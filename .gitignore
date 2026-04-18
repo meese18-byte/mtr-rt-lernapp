@@ -1,0 +1,19 @@
+# Betriebssystem-Müll
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Editor-Reste
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# Temporäre Dateien
+*.tmp
+*.log
+
+# Eigene Arbeitsnotizen, die NICHT auf GitHub sollen
+/privat/
+*.privat.md

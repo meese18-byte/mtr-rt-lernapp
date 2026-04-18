@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-04-18",
+  "modules": [
+    {
+      "id": "prostata-planungs-ct-enddarm",
+      "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
+      "type": "case",
+      "category": "Becken – Prostata",
+      "difficulty": "fortgeschritten",
+      "order": 10
+    }
+  ]
+}

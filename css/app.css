@@ -1,0 +1,247 @@
+/* ============================================================
+   MTR RT Lernapp – Stylesheet
+   Mobile-first, systemnah, barrierearm.
+   ============================================================ */
+
+/* --- Reset & Grundlagen --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #1f2933;
+  background: #f6f7f9;
+}
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: #1a5aa8; text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+:focus-visible { outline: 3px solid #f0a500; outline-offset: 2px; }
+
+/* --- Layout-Container --- */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* --- Skip-Link --- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 0.5rem 1rem;
+  background: #1a5aa8;
+  color: #fff;
+  z-index: 100;
+}
+.skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+/* --- Header --- */
+.app-header {
+  background: #1f2933;
+  color: #fff;
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.brand { color: #fff; font-weight: 600; }
+.brand-full { display: none; }
+.brand-short { display: inline; }
+@media (min-width: 600px) {
+  .brand-full { display: inline; margin-left: 0.5rem; font-weight: 400; opacity: 0.85; }
+}
+.main-nav a {
+  color: #fff;
+  margin-left: 1rem;
+  opacity: 0.85;
+}
+.main-nav a:hover, .main-nav a:focus { opacity: 1; }
+
+/* --- Footer --- */
+.app-footer {
+  margin-top: 3rem;
+  padding: 1rem 0;
+  background: #e3e7eb;
+  font-size: 0.9rem;
+  color: #52606d;
+}
+
+/* --- Hauptbereich --- */
+main { min-height: 70vh; padding: 1.5rem 0; }
+.loading { color: #7b8794; font-style: italic; }
+
+/* --- Überschriften --- */
+h1 { font-size: 1.6rem; margin: 0 0 0.75rem; }
+h2 { font-size: 1.3rem; margin: 1.5rem 0 0.5rem; }
+h3 { font-size: 1.1rem; margin: 1.25rem 0 0.4rem; }
+
+/* --- Dashboard: Kategorien & Module --- */
+.category-block { margin-bottom: 2rem; }
+.category-block h2 {
+  border-bottom: 2px solid #cbd2d9;
+  padding-bottom: 0.25rem;
+}
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.module-card {
+  display: block;
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1rem;
+  color: inherit;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.module-card:hover, .module-card:focus {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.module-card h3 { margin-top: 0; }
+.module-card .meta {
+  font-size: 0.85rem;
+  color: #52606d;
+  margin-top: 0.4rem;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #e3e7eb;
+  color: #323f4b;
+  margin-right: 0.3rem;
+}
+.badge.type-knowledge   { background: #dbeafe; color: #1e3a8a; }
+.badge.type-case        { background: #fef3c7; color: #78350f; }
+.badge.type-image-analysis { background: #dcfce7; color: #14532d; }
+.badge.type-quiz        { background: #fee2e2; color: #7f1d1d; }
+.badge.type-transfer    { background: #ede9fe; color: #4c1d95; }
+.badge.status-completed { background: #16a34a; color: #fff; }
+.badge.status-in-progress { background: #f59e0b; color: #fff; }
+
+/* --- Modul-Ansicht --- */
+.module-view { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1.25rem; }
+.module-view .breadcrumb { font-size: 0.9rem; color: #52606d; margin-bottom: 0.5rem; }
+.module-view figure { margin: 1rem 0; }
+.module-view figcaption { font-size: 0.9rem; color: #52606d; margin-top: 0.25rem; }
+
+/* --- Optionsliste (case, quiz, knowledge, image-analysis) --- */
+.options { list-style: none; padding: 0; margin: 1rem 0; }
+.options li { margin-bottom: 0.6rem; }
+.option-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 2px solid #cbd2d9;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.option-btn:hover:not(:disabled) { border-color: #1a5aa8; }
+.option-btn:disabled { cursor: default; opacity: 0.95; }
+.option-btn.correct { border-color: #16a34a; background: #f0fdf4; }
+.option-btn.incorrect { border-color: #dc2626; background: #fef2f2; }
+
+/* --- Feedback-Blöcke --- */
+.feedback {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-left: 4px solid #1a5aa8;
+  background: #f0f5fb;
+  border-radius: 4px;
+}
+.feedback.correct { border-left-color: #16a34a; background: #f0fdf4; }
+.feedback.incorrect { border-left-color: #dc2626; background: #fef2f2; }
+.feedback h3 { margin-top: 0; }
+
+/* --- Transfer-Modul --- */
+.transfer textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 0.75rem;
+  border: 2px solid #cbd2d9;
+  border-radius: 6px;
+  font: inherit;
+}
+.transfer .word-count { font-size: 0.85rem; color: #52606d; text-align: right; }
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #e3e7eb;
+}
+.checklist input[type="checkbox"] { margin-right: 0.5rem; }
+
+/* --- Bildanalyse Klickpunkt --- */
+.image-click-wrap { position: relative; display: inline-block; max-width: 100%; }
+.image-click-wrap img { cursor: crosshair; }
+.click-marker {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 3px solid #f0a500;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* --- Buttons generell --- */
+.btn {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  background: #1a5aa8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover, .btn:focus { background: #144884; text-decoration: none; }
+.btn.secondary { background: #e3e7eb; color: #1f2933; }
+.btn.secondary:hover, .btn.secondary:focus { background: #cbd2d9; }
+.btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* --- Progress-Balken --- */
+.progress-overview {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar {
+  background: #e3e7eb;
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+.progress-bar > span {
+  display: block;
+  background: #16a34a;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+/* --- Utility --- */
+.muted { color: #52606d; }
+.center { text-align: center; }
+.hidden { display: none !important; }

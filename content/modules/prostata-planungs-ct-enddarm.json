@@ -1,0 +1,54 @@
+{
+  "id": "prostata-planungs-ct-enddarm",
+  "type": "case",
+  "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
+  "category": "Becken – Prostata",
+  "difficulty": "fortgeschritten",
+  "estimatedMinutes": 10,
+  "learningGoals": [
+    "Der Lernende erkennt einen deutlich gefüllten Enddarm im Planungs-CT und benennt dessen Einfluss auf die Lage der Prostata.",
+    "Der Lernende begründet, warum die Reproduzierbarkeit der Enddarmfüllung eine Grundvoraussetzung für die Prostata-Bestrahlung ist.",
+    "Der Lernende leitet die korrekte Handlungskette zur Wiederherstellung einer reproduzierbaren Ausgangslage ab."
+  ],
+  "tags": ["prostata", "planungs-ct", "enddarm", "setup", "lagerung"],
+  "examRelevance": "MTAPrV praktische Prüfung – Setup-Verifikation und Lagerung bei Beckenbestrahlung",
+  "relatedModules": [],
+  "relatedInfotexte": ["enddarmvorbereitung-becken"],
+  "body": {
+    "scenario": {
+      "situation": "Sie bereiten das Planungs-CT eines Patienten mit lokal begrenztem Prostatakarzinom vor. Die Aufnahmen sind gefahren. Beim Sichten der Schnittbilder fällt Ihnen auf, dass der Enddarm stark gefüllt ist. Der Patient gibt auf Rückfrage an, er habe das morgendliche Vorbereitungsschema nicht vollständig durchgeführt.",
+      "media": [
+        {
+          "type": "image",
+          "src": "./media/images/platzhalter-enddarm-voll.svg",
+          "alt": "Schematischer axialer CT-Schnitt auf Höhe der Prostata mit deutlich gefülltem Enddarm",
+          "caption": "Schematische Darstellung: axialer CT-Schnitt auf Höhe der Prostata. Der Enddarm ist deutlich gefüllt und verlagert die Prostata nach ventral (Platzhalter-Grafik – später durch anonymisiertes CT-Bild ersetzen)."
+        }
+      ],
+      "question": "Wie entscheiden Sie sich als MTR an diesem Punkt?"
+    },
+    "options": [
+      {
+        "label": "Aufnahme akzeptieren, Bestrahlungsplanung auf dieser Basis beginnen.",
+        "correct": false,
+        "feedback": "Nicht empfohlen. Ein voller Enddarm verlagert die Prostata nach ventral und kaudal, typisch im Bereich einiger Millimeter. Klinische Konsequenz: bei täglicher Verifikation über Wochen wird der Enddarm regelmäßig weniger gefüllt sein als am Planungs-CT, das Zielvolumen wandert nach dorsal, die dorsale CTV-Randzone wird unterdosiert und die Rektum-Vorderwand bekommt mehr Dosis als geplant. Korrekter Weg: Ausgangslage korrigieren, dann Wiederholungs-CT."
+      },
+      {
+        "label": "Patient zur Enddarmentleerung auffordern und ein Wiederholungs-Planungs-CT veranlassen.",
+        "correct": true,
+        "feedback": "Richtige Entscheidung. Nur ein Planungs-CT mit reproduzierbarem Füllungszustand des Enddarms liefert eine valide Basis für die Konturierung und für die tägliche Bildverifikation (CBCT). Der Patient wird auf die Toilette geschickt, das Vorbereitungsschema (z. B. Mikroklist oder Diätempfehlung) wird besprochen und dokumentiert, anschließend wird das CT unter denselben Lagerungsbedingungen wiederholt."
+      },
+      {
+        "label": "Nur die oberen Schnitte nachfahren, in denen der Enddarm weniger gefüllt aussieht.",
+        "correct": false,
+        "feedback": "Nicht ausreichend. Die veränderte Enddarmfüllung wirkt sich auf die Lage der Prostata im gesamten Zielvolumen aus, nicht nur an einzelnen Schnittpositionen. Ein partielles Nachfahren liefert keine konsistente Basis für die Planung und für die Bildverifikation."
+      },
+      {
+        "label": "Das Zielvolumen in der Konturierung einfach etwas ventral erweitern, damit es passt.",
+        "correct": false,
+        "feedback": "Nicht zulässig. Eine MTR kompensiert eine fehlerhafte Ausgangslage nicht durch Konturierungs-Kompromisse. Zielvolumendefinition ist ärztliche Aufgabe und setzt ein qualitativ einwandfreies Planungs-CT voraus. Der korrekte Weg bleibt: reproduzierbare Ausgangslage herstellen und Wiederholungs-CT."
+      }
+    ],
+    "reinforcement": "Reproduzierbare Enddarmfüllung ist die Grundvoraussetzung jeder Prostata-Bestrahlung. Das tägliche CBCT prüft nicht nur den Knochenstand, sondern auch Enddarm und Harnblase. Weicht der Füllungszustand deutlich vom Planungs-CT ab, muss interveniert werden – nicht einfach bestrahlt werden."
+  }
+}
