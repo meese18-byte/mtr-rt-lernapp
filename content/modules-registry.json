@@ -1,14 +1,21 @@
 {
-  "version": 1,
+  "version": 2,
   "lastUpdated": "2026-04-18",
+  "schemaNote": "Neue Felder: kapitel, reihenfolge, pflichtgrad, voraussetzungen, phase. Alte Felder (category, order) bleiben temporär erhalten, bis die Rendering-Logik in app.js + renderers auf die neuen Felder migriert wurde. Siehe ARCHITECTURE.md §12 und CURRICULUM.md.",
   "modules": [
     {
       "id": "prostata-planungs-ct-enddarm",
       "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
       "type": "case",
       "category": "Becken – Prostata",
+      "order": 10,
       "difficulty": "fortgeschritten",
-      "order": 10
+      "kapitel": 5,
+      "reihenfolge": 3,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": ["05-ablauf-planungsct", "05-lagerung-immobilisierung"],
+      "phase": "MVP",
+      "umbenennung_geplant": "05-enddarmvorbereitung-becken"
     }
   ]
 }

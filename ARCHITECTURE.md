@@ -187,4 +187,98 @@ Canvas ist nur erlaubt für:
 - räumliche Zuordnung mit Drag-Verhalten,
 - Animationen (Atembewegung, Organverschiebung, Dosisaufbau),
 - Simulationen mit Echtzeit-Reaktion,
-- 
+- spielerische Module mit pixelgenauen Trefferzonen.
+
+### Prüfpflicht vor jedem Canvas-Einsatz
+
+Vor jedem geplanten Canvas-Modul müssen diese sieben Fragen mit "ja" beantwortet werden können:
+
+1. Kann die didaktische Aufgabe nicht genauso gut mit DOM/SVG umgesetzt werden?
+2. Entsteht durch Canvas ein echter didaktischer Mehrwert (Interaktion, nicht Optik)?
+3. Gibt es eine barrierefreie DOM-Alternative für Nutzer ohne Mausinteraktion?
+4. Ist die Canvas-Oberfläche responsiv auf mindestens 3 Breakpoints (Handy, Tablet, Desktop) bedienbar?
+5. Kann der Canvas-Zustand serialisierbar gespeichert und exportiert werden (oder ist er bewusst flüchtig)?
+6. Lässt sich die Trefferlogik von der Zeichenlogik sauber trennen?
+7. Ist die Performance auf schwachen Klinik-Laptops ausreichend (< 16 ms pro Frame)?
+
+Wird auch nur eine Frage verneint, bleibt die Umsetzung bei DOM.
+
+### Hybride Struktur als Pflicht
+
+Auch wenn Canvas eingesetzt wird: Der Rahmen bleibt DOM.
+- Fragestellung, Auswahloptionen, Feedback, Weiter-Button, Fortschritt → DOM.
+- Nur die reine Interaktionsfläche → Canvas.
+- Canvas bekommt immer einen DOM-Alternativweg ("Ich kann das nicht per Maus" → Textauswahl).
+
+### NIEMALS
+
+- Ganze Module im Canvas rendern.
+- Text im Canvas ausgeben, der inhaltlich zählt.
+- Canvas für Navigation, Dashboard, Einstellungen.
+- Canvas als Ersatz für Layout oder Animation, die mit CSS möglich wäre.
+
+---
+
+## 12. Konsistenzregeln für Curriculum und Module
+
+Diese Regeln ergänzen die Inhaltsstruktur in `CURRICULUM.md` um technische Konsequenzen.
+
+### 12.1 Modul-ID-Schema
+
+- Format: `<kapitelnummer>-<kurzname>`
+- Kapitelnummer: zwei Ziffern mit führender Null (`01`, `05`, `14`)
+- Kurzname: kleingeschrieben, Bindestriche, keine Umlaute, max. 40 Zeichen
+- IDs sind unveränderlich — einmal in der Registry, nie mehr umbenennen (würde localStorage-Fortschritt von Nutzern zerstören)
+- Ausnahme: Migration. Dann `umbenannt_von`-Feld im Modul-JSON setzen und Fortschritt in `progress.js` mitmigrieren
+
+### 12.2 Neue Registry-Felder (verbindlich)
+
+Die `content/modules-registry.json` erhält pro Modul folgende Felder zusätzlich zu `id`, `title`, `type`:
+
+| Feld | Typ | Pflicht | Beschreibung |
+|---|---|---|---|
+| `kapitel` | number | ja | Kapitelnummer 1-14 aus CURRICULUM.md |
+| `reihenfolge` | number | ja | Sortierung innerhalb des Kapitels, Ganzzahl ab 1 |
+| `pflichtgrad` | enum | ja | `pflicht`, `vertiefung` oder `exkurs` |
+| `voraussetzungen` | array | nein | Liste von Modul-IDs, die sinnvoll vorher bearbeitet wurden |
+| `phase` | enum | nein | `MVP`, `P2`, `P3`, `P4`, `P5` — nur für internes Tracking, nicht in UI |
+
+### 12.3 Bearbeitungszeit-Obergrenzen pro Modultyp
+
+Wird in `CURRICULUM.md §7` inhaltlich festgelegt. Technisch gilt:
+- `knowledge`: Infotext max. 400 Wörter, max. 3 Fragen
+- `case`: max. 5 Optionen, max. 1 Bild/Clip
+- `image-analysis`: max. 6 Klickregionen ODER max. 4 MC-Optionen
+- `quiz`: max. 15 Fragen
+- `transfer`: max. 8 Selbstbewertungspunkte
+
+Werden diese Grenzen in einem Modul gesprengt, wird das Modul geteilt — **nicht** die Grenze erhöht.
+
+### 12.4 Pflichtgrad-Darstellung im Dashboard
+
+Pro Modul zeigt das Dashboard ein Badge:
+- `pflicht` → grün (CSS-Klasse `.badge-pflicht`)
+- `vertiefung` → blau (`.badge-vertiefung`)
+- `exkurs` → grau (`.badge-exkurs`)
+
+Filter auf dem Dashboard: `Alle | Pflicht | Vertiefung | Exkurs`.
+
+### 12.5 Kapitel-Gruppierung im Dashboard
+
+Das Dashboard gruppiert Module primär nach `kapitel`, sekundär nach `reihenfolge`. Innerhalb eines Kapitels werden Module auch ohne vollständige Voraussetzungen angezeigt, aber mit Empfehlungshinweis ("Vorher sinnvoll: X, Y").
+
+---
+
+## 13. Offene Entscheidungen
+
+Keine aktuell. Alle offenen Punkte werden hier dokumentiert, bevor sie umgesetzt werden.
+
+---
+
+## 14. Änderungsprotokoll
+
+| Datum | Änderung | Grund |
+|---|---|---|
+| 2026-04-18 | Initialversion mit §§ 1-10 | Projektstart |
+| 2026-04-18 | §11 Canvas-Policy ergänzt | Verbindliche DOM-vs-Canvas-Leitlinie, Prüfbogen-Pflicht, hybride Architektur |
+| 2026-04-18 | §12 Konsistenzregeln für Curriculum und Module ergänzt, CURRICULUM.md als zweite Source of Truth eingeführt | Roter Faden von Anfang bis Ende, Feature-Creep-Vermeidung, gemeinsame Felder Kapitel/Pflichtgrad/Voraussetzungen |
