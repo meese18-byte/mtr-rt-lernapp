@@ -145,7 +145,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 | ID | Titel | Typ | Tag | Phase | Status |
 |---|---|---|---|---|---|
 | 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | MVP | ✅ *(umzubenennen, aktuell `prostata-planungs-ct-enddarm`)* |
-| 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | MVP | ⬜ |
+| 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | MVP | ✅ |
 | 01-rollen-berufsgruppen | Berufsgruppen und ihre Rollen | knowledge | pflicht | MVP | ⬜ |
 | 01-tagesablauf | Typischer Tagesablauf einer MTR | knowledge | pflicht | MVP | ⬜ |
 | 05-ablauf-planungsct | Ablauf eines Planungs-CT | knowledge | pflicht | MVP | ⬜ |
@@ -160,6 +160,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 | Datum | Änderung | Grund |
 |---|---|---|
 | 2026-04-18 | Curriculum initial angelegt, 14-Kapitel-Struktur, MVP Phase 1 mit 8 Modulen definiert | Roter Faden von Anfang an, Vermeidung Feature-Creep |
+| 2026-04-18 | Modul 01-aufbau-abteilung live (knowledge, 3 Verständnisfragen) | Erstes echtes MVP-Modul, Blaupause-Charakter für alle weiteren |
 
 ---
 

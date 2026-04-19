@@ -4,6 +4,18 @@
   "schemaNote": "Neue Felder: kapitel, reihenfolge, pflichtgrad, voraussetzungen, phase. Alte Felder (category, order) bleiben temporär erhalten, bis die Rendering-Logik in app.js + renderers auf die neuen Felder migriert wurde. Siehe ARCHITECTURE.md §12 und CURRICULUM.md.",
   "modules": [
     {
+      "id": "01-aufbau-abteilung",
+      "title": "Aufbau einer Strahlentherapie-Abteilung",
+      "type": "knowledge",
+      "category": "Orientierung",
+      "order": 10,
+      "difficulty": "einstieg",
+      "kapitel": 1,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "phase": "MVP"
+    },
+    {
       "id": "prostata-planungs-ct-enddarm",
       "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
       "type": "case",

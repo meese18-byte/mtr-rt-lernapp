@@ -1,0 +1,91 @@
+{
+  "id": "01-aufbau-abteilung",
+  "title": "Aufbau einer Strahlentherapie-Abteilung",
+  "type": "knowledge",
+  "category": "Orientierung",
+  "kapitel": 1,
+  "reihenfolge": 1,
+  "pflichtgrad": "pflicht",
+  "phase": "MVP",
+  "body": {
+    "intro": "Eine kurze Orientierung darüber, wie eine Strahlentherapie-Abteilung organisiert ist, welche Bereiche und Berufsgruppen es gibt und wo deine Rolle als MTR liegt.",
+    "infotext": "01-aufbau-abteilung",
+    "checkQuestions": [
+      {
+        "question": "Wer verordnet die Bestrahlungsdosis und legt die zu bestrahlenden Volumina fest?",
+        "options": [
+          {
+            "label": "Die MTR am Linac",
+            "correct": false,
+            "feedback": "Nein. Die MTR setzt die Bestrahlung technisch um, verordnet aber nicht. Dosis und Volumina werden ärztlich festgelegt."
+          },
+          {
+            "label": "Die Strahlentherapeutin oder der Strahlentherapeut",
+            "correct": true,
+            "feedback": "Richtig. Die ärztliche Verordnung – Dosis, Fraktionierung, Zielvolumen – ist die Grundlage für alle weiteren Schritte. MPE und MTR setzen sie technisch um."
+          },
+          {
+            "label": "Die Medizinphysik-Expertin (MPE)",
+            "correct": false,
+            "feedback": "Nein. Die MPE berechnet den Bestrahlungsplan auf Basis der ärztlichen Verordnung, verordnet aber selbst nicht."
+          },
+          {
+            "label": "Die Patientenlotsin",
+            "correct": false,
+            "feedback": "Nein. Die Patientenlotsin koordiniert Termine und begleitet den Behandlungsweg, hat aber keine medizinische Verordnungskompetenz."
+          }
+        ]
+      },
+      {
+        "question": "Welche der folgenden Aufgaben gehört NICHT zum Kernbereich der MTR in der Strahlentherapie?",
+        "options": [
+          {
+            "label": "Tägliche Bestrahlung am Linac durchführen",
+            "correct": false,
+            "feedback": "Doch, das ist eine Kernaufgabe. Tägliche Bestrahlungsdurchführung gehört zum operativen Kern."
+          },
+          {
+            "label": "Patientenpositionierung und Verifikation (z. B. CBCT)",
+            "correct": false,
+            "feedback": "Doch, das ist eine Kernaufgabe der MTR vor jeder Bestrahlung."
+          },
+          {
+            "label": "Aufklärungsgespräch und Indikationsstellung",
+            "correct": true,
+            "feedback": "Richtig. Aufklärung und Indikationsstellung sind ärztliche Aufgaben. Die MTR ist daran in der Regel nicht direkt beteiligt – auch wenn sie die Patientinnen während der Behandlung am häufigsten sieht."
+          },
+          {
+            "label": "Planungs-CT durchführen",
+            "correct": false,
+            "feedback": "Doch, das ist eine Kernaufgabe der MTR. Das Planungs-CT ist meist der erste eigene Wirkbereich."
+          }
+        ]
+      },
+      {
+        "question": "Wo wird der konkrete Bestrahlungsplan (Strahlenfelder, Dosisverteilung, Energien) berechnet?",
+        "options": [
+          {
+            "label": "Im Bestrahlungsraum am Linac",
+            "correct": false,
+            "feedback": "Nein. Am Linac wird der Plan umgesetzt, nicht berechnet. Berechnet wird in der Medizinphysik."
+          },
+          {
+            "label": "Im Arztzimmer während der Aufklärung",
+            "correct": false,
+            "feedback": "Nein. Im Arztzimmer werden Indikation, Dosis und Volumina festgelegt – die technische Planberechnung erfolgt anschließend in der Medizinphysik."
+          },
+          {
+            "label": "In der Medizinphysik (Bestrahlungsplanung)",
+            "correct": true,
+            "feedback": "Richtig. Aus dem Planungs-CT und den ärztlichen Vorgaben berechnet die MPE den konkreten Bestrahlungsplan. Erfahrene MTR können in manchen Abteilungen Teile der Planung übernehmen."
+          },
+          {
+            "label": "An der Anmeldung",
+            "correct": false,
+            "feedback": "Nein. An der Anmeldung werden Termine und Akten verwaltet, keine Bestrahlungsplanung."
+          }
+        ]
+      }
+    ]
+  }
+}
