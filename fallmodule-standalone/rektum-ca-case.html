@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rektumkarzinom – Klinischer Fall | MTR Strahlentherapie</title>
+<style>
+:root {
+  --primary: #1a4f7a; --primary-light: #2c6ea6; --primary-bg: #eef4fb;
+  --correct: #1e6e42; --correct-bg: #e8f5ee;
+  --wrong: #8b1a1a; --wrong-bg: #fdf0f0;
+  --neutral: #4a5568; --border: #d1d9e0; --surface: #f8f9fa;
+  --radius: 8px; --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: #f0f4f8; color: #1a1a2e; line-height: 1.6; min-height: 100vh; padding: 24px 16px; }
+.card { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 32px; box-shadow: var(--shadow); }
+
+/* Intro */
+.intro-badge { display: inline-block; background: var(--primary); color: #fff; font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-bottom: 12px; }
+.intro-title { font-size: 1.7rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+.intro-sub { font-size: 1rem; color: var(--neutral); margin-bottom: 16px; }
+.patient-card { background: var(--primary-bg); border: 1px solid #b8d0e8; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 20px; }
+.patient-card h3 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: 10px; }
+.patient-grid { display: grid; grid-template-columns: 120px 1fr; gap: 6px 12px; font-size: .9rem; }
+.patient-grid dt { color: var(--neutral); font-weight: 600; }
+.patient-grid dd { color: #1a1a2e; }
+.pillars { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.pillar-badge { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 10px; font-size: .8rem; }
+.pillar-badge strong { color: var(--primary); display: block; font-size: .72rem; }
+
+/* Progress */
+.progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width .3s; }
+.progress-label { font-size: .8rem; color: var(--neutral); display: flex; justify-content: space-between; margin-bottom: 20px; }
+
+/* Station */
+.station-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.station-num { background: var(--primary); color: #fff; font-size: .72rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+.station-pillar { font-size: .78rem; color: var(--neutral); background: var(--surface); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; }
+.station-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 14px; }
+.situation-box { background: var(--primary-bg); border: 1px solid #b8d0e8; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 18px; }
+.situation-box h4 { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: 8px; }
+.situation-box p { font-size: .93rem; color: #2d4a6a; line-height: 1.6; }
+.question { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
+
+/* Options */
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.option { display: flex; align-items: flex-start; gap: 12px; padding: 13px 15px; border: 2px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color .15s, background .15s; }
+.option:hover:not(.locked) { border-color: var(--primary-light); background: #f0f7ff; }
+.option input { margin-top: 3px; accent-color: var(--primary); flex-shrink: 0; }
+.option-text { font-size: .93rem; flex: 1; line-height: 1.5; }
+.option-icon { font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+.option.selected { border-color: var(--primary); background: #f0f7ff; }
+.option.correct { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+.option.correct .option-icon { color: var(--correct); }
+.option.wrong .option-icon { color: var(--wrong); }
+.option.locked { cursor: default; }
+
+/* Feedback */
+.feedback { border-radius: var(--radius); padding: 14px 16px; margin-bottom: 20px; border-left: 4px solid; }
+.feedback.correct { background: var(--correct-bg); border-color: var(--correct); }
+.feedback.wrong { background: var(--wrong-bg); border-color: var(--wrong); }
+.feedback-label { font-weight: 700; font-size: .88rem; margin-bottom: 4px; }
+.feedback.correct .feedback-label { color: var(--correct); }
+.feedback.wrong .feedback-label { color: var(--wrong); }
+.feedback-text { font-size: .9rem; line-height: 1.6; color: #333; margin-bottom: 6px; }
+.consequence { font-size: .85rem; color: var(--neutral); font-style: italic; border-top: 1px solid rgba(0,0,0,.1); padding-top: 8px; margin-top: 8px; }
+
+/* Key Learning */
+.key-learning { background: #fffbea; border: 1px solid #f0e08c; border-radius: var(--radius); padding: 10px 14px; margin-bottom: 20px; font-size: .85rem; color: #5a4a00; display: none; }
+.key-learning strong { display: block; margin-bottom: 4px; color: #3d3000; }
+
+/* Actions */
+.actions { display: flex; justify-content: flex-end; gap: 12px; }
+.btn { padding: 10px 22px; border-radius: var(--radius); font-size: .95rem; font-weight: 600; border: none; cursor: pointer; transition: background .15s, opacity .15s; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-light); }
+.btn-secondary { background: var(--surface); color: var(--primary); border: 2px solid var(--border); }
+.btn-secondary:hover:not(:disabled) { border-color: var(--primary); }
+.btn-lg { padding: 14px 32px; font-size: 1.05rem; width: 100%; }
+
+/* Result */
+.result-header { text-align: center; padding: 28px; border-radius: var(--radius); margin-bottom: 24px; }
+.r1{background:#e8f5ee;} .r2{background:#edf7e8;} .r3{background:#fdf7e3;} .r4{background:#fef3e2;} .r5{background:#fdf0f0;}
+.result-note { font-size: 3rem; font-weight: 800; color: var(--primary); }
+.result-label { font-size: 1.2rem; font-weight: 700; margin: 4px 0; }
+.result-score { font-size: .95rem; color: var(--neutral); }
+.result-stations { margin-bottom: 24px; }
+.result-stations h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+.result-station-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; font-size: .88rem; }
+.result-icon { font-size: 1.1rem; flex-shrink: 0; }
+.result-station-title { font-weight: 600; color: #1a1a2e; }
+.result-station-learning { color: var(--neutral); font-size: .83rem; margin-top: 2px; }
+
+/* Transfer */
+.transfer-case { background: var(--primary-bg); border: 1px solid #b8d0e8; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; font-size: .93rem; color: #2d4a6a; line-height: 1.6; }
+.transfer-case h4 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: 8px; }
+.transfer-q { font-size: 1rem; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
+.transfer-textarea { width: 100%; min-height: 160px; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius); font-size: .95rem; font-family: var(--font); resize: vertical; line-height: 1.6; color: #333; margin-bottom: 16px; }
+.transfer-textarea:focus { outline: none; border-color: var(--primary); }
+.sample-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; display: none; }
+.sample-box h4 { font-size: .85rem; font-weight: 700; color: var(--correct); margin-bottom: 8px; }
+.sample-box p { font-size: .9rem; line-height: 1.6; color: #333; }
+.checklist { display: none; margin-bottom: 20px; }
+.checklist h4 { font-size: .9rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.check-item input { margin-top: 3px; accent-color: var(--primary); flex-shrink: 0; width: 16px; height: 16px; }
+.check-item label { font-size: .9rem; color: #333; cursor: pointer; }
+
+@media(max-width:600px){
+  .card{padding:20px 14px;}
+  .patient-grid{grid-template-columns:1fr;}
+  .result-station-item{flex-direction:column;}
+}
+
+/* P1: Feedback summary + expandable detail */
+.feedback-summary { font-size:.93rem; font-weight:700; line-height:1.5; margin-bottom:0; }
+.feedback-detail { font-size:.88rem; line-height:1.6; color:#333; margin-top:8px; }
+.feedback-detail.hidden { display:none; }
+.feedback-toggle { background:none; border:none; cursor:pointer; font-size:.8rem; font-weight:600; padding:4px 0; margin-top:6px; text-decoration:underline; }
+.feedback.correct .feedback-toggle { color:var(--correct); }
+.feedback.wrong .feedback-toggle { color:var(--wrong); }
+/* P1: Situation key fact highlight */
+.key-fact { font-weight:700; color:#1a1a2e; background:#dbeafe; padding:1px 4px; border-radius:3px; }
+/* P1: Competency labels in result */
+.comp-label { display:inline-block; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-size:.78rem; padding:2px 10px; margin:2px; color:var(--neutral); }
+.comp-label.done { background:var(--correct-bg); color:var(--correct); border-color:var(--correct); }
+
+/* Cross-module links */
+.xlink { background:#f0f7ff; border:1px solid #b8d0e8; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:.83rem; display:none; }
+.xlink.visible { display:block; }
+.xlink-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#1a4f7a; margin-bottom:6px; }
+.xlink a { color:#1a4f7a; font-weight:600; text-decoration:none; border-bottom:1px solid #b8d0e8; }
+.xlink a:hover { border-bottom-color:#1a4f7a; }
+
+/* Cross-module links */
+.crosslink-section { margin-bottom: 24px; }
+.crosslink-section h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+.crosslink-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; background: var(--surface); text-decoration: none; color: inherit; transition: border-color .15s, background .15s; }
+.crosslink-card:hover { border-color: var(--primary-light); background: #f0f7ff; }
+.crosslink-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.crosslink-title { font-size: .9rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.crosslink-hint { font-size: .82rem; color: var(--neutral); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const CASE = {
+  id: "rektum-ca-case",
+  title: "Rektumkarzinom – Klinischer Fall",
+  subtitle: "Theorie-Praxis-Transfer | 3. Lehrjahr",
+  description: "Begleite Herrn S. durch den gesamten Behandlungsprozess – von der Lagerungssimulation bis zur täglichen Bestrahlung. Jede Station erfordert eine fundierte klinische Entscheidung.",
+  patient: {
+    name: "Herr Werner S., 64 Jahre",
+    diagnose: "Rektumkarzinom cT3 N1 M0, mittleres Rektumdrittel",
+    plan: "Neoadjuvante RCT: ED 1,8 Gy, GD 50,4 Gy (28 Fraktionen) + Capecitabin simultan. OP nach 6–8 Wochen.",
+    besonderheiten: "Kein Anus praeter. Patient mobil und kooperativ."
+  },
+  pillars: [
+    { num: "1", label: "Präzision als Patientenschutz" },
+    { num: "2", label: "Technologische Souveränität" },
+    { num: "3", label: "Empathische Professionalität" },
+    { num: "4", label: "Prozessethik & Strahlenschutz" },
+    { num: "5", label: "Reflexive Handlungskompetenz" }
+  ],
+  stations: [
+    {
+      id: "s1", pillar: "1",
+      title: "Station 1 – Planungs-CT: Lagerung",
+      situation: "Herr S. erscheint zum Planungs-CT. Du bist für die Lagerung zuständig. Standardlagerung für ein Rektumkarzinom im mittleren Drittel – kein Anus praeter, Patient mobil und kooperativ.",
+      question: "Welche Lagerung und welche Lagerungshilfen sind korrekt für das Planungs-CT von Herrn S.?",
+      options: [
+        { id:"a", text:"Rückenlage, Knierolle, Arme auf der Brust, Kopfschale.", correct:false, feedback:"Rückenlage ist die Alternativlagerung – z.B. bei Anus praeter oder wenn der Patient nicht in Bauchlage liegen kann. Bei Herrn S. (mobil, kein AP) ist Bauchlage auf dem Lochbrett die Standard-Indikation.", consequence:"Klinische Konsequenz: Der Dünndarm wird nicht aus dem Bestrahlungsfeld verlagert – höhere Enteritis-Rate und erhöhte Risikoorganbelastung." },
+        { id:"b", text:"Bauchlage auf dem Lochbrett (Bellyboard/Bellystep), Knierolle unter die Füße, Arme nach vorne, gefüllte Blase.", correct:true, feedback:"Richtig. Standardlagerung beim Rektumkarzinom ohne Anus praeter: Bauchlage auf dem Lochbrett. Der Dünndarm fällt durch Schwerkraft in die Bauchaussparung – er verlässt den Hochdosisbereich. Präzision ≤5 mm. Wichtig: Gonaden des Mannes nicht im Loch, Symphyse am Unterrand des Loches. Gefüllte Blase schützt zusätzlich.", consequence:"Klinische Konsequenz: Optimale Dünndarmschonung. Reproduzierbare Lagerung gewährleistet Bestrahlungsgenauigkeit über alle 28 Fraktionen." },
+        { id:"c", text:"Bauchlage, Vakuummatte (Bluebag), Kopfschale, Arme nach vorne.", correct:false, feedback:"Die Vakuummatte (Bluebag) ist die Standardlagerungshilfe beim Prostatakarzinom in Rückenlage – nicht beim Rektumkarzinom. Beim Rektumkarzinom ist das Lochbrett (Bellyboard/Bellystep) indiziert.", consequence:"Klinische Konsequenz: Ohne Lochbrett entfällt der Dünndarmschutz durch Schwerkraft. Bluebag ist für Bauchlage nicht konzipiert." },
+        { id:"d", text:"Rückenlage mit Kniestep (Prostep) – da Rückenlage für den Patienten komfortabler ist.", correct:false, feedback:"Rückenlage mit Kniestep/Prostep ist eine Alternativlagerung bei Kontraindikationen für Bauchlage. Für Herrn S. ist Bauchlage indiziert. Patientenkomfort darf nicht auf Kosten der Behandlungsqualität gehen.", consequence:"Klinische Konsequenz: Suboptimale Dünndarmschonung bei verzichtbarer Entscheidung." }
+      ],
+      key_learning: "Lochbrett (Bellyboard) = Standardlagerung Rektum-Ca. | Alternativ Rückenlage nur bei AP oder körperlichen Einschränkungen | Blase gefüllt = Schutz vor Dosisbelastung | Gonaden des Mannes nicht im Loch"
+    },
+    {
+      id: "s2", pillar: "1",
+      title: "Station 2 – Planungs-CT: Referenzpunkt",
+      situation: "Herr S. liegt korrekt auf dem Lochbrett. Du musst den Referenzpunkt für die Lagerungsdokumentation festlegen. Der Tumor sitzt im mittleren Rektumdrittel.",
+      question: "Wie wird der Referenzpunkt in Bauchlage beim Rektumkarzinom korrekt definiert?",
+      options: [
+        { id:"a", text:"Vertikal: halber Patientendurchmesser | Lateral: Körpermitte | Longitudinal: 2 Querfinger unterhalb Bauchnabel.", correct:false, feedback:"Unvollständig. In Bauchlage gibt es beim Rektum ZWEI longitudinale Markierungen: einen Lagerungslaser (Matte symmetrisch ausrichten, Markierung übertragen) UND einen tumorspezifischen Referenzpunkt gemessen ab Anus je nach Tumorsitz.", consequence:"Klinische Konsequenz: Unvollständige Referenzpunktsetzung erschwert die tägliche Reproduzierbarkeit." },
+        { id:"b", text:"Vertikal: halber Patientendurchmesser | Lateral: Körpermitte | Longitudinal (2 Markierungen): Lagerungslaser auf Matte + tumorspezifischer Referenzpunkt gemessen ab Anus.", correct:true, feedback:"Richtig. In Bauchlage mit Lochbrett gibt es zwei longitudinale Referenzpunkte: (1) Lagerungslaser – Matte wird symmetrisch ausgerichtet, Markierung von Matte auf Patienten übertragen. (2) Tumorspezifischer Referenzpunkt – gemessen ab Anus (je nach Tumorsitz variierend). Beide werden dokumentiert.", consequence:"Klinische Konsequenz: Exakte Reproduzierbarkeit über alle 28 Fraktionen. Abweichungen beim täglichen Setup werden sofort erkennbar." },
+        { id:"c", text:"Der Referenzpunkt wird ausschließlich vom Radioonkologen festgelegt – die MTR ist nicht zuständig.", correct:false, feedback:"Nicht korrekt. Die Festlegung, Vermessung und Dokumentation des Referenzpunkts am Planungs-CT ist eine Kernaufgabe der MTR. Der Radioonkologe definiert das Zielvolumen – Lagerung und Dokumentation liegt in der MTR-Verantwortung.", consequence:"Klinische Konsequenz: Fehlende Zuständigkeitsklarheit gefährdet die Behandlungsqualität." },
+        { id:"d", text:"Vertikal: Hautoberfläche | Lateral: Feldmitte des Bestrahlungsfeldes | Longitudinal: Tumormitte laut CT-Planung.", correct:false, feedback:"Nicht korrekt. Der Referenzpunkt beim Planungs-CT wird anatomisch am Patienten definiert – nicht nach Feldgrenzen oder CT-Tumormitte. Die Laser-Positionierung folgt festgelegten anatomischen Orientierungspunkten.", consequence:"Klinische Konsequenz: Falsch definierter Referenzpunkt führt zu systematischen Lagerungsfehlern bei jeder Fraktion." }
+      ],
+      key_learning: "ZWEI longitudinale Markierungen in Bauchlage | Lagerungslaser (Matte) + Tumorreferenz ab Anus | Vertikal = halber Patientendurchmesser | Lateral = Körpermitte"
+    },
+    {
+      id: "s3", pillar: "2",
+      title: "Station 3 – Ersteinstellung: CBCT-Auswertung",
+      situation: "Erster Bestrahlungstag. Plan: VMAT, Photonen 6 MV, 28×1,8 Gy. Beim Setup-CBCT zeigt sich: 4 mm Abweichung in PA-Richtung, 2 mm lateral. Der institutionelle Action Level liegt bei 5 mm.",
+      question: "Wie gehst du mit dieser CBCT-Abweichung um?",
+      options: [
+        { id:"a", text:"Abweichung liegt unter dem Action Level – Bestrahlung durchführen, Abweichung dokumentieren.", correct:true, feedback:"Richtig. 4 mm und 2 mm liegen unter dem Action Level von 5 mm. Bestrahlung ist durchführbar. Dokumentation ist Pflicht. Bei systematisch wiederkehrenden Abweichungen unter 5 mm: Muster erkennen, ggf. Rücksprache mit MPE.", consequence:"Klinische Konsequenz: Korrekte Protokollanwendung. Dokumentation schützt vor unentdeckten Systematikfehlern." },
+        { id:"b", text:"Jede CBCT-Abweichung muss korrigiert werden – Tischkorrektur und erneutes CBCT.", correct:false, feedback:"Nicht korrekt als generelle Aussage. Action Levels definieren den Schwellenwert. Unter dem Action Level ist eine Korrektur nicht zwingend – sie verlängert unnötig die Behandlungszeit und erhöht die Bildgebungsdosis für den Patienten.", consequence:"Klinische Konsequenz: Unkritische Überkorrektur erhöht Behandlungsdauer und Gesamtbildgebungsdosis." },
+        { id:"c", text:"Abweichung dokumentieren, Bestrahlung pausieren, Arzt informieren.", correct:false, feedback:"Nicht korrekt. Abweichungen unter dem Action Level erfordern keinen Arztaufruf oder Behandlungspause. Rücksprache ist indiziert bei: Abweichungen über Action Level, anatomischen Veränderungen oder systematischen Mustern.", consequence:"Klinische Konsequenz: Unnötige Behandlungsunterbrechung und Verunsicherung des Patienten." },
+        { id:"d", text:"CBCT-Bilder speichern und am Ende der Woche im Team besprechen.", correct:false, feedback:"Nicht korrekt. CBCT-Auswertung muss täglich erfolgen. Verzögerte Auswertung kann systematische Fehler über mehrere Fraktionen unentdeckt lassen – mit direkten Konsequenzen für Dosisabdeckung.", consequence:"Klinische Konsequenz: Unentdeckte Systematikfehler über mehrere Fraktionen – retrospektiv nicht korrigierbar." }
+      ],
+      key_learning: "Action Level = Schwellenwert für Pflichtkorrektur | Unter Action Level: dokumentieren, weiterbehandeln | Über Action Level: korrigieren, verifizieren, dokumentieren | Systematische Muster über Fraktionen beobachten"
+    },
+    {
+      id: "s4", pillar: "3",
+      title: "Station 4 – Fraktion 8: Patientengespräch",
+      situation: "In der 8. Fraktion klagt Herr S. über anhaltenden Durchfall (seit 3 Tagen) und leichte Blasenbeschwerden beim Wasserlassen. Er ist sichtlich besorgt und fragt dich: 'Ist das normal? Macht mir das Bestrahlen kaputt?'",
+      question: "Wie reagierst du – fachlich und kommunikativ?",
+      options: [
+        { id:"a", text:"'Das sind normale Nebenwirkungen, machen Sie sich keine Sorgen.' – Bestrahlung wird durchgeführt.", correct:false, feedback:"Unvollständig und kommunikativ unzureichend. 'Machen Sie sich keine Sorgen' bagatellisiert die Beschwerden. Enteritis und Zystitis sind erwartete Strahlenfolgen, müssen aber dem Arzt gemeldet und intensitätsmäßig erfasst werden.", consequence:"Klinische Konsequenz: Patient fühlt sich nicht ernst genommen. Arzt erhält keine Information über Symptomintensität." },
+        { id:"b", text:"Du erklärst, dass Durchfall und Blasenbeschwerden typische akute Strahlenfolgen bei Beckenbestrahlungen sind (Enteritis, Zystitis). Du fragst nach Intensität, dokumentierst es und meldest es dem Arzt vor der Behandlung.", correct:true, feedback:"Richtig. Empathische Professionalität: Enteritis und Zystitis sind typische, erwartete akute Strahlenfolgen bei Beckenbestrahlung – reversibel, behandelbar. Erfasse Intensität (Stuhlfrequenz, Schmerzen), dokumentiere, melde dem Arzt. Du diagnostizierst nicht und entscheidest nicht über Pausen – das ist Aufgabe des Arztes.", consequence:"Klinische Konsequenz: Patient ist informiert und kooperativ. Arzt kann supportiv intervenieren. Compliance bleibt erhalten." },
+        { id:"c", text:"Du empfiehlst Herrn S., eine Pause von 2–3 Tagen einzulegen, bis die Symptome besser werden.", correct:false, feedback:"Nicht korrekt. Behandlungspausen entscheidet ausschließlich der Radioonkologe. Behandlungspausen verlängern die Gesamtbehandlungszeit – klinisch relevant für das Therapieergebnis.", consequence:"Klinische Konsequenz: MTR überschreitet ihre Kompetenz. Potenzielle Tumorrepopulation durch verlängerte Gesamtbehandlungszeit." },
+        { id:"d", text:"Du verweist Herrn S. schweigend an den behandelnden Arzt und machst selbst keine Aussage.", correct:false, feedback:"Unvollständig. Der Verweis an den Arzt ist richtig – aber der Patient hat das Recht auf sachliche Einordnung durch die MTR. Schweigen wirkt wie Desinteresse. Professionelle Kommunikation: informieren, empathisch begleiten, Grenzen der eigenen Rolle klar halten.", consequence:"Klinische Konsequenz: Patient fühlt sich allein gelassen. Vertrauensverlust in das Behandlungsteam." }
+      ],
+      key_learning: "Enteritis + Zystitis = typische akute Strahlenfolgen ab Fraktion 5–10 bei Beckenbestrahlung | MTR-Rolle: informieren, dokumentieren, Arzt melden – nicht diagnostizieren | Empathie + Rollenklarheit"
+    },
+    {
+      id: "s5", pillar: "5",
+      title: "Station 5 – Fraktion 15: Gewichtsverlust",
+      situation: "Herr S. hat seit Behandlungsbeginn 7 kg abgenommen (82→75 kg). Das Lochbrett sitzt heute merklich anders. Das CBCT zeigt 9 mm ventral und 6 mm lateral Abweichung.",
+      question: "Welche Handlungskonsequenz ziehst du aus dieser Situation?",
+      options: [
+        { id:"a", text:"Tischkorrektur um 9 mm und 6 mm, erneutes CBCT, Bestrahlung durchführen – der Plan ist gültig.", correct:false, feedback:"Unvollständig. Tischkorrektur ist der erste Schritt – aber 7 kg Gewichtsverlust verändert die Körperkonturen fundamental. Der ursprüngliche Plan wurde auf einer anderen Anatomie erstellt. Selbst nach Korrektur kann die Dosisverteilung nicht mehr der ursprünglichen entsprechen. Adaptive Replanning ist zu prüfen.", consequence:"Klinische Konsequenz: Signifikante Unterdosierung im Zielvolumen und/oder Überdosierung in Risikoorganen durch veränderte Anatomie." },
+        { id:"b", text:"Tischkorrektur, Verifikations-CBCT, Gewichtsverlust und Konturänderung dokumentieren, Rücksprache mit Radioonkologe und MPE – Adaptive Replanning prüfen.", correct:true, feedback:"Richtig. Ein Gewichtsverlust von >5% oder sichtbare Konturänderungen sind Indikatoren für Adaptive Replanning. Vorgehen: (1) Tischkorrektur + Verifikations-CBCT. (2) Gewichtsverlust und Anatomieänderung dokumentieren. (3) Radioonkologe und MPE informieren. (4) Ggf. neues Planungs-CT. Die Entscheidung trifft das Team.", consequence:"Klinische Konsequenz: Nur durch Replanning kann sichergestellt werden, dass Zielvolumen ausreichend dosiert und Risikoorgane nicht überdosiert werden." },
+        { id:"c", text:"Behandlung pausieren bis Herr S. wieder Gewicht zugenommen hat.", correct:false, feedback:"Nicht korrekt. Gewichtsverlust während Radiochemotherapie ist häufig und erwartet – er erfordert Planadaption, keine Pause. Behandlungspausen verlängern die Gesamtbehandlungszeit mit negativem Einfluss auf das Therapieergebnis.", consequence:"Klinische Konsequenz: Unnötige Behandlungsverzögerung ohne Nutzen für die Dosisgeometrie." },
+        { id:"d", text:"9 mm und 6 mm liegen über dem Action Level – sofort abbrechen und Arzt rufen.", correct:false, feedback:"Teilweise korrekt, aber zu undifferenziert. Ja, Abweichungen über dem Action Level erfordern Korrektur und Rücksprache. Aber der entscheidende klinische Befund hier ist der Gewichtsverlust und die anatomische Veränderung. Der Fokus muss auf Adaptive Replanning liegen – nicht nur auf der CBCT-Reaktion.", consequence:"Klinische Konsequenz: Der eigentliche klinische Befund (Anatomieänderung) wird nicht ausreichend adressiert." }
+      ],
+      key_learning: "Gewichtsverlust >5% = Indikator für Adaptive Replanning | Anatomische Veränderungen invalidieren den ursprünglichen Plan | CBCT-Korrektur ≠ Lösung bei Konturänderung | Interprofessionelle Rücksprache zwingend"
+    },
+    {
+      id: "s6", pillar: "4",
+      title: "Station 6 – Fraktionierungskonzepte verstehen",
+      situation: "Im Teamgespräch fragt ein Assistenzarzt, warum beim Rektumkarzinom die Kurzzeitbestrahlung (5×5 Gy) und die Langzeit-RCT (28×1,8 Gy) beide eingesetzt werden – schließlich sei die Gesamtdosis unterschiedlich. Er bittet um deine Einschätzung aus MTR-Perspektive.",
+      question: "Welche Aussage beschreibt die Unterschiede zwischen beiden Konzepten korrekt?",
+      options: [
+        { id:"a", text:"Kurzzeitbestrahlung wird bei fortgeschrittenen, lokal inoperablen Tumoren eingesetzt; Langzeit-RCT ist das Konzept für frühe Stadien.", correct:false, feedback:"Nicht korrekt. Die Kurzzeitbestrahlung (5×5 Gy) wird bei resektablen Tumoren eingesetzt – mit unmittelbar anschließender OP (innerhalb 1 Woche). Die Langzeit-RCT (28×1,8 Gy + Capecitabin) zielt auf Downstaging fortgeschrittenerer Tumoren – OP nach 6–8 Wochen.", consequence:"Klinische Konsequenz: Falsche Einschätzung der Indikation – beeinträchtigt das Prozessverständnis der MTR." },
+        { id:"b", text:"Kurzzeitbestrahlung (5×5 Gy = 25 Gy, ohne Chemo, OP innerhalb 1 Woche) nutzt hohe Einzeldosen für raschen Effekt. Langzeit-RCT (28×1,8 Gy = 50,4 Gy + Capecitabin, OP nach 6–8 Wochen) erzielt durch Downstaging bessere Operabilität.", correct:true, feedback:"Richtig. Beide Konzepte haben unterschiedliche radiobiologische Wirkprinzipien und klinische Ziele: Kurzzeitbestrahlung → rasche OP ohne Wartezeit. Langzeit-RCT → Tumorregression (Downstaging) zur Verbesserung der Operabilität und ggf. zum Sphinktererhalt bei tiefsitzenden Tumoren. Gesamtdosis allein ist kein ausreichendes Vergleichskriterium.", consequence:"Klinische Konsequenz: MTR versteht die Behandlungslogik – essentiell für kompetenten Dialog im interprofessionellen Team." },
+        { id:"c", text:"Beide Konzepte sind identisch in der biologischen Wirkung – die Wahl ist rein organisatorisch.", correct:false, feedback:"Nicht korrekt. Hohe Einzeldosen (5 Gy) haben durch den größeren radiobiologischen Effekt (LQ-Modell, α/β-Verhältnis) eine andere Wirkung auf Tumor- und Normalgewebe als kleine Einzeldosen (1,8 Gy). Die Konzepte sind biologisch nicht äquivalent.", consequence:"Klinische Konsequenz: Fehlendes radiobiologisches Verständnis verhindert kompetente Kommunikation im Team." },
+        { id:"d", text:"Die Entscheidung hat für die MTR keine Relevanz – wir führen nur aus.", correct:false, feedback:"Nicht korrekt. Als MTR musst du den Bestrahlungsplan verstehen – um Abweichungen zu erkennen, Patienten korrekt zu informieren und im interprofessionellen Team kompetent zu handeln. 'Nur ausführen' entspricht nicht dem Berufsverständnis nach MTAPrV.", consequence:"Klinische Konsequenz: Fehlendes Prozessverständnis gefährdet Patientensicherheit und Behandlungsqualität." }
+      ],
+      key_learning: "Kurzzeitbestrahlung: 5×5 Gy = 25 Gy, keine Chemo, OP innerhalb 1 Woche | Langzeit-RCT: 28×1,8 Gy = 50,4 Gy + Capecitabin, OP nach 6–8 Wochen | Ziel: sofortige OP vs. Downstaging + Sphinktererhalt"
+    },
+    {
+      id: "s7", pillar: "3",
+      title: "Station 7 – Fraktion 22: Schwere Toxizität",
+      situation: "Herr S. erscheint zur 22. Fraktion. Im Wartezimmer siehst du, dass er sehr blass ist, kaum gehen kann und über starke Bauchkrämpfe klagt. Er habe die letzten 2 Tage kaum gegessen und sehr starken Durchfall (8–10 Mal täglich).",
+      question: "Wie handelst du in dieser Situation?",
+      options: [
+        { id:"a", text:"Du informierst den Patienten, dass Durchfall normal ist, und führst die Bestrahlung wie geplant durch.", correct:false, feedback:"Nicht korrekt und gefährlich. 8–10 Stuhlgänge täglich entspricht Grad-3-Toxizität (CTCAE). Das ist kein normaler Behandlungsverlauf. Bestrahlung in diesem Zustand fortzuführen ohne ärztliche Evaluation ist ein schwerwiegender Fehler.", consequence:"Klinische Konsequenz: Gefährdung durch Dehydratation, Elektrolytentgleisung, schwere Mukosaschädigung. Möglicher stationärer Notfall." },
+        { id:"b", text:"Du erkennst die Schwere der Situation, informierst sofort den Arzt, dokumentierst die Symptome detailliert und wartest auf die ärztliche Entscheidung.", correct:true, feedback:"Richtig. 8–10 Stuhlgänge täglich = Grad-3-Diarrhö – schwere Toxizität, die ärztliche Evaluation erfordert (Rehydratation, Elektrolyte, Loperamid, ggf. stationäre Aufnahme, Behandlungspause). Als MTR: erkennst, dokumentierst, meldest – handelst nicht eigenständig therapeutisch. Empathische Begleitung bis zur ärztlichen Bewertung.", consequence:"Klinische Konsequenz: Frühzeitige Intervention verhindert schwere Komplikationen. Supportive Therapie verbessert Erholungsfähigkeit und Weiterführbarkeit der RT." },
+        { id:"c", text:"Du empfiehlst viel zu trinken und Hausarztkonsultation, und führst die Bestrahlung durch.", correct:false, feedback:"Nicht korrekt. Dieser Patient braucht sofortige Evaluation durch den behandelnden Radioonkologen – nicht den Hausarzt. 'Viel trinken' ist bei diesem Schweregrad völlig unzureichend. Bestrahlung durchführen ist kontraindiziert.", consequence:"Klinische Konsequenz: Verzögerung der notwendigen Intervention. Risiko schwerer Komplikationen." },
+        { id:"d", text:"Bestrahlung abbrechen, Patient nach Hause schicken mit dem Hinweis, morgen wiederzukommen.", correct:false, feedback:"Bestrahlung nicht durchführen ist richtig – aber den Patienten nach Hause zu schicken ist falsch. Er braucht sofortige ärztliche Evaluation vor Ort. 'Morgen wiederkommen' ist bei Grad-3-Toxizität eine gefährliche Verzögerung.", consequence:"Klinische Konsequenz: Patient in schlechtem Allgemeinzustand ohne ärztliche Evaluation zu entlassen ist eine schwere Pflichtverletzung." }
+      ],
+      key_learning: "Grad-3-Toxizität (≥7 Stuhlgänge/Tag) = sofortige ärztliche Evaluation | MTR erkennt, dokumentiert, meldet – entscheidet nicht allein | Patient nicht ohne ärztliche Freigabe entlassen"
+    }
+  ],
+  transfer: {
+    title: "Abschluss-Reflexion: Deine Rolle im Behandlungsprozess",
+    question: "Herr S. hat seine Behandlung abgeschlossen. Reflektiere in eigenen Worten: An welchen Stationen des Behandlungsprozesses trägt die MTR direkt zur Behandlungssicherheit bei? Welche Entscheidungen darf die MTR eigenständig treffen – und wo liegen die Grenzen?",
+    sample: "Die MTR trägt an mehreren kritischen Punkten zur Behandlungssicherheit bei: (1) Lagerung und Reproduzierbarkeit – korrekte Lagerungsentscheidung (Lochbrett), exakte Referenzpunktsetzung, tägliche CBCT-Auswertung nach Protokoll. (2) Qualitätssicherung – Erkennung von Abweichungen (Gewichtsverlust, Konturänderungen) und deren Meldung an das Team. (3) Patientenkommunikation – empathische Information über erwartete Nebenwirkungen, ohne medizinische Diagnosen zu stellen. (4) Früherkennung von Toxizität – Grad-3-Toxizität erkennen und sofort weiterleiten. Eigenständige MTR-Entscheidungen: Tischkorrekturen im Rahmen von Action Levels, Lagerungsentscheidungen nach Protokoll, Dokumentation. Grenzen: Behandlungspausen, Dosisanpassungen, Planadaptionen, therapeutische Empfehlungen – ausschließlich ärztliche Entscheidungen.",
+    checklist: [
+      "Ich habe mindestens 3 konkrete Beispiele für MTR-Beiträge zur Behandlungssicherheit genannt.",
+      "Ich habe die Grenzen der MTR-Entscheidungskompetenz klar beschrieben.",
+      "Ich habe den Begriff 'interprofessionelle Kommunikation' sinnvoll eingesetzt.",
+      "Ich habe den Zusammenhang zwischen Lagerungsgenauigkeit und Dosisverteilung erklärt.",
+      "Ich habe beschrieben, was bei Abweichungen vom erwarteten Verlauf zu tun ist."
+    ]
+  }
+};
+
+// ---- State ----
+const state = { current: 0, answers: {}, submitted: {}, score: 0, start: Date.now() };
+const app = document.getElementById('app');
+const PILLAR_MAP = { "1":"Präzision", "2":"Technologie", "3":"Kommunikation", "4":"Prozessethik", "5":"Reflexion" };
+
+function init() { renderIntro(); }
+
+function renderIntro() {
+  app.innerHTML = `<div class="card">
+    <span class="intro-badge">Klinischer Fall · MTR Strahlentherapie</span>
+    <h1 class="intro-title">${CASE.title}</h1>
+    <p class="intro-sub">${CASE.subtitle}</p>
+    <div class="patient-card">
+      <h3>Patient</h3>
+      <dl class="patient-grid">
+        <dt>Patient</dt><dd>${CASE.patient.name}</dd>
+        <dt>Diagnose</dt><dd>${CASE.patient.diagnose}</dd>
+        <dt>Therapieplan</dt><dd>${CASE.patient.plan}</dd>
+        <dt>Besonderheiten</dt><dd>${CASE.patient.besonderheiten}</dd>
+      </dl>
+    </div>
+    <div class="pillars">
+      ${CASE.pillars.map(p => `<div class="pillar-badge"><strong>Säule ${p.num}</strong>${p.label}</div>`).join('')}
+    </div>
+    <p style="font-size:.9rem;color:var(--neutral);margin-bottom:24px;">${CASE.description}<br><br>
+    <strong>${CASE.stations.length} klinische Stationen</strong> – von der Lagerungssimulation bis zum Abschluss der Behandlung.</p>
+    <button class="btn btn-primary btn-lg" id="start-btn">Fall starten →</button>
+  </div>`;
+  document.getElementById('start-btn').onclick = () => renderStation();
+}
+
+function renderStation() {
+  const s = CASE.stations[state.current];
+  const total = CASE.stations.length;
+  const pct = Math.round((state.current / total) * 100);
+  const locked = !!state.submitted[s.id];
+  const sel = state.answers[s.id] || null;
+
+  app.innerHTML = `<div class="card">
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-label"><span>Station ${state.current+1} von ${total}</span><span>${state.score} richtig</span></div>
+    <div class="station-header">
+      <span class="station-num">Station ${state.current+1}</span>
+      <span class="station-pillar">Säule ${s.pillar} – ${PILLAR_MAP[s.pillar]}</span>
+    </div>
+    <h2 class="station-title">${s.title}</h2>
+    <div class="situation-box">
+      <h4>Situation</h4>
+      <p>${s.situation}</p>
+    </div>
+    <p class="question">${s.question}</p>
+    <div class="options" id="opts">
+      ${s.options.map(o => {
+        let cls = '';
+        const icon = locked
+          ? (o.correct ? '<span class="option-icon">✓</span>'
+            : (sel===o.id ? '<span class="option-icon">✗</span>' : ''))
+          : '';
+        if(locked){
+          if(o.correct) cls='correct';
+          else if(!o.correct && sel===o.id) cls='wrong';
+        } else if(sel===o.id) cls='selected';
+        return `<label class="option ${cls} ${locked?'locked':''}" data-id="${o.id}">
+          <input type="radio" name="opt" value="${o.id}" ${sel===o.id?'checked':''} ${locked?'disabled':''}>
+          <span class="option-text">${o.text}</span>
+          ${icon}
+        </label>`;
+      }).join('')}
+    </div>
+    ${locked ? renderFeedback(s) : ''}
+    <div class="key-learning" id="kl" style="${locked?'display:block':''}">
+      <strong>🔑 Merksatz</strong>${s.key_learning}
+    </div>
+    ${locked && XLINKS[s.id] ? `<div class="xlink visible"><p class="xlink-label">🔗 Verknüpfung zu anderen Modulen</p>${XLINKS[s.id]}</div>` : ''}
+    <div class="actions">
+      ${!locked
+        ? `<button class="btn btn-primary" id="submit-btn" disabled>Antwort prüfen</button>`
+        : state.current < total-1
+          ? `<button class="btn btn-primary" id="next-btn">Nächste Station →</button>`
+          : `<button class="btn btn-primary" id="result-btn">Auswertung →</button>`
+      }
+    </div>
+  </div>`;
+
+  if(!locked){
+    document.getElementById('opts').addEventListener('change', e => {
+      if(e.target.type==='radio'){
+        state.answers[s.id] = e.target.value;
+        document.getElementById('submit-btn').disabled = false;
+      }
+    });
+    document.getElementById('submit-btn').onclick = () => submitStation(s);
+  }
+  document.getElementById('next-btn')?.addEventListener('click', () => { state.current++; renderStation(); });
+  document.getElementById('result-btn')?.addEventListener('click', renderResult);
+}
+
+function renderFeedback(s) {
+  const sub = state.submitted[s.id];
+  const opt = s.options.find(o => o.id === state.answers[s.id]);
+  if(!opt) return '';
+  const cls = sub.correct ? 'correct' : 'wrong';
+  const label = sub.correct ? 'Richtig' : 'Nicht korrekt';
+  // Split feedback: first sentence as summary, rest as detail
+  const sentences = opt.feedback.split(/(?<=\.) /);
+  const summary = sentences[0];
+  const detail = sentences.slice(1).join(' ');
+  const detailHtml = detail ? `
+    <div class="feedback-detail hidden" id="fd-${s.id}">
+      <p style="margin-bottom:6px;">${detail}</p>
+      <p class="consequence">${opt.consequence}</p>
+    </div>
+    <button class="feedback-toggle" onclick="toggleDetail('${s.id}')">Details einblenden ▾</button>` 
+    : `<p class="consequence" style="margin-top:8px;font-size:.85rem;color:var(--neutral);font-style:italic;">${opt.consequence}</p>`;
+  return `<div class="feedback ${cls}">
+    <p class="feedback-label">${label}</p>
+    <p class="feedback-summary">${summary}</p>
+    ${detailHtml}
+  </div>`;
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById('fd-' + id);
+  const btn = el?.nextElementSibling;
+  if (!el) return;
+  const hidden = el.classList.toggle('hidden');
+  if (btn) btn.textContent = hidden ? 'Details einblenden ▾' : 'Details ausblenden ▴';
+}
+
+function submitStation(s) {
+  const sel = state.answers[s.id];
+  const opt = s.options.find(o => o.id === sel);
+  const correct = opt?.correct || false;
+  state.submitted[s.id] = { correct };
+  if(correct) state.score++;
+  renderStation();
+}
+
+function renderResult() {
+  const total = CASE.stations.length;
+  const pct = Math.round((state.score/total)*100);
+  try { localStorage.setItem('mtr_rt_case_rektum-ca-case', JSON.stringify({lastPct: pct})); } catch(e) {}
+  const elapsed = Math.round((Date.now()-state.start)/60000);
+  const g = pct>=86?{l:'Sehr sicher',n:'●●●●●',c:'r1'}: pct>=71?{l:'Sicher',n:'●●●●○',c:'r2'}: pct>=57?{l:'Gut vorbereitet',n:'●●●○○',c:'r3'}: pct>=43?{l:'In Entwicklung',n:'●●○○○',c:'r4'}: {l:'Noch Übungsbedarf',n:'●○○○○',c:'r5'};
+
+  app.innerHTML = `<div class="card">
+    <div class="result-header ${g.c}">
+      <p class="result-note">${g.n}</p>
+      <p class="result-label">${g.l}</p>
+      <p class="result-score">${state.score} / ${total} Stationen richtig (${pct}%) · ca. ${elapsed} Minuten</p>
+    </div>
+    <div class="result-stations">
+      <h3>Auswertung nach Station</h3>
+      ${CASE.stations.map(s => {
+        const sub = state.submitted[s.id];
+        const correct = sub?.correct;
+        return `<div class="result-station-item">
+          <span class="result-icon">${correct?'✓':'✗'}</span>
+          <div>
+            <p class="result-station-title">${s.title}</p>
+            <p class="result-station-learning">🔑 ${s.key_learning}</p>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="crosslink-section">
+      <h3>Verknüpfung zu anderen Fällen</h3>
+      <a href="oesophagus-ca-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">Ösophaguskarzinom – Herr M.</p>
+            <p class="crosslink-hint">Vergleich: Wie unterscheidet sich die Lagerung beim Ösophagus (Arme nach oben, kein Lochbrett) von der Rektum-Lagerung? Und welches serielle Risikoorgan ist dort kritischer als der Dünndarm?</p>
+          </div>
+        </a><a href="hno-tumor-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">HNO-Tumor – Frau B.</p>
+            <p class="crosslink-hint">Vergleich: Beim HNO-Tumor gibt es eine Pflichtprüfung VOR der Maskenanfertigung – was ist das Äquivalent beim Rektum-Fall vor der Lagerungssimulation?</p>
+          </div>
+        </a>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" id="retry-btn">Fall neu starten</button>
+      <button class="btn btn-primary" id="transfer-btn">Zur Reflexionsaufgabe →</button>
+    </div>
+  </div>`;
+
+  document.getElementById('retry-btn').onclick = () => {
+    state.current=0; state.answers={}; state.submitted={}; state.score=0; state.start=Date.now();
+    renderIntro();
+  };
+  document.getElementById('transfer-btn').onclick = renderTransfer;
+}
+
+function renderTransfer() {
+  const t = CASE.transfer;
+  app.innerHTML = `<div class="card">
+    <span class="intro-badge">Reflexionsaufgabe</span>
+    <h2 style="font-size:1.3rem;font-weight:700;color:var(--primary);margin-bottom:16px;">${t.title}</h2>
+    <p class="transfer-q">${t.question}</p>
+    <textarea class="transfer-textarea" id="ta" placeholder="Schreibe hier deine Antwort…"></textarea>
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn btn-primary" id="sample-btn">Musterlösung anzeigen</button>
+    </div>
+    <div class="sample-box" id="sample">
+      <h4>Musterlösung</h4>
+      <p>${t.sample}</p>
+    </div>
+    <div class="checklist" id="checklist">
+      <h4>Selbstbewertung</h4>
+      ${t.checklist.map((item,i)=>`<div class="check-item">
+        <input type="checkbox" id="c${i}">
+        <label for="c${i}">${item}</label>
+      </div>`).join('')}
+    </div>
+    <div class="actions" style="margin-top:16px;">
+      <button class="btn btn-secondary" id="back-btn">← Zurück</button>
+      <button class="btn btn-primary" id="new-btn">Neuen Fall starten</button>
+    </div>
+  </div>`;
+
+  document.getElementById('sample-btn').onclick = () => {
+    document.getElementById('sample').style.display='block';
+    document.getElementById('checklist').style.display='block';
+    document.getElementById('sample-btn').style.display='none';
+  };
+  document.getElementById('back-btn').onclick = renderResult;
+  document.getElementById('new-btn').onclick = () => {
+    state.current=0; state.answers={}; state.submitted={}; state.score=0; state.start=Date.now();
+    renderIntro();
+  };
+}
+
+const XLINKS = {"s3": "→ Beim <a href='oesophagus-ca-case.html'>Ösophagus-Fall Station 3</a> gilt derselbe Action-Level-Grundsatz – aber zusätzlich mit anatomischer Veränderung durch Gewichtsverlust. Vergleiche, was sich dort ändert.", "s5": "→ Beim <a href='oesophagus-ca-case.html'>Ösophagus-Fall Station 4</a> ist das Rückenmark das kritische Risikoorgan – ein Kontrastfall zu Dünndarm/Blase hier im Becken. Beide erfordern DVH-Aufmerksamkeit.", "s6": "→ Beim <a href='oesophagus-ca-case.html'>Ösophagus-Fall Station 6</a> erklärt dasselbe Konzept (definitiv vs. neoadjuvant) einem Patienten – gesucht: patientengerechte Formulierung."};
+init();
+</script>
+<!-- MTR Feedback Widget -->
+<style>
+/* ── MTR Feedback Widget ─────────────────── */
+#mtr-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;
+  background:#1a4f7a;color:#fff;border:none;font-size:1.4rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:9999;transition:transform .15s,background .15s;
+  display:flex;align-items:center;justify-content:center;}
+#mtr-fab:hover{background:#2c6ea6;transform:scale(1.08);}
+#mtr-fab.has-feedback{background:#1e6e42;}
+#mtr-fb-panel{position:fixed;bottom:88px;right:16px;width:310px;background:#fff;
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);padding:20px;z-index:9998;
+  border:1px solid #d1d9e0;animation:mtrSlideIn .18s ease;}
+@keyframes mtrSlideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#mtr-fb-panel[hidden]{display:none;}
+.mtr-fb-head{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:#1a4f7a;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eef4fb;}
+.mtr-fb-q{font-size:.88rem;font-weight:600;color:#1a1a2e;margin-bottom:8px;}
+.mtr-stars{display:flex;gap:6px;margin-bottom:16px;cursor:default;}
+.mtr-star{font-size:1.7rem;cursor:pointer;color:#d1d9e0;transition:color .1s;line-height:1;user-select:none;}
+.mtr-star.active{color:#f0b429;}
+.mtr-fb-sub{font-size:.8rem;color:#4a5568;margin-bottom:14px;margin-top:-10px;}
+.mtr-fb-textarea{width:100%;min-height:72px;padding:8px 10px;border:1.5px solid #d1d9e0;
+  border-radius:6px;font-size:.88rem;font-family:inherit;resize:vertical;margin-bottom:12px;
+  color:#333;line-height:1.5;}
+.mtr-fb-textarea:focus{outline:none;border-color:#1a4f7a;}
+.mtr-fb-actions{display:flex;gap:8px;justify-content:flex-end;}
+.mtr-fb-btn{padding:8px 16px;border-radius:6px;font-size:.85rem;font-weight:600;border:none;cursor:pointer;transition:background .12s;}
+.mtr-fb-save{background:#1a4f7a;color:#fff;}
+.mtr-fb-save:hover{background:#2c6ea6;}
+.mtr-fb-cancel{background:#f8f9fa;color:#4a5568;border:1.5px solid #d1d9e0;}
+.mtr-fb-cancel:hover{border-color:#1a4f7a;color:#1a4f7a;}
+.mtr-fb-msg{font-size:.83rem;margin-bottom:8px;min-height:20px;}
+.mtr-fb-saved{color:#1e6e42;font-weight:600;}
+.mtr-fb-error{color:#8b1a1a;}
+@media(max-width:420px){#mtr-fb-panel{width:calc(100vw - 32px);right:8px;}}
+</style>
+<button id="mtr-fab" title="Feedback geben" aria-label="Feedback zu diesem Modul geben">💬</button>
+<div id="mtr-fb-panel" hidden role="dialog" aria-modal="true" aria-label="Modul-Feedback">
+  <p class="mtr-fb-head">Feedback – Rektumkarzinom – Herr S.</p>
+  <p class="mtr-fb-q">Wie hilfreich war dieses Modul?</p>
+  <div class="mtr-stars" id="mtr-stars" role="group" aria-label="Bewertung">
+    <span class="mtr-star" data-v="1" role="button" tabindex="0" aria-label="1 Stern">★</span>
+    <span class="mtr-star" data-v="2" role="button" tabindex="0" aria-label="2 Sterne">★</span>
+    <span class="mtr-star" data-v="3" role="button" tabindex="0" aria-label="3 Sterne">★</span>
+    <span class="mtr-star" data-v="4" role="button" tabindex="0" aria-label="4 Sterne">★</span>
+    <span class="mtr-star" data-v="5" role="button" tabindex="0" aria-label="5 Sterne">★</span>
+  </div>
+  <p class="mtr-fb-q">Was war unklar oder fehlt?</p>
+  <textarea class="mtr-fb-textarea" id="mtr-fb-text" placeholder="Optional – Freitext…" aria-label="Kommentar"></textarea>
+  <div class="mtr-fb-msg" id="mtr-fb-msg" aria-live="polite"></div>
+  <div class="mtr-fb-actions">
+    <button class="mtr-fb-btn mtr-fb-cancel" id="mtr-fb-cancel">Schließen</button>
+    <button class="mtr-fb-btn mtr-fb-save" id="mtr-fb-save">Speichern</button>
+  </div>
+</div>
+<script>
+(function(){
+  var MOD='rektum-ca-case', KEY='mtr_rt_feedback_'+MOD;
+  var fab=document.getElementById('mtr-fab');
+  var panel=document.getElementById('mtr-fb-panel');
+  var stars=document.querySelectorAll('.mtr-star');
+  var txt=document.getElementById('mtr-fb-text');
+  var msg=document.getElementById('mtr-fb-msg');
+  var rating=0;
+
+  function load(){
+    try{
+      var s=JSON.parse(localStorage.getItem(KEY));
+      if(s){rating=s.rating||0;txt.value=s.text||'';setStars(rating);fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';}
+    }catch(e){}
+  }
+  function setStars(v){
+    stars.forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.v)<=v);});
+  }
+  fab.addEventListener('click',function(){
+    panel.hidden=!panel.hidden;
+    if(!panel.hidden){msg.innerHTML='';txt.focus();}
+  });
+  stars.forEach(function(s){
+    s.addEventListener('click',function(){rating=parseInt(s.dataset.v);setStars(rating);});
+    s.addEventListener('mouseover',function(){setStars(parseInt(s.dataset.v));});
+    s.addEventListener('mouseout',function(){setStars(rating);});
+    s.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){rating=parseInt(s.dataset.v);setStars(rating);}});
+  });
+  document.getElementById('mtr-fb-cancel').addEventListener('click',function(){panel.hidden=true;});
+  document.getElementById('mtr-fb-save').addEventListener('click',function(){
+    if(!rating){msg.innerHTML='<span class="mtr-fb-error">Bitte zuerst Bewertung wählen.</span>';return;}
+    try{
+      localStorage.setItem(KEY,JSON.stringify({rating:rating,text:txt.value.trim(),module:'Rektumkarzinom – Herr S.',savedAt:new Date().toISOString()}));
+      msg.innerHTML='<span class="mtr-fb-saved">✓ Feedback gespeichert</span>';
+      fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';
+      setTimeout(function(){panel.hidden=true;msg.innerHTML='';},1600);
+    }catch(e){msg.innerHTML='<span class="mtr-fb-error">Speichern fehlgeschlagen (localStorage blockiert?).</span>';}
+  });
+  load();
+})();
+</script>
+
+</body>
+</html>

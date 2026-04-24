@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HNO-Tumor – Klinischer Fall | MTR Strahlentherapie</title>
+<style>
+:root {
+  --primary:#1a4f7a;--primary-light:#2c6ea6;--primary-bg:#eef4fb;
+  --correct:#1e6e42;--correct-bg:#e8f5ee;
+  --wrong:#8b1a1a;--wrong-bg:#fdf0f0;
+  --neutral:#4a5568;--border:#d1d9e0;--surface:#f8f9fa;
+  --radius:8px;--shadow:0 2px 8px rgba(0,0,0,.08);
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:#f0f4f8;color:#1a1a2e;line-height:1.6;min-height:100vh;padding:24px 16px;}
+.card{max-width:760px;margin:0 auto;background:#fff;border-radius:12px;padding:32px;box-shadow:var(--shadow);}
+.intro-badge{display:inline-block;background:var(--primary);color:#fff;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;margin-bottom:12px;}
+.intro-title{font-size:1.7rem;font-weight:800;color:var(--primary);margin-bottom:6px;}
+.intro-sub{font-size:1rem;color:var(--neutral);margin-bottom:16px;}
+.patient-card{background:var(--primary-bg);border:1px solid #b8d0e8;border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;}
+.patient-card h3{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);margin-bottom:10px;}
+.patient-grid{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:.9rem;}
+.patient-grid dt{color:var(--neutral);font-weight:600;}
+.progress-bar{height:6px;background:#e2e8f0;border-radius:3px;margin-bottom:6px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .3s;}
+.progress-label{font-size:.8rem;color:var(--neutral);display:flex;justify-content:space-between;margin-bottom:20px;}
+.station-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.station-num{background:var(--primary);color:#fff;font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:20px;}
+.station-pillar{font-size:.78rem;color:var(--neutral);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px;}
+.station-title{font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:14px;}
+.situation-box{background:var(--primary-bg);border:1px solid #b8d0e8;border-radius:var(--radius);padding:14px 16px;margin-bottom:18px;}
+.situation-box h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);margin-bottom:8px;}
+.situation-box p{font-size:.93rem;color:#2d4a6a;line-height:1.6;}
+.question{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:16px;}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.option{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .15s,background .15s;}
+.option:hover:not(.locked){border-color:var(--primary-light);background:#f0f7ff;}
+.option input{margin-top:3px;accent-color:var(--primary);flex-shrink:0;}
+.option-text{font-size:.93rem;flex:1;line-height:1.5;}
+.option-icon{font-size:1rem;font-weight:700;flex-shrink:0;}
+.option.selected{border-color:var(--primary);background:#f0f7ff;}
+.option.correct{border-color:var(--correct);background:var(--correct-bg);}
+.option.wrong{border-color:var(--wrong);background:var(--wrong-bg);}
+.option.correct .option-icon{color:var(--correct);}
+.option.wrong .option-icon{color:var(--wrong);}
+.option.locked{cursor:default;}
+.feedback{border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;border-left:4px solid;}
+.feedback.correct{background:var(--correct-bg);border-color:var(--correct);}
+.feedback.wrong{background:var(--wrong-bg);border-color:var(--wrong);}
+.feedback-label{font-weight:700;font-size:.88rem;margin-bottom:4px;}
+.feedback.correct .feedback-label{color:var(--correct);}
+.feedback.wrong .feedback-label{color:var(--wrong);}
+.feedback-text{font-size:.9rem;line-height:1.6;color:#333;margin-bottom:6px;}
+.consequence{font-size:.85rem;color:var(--neutral);font-style:italic;border-top:1px solid rgba(0,0,0,.1);padding-top:8px;margin-top:8px;}
+.key-learning{background:#fffbea;border:1px solid #f0e08c;border-radius:var(--radius);padding:10px 14px;margin-bottom:20px;font-size:.85rem;color:#5a4a00;}
+.key-learning strong{display:block;margin-bottom:4px;color:#3d3000;}
+.actions{display:flex;justify-content:flex-end;gap:12px;}
+.btn{padding:10px 22px;border-radius:var(--radius);font-size:.95rem;font-weight:600;border:none;cursor:pointer;transition:background .15s;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover:not(:disabled){background:var(--primary-light);}
+.btn-secondary{background:var(--surface);color:var(--primary);border:2px solid var(--border);}
+.btn-secondary:hover{border-color:var(--primary);}
+.btn-lg{padding:14px 32px;font-size:1.05rem;width:100%;}
+.result-header{text-align:center;padding:28px;border-radius:var(--radius);margin-bottom:24px;}
+.r1{background:#e8f5ee;}.r2{background:#edf7e8;}.r3{background:#fdf7e3;}.r4{background:#fef3e2;}.r5{background:#fdf0f0;}
+.result-note{font-size:3rem;font-weight:800;color:var(--primary);}
+.result-label{font-size:1.2rem;font-weight:700;margin:4px 0;}
+.result-score{font-size:.95rem;color:var(--neutral);}
+.result-stations h3{font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--border);}
+.result-station-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;font-size:.88rem;}
+.result-icon{font-size:1.1rem;flex-shrink:0;}
+.result-station-title{font-weight:600;}
+.result-station-learning{color:var(--neutral);font-size:.83rem;margin-top:2px;}
+.transfer-q{font-size:1rem;font-weight:600;color:#1a1a2e;margin-bottom:12px;}
+.transfer-textarea{width:100%;min-height:160px;padding:12px 14px;border:2px solid var(--border);border-radius:var(--radius);font-size:.95rem;font-family:var(--font);resize:vertical;line-height:1.6;color:#333;margin-bottom:16px;}
+.transfer-textarea:focus{outline:none;border-color:var(--primary);}
+.sample-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;display:none;}
+.sample-box h4{font-size:.85rem;font-weight:700;color:var(--correct);margin-bottom:8px;}
+.sample-box p{font-size:.9rem;line-height:1.6;color:#333;}
+.checklist{display:none;margin-bottom:20px;}
+.checklist h4{font-size:.9rem;font-weight:700;color:var(--primary);margin-bottom:10px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.check-item input{margin-top:3px;accent-color:var(--primary);flex-shrink:0;width:16px;height:16px;}
+.check-item label{font-size:.9rem;color:#333;cursor:pointer;}
+@media(max-width:600px){.card{padding:20px 14px;}.patient-grid{grid-template-columns:1fr;}}
+
+/* P1: Feedback summary + expandable detail */
+.feedback-summary { font-size:.93rem; font-weight:700; line-height:1.5; margin-bottom:0; }
+.feedback-detail { font-size:.88rem; line-height:1.6; color:#333; margin-top:8px; }
+.feedback-detail.hidden { display:none; }
+.feedback-toggle { background:none; border:none; cursor:pointer; font-size:.8rem; font-weight:600; padding:4px 0; margin-top:6px; text-decoration:underline; }
+.feedback.correct .feedback-toggle { color:var(--correct); }
+.feedback.wrong .feedback-toggle { color:var(--wrong); }
+/* P1: Situation key fact highlight */
+.key-fact { font-weight:700; color:#1a1a2e; background:#dbeafe; padding:1px 4px; border-radius:3px; }
+/* P1: Competency labels in result */
+.comp-label { display:inline-block; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-size:.78rem; padding:2px 10px; margin:2px; color:var(--neutral); }
+.comp-label.done { background:var(--correct-bg); color:var(--correct); border-color:var(--correct); }
+
+/* Cross-module links */
+.xlink { background:#f0f7ff; border:1px solid #b8d0e8; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:.83rem; display:none; }
+.xlink.visible { display:block; }
+.xlink-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#1a4f7a; margin-bottom:6px; }
+.xlink a { color:#1a4f7a; font-weight:600; text-decoration:none; border-bottom:1px solid #b8d0e8; }
+.xlink a:hover { border-bottom-color:#1a4f7a; }
+
+/* Cross-module links */
+.crosslink-section { margin-bottom: 24px; }
+.crosslink-section h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+.crosslink-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; background: var(--surface); text-decoration: none; color: inherit; transition: border-color .15s, background .15s; }
+.crosslink-card:hover { border-color: var(--primary-light); background: #f0f7ff; }
+.crosslink-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.crosslink-title { font-size: .9rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.crosslink-hint { font-size: .82rem; color: var(--neutral); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const CASE = {
+  title:"HNO-Tumor – Klinischer Fall",
+  subtitle:"Theorie-Praxis-Transfer | 3. Lehrjahr",
+  patient:{
+    name:"Frau Katharina B., 58 Jahre",
+    diagnose:"Oropharynxkarzinom (Tonsillenkarzinom links) cT3 N2b M0, HPV-positiv",
+    plan:"Definitive Radiochemotherapie: PTV1 (Tumor + Lymphabfluss) ED 2,0 Gy bis GD 54 Gy; PTV2 Boost (Primärtumor + befallene LK) ED 2,0 Gy bis GD 12–18 Gy. Gesamtdosis 66–72 Gy. Chemotherapie simultan (Cisplatin).",
+    besonderheiten:"Nichtraucherin, HPV-assoziierter Tumor. Zahnstatus: 3 kariöse Zähne, Zahnsanierung noch ausstehend. Patientin beruflich aktiv (Lehrerin)."
+  },
+  pillars:{"1":"Präzision","2":"Technologie","3":"Kommunikation","4":"Prozessethik","5":"Reflexion"},
+  stations:[
+    {
+      id:"s1",pillar:"1",
+      title:"Station 1 – Planungs-CT: Zahnschiene und Maskenanfertigung",
+      situation:"Frau B. kommt zum Termin für die Maskenanfertigung vor dem Planungs-CT. Du stellst fest: Ihr Zahnarztbericht liegt noch nicht vor. Die Zahnsanierung (3 kariöse Zähne) ist laut Akte noch nicht abgeschlossen.",
+      question:"Wie gehst du mit dieser Situation um – darf die Maskenanfertigung heute stattfinden?",
+      options:[
+        {id:"a",text:"Maskenanfertigung heute durchführen – Zahnstatus ist für die Maske irrelevant.",correct:false,feedback:"Nicht korrekt. Vor jeder Maskenanfertigung bei HNO-Tumoren gilt die Pflicht: ACHTUNG – Zahnschienen vor Maskenanfertigung! Kariöse Zähne müssen vor Bestrahlungsbeginn behandelt sein, da Bestrahlung des Kiefers das Kariesrisiko erhöht (Xerostomie → Mundtrockenheit → Karies). Zudem muss ggf. eine individuelle Zahnschutzschiene angefertigt werden, die dann bei der Maskenanpassung berücksichtigt wird.",consequence:"Klinische Konsequenz: Bestrahlung über sanierungsbedürftige Zähne führt zu Strahlenkaries, Parodontose und im schlimmsten Fall zu Osteoradionekrose des Kiefers – eine schwere, oft irreversible Spätfolge."},
+        {id:"b",text:"Maskenanfertigung stoppen, Radioonkologen informieren – Zahnsanierung und ggf. Zahnschutzschiene müssen vor Maskenanfertigung abgeschlossen sein.",correct:true,feedback:"Richtig. Die Pflichtprüfung vor Maskenanfertigung lautet: Zahnsanierung abgeschlossen? Zahnschiene vorhanden? Beide Punkte sind bei Frau B. noch offen. Konsequenz: Termin stoppen, Radioonkologen informieren, ggf. Zahnarzttermin und Zahnschinenanfertigung koordinieren. Erst dann Maskenanfertigung. Diese Reihenfolge ist klinisch unverzichtbar.",consequence:"Klinische Konsequenz: Ordnungsgemäßer Ablauf verhindert Strahlenkaries und Osteoradionekrose. Verzögerung von wenigen Tagen ist klinisch vertretbar – eine Spätfolge ist es nicht."},
+        {id:"c",text:"Maskenanfertigung mit Vermerk 'Zahnsanierung ausstehend' durchführen und hoffen, dass die Zähne rechtzeitig behandelt werden.",correct:false,feedback:"Nicht korrekt. Ein Vermerk ohne Konsequenz ist keine adäquate Maßnahme. Wenn die Zahnsanierung nicht vor Bestrahlungsbeginn abgeschlossen ist, darf die Behandlung nicht beginnen. Das ist ein verbindliches klinisches Protokoll.",consequence:"Klinische Konsequenz: Bestrahlungsstart ohne vollständige Zahnsanierung → Strahlenkaries → Parodontose → Osteoradionekrose des Kiefers."},
+        {id:"d",text:"Maskenanfertigung heute durchführen – die Zahnschiene kann nach der Maske noch angefertigt werden.",correct:false,feedback:"Nicht korrekt. Die Zahnschutzschiene muss VOR der Maske angefertigt werden, da sie die Mundposition während der Bestrahlung definiert. Wird die Zahnschiene nach der Maske angefertigt, kann sie die Reproduzierbarkeit der Lagerung gefährden und passt ggf. nicht zur gefertigten Maske.",consequence:"Klinische Konsequenz: Falsche Reihenfolge → Zahnschiene passt nicht zur Maske → Lagerungsinkonsistenz → Dosisabweichungen."}
+      ],
+      key_learning:"PFLICHTPRÜFUNG vor Maskenanfertigung bei HNO: Zahnsanierung abgeschlossen? Zahnschutzschiene vorhanden? | Reihenfolge: Zahnarzt → Zahnschiene → Maskenanfertigung → Planungs-CT | Osteoradionekrose = schwerwiegende Spätfolge bei nicht saniertem Gebiss"
+    },
+    {
+      id:"s2",pillar:"1",
+      title:"Station 2 – Planungs-CT: Lagerung und Maskenqualität",
+      situation:"Eine Woche später: Zahnsanierung abgeschlossen, Zahnschutzschiene angefertigt. Frau B. kommt zur Maskenanfertigung. Du fertigst die Thermoplastmaske an.",
+      question:"Welche Qualitätsmerkmale muss eine korrekt angefertigte Thermoplastmaske für das Oropharynxkarzinom aufweisen?",
+      options:[
+        {id:"a",text:"Maskenmaterial liegt lückenlos auf dem Gesicht auf. Fixpunkte: Stirn, Nasenrücken, Kinn. Kehlkopf ist freigehalten (Schlucken möglich). Schulterbereich ist miterfasst.",correct:true,feedback:"Richtig. Korrekte Qualitätsmerkmale der Thermoplastmaske: (1) Lückenlose Anlage – keine Luftspalte, die Markierungen ungenau machen. (2) Fixpunkte Stirn, Nasenrücken, Kinn – definieren die Lagerungsreproduzierbarkeit. (3) Kehlkopf freigehalten – Schlucken muss möglich bleiben, Kompression des Kehlkopfes gefährdet Atemwege. (4) Schultern miterfasst – beim Oropharynx (zervikale Lymphknoten) ist eine Schultermaske nötig, um die Feldausdehnung bis supraklavikulär reproduzierbar zu halten.",consequence:"Klinische Konsequenz: Korrekt angefertigte Maske = Lagerungspräzision ≤5 mm (Standard-Netzmaske) bzw. ≤3 mm (IMRT-Maske beim Nasopharynx). Grundlage für reproduzierbare tägliche Bestrahlung."},
+        {id:"b",text:"Maskenmaterial locker anlegen, damit der Patient sich wohler fühlt. Kehlkopf muss nicht freigehalten werden.",correct:false,feedback:"Nicht korrekt. Eine lockere Maske verfehlt ihren Zweck vollständig – die Immobilisierung und Reproduzierbarkeit sind nicht mehr gewährleistet. Der Kehlkopf muss immer freigehalten werden (Schlucken, Atemweg).",consequence:"Klinische Konsequenz: Zu lockere Maske → keine Immobilisierung → tägliche Lagerungsabweichungen → Dosisfehler über alle Fraktionen."},
+        {id:"c",text:"Maske nur über Gesicht anfertigen – Schulterbereich ist beim Oropharynxkarzinom nicht relevant.",correct:false,feedback:"Nicht korrekt. Beim Oropharynxkarzinom werden regelmäßig zervikale und supraklavikuläre Lymphabflussregionen mitbestrahlt. Ohne Schultererfassung in der Maske ist die Reproduzierbarkeit des kaudalen Feldanteils nicht gesichert.",consequence:"Klinische Konsequenz: Fehlende Schulterimmobilisierung → Abweichungen im kaudalen Feldanteil → Unter- oder Überdosierung zervikaler Lymphknoten."},
+        {id:"d",text:"Maske so fest wie möglich anlegen, damit keine Bewegung möglich ist – Komfort ist zweitrangig.",correct:false,feedback:"Unvollständig und einseitig. Ja, die Maske muss eng anliegen – aber eine zu fest angelegte Maske führt zu Druckstellen, Compliance-Problemen und kann den Kehlkopf komprimieren. Die Balance zwischen sicherer Fixierung und Patientenkomfort ist entscheidend für die Durchführbarkeit über alle Fraktionen.",consequence:"Klinische Konsequenz: Zu enge Maske → Druckschmerzen → Patient toleriert Maske zunehmend schlechter → Behandlungsabbruchrisiko."}
+      ],
+      key_learning:"Thermoplastmaske: lückenlos anliegend | Fixpunkte Stirn, Nasenrücken, Kinn | Kehlkopf IMMER freihalten | Schulterbereich miterfassen bei zervikalem Lymphabfluss | Präzision ≤5 mm (Standard) / ≤3 mm (IMRT-Maske Nasopharynx)"
+    },
+    {
+      id:"s3",pillar:"2",
+      title:"Station 3 – Bestrahlungstechnik: Warum VMAT statt alte 3-Felder-Technik?",
+      situation:"Im Unterrichtsgespräch fragt ein Azubi: 'Früher hat man beim HNO-Tumor doch auch mit Gegenfeldern bis 40 Gy bestrahlt und dann das Rückenmark ausgeblockt. Das klingt eigentlich logisch. Warum macht man das nicht mehr?'",
+      question:"Welche Aussage erklärt den Vorteil von IMRT/VMAT gegenüber der alten 3-Felder-Technik beim HNO-Tumor korrekt und vollständig?",
+      options:[
+        {id:"a",text:"IMRT/VMAT ist schneller und praktischer – inhaltlich sind beide Techniken gleich gut.",correct:false,feedback:"Nicht korrekt. VMAT ist oft schneller in der Durchführung, aber der entscheidende Vorteil liegt in der dosimetrischen Überlegenheit: Risikoorganschonung (besonders Parotis, Rückenmark, Larynx, Kiefergelenk) ist mit der alten Technik nicht erreichbar.",consequence:"Klinische Konsequenz: Falsche Einschätzung verhindert das Verständnis des technologischen Fortschritts und der klinischen Notwendigkeit von IMRT/VMAT."},
+        {id:"b",text:"IMRT/VMAT ermöglicht durch 7–9 Einstrahlwinkel (IMRT) oder kontinuierliche Rotation (VMAT) konkave Dosisverteilungen: Das Zielvolumen (Tumor + Lymphabfluss) wird hochdosiert erfasst, während Parotis, Rückenmark, Larynx und Kiefergelenk deutlich besser geschont werden als mit der alten Gegenfeld-/3-Felder-Technik.",correct:true,feedback:"Richtig. Die alte Technik (opponierende Gegenfelder bis 40 Gy, dann Rückenmarkausblockung, Elektronen-Aufsättigung) war ein Kompromiss: Entweder Rückenmark schonen ODER Lymphabfluss vollständig erfassen. IMRT/VMAT löst dieses Dilemma durch Intensitätsmodulation: Jeder Subfeld-Winkel hat eine andere Intensität, der Optimierungsalgorithmus maximiert die Tumordosis und minimiert gleichzeitig die Risikoorgan-Dosis. Klinisches Ergebnis: Weniger Xerostomie (Parotis-Sparing), weniger Trismus (Kiefergelenk), weniger Myelopathierisiko.",consequence:"Klinische Konsequenz: Deutlich bessere Lebensqualität der Patienten durch reduzierte Langzeittoxizität – besonders Xerostomie und Fibrose."},
+        {id:"c",text:"Die alte Technik war gefährlicher wegen der Strahlenenergie – VMAT verwendet niedrigere Energien.",correct:false,feedback:"Nicht korrekt. Beide Techniken verwenden üblicherweise Photonen 6 MV. Der Unterschied liegt in der Feldgeometrie und Intensitätsmodulation, nicht in der Strahlenenergie.",consequence:"Klinische Konsequenz: Falsche Begründung – Energieangabe ist irreführend."},
+        {id:"d",text:"Die alte Technik wurde verboten – es gibt keine klinische Begründung für VMAT außer Vorschriften.",correct:false,feedback:"Nicht korrekt. Es gibt keine behördliche Vorschrift, die die alte Technik verbietet. Der Wechsel zu IMRT/VMAT ist klinisch und dosimetrisch begründet: nachweislich bessere Risikoorganschonung, reduzierte Toxizität, bessere Lebensqualität.",consequence:"Klinische Konsequenz: Fehlende klinische Begründung verhindert das Verständnis der Behandlungslogik."}
+      ],
+      key_learning:"Alte Technik: opponierende Gegenfelder bis 40 Gy → Rückenmarkausblockung → Elektronen-Aufsättigung | Nachteil: hohe Risikoorganbelastung | IMRT/VMAT: 7–9 Winkel / Rotation → konkave Dosisverteilung → Parotis-Sparing → weniger Xerostomie, weniger Trismus"
+    },
+    {
+      id:"s4",pillar:"2",
+      title:"Station 4 – Risikoorgane: Parotis und Xerostomie-Prävention",
+      situation:"Im DVH-Review für Frau B. zeigt sich: Die ipsilaterale Parotis (links, tumornahe Seite) erhält eine mittlere Dosis von 38 Gy. Die kontralaterale Parotis (rechts) erhält eine mittlere Dosis von 22 Gy. Die TD 5/5 der Parotis beträgt 32 Gy.",
+      question:"Wie bewertest du diesen DVH-Befund für die Parotis klinisch korrekt?",
+      options:[
+        {id:"a",text:"Beide Parotiden werden geschädigt – der Plan muss komplett neu erstellt werden.",correct:false,feedback:"Zu absolut. Die ipsilaterale Parotis (38 Gy) überschreitet die TD 5/5 (32 Gy) – das ist bei tumornaher Seite oft unvermeidbar und klinisch akzeptabel. Entscheidend ist die Schonung der kontralateralen Parotis (22 Gy < TD 5/5) – sie kann die Speichelproduktion kompensieren. Komplette Neuplanung ist nicht zwingend nötig.",consequence:"Klinische Konsequenz: Unrealistische Forderung. Bei einseitigen HNO-Tumoren ist Schonung der kontralateralen Parotis das klinische Ziel."},
+        {id:"b",text:"Kontralaterale Parotis (22 Gy) liegt unter der TD 5/5 (32 Gy) – das ist ein gutes Ergebnis. Ipsilaterale Parotis (38 Gy) überschreitet die TD 5/5, was bei tumornaher Seite oft nicht vermeidbar ist. Gesamtbewertung: klinisch akzeptabel, wenn kontralaterale Schonung gegeben ist.",correct:true,feedback:"Richtig. Das Ziel des Parotis-Sparing bei IMRT/VMAT beim einseitigen HNO-Tumor ist: kontralaterale Parotis möglichst unter TD 5/5 (32 Gy) halten. Die kontralaterale Drüse übernimmt die Speichelproduktion. Die ipsilaterale Parotis liegt oft im Hochdosisfeld – ein Überschreiten der TD 5/5 ist dort klinisch akzeptabel. Frau B.'s Plan zeigt ein gutes Ergebnis für die kontralaterale Seite (22 Gy).",consequence:"Klinische Konsequenz: Frau B. wird wahrscheinlich eine temporäre Xerostomie entwickeln, die sich durch die kontralaterale Drüse weitgehend kompensiert – reduzierte, aber erhaltene Speichelproduktion."},
+        {id:"c",text:"Xerostomie ist bei HNO-Bestrahlungen unvermeidbar – DVH-Werte der Parotis sind daher irrelevant für die Planbeurteilung.",correct:false,feedback:"Nicht korrekt. Xerostomie ist nicht unvermeidbar – sie ist durch gezieltes Parotis-Sparing mittels IMRT/VMAT deutlich reduzierbar. Das ist einer der wichtigsten klinischen Fortschritte der modernen HNO-Bestrahlung. Die DVH-Auswertung der Parotis ist daher ein zentrales Qualitätsmerkmal.",consequence:"Klinische Konsequenz: Xerostomie ist eine der häufigsten und belastendsten Langzeitfolgen der HNO-Bestrahlung – ihre Prävention ist ein klinisches Hauptziel."},
+        {id:"d",text:"Beide Werte (38 Gy und 22 Gy) liegen unter der TD 50/5 der Parotis (46 Gy) – alles ist optimal.",correct:false,feedback:"Nicht korrekt. Die TD 5/5 (32 Gy) ist die klinisch relevante Planungsgrenze, nicht die TD 50/5. Die TD 50/5 gibt an, ab wann 50% der Patienten eine Xerostomie entwickeln – das ist kein akzeptables Planungsziel. Die ipsilaterale Parotis (38 Gy) überschreitet bereits die TD 5/5.",consequence:"Klinische Konsequenz: Falsche Anwendung der Toleranzdosis-Konzepte – TD 5/5 ist die Planungsgrenze, nicht die TD 50/5."}
+      ],
+      key_learning:"Parotis TD 5/5 = 32 Gy (Xerostomie) | Ziel beim einseitigen HNO: kontralaterale Parotis unter TD 5/5 halten | Ipsilaterale Seite oft nicht voll schonbar | Kontralaterale Parotis kompensiert Speichelproduktion | Parotis-Sparing = wichtigster IMRT/VMAT-Vorteil bei HNO"
+    },
+    {
+      id:"s5",pillar:"3",
+      title:"Station 5 – Fraktion 10: Mukositis und psychosoziale Belastung",
+      situation:"Frau B. erscheint zur 10. Fraktion. Sie ist Lehrerin und sagt dir mit brüchiger Stimme: 'Ich kann kaum noch sprechen. Meine Klasse braucht mich – aber ich brauche meinen Beruf auch. Und dieser Mund... das kann ich niemandem zumuten.' Sie kämpft mit den Tränen. Du siehst eine deutliche Mukositis im sichtbaren Mundbereich.",
+      question:"Wie reagierst du auf Frau B.'s Situation – fachlich, kommunikativ und bezüglich der Patientensicherheit?",
+      options:[
+        {id:"a",text:"Du erklärst knapp, dass Mukositis normal ist, und führst die Bestrahlung durch. Eine emotionale Reaktion würde die Patientin zusätzlich belasten.",correct:false,feedback:"Nicht korrekt. Frau B. spricht nicht nur über Mukositis – sie spricht über Identitätsverlust (Stimme = Beruf), sozialen Rückzug und Scham. Diese Dimension zu ignorieren ist weder empathisch noch professionell. Mukositis und psychosoziale Belastung müssen beide adressiert werden.",consequence:"Klinische Konsequenz: Unbehandelte psychosoziale Belastung gefährdet die Compliance und erhöht das Risiko eines Behandlungsabbruchs."},
+        {id:"b",text:"Du nimmst dir Zeit, hörst Frau B. zu und nimmst ihre Aussagen ernst. Du erklärst, dass Mukositis und Stimmveränderungen typische, temporäre Strahlenfolgen sind. Du dokumentierst den Befund (Grad der Mukositis), informierst den Arzt und sprichst das Thema psychosoziale Unterstützung an.",correct:true,feedback:"Richtig. Empathische Professionalität auf mehreren Ebenen: (1) Zuhören und Validieren – ihre Sorge um die Stimme (= berufliche Identität) ist berechtigt. (2) Fachliche Einordnung – Mukositis und Heiserkeit sind typische temporäre Strahlenfolgen, nicht permanent. (3) Dokumentation + Arztmeldung – Grad der Mukositis ist klinisch relevant (Schmerzmittel, ggf. PEG-Anlage bei schwerem Verlauf). (4) Psychosoziale Unterstützung ansprechen – Psychoonkologie, Selbsthilfegruppen, ggf. Sozialberatung. Als MTR bist du oft die erste Person, die diese Signale wahrnimmt.",consequence:"Klinische Konsequenz: Frühzeitige psychosoziale Intervention verbessert Compliance und Behandlungsdurchführbarkeit. Mukositis-Dokumentation ermöglicht optimale supportive Therapie."},
+        {id:"c",text:"Du empfiehlst Frau B., krankgeschrieben zu werden und sich vollständig auf die Behandlung zu konzentrieren.",correct:false,feedback:"Nicht deine Entscheidung und nicht deine Rolle. Ob und wie lange Frau B. arbeitet, ist ihre persönliche und ärztliche Entscheidung. Ein paternalistischer Ratschlag ('Hören Sie auf zu arbeiten') überschreitet die MTR-Kompetenz und respektiert die Autonomie der Patientin nicht.",consequence:"Klinische Konsequenz: Autonomieverletzung. Patient verliert das Gefühl der Kontrolle – verschlechtert psychische Situation."},
+        {id:"d",text:"Du verweist Frau B. an die Sozialarbeit und führst die Bestrahlung ohne weiteres Gespräch durch.",correct:false,feedback:"Unvollständig. Der Verweis an die Sozialarbeit ist richtig – aber als alleinige Reaktion ohne Zuhören und Erklären ist es zu kurz. Frau B. braucht zuerst das Gefühl, gehört zu werden, bevor sie für Weiterleitungen offen ist.",consequence:"Klinische Konsequenz: Ablehnendes Empfinden gegenüber dem Verweis ohne persönliche Kontaktaufnahme – Vertrauen geht verloren."}
+      ],
+      key_learning:"Mukositis + Heiserkeit = typische temporäre Strahlenfolgen bei HNO | Psychosoziale Belastung (Stimme, Beruf, Scham) ernst nehmen | MTR-Rolle: zuhören, dokumentieren, Arzt informieren, Unterstützungsangebote ansprechen | Psychoonkologische Unterstützung ansprechen"
+    },
+    {
+      id:"s6",pillar:"4",
+      title:"Station 6 – Dosierungskonzept: SIB beim Oropharynxkarzinom",
+      situation:"Der Planungsphysiker erklärt Frau B.'s Plan: PTV1 (Lymphabfluss + Ausbreitungsgebiet) erhält 54 Gy, PTV2 (Primärtumor + befallene LK) erhält gleichzeitig in denselben Fraktionen 66–72 Gy. Frau B. fragt dich: 'Wie kann ich gleichzeitig zwei verschiedene Dosen bekommen?'",
+      question:"Wie erklärst du das SIB-Konzept (Simultaner Integrierter Boost) korrekt und patientengerecht?",
+      options:[
+        {id:"a",text:"Du erklärst, dass der Computer zwei verschiedene Bestrahlungssitzungen in einer kombiniert – morgens eine niedrigere Dosis, abends eine höhere.",correct:false,feedback:"Nicht korrekt. Beim SIB erfolgt keine Aufteilung in Morgen/Abend-Fraktionen. Es gibt nur eine tägliche Bestrahlung – in dieser einen Sitzung erhalten verschiedene Zielvolumina unterschiedliche Dosen pro Fraktion durch die VMAT-Dosismodulation.",consequence:"Klinische Konsequenz: Falschinformation verunsichert die Patientin und untergräbt das Vertrauen in das Behandlungsteam."},
+        {id:"b",text:"Du erklärst, dass der Beschleuniger die Strahlstärke während der Rotation anpasst: Wo der Haupttumor liegt, wird stärker bestrahlt; der Lymphabfluss um ihn herum erhält etwas weniger Dosis – alles in einer einzigen täglichen Sitzung.",correct:true,feedback:"Richtig und patientengerecht formuliert. Das SIB-Prinzip: In einer einzigen täglichen Bestrahlungssitzung werden PTV1 (Lymphabfluss, elektive Regionen) mit niedrigerer Einzeldosis und PTV2 (Boost, Primärtumor) mit höherer Einzeldosis simultan bestrahlt. Die VMAT-Rotation ermöglicht dies durch kontinuierliche Dosisratenanpassung während der Gantryrotation. Vorteil: Kürzere Gesamtbehandlungszeit, kein separater Boost-Block am Ende.",consequence:"Klinische Konsequenz: Patient ist informiert, Compliance wird gestärkt. SIB ermöglicht bei gleicher Gesamtdosis eine Zeitersparnis von mehreren Fraktionen."},
+        {id:"c",text:"Du sagst, du weißt das nicht genau und empfiehlst ihr, den Arzt zu fragen.",correct:false,feedback:"Unzureichend. Das SIB-Konzept ist für eine MTR erklärbar und sollte erklärt werden können. 'Ich weiß es nicht' signalisiert fehlende Fachkompetenz bei einer zentralen Behandlungstechnik.",consequence:"Klinische Konsequenz: Vertrauensverlust. Patient fühlt sich unzureichend informiert."},
+        {id:"d",text:"Du erklärst, dass es sich um einen Fehler im Plan handelt und nur eine Dosis korrekt sein kann.",correct:false,feedback:"Nicht korrekt. Der simultane integrierte Boost ist kein Fehler, sondern ein etabliertes modernes Bestrahlungskonzept. Zwei Dosen für zwei Zielvolumina in einer Sitzung ist das Kernprinzip des SIB.",consequence:"Klinische Konsequenz: Schwerwiegende Falschinformation, die Vertrauen in die Behandlung gefährdet."}
+      ],
+      key_learning:"SIB = Simultaner Integrierter Boost | Zwei Zielvolumina erhalten in EINER täglichen Sitzung unterschiedliche Dosen | VMAT ermöglicht durch Dosisratenanpassung die simultane Dosisdifferenzierung | Vorteil: Zeitersparnis, kein separater Boost-Block"
+    },
+    {
+      id:"s7",pillar:"5",
+      title:"Station 7 – Fraktion 25: Gewichtsverlust und PEG-Anlage",
+      situation:"Frau B. hat in 25 Fraktionen 9 kg abgenommen (von 72 auf 63 kg). Sie kann kaum noch schlucken. Der Arzt hat gestern die Anlage einer PEG-Sonde (perkutane endoskopische Gastrostomie) empfohlen – Frau B. lehnt das jedoch ab: 'Eine Sonde ist für mich das Ende. Das kann ich mir nicht vorstellen.'",
+      question:"Wie gehst du als MTR mit der Ablehnung der PEG durch Frau B. um?",
+      options:[
+        {id:"a",text:"Du respektierst die Entscheidung der Patientin, ohne weiteren Kommentar, und führst die Bestrahlung durch.",correct:false,feedback:"Unvollständig. Frau B.'s Autonomie ist zu respektieren – aber als MTR, die täglich mit ihr in Kontakt steht, hast du auch die Pflicht, relevante klinische Informationen zu teilen und ihre Aussage dem Arzt zu melden. Schweigendes Akzeptieren ohne Rückmeldung ist keine professionelle Reaktion.",consequence:"Klinische Konsequenz: Starke Mangelernährung (9 kg in 25 Fraktionen) gefährdet die Durchführbarkeit der verbleibenden Fraktionen und die Erholung nach der Therapie."},
+        {id:"b",text:"Du hörst Frau B. zu und nimmst ihre Aussage ('Das ist das Ende') ernst als Signal für tiefe Angst und Kontrollverlust. Du erklärst sachlich die klinische Bedeutung der Ernährungssonde, dokumentierst ihr Ablehnen und gibst die Information an den Arzt weiter – ohne sie zu drängen oder zu überreden.",correct:true,feedback:"Richtig. Drei Ebenen gleichzeitig: (1) Empathie – 'Das ist das Ende' ist kein sachliches Statement, sondern Ausdruck von Angst und Kontrollverlust. Diese Dimension ernst nehmen, ohne zu bagatellisieren. (2) Information – sachlich erklären, was eine PEG ist und warum sie empfohlen wird (Kalorienversorgung sichern, Behandlungsdurchführbarkeit gewährleisten). Keine Überredung, aber ehrliche Erklärung. (3) Dokumentation und Arztmeldung – die Ablehnung und deren Hintergrund dokumentieren. Der Arzt muss diese Information kennen, um ggf. das Gespräch nochmals zu suchen oder Alternativen anzubieten.",consequence:"Klinische Konsequenz: Frühzeitige Kommunikation ermöglicht dem Team, gemeinsam mit der Patientin eine Lösung zu finden. Ggf. nasogastrale Sonde als weniger invasive Alternative."},
+        {id:"c",text:"Du überzeugst Frau B., die PEG anzunehmen – ihr Wohlergehen steht über ihrer Meinung.",correct:false,feedback:"Nicht korrekt und ethisch problematisch. Frau B. ist eine entscheidungsfähige erwachsene Patientin. Ihr Autonomierecht ist zu respektieren. Überredung gegen den explizit geäußerten Willen einer kompetenten Patientin ist ein Eingriff in die Selbstbestimmung.",consequence:"Klinische Konsequenz: Verletzung der Patientenautonomie. Vertrauensverlust kann zu Behandlungsabbruch führen."},
+        {id:"d",text:"Du sagst ihr, dass ohne PEG die Bestrahlung abgebrochen werden muss.",correct:false,feedback:"Nicht korrekt – und du hast auch nicht die Autorität, diese Aussage zu machen. Entscheidungen über Behandlungsabbrüche trifft der Radioonkologe im Gespräch mit der Patientin. Als MTR machst du keine solchen Aussagen.",consequence:"Klinische Konsequenz: Falsche Aussage kann als Drohung wahrgenommen werden – verschlechtert die therapeutische Beziehung erheblich."}
+      ],
+      key_learning:"PEG-Anlage bei HNO: indiziert bei schwerer Dysphagie und Mangelernährung | MTR-Rolle: zuhören, sachlich informieren, dokumentieren, Arzt melden – nicht überreden | Patientenautonomie respektieren | 'Das ist das Ende' = emotionales Signal, kein sachliches Statement"
+    }
+  ],
+  transfer:{
+    title:"Abschluss-Reflexion: HNO als besonders komplexe Bestrahlungssituation",
+    question:"Frau B. hat ihre Behandlung abgeschlossen. Reflektiere: Worin unterscheidet sich das HNO-Karzinom von Rektum- und Ösophaguskarzinom in Bezug auf (1) Lagerungsbesonderheiten, (2) das kritischste Risikoorgan für die Lebensqualität, (3) die psychosoziale Belastungsdimension?",
+    sample:"Lagerungsbesonderheiten: HNO erfordert eine individuelle Thermoplastmaske (Pflichtprüfung: Zahnsanierung + Zahnschiene VOR Maskenanfertigung). Beim Rektum ist das Lochbrett (Dünndarmschonung) entscheidend, beim Ösophagus die Armpositionierung (nach oben für Feldwinkelfreiheit). Die Maske bei HNO definiert die Lagerungsreproduzierbarkeit ≤5 mm. Kritisches Risikoorgan für die Lebensqualität: Beim HNO-Tumor ist die Parotis das entscheidende Organ für Lebensqualität (Xerostomie bei Überdosierung → Karies, Schluckstörungen, Sprachprobleme). Beim Ösophagus ist das Rückenmark das kritischste serielle Organ (Myelopathie), beim Rektum der Dünndarm (Enteritis, Stenose). Psychosoziale Belastung: HNO-Tumoren betreffen Sprache, Schlucken, Aussehen – zentrale Aspekte der sozialen Identität. Frau B. als Lehrerin ist durch die Stimmveränderung besonders betroffen. Psychoonkologische Unterstützung ist essenziell. Beim Rektum und Ösophagus überwiegen funktionelle Einschränkungen (Verdauung, Ernährung) – psychosozial relevant, aber anders dimensioniert.",
+    checklist:[
+      "Ich habe die Pflichtprüfung vor Maskenanfertigung (Zahnsanierung + Zahnschiene) korrekt beschrieben.",
+      "Ich habe die Parotis als lebensqualitätsrelevantes Risikoorgan beim HNO-Tumor benannt und begründet.",
+      "Ich habe den Unterschied zwischen Standard-Netzmaske (≤5 mm) und IMRT-Maske (≤3 mm, z.B. Nasopharynx) erwähnt.",
+      "Ich habe die psychosoziale Dimension (Stimme, Schlucken, Identität) als HNO-spezifische Belastung beschrieben.",
+      "Ich habe das SIB-Konzept in eigenen Worten erklärt."
+    ]
+  }
+};
+
+const state={current:0,answers:{},submitted:{},score:0,start:Date.now()};
+const app=document.getElementById('app');
+
+function init(){state.current=0;state.answers={};state.submitted={};state.score=0;state.start=Date.now();renderIntro();}
+
+function renderIntro(){
+  app.innerHTML=`<div class="card">
+    <span class="intro-badge">Klinischer Fall · MTR Strahlentherapie</span>
+    <h1 class="intro-title">${CASE.title}</h1>
+    <p class="intro-sub">${CASE.subtitle}</p>
+    <div class="patient-card">
+      <h3>Patientin</h3>
+      <dl class="patient-grid">
+        <dt>Patientin</dt><dd>${CASE.patient.name}</dd>
+        <dt>Diagnose</dt><dd>${CASE.patient.diagnose}</dd>
+        <dt>Therapieplan</dt><dd>${CASE.patient.plan}</dd>
+        <dt>Besonderheiten</dt><dd>${CASE.patient.besonderheiten}</dd>
+      </dl>
+    </div>
+    <p style="font-size:.9rem;color:var(--neutral);margin-bottom:24px;">
+      Begleite Frau B. vom ersten Termin bis zum Behandlungsende.
+      <strong>${CASE.stations.length} klinische Stationen</strong> – von der Maskenanfertigung bis zur psychosozialen Begleitung.
+    </p>
+    <button class="btn btn-primary btn-lg" id="start-btn">Fall starten →</button>
+  </div>`;
+  document.getElementById('start-btn').onclick=()=>renderStation();
+}
+
+function renderStation(){
+  const s=CASE.stations[state.current];
+  const total=CASE.stations.length;
+  const pct=Math.round((state.current/total)*100);
+  const locked=!!state.submitted[s.id];
+  const sel=state.answers[s.id]||null;
+
+  app.innerHTML=`<div class="card">
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-label"><span>Station ${state.current+1} von ${total}</span><span>${state.score} richtig</span></div>
+    <div class="station-header">
+      <span class="station-num">Station ${state.current+1}</span>
+      <span class="station-pillar">Säule ${s.pillar} – ${CASE.pillars[s.pillar]}</span>
+    </div>
+    <h2 class="station-title">${s.title}</h2>
+    <div class="situation-box"><h4>Situation</h4><p>${s.situation}</p></div>
+    <p class="question">${s.question}</p>
+    <div class="options" id="opts">
+      ${s.options.map(o=>{
+        let cls='';const isSel=sel===o.id;
+        if(locked){if(o.correct)cls='correct';else if(isSel&&!o.correct)cls='wrong';}
+        else if(isSel)cls='selected';
+        const icon=locked?(o.correct?'<span class="option-icon">✓</span>':(isSel&&!o.correct?'<span class="option-icon">✗</span>':'')):'';
+        return `<label class="option ${cls} ${locked?'locked':''}" data-id="${o.id}">
+          <input type="radio" name="opt" value="${o.id}" ${isSel?'checked':''} ${locked?'disabled':''}>
+          <span class="option-text">${o.text}</span>${icon}
+        </label>`;
+      }).join('')}
+    </div>
+    ${locked?renderFeedback(s):''}
+    ${locked?`<div class="key-learning"><strong>🔑 Merksatz</strong>${s.key_learning}</div><div class="xlink ${XLINKS[s.id]?'visible':''}" id="xl-${s.id}"><p class="xlink-label">🔗 Verknüpfung zu anderen Modulen</p>${XLINKS[s.id]||''}</div>`:''}
+    <div class="actions">
+      ${!locked
+        ?`<button class="btn btn-primary" id="submit-btn" disabled>Antwort prüfen</button>`
+        :state.current<total-1
+          ?`<button class="btn btn-primary" id="next-btn">Nächste Station →</button>`
+          :`<button class="btn btn-primary" id="result-btn">Auswertung →</button>`
+      }
+    </div>
+  </div>`;
+
+  if(!locked){
+    document.getElementById('opts').addEventListener('change',e=>{
+      if(e.target.type==='radio'){state.answers[s.id]=e.target.value;document.getElementById('submit-btn').disabled=false;}
+    });
+    document.getElementById('submit-btn').onclick=()=>submitStation(s);
+  }
+  document.getElementById('next-btn')?.addEventListener('click',()=>{state.current++;renderStation();});
+  document.getElementById('result-btn')?.addEventListener('click',renderResult);
+}
+
+function renderFeedback(s){
+  const sub=state.submitted[s.id];const opt=s.options.find(o=>o.id===state.answers[s.id]);
+  if(!opt)return '';
+  const cls=sub.correct?'correct':'wrong';const label=sub.correct?'Richtig':'Nicht korrekt';
+  const parts=opt.feedback.split(/(?<=\.) /);
+  const summary=parts[0];const detail=parts.slice(1).join(' ');
+  const dHtml=detail?`<div class="feedback-detail hidden" id="fd-${s.id}"><p style="margin-bottom:6px;">${detail}</p><p class="consequence">${opt.consequence}</p></div><button class="feedback-toggle" onclick="toggleDetail('${s.id}')">Details einblenden ▾</button>`:`<p class="consequence" style="margin-top:8px;font-size:.85rem;color:var(--neutral);font-style:italic;">${opt.consequence}</p>`;
+  return `<div class="feedback ${cls}"><p class="feedback-label">${label}</p><p class="feedback-summary">${summary}</p>${dHtml}</div>`;
+}
+function toggleDetail(id){const el=document.getElementById('fd-'+id);const btn=el?.nextElementSibling;if(!el)return;const h=el.classList.toggle('hidden');if(btn)btn.textContent=h?'Details einblenden ▾':'Details ausblenden ▴';}
+
+function submitStation(s){
+  const sel=state.answers[s.id];const opt=s.options.find(o=>o.id===sel);
+  const correct=opt?.correct||false;
+  state.submitted[s.id]={correct};if(correct)state.score++;
+  renderStation();
+}
+
+function renderResult(){
+  const total=CASE.stations.length;const pct=Math.round((state.score/total)*100);
+  try { localStorage.setItem('mtr_rt_case_hno-tumor-case', JSON.stringify({lastPct: pct})); } catch(e) {}
+  const elapsed=Math.round((Date.now()-state.start)/60000);
+  const g=pct>=86?{l:'Sehr sicher',n:'●●●●●',c:'r1'}:pct>=71?{l:'Sicher',n:'●●●●○',c:'r2'}:pct>=57?{l:'Gut vorbereitet',n:'●●●○○',c:'r3'}:pct>=43?{l:'In Entwicklung',n:'●●○○○',c:'r4'}:{l:'Noch Übungsbedarf',n:'●○○○○',c:'r5'};
+
+  app.innerHTML=`<div class="card">
+    <div class="result-header ${g.c}">
+      <p class="result-note">${g.n}</p>
+      <p class="result-label">${g.l}</p>
+      <p class="result-score">${state.score} / ${total} Stationen richtig (${pct}%) · ca. ${elapsed} Min.</p>
+    </div>
+    <div class="result-stations">
+      <h3>Auswertung nach Station</h3>
+      ${CASE.stations.map(s=>{
+        const correct=state.submitted[s.id]?.correct;
+        return `<div class="result-station-item">
+          <span class="result-icon">${correct?'✓':'✗'}</span>
+          <div><p class="result-station-title">${s.title}</p>
+          <p class="result-station-learning">🔑 ${s.key_learning}</p></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="crosslink-section">
+      <h3>Verknüpfung zu anderen Fällen</h3>
+      <a href="rektum-ca-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">Rektumkarzinom – Herr S.</p>
+            <p class="crosslink-hint">Vergleich: Bei Herrn S. (Station 5) führte Gewichtsverlust zu einem Adaptive Replanning. Bei Frau B. droht dasselbe durch Mangelernährung. Was ist der gemeinsame Mechanismus – und warum ist die Konsequenz bei HNO potenziell gravierender?</p>
+          </div>
+        </a><a href="oesophagus-ca-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">Ösophaguskarzinom – Herr M.</p>
+            <p class="crosslink-hint">Vergleich: Maske beim HNO (≤5 mm Präzision) vs. Arme nach oben beim Ösophagus. Beide Lagerungsentscheidungen haben eine klare klinische Begründung – welche ist jeweils die entscheidende?</p>
+          </div>
+        </a>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" id="retry-btn">Fall neu starten</button>
+      <button class="btn btn-primary" id="transfer-btn">Zur Reflexionsaufgabe →</button>
+    </div>
+  </div>`;
+  document.getElementById('retry-btn').onclick=init;
+  document.getElementById('transfer-btn').onclick=renderTransfer;
+}
+
+function renderTransfer(){
+  const t=CASE.transfer;
+  app.innerHTML=`<div class="card">
+    <span class="intro-badge">Reflexionsaufgabe</span>
+    <h2 style="font-size:1.3rem;font-weight:700;color:var(--primary);margin-bottom:16px;">${t.title}</h2>
+    <p class="transfer-q">${t.question}</p>
+    <textarea class="transfer-textarea" id="ta" placeholder="Schreibe hier deine Antwort…"></textarea>
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn btn-primary" id="sample-btn">Musterlösung anzeigen</button>
+    </div>
+    <div class="sample-box" id="sample"><h4>Musterlösung</h4><p>${t.sample}</p></div>
+    <div class="checklist" id="checklist">
+      <h4>Selbstbewertung</h4>
+      ${t.checklist.map((item,i)=>`<div class="check-item"><input type="checkbox" id="c${i}"><label for="c${i}">${item}</label></div>`).join('')}
+    </div>
+    <div class="actions" style="margin-top:16px;">
+      <button class="btn btn-secondary" id="back-btn">← Zurück</button>
+      <button class="btn btn-primary" id="new-btn">Neuen Fall starten</button>
+    </div>
+  </div>`;
+  document.getElementById('sample-btn').onclick=()=>{
+    document.getElementById('sample').style.display='block';
+    document.getElementById('checklist').style.display='block';
+    document.getElementById('sample-btn').style.display='none';
+  };
+  document.getElementById('back-btn').onclick=renderResult;
+  document.getElementById('new-btn').onclick=init;
+}
+
+const XLINKS = {"s1": "→ Die Pflichtprüfung vor Therapiestart (Zahnsanierung) ist ein Beispiel für Prozessverantwortung. Beim <a href='oesophagus-ca-case.html'>Ösophagus-Fall Station 3</a> findest du einen anderen Aspekt davon: Kommunikation bei Klaustrophobie.", "s4": "→ Beim <a href='oesophagus-ca-case.html'>Ösophagus-Fall Station 4</a> ist das Rückenmark das kritische Risikoorgan – seriell, mit völlig anderer DVH-Logik als die Parotis hier. Vergleiche bewusst.", "s6": "→ Das SIB-Konzept taucht auch im <a href='grundlagen-pruefungstraining.html'>Grundlagen-Quiz</a> als Prüfungsfrage auf (Stufe 1 + 3). Kannst du es dort korrekt einordnen?"};
+init();
+</script>
+<!-- MTR Feedback Widget -->
+<style>
+/* ── MTR Feedback Widget ─────────────────── */
+#mtr-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;
+  background:#1a4f7a;color:#fff;border:none;font-size:1.4rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:9999;transition:transform .15s,background .15s;
+  display:flex;align-items:center;justify-content:center;}
+#mtr-fab:hover{background:#2c6ea6;transform:scale(1.08);}
+#mtr-fab.has-feedback{background:#1e6e42;}
+#mtr-fb-panel{position:fixed;bottom:88px;right:16px;width:310px;background:#fff;
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);padding:20px;z-index:9998;
+  border:1px solid #d1d9e0;animation:mtrSlideIn .18s ease;}
+@keyframes mtrSlideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#mtr-fb-panel[hidden]{display:none;}
+.mtr-fb-head{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:#1a4f7a;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eef4fb;}
+.mtr-fb-q{font-size:.88rem;font-weight:600;color:#1a1a2e;margin-bottom:8px;}
+.mtr-stars{display:flex;gap:6px;margin-bottom:16px;cursor:default;}
+.mtr-star{font-size:1.7rem;cursor:pointer;color:#d1d9e0;transition:color .1s;line-height:1;user-select:none;}
+.mtr-star.active{color:#f0b429;}
+.mtr-fb-sub{font-size:.8rem;color:#4a5568;margin-bottom:14px;margin-top:-10px;}
+.mtr-fb-textarea{width:100%;min-height:72px;padding:8px 10px;border:1.5px solid #d1d9e0;
+  border-radius:6px;font-size:.88rem;font-family:inherit;resize:vertical;margin-bottom:12px;
+  color:#333;line-height:1.5;}
+.mtr-fb-textarea:focus{outline:none;border-color:#1a4f7a;}
+.mtr-fb-actions{display:flex;gap:8px;justify-content:flex-end;}
+.mtr-fb-btn{padding:8px 16px;border-radius:6px;font-size:.85rem;font-weight:600;border:none;cursor:pointer;transition:background .12s;}
+.mtr-fb-save{background:#1a4f7a;color:#fff;}
+.mtr-fb-save:hover{background:#2c6ea6;}
+.mtr-fb-cancel{background:#f8f9fa;color:#4a5568;border:1.5px solid #d1d9e0;}
+.mtr-fb-cancel:hover{border-color:#1a4f7a;color:#1a4f7a;}
+.mtr-fb-msg{font-size:.83rem;margin-bottom:8px;min-height:20px;}
+.mtr-fb-saved{color:#1e6e42;font-weight:600;}
+.mtr-fb-error{color:#8b1a1a;}
+@media(max-width:420px){#mtr-fb-panel{width:calc(100vw - 32px);right:8px;}}
+</style>
+<button id="mtr-fab" title="Feedback geben" aria-label="Feedback zu diesem Modul geben">💬</button>
+<div id="mtr-fb-panel" hidden role="dialog" aria-modal="true" aria-label="Modul-Feedback">
+  <p class="mtr-fb-head">Feedback – HNO-Tumor – Frau B.</p>
+  <p class="mtr-fb-q">Wie hilfreich war dieses Modul?</p>
+  <div class="mtr-stars" id="mtr-stars" role="group" aria-label="Bewertung">
+    <span class="mtr-star" data-v="1" role="button" tabindex="0" aria-label="1 Stern">★</span>
+    <span class="mtr-star" data-v="2" role="button" tabindex="0" aria-label="2 Sterne">★</span>
+    <span class="mtr-star" data-v="3" role="button" tabindex="0" aria-label="3 Sterne">★</span>
+    <span class="mtr-star" data-v="4" role="button" tabindex="0" aria-label="4 Sterne">★</span>
+    <span class="mtr-star" data-v="5" role="button" tabindex="0" aria-label="5 Sterne">★</span>
+  </div>
+  <p class="mtr-fb-q">Was war unklar oder fehlt?</p>
+  <textarea class="mtr-fb-textarea" id="mtr-fb-text" placeholder="Optional – Freitext…" aria-label="Kommentar"></textarea>
+  <div class="mtr-fb-msg" id="mtr-fb-msg" aria-live="polite"></div>
+  <div class="mtr-fb-actions">
+    <button class="mtr-fb-btn mtr-fb-cancel" id="mtr-fb-cancel">Schließen</button>
+    <button class="mtr-fb-btn mtr-fb-save" id="mtr-fb-save">Speichern</button>
+  </div>
+</div>
+<script>
+(function(){
+  var MOD='hno-tumor-case', KEY='mtr_rt_feedback_'+MOD;
+  var fab=document.getElementById('mtr-fab');
+  var panel=document.getElementById('mtr-fb-panel');
+  var stars=document.querySelectorAll('.mtr-star');
+  var txt=document.getElementById('mtr-fb-text');
+  var msg=document.getElementById('mtr-fb-msg');
+  var rating=0;
+
+  function load(){
+    try{
+      var s=JSON.parse(localStorage.getItem(KEY));
+      if(s){rating=s.rating||0;txt.value=s.text||'';setStars(rating);fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';}
+    }catch(e){}
+  }
+  function setStars(v){
+    stars.forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.v)<=v);});
+  }
+  fab.addEventListener('click',function(){
+    panel.hidden=!panel.hidden;
+    if(!panel.hidden){msg.innerHTML='';txt.focus();}
+  });
+  stars.forEach(function(s){
+    s.addEventListener('click',function(){rating=parseInt(s.dataset.v);setStars(rating);});
+    s.addEventListener('mouseover',function(){setStars(parseInt(s.dataset.v));});
+    s.addEventListener('mouseout',function(){setStars(rating);});
+    s.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){rating=parseInt(s.dataset.v);setStars(rating);}});
+  });
+  document.getElementById('mtr-fb-cancel').addEventListener('click',function(){panel.hidden=true;});
+  document.getElementById('mtr-fb-save').addEventListener('click',function(){
+    if(!rating){msg.innerHTML='<span class="mtr-fb-error">Bitte zuerst Bewertung wählen.</span>';return;}
+    try{
+      localStorage.setItem(KEY,JSON.stringify({rating:rating,text:txt.value.trim(),module:'HNO-Tumor – Frau B.',savedAt:new Date().toISOString()}));
+      msg.innerHTML='<span class="mtr-fb-saved">✓ Feedback gespeichert</span>';
+      fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';
+      setTimeout(function(){panel.hidden=true;msg.innerHTML='';},1600);
+    }catch(e){msg.innerHTML='<span class="mtr-fb-error">Speichern fehlgeschlagen (localStorage blockiert?).</span>';}
+  });
+  load();
+})();
+</script>
+
+</body>
+</html>

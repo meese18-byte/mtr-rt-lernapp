@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ösophaguskarzinom – Klinischer Fall | MTR Strahlentherapie</title>
+<style>
+:root {
+  --primary: #1a4f7a; --primary-light: #2c6ea6; --primary-bg: #eef4fb;
+  --correct: #1e6e42; --correct-bg: #e8f5ee;
+  --wrong: #8b1a1a; --wrong-bg: #fdf0f0;
+  --neutral: #4a5568; --border: #d1d9e0; --surface: #f8f9fa;
+  --radius: 8px; --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: #f0f4f8; color: #1a1a2e; line-height: 1.6; min-height: 100vh; padding: 24px 16px; }
+.card { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 32px; box-shadow: var(--shadow); }
+.intro-badge { display: inline-block; background: var(--primary); color: #fff; font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; margin-bottom:12px; }
+.intro-title { font-size:1.7rem; font-weight:800; color:var(--primary); margin-bottom:6px; }
+.intro-sub { font-size:1rem; color:var(--neutral); margin-bottom:16px; }
+.patient-card { background:var(--primary-bg); border:1px solid #b8d0e8; border-radius:var(--radius); padding:16px 18px; margin-bottom:20px; }
+.patient-card h3 { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--primary); margin-bottom:10px; }
+.patient-grid { display:grid; grid-template-columns:120px 1fr; gap:6px 12px; font-size:.9rem; }
+.patient-grid dt { color:var(--neutral); font-weight:600; }
+.progress-bar { height:6px; background:#e2e8f0; border-radius:3px; margin-bottom:6px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:3px; transition:width .3s; }
+.progress-label { font-size:.8rem; color:var(--neutral); display:flex; justify-content:space-between; margin-bottom:20px; }
+.station-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.station-num { background:var(--primary); color:#fff; font-size:.72rem; font-weight:700; padding:2px 10px; border-radius:20px; }
+.station-pillar { font-size:.78rem; color:var(--neutral); background:var(--surface); border:1px solid var(--border); padding:2px 8px; border-radius:4px; }
+.station-title { font-size:1.1rem; font-weight:700; color:var(--primary); margin-bottom:14px; }
+.situation-box { background:var(--primary-bg); border:1px solid #b8d0e8; border-radius:var(--radius); padding:14px 16px; margin-bottom:18px; }
+.situation-box h4 { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--primary); margin-bottom:8px; }
+.situation-box p { font-size:.93rem; color:#2d4a6a; line-height:1.6; }
+.question { font-size:1rem; font-weight:700; color:#1a1a2e; margin-bottom:16px; }
+.options { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+.option { display:flex; align-items:flex-start; gap:12px; padding:13px 15px; border:2px solid var(--border); border-radius:var(--radius); cursor:pointer; transition:border-color .15s, background .15s; }
+.option:hover:not(.locked) { border-color:var(--primary-light); background:#f0f7ff; }
+.option input { margin-top:3px; accent-color:var(--primary); flex-shrink:0; }
+.option-text { font-size:.93rem; flex:1; line-height:1.5; }
+.option-icon { font-size:1rem; font-weight:700; flex-shrink:0; }
+.option.selected { border-color:var(--primary); background:#f0f7ff; }
+.option.correct { border-color:var(--correct); background:var(--correct-bg); }
+.option.wrong { border-color:var(--wrong); background:var(--wrong-bg); }
+.option.correct .option-icon { color:var(--correct); }
+.option.wrong .option-icon { color:var(--wrong); }
+.option.locked { cursor:default; }
+.feedback { border-radius:var(--radius); padding:14px 16px; margin-bottom:20px; border-left:4px solid; }
+.feedback.correct { background:var(--correct-bg); border-color:var(--correct); }
+.feedback.wrong { background:var(--wrong-bg); border-color:var(--wrong); }
+.feedback-label { font-weight:700; font-size:.88rem; margin-bottom:4px; }
+.feedback.correct .feedback-label { color:var(--correct); }
+.feedback.wrong .feedback-label { color:var(--wrong); }
+.feedback-text { font-size:.9rem; line-height:1.6; color:#333; margin-bottom:6px; }
+.consequence { font-size:.85rem; color:var(--neutral); font-style:italic; border-top:1px solid rgba(0,0,0,.1); padding-top:8px; margin-top:8px; }
+.key-learning { background:#fffbea; border:1px solid #f0e08c; border-radius:var(--radius); padding:10px 14px; margin-bottom:20px; font-size:.85rem; color:#5a4a00; }
+.key-learning strong { display:block; margin-bottom:4px; color:#3d3000; }
+.actions { display:flex; justify-content:flex-end; gap:12px; }
+.btn { padding:10px 22px; border-radius:var(--radius); font-size:.95rem; font-weight:600; border:none; cursor:pointer; transition:background .15s; }
+.btn:disabled { opacity:.4; cursor:not-allowed; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-primary:hover:not(:disabled) { background:var(--primary-light); }
+.btn-secondary { background:var(--surface); color:var(--primary); border:2px solid var(--border); }
+.btn-secondary:hover { border-color:var(--primary); }
+.btn-lg { padding:14px 32px; font-size:1.05rem; width:100%; }
+.result-header { text-align:center; padding:28px; border-radius:var(--radius); margin-bottom:24px; }
+.r1{background:#e8f5ee;} .r2{background:#edf7e8;} .r3{background:#fdf7e3;} .r4{background:#fef3e2;} .r5{background:#fdf0f0;}
+.result-note { font-size:3rem; font-weight:800; color:var(--primary); }
+.result-label { font-size:1.2rem; font-weight:700; margin:4px 0; }
+.result-score { font-size:.95rem; color:var(--neutral); }
+.result-stations h3 { font-size:1rem; font-weight:700; color:var(--primary); margin-bottom:12px; padding-bottom:6px; border-bottom:2px solid var(--border); }
+.result-station-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; font-size:.88rem; }
+.result-icon { font-size:1.1rem; flex-shrink:0; }
+.result-station-title { font-weight:600; }
+.result-station-learning { color:var(--neutral); font-size:.83rem; margin-top:2px; }
+.transfer-q { font-size:1rem; font-weight:600; color:#1a1a2e; margin-bottom:12px; }
+.transfer-textarea { width:100%; min-height:160px; padding:12px 14px; border:2px solid var(--border); border-radius:var(--radius); font-size:.95rem; font-family:var(--font); resize:vertical; line-height:1.6; color:#333; margin-bottom:16px; }
+.transfer-textarea:focus { outline:none; border-color:var(--primary); }
+.sample-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; margin-bottom:16px; display:none; }
+.sample-box h4 { font-size:.85rem; font-weight:700; color:var(--correct); margin-bottom:8px; }
+.sample-box p { font-size:.9rem; line-height:1.6; color:#333; }
+.checklist { display:none; margin-bottom:20px; }
+.checklist h4 { font-size:.9rem; font-weight:700; color:var(--primary); margin-bottom:10px; }
+.check-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; }
+.check-item input { margin-top:3px; accent-color:var(--primary); flex-shrink:0; width:16px; height:16px; }
+.check-item label { font-size:.9rem; color:#333; cursor:pointer; }
+@media(max-width:600px){ .card{padding:20px 14px;} .patient-grid{grid-template-columns:1fr;} }
+
+/* P1: Feedback summary + expandable detail */
+.feedback-summary { font-size:.93rem; font-weight:700; line-height:1.5; margin-bottom:0; }
+.feedback-detail { font-size:.88rem; line-height:1.6; color:#333; margin-top:8px; }
+.feedback-detail.hidden { display:none; }
+.feedback-toggle { background:none; border:none; cursor:pointer; font-size:.8rem; font-weight:600; padding:4px 0; margin-top:6px; text-decoration:underline; }
+.feedback.correct .feedback-toggle { color:var(--correct); }
+.feedback.wrong .feedback-toggle { color:var(--wrong); }
+/* P1: Situation key fact highlight */
+.key-fact { font-weight:700; color:#1a1a2e; background:#dbeafe; padding:1px 4px; border-radius:3px; }
+/* P1: Competency labels in result */
+.comp-label { display:inline-block; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-size:.78rem; padding:2px 10px; margin:2px; color:var(--neutral); }
+.comp-label.done { background:var(--correct-bg); color:var(--correct); border-color:var(--correct); }
+
+/* Cross-module links */
+.xlink { background:#f0f7ff; border:1px solid #b8d0e8; border-radius:8px; padding:10px 14px; margin-bottom:20px; font-size:.83rem; display:none; }
+.xlink.visible { display:block; }
+.xlink-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#1a4f7a; margin-bottom:6px; }
+.xlink a { color:#1a4f7a; font-weight:600; text-decoration:none; border-bottom:1px solid #b8d0e8; }
+.xlink a:hover { border-bottom-color:#1a4f7a; }
+
+/* Cross-module links */
+.crosslink-section { margin-bottom: 24px; }
+.crosslink-section h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--border); }
+.crosslink-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; background: var(--surface); text-decoration: none; color: inherit; transition: border-color .15s, background .15s; }
+.crosslink-card:hover { border-color: var(--primary-light); background: #f0f7ff; }
+.crosslink-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.crosslink-title { font-size: .9rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.crosslink-hint { font-size: .82rem; color: var(--neutral); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const CASE = {
+  title: "Ösophaguskarzinom – Klinischer Fall",
+  subtitle: "Theorie-Praxis-Transfer | 3. Lehrjahr",
+  patient: {
+    name: "Herr Günter M., 67 Jahre",
+    diagnose: "Ösophaguskarzinom cT3 N1 M0, mittlerer thorakaler Ösophagus (Höhe T5/T6)",
+    plan: "Definitive Radiochemotherapie: PTV1 (Tumor + Lymphabfluss) ED 1,8 Gy bis GD 50,4 Gy, PTV2 (Boost Tumor) bis GD 60–66 Gy. Chemotherapie simultan.",
+    besonderheiten: "Histologie: Plattenepithelkarzinom. Tumor nicht operable (zentrale Lage). Vorerkrankungen: COPD Grad II, Nikotinabusus 40 py."
+  },
+  pillars: { "1":"Präzision", "2":"Technologie", "3":"Kommunikation", "4":"Prozessethik", "5":"Reflexion" },
+  stations: [
+    {
+      id:"s1", pillar:"1",
+      title:"Station 1 – Planungs-CT: Lagerungsentscheidung",
+      situation:"Herr M. kommt zum Planungs-CT. Sein Tumor sitzt im mittleren thorakalen Ösophagus (Höhe T5/T6). Du bist für die Lagerung zuständig.",
+      question:"Welche Lagerung und welche Lagerungshilfen sind korrekt für den mittleren thorakalen Ösophagus?",
+      options:[
+        { id:"a", text:"Rückenlage, Thermoplastmaske (Kopf-Hals), passende Nackenschale, Arme seitlich am Körper.", correct:false, feedback:"Nicht korrekt. Eine Thermoplastmaske ist beim distalen/thorakalen Ösophagus nicht indiziert – sie wird beim proximalen/zervikalen Ösophagus benötigt (Kopf-Hals-Immobilisierung). Beim mittleren/distalen Ösophagus werden die Arme nach oben gelagert, um die Wahl der Gantrywinkel zu erleichtern.", consequence:"Klinische Konsequenz: Arme im Strahlenfeld schränken die Wahl der Einstrahlwinkel erheblich ein – Dosisverteilung und Risikoorganschonung werden kompromittiert." },
+        { id:"b", text:"Rückenlage, Arme nach oben (Armhalterung/Wingstep), Kniestep, keine Maske.", correct:true, feedback:"Richtig. Für den mittleren/distalen thorakalen Ösophagus und AEG-Tumore gilt: Rückenlage, Arme nach oben in Armhalterung (Wingstep), Kniestep. Keine Maske nötig. Die Arme nach oben verlagern Schulter und Arme aus dem Bestrahlungsfeld – das erweitert die Wahl der Gantrywinkel erheblich und schont die Knochenmarkszentren der Humerusköpfe. Lagerungspräzision ≤5 mm.", consequence:"Klinische Konsequenz: Optimale Feldwinkelfreiheit für IMRT/VMAT. Schulter/Arme außerhalb des Hochdosisbereichs." },
+        { id:"c", text:"Bauchlage auf dem Lochbrett, Arme nach vorne, Knierolle.", correct:false, feedback:"Nicht korrekt. Bauchlage auf dem Lochbrett ist die Standardlagerung beim Rektumkarzinom – nicht beim Ösophaguskarzinom. Das Ösophaguskarzinom wird generell in Rückenlage behandelt.", consequence:"Klinische Konsequenz: Falsche Grundposition – keine klinische Entsprechung beim Ösophagus." },
+        { id:"d", text:"Rückenlage, Arme auf der Brust, Kniestep, keine Maske.", correct:false, feedback:"Teilweise korrekt (Rückenlage, Kniestep, keine Maske) – aber Arme auf der Brust ist falsch. Die Arme müssen beim thorakalen Ösophagus nach oben gelagert werden, um sie aus dem Bestrahlungsfeld und dem Bereich der möglichen Einstrahlwinkel zu verlagern.", consequence:"Klinische Konsequenz: Arme auf der Brust liegen im potenziellen Strahlenfeld seitlicher Einstrahlwinkel – schränkt Feldwinkeloptimierung ein." }
+      ],
+      key_learning:"Thorakaler/distaler Ösophagus: Rückenlage, Arme NACH OBEN (Wingstep/Armhalterung), Kniestep | Proximaler/zervikaler Ösophagus: Rückenlage + Thermoplastmaske + Nackenschale | Arme nach oben = Feldwinkelfreiheit + Knochenmarkschonung"
+    },
+    {
+      id:"s2", pillar:"1",
+      title:"Station 2 – Planungs-CT: Referenzpunkt distaler Ösophagus",
+      situation:"Herr M. liegt korrekt mit Armen nach oben. Jetzt musst du den Referenzpunkt für den mittleren/distalen Ösophagus definieren.",
+      question:"Wie wird der Referenzpunkt beim distalen/thorakalen Ösophaguskarzinom korrekt gesetzt?",
+      options:[
+        { id:"a", text:"Vertikal: halber Patientendurchmesser | Lateral: Körpermitte | Longitudinal: Mitte Sternum oder 2 Querfinger oberhalb des Xiphoids.", correct:true, feedback:"Richtig. Beim distalen thorakalen Ösophagus/AEG-Tumor: Vertikal = halber Patientendurchmesser, Lateral = Körpermitte, Longitudinal = Mitte Sternum oder 2 Querfinger oberhalb des Xiphoids. Dies sind reproduzierbare anatomische Orientierungspunkte ohne Maske.", consequence:"Klinische Konsequenz: Reproduzierbarer Referenzpunkt ermöglicht präzise tägliche Lagerungsverifikation über alle Fraktionen." },
+        { id:"b", text:"Vertikal: Hautoberfläche | Lateral: Körpermitte | Longitudinal: Höhe Unterkiefer + Schultermarker.", correct:false, feedback:"Nicht korrekt. 'Höhe Unterkiefer + Schultermarker' ist der Referenzpunkt für den proximalen/zervikalen Ösophagus mit Maske. Beim distalen Ösophagus ohne Maske wird der Referenzpunkt thorakal gesetzt (Mitte Sternum/Xiphoid). Außerdem: Vertikal = halber Patientendurchmesser, nicht Hautoberfläche.", consequence:"Klinische Konsequenz: Falscher Referenzpunkt führt zum falschen Isozentrum – systematische Dosisabweichung bei jeder Fraktion." },
+        { id:"c", text:"Vertikal: halber Patientendurchmesser | Lateral: Körpermitte | Longitudinal: Höhe Unterkiefer oder Oberlippe + Schultermarker.", correct:false, feedback:"Dies ist der korrekte Referenzpunkt für den proximalen/zervikalen Ösophagus mit Maske – nicht für den distalen. Beim mittleren/distalen Ösophagus entfällt die Maske, der Referenzpunkt wird thorakal (Mitte Sternum/oberhalb Xiphoid) gesetzt.", consequence:"Klinische Konsequenz: Verwechslung der Referenzpunkt-Protokolle führt zu inkorrekter Feldzentrierung." },
+        { id:"d", text:"Referenzpunkt beim Ösophagus wird immer vom Arzt am CT-Konsolsystem definiert – die MTR übernimmt nur die Lagerung.", correct:false, feedback:"Nicht korrekt. Die Referenzpunktsetzung, -messung und -dokumentation am Planungs-CT ist eine Kernaufgabe der MTR. Der Radioonkologe definiert das Zielvolumen – die Lagerungsdokumentation liegt in der MTR-Verantwortung.", consequence:"Klinische Konsequenz: Unklare Zuständigkeit führt zu Fehlern bei der Lagerungsreproduzierbarkeit." }
+      ],
+      key_learning:"Distaler/thorakaler Ösophagus (ohne Maske): Longitudinal = Mitte Sternum / 2 QF oberhalb Xiphoid | Proximaler Ösophagus (mit Maske): Longitudinal = Höhe Unterkiefer + Schultermarker | Vertikal immer = halber Patientendurchmesser"
+    },
+    {
+      id:"s3", pillar:"3",
+      title:"Station 3 – Kommunikation: Klaustrophobie bei der Maskenanpassung",
+      situation:"Stell dir vor, Herr M. hätte einen proximalen Ösophagustumor und würde eine Thermoplastmaske benötigen. Beim Zeigen der Maske erklärt er dir, dass er unter ausgeprägter Klaustrophobie leidet. Er wirkt angespannt und sagt: 'Das schaffe ich nie. Die Maske bringt mich um den Verstand.'",
+      question:"Wie gehst du als MTR mit dieser Situation um?",
+      options:[
+        { id:"a", text:"Du erklärst sachlich, dass die Maske zwingend notwendig ist, und verschiebst den Termin auf einen anderen Tag.", correct:false, feedback:"Unzureichend. 'Zwingend notwendig und auf später verschieben' adressiert die Angst des Patienten nicht. Verschieben ohne Hilfsangebot löst das Problem nicht. Der Patient braucht jetzt konkrete Unterstützung und Information.", consequence:"Klinische Konsequenz: Unbehandelte Klaustrophobie führt zu Behandlungsunterbrechungen oder -abbruch. Compliance gefährdet." },
+        { id:"b", text:"Du nimmst dir Zeit, erklärst ruhig, dass die Maske die Atmung nicht beeinträchtigt, dass der Patient jederzeit überwacht wird und die Behandlung nur wenige Minuten dauert. Du bietest an, Nase und Mund bei der Anpassung freizulassen. Bei anhaltender Angst empfiehlst du dem Arzt ein Beruhigungsmittel.", correct:true, feedback:"Richtig. Empathische Professionalität: (1) Ruhe bewahren und Zeit nehmen. (2) Die Maske erklärt – Atmung nicht beeinträchtigt, ständige Überwachung, kurze Behandlungszeit. (3) Konkrete Hilfsmaßnahme anbieten: Freilassung von Nase und Mund bei der Maskenanpassung. (4) Bei anhaltender schwerer Angst: Rücksprache mit dem Arzt für pharmakologische Unterstützung (z.B. Benzodiazepine). Du entscheidest nicht über Medikamentengabe – du informierst den Arzt.", consequence:"Klinische Konsequenz: Gut begleitete Patienten mit Klaustrophobie können die Behandlung häufig erfolgreich abschließen. Frühzeitige Intervention verhindert Behandlungsabbruch." },
+        { id:"c", text:"Du dokumentierst die Angst des Patienten und führst die Maskenanpassung trotzdem sofort durch – eine weitere Verzögerung ist nicht vertretbar.", correct:false, feedback:"Nicht korrekt. Eine Maskenanpassung gegen den erklärten Willen eines ängstlichen Patienten ist ethisch nicht vertretbar und gefährdet die Behandlungsqualität. Zwangsmaßnahmen erzeugen Trauma und zerstören das Vertrauensverhältnis.", consequence:"Klinische Konsequenz: Erzwungene Behandlung führt zu PTBS-ähnlichen Reaktionen, zukünftiger Verweigerung, und rechtlichen Problemen (Einwilligung)." },
+        { id:"d", text:"Du bittest den Patienten, tief durchzuatmen, und erklärt, dass andere Patienten das auch schaffen.", correct:false, feedback:"Unzureichend und potenziell kontraproduktiv. 'Andere schaffen das auch' ist eine Bagatellisierung der individuellen Angst des Patienten. Tiefes Durchatmen als einzige Maßnahme reicht bei ausgeprägter Klaustrophobie nicht aus.", consequence:"Klinische Konsequenz: Patient fühlt sich nicht ernst genommen. Vertrauensverlust. Angstspirale kann sich verstärken." }
+      ],
+      key_learning:"Klaustrophobie bei Maskenanpassung: Zeit nehmen + Erklären (Atmung frei, Überwachung, kurze Dauer) | Nase/Mund freistellen als erste Hilfsmaßnahme | Bei anhaltender Angst: Arzt informieren für Anxiolytikum | Keine Zwangsmaßnahmen"
+    },
+    {
+      id:"s4", pillar:"2",
+      title:"Station 4 – Risikoorgane und kritische Grenzwerte",
+      situation:"Im Planungsteam wird der Bestrahlungsplan für Herrn M. besprochen. Das DVH zeigt: Das Rückenmark erhält in einem 2 cm langen Segment eine maximale Dosis von 48 Gy (Dmax). Die TD 5/5 für das Rückenmark beträgt 40–45 Gy. Du wirst gefragt, ob dieser Plan aus MTR-Sicht akzeptabel ist.",
+      question:"Wie bewertest du den DVH-Befund für das Rückenmark korrekt?",
+      options:[
+        { id:"a", text:"Akzeptabel – 48 Gy liegt unter der TD 50/5 (55–60 Gy) für das Rückenmark.", correct:false, feedback:"Nicht korrekt. Die TD 5/5 (40–45 Gy) ist die klinisch relevante Grenze, ab der 5% der Patienten eine Myelopathie entwickeln. Die TD 50/5 (55–60 Gy) ist die Grenze für 50% Wahrscheinlichkeit – sie als 'akzeptable' Grenze zu verwenden wäre klinisch inakzeptabel. 48 Gy überschreitet die TD 5/5 und erfordert Planoptimierung.", consequence:"Klinische Konsequenz: Myelopathie nach Rückenmarküberdosierung ist eine schwere, irreversible Spätfolge (Lähmungen, Querschnitt). Als serielles Organ ist das Rückenmark besonders gefährdet." },
+        { id:"b", text:"Nicht akzeptabel – 48 Gy überschreitet die TD 5/5 des Rückenmarks (40–45 Gy). Der Plan muss überarbeitet werden.", correct:true, feedback:"Richtig. Das Rückenmark ist ein serielles Risikoorgan mit TD 5/5 von 40–45 Gy (Myelopathierisiko). 48 Gy Dmax überschreitet diese Grenze. Als serielles Organ führt bereits ein lokaler Überschuss zur Gesamtfunktionsgefährdung. Der Plan muss optimiert werden – z.B. durch Feldwinkelanpassung, Gewichtsverschiebung oder Dosisreduktion im Rückenmarkbereich. Die Entscheidung trifft das Team (Radioonkologe + MPE).", consequence:"Klinische Konsequenz: Kein Plan mit Rückenmark-Dmax >45 Gy darf freigegeben werden. Myelopathie ist irreversibel." },
+        { id:"c", text:"Grenzwertig – da es nur 2 cm betrifft, ist das Volumenkriterium ausschlaggebend und der Plan kann akzeptiert werden.", correct:false, feedback:"Nicht korrekt. Beim Rückenmark als seriellem Risikoorgan gilt das 'schwächste Glied'-Prinzip: Ein einzelner Hochdosispunkt kann die Gesamtfunktion des Rückenmarks gefährden. Das Volumenprinzip gilt für parallele Organe (Lunge, Leber) – nicht für serielle. 48 Gy auf 2 cm Rückenmark sind klinisch nicht akzeptabel.", consequence:"Klinische Konsequenz: Falsche Anwendung des Volumen-Konzepts auf ein serielles Risikoorgan. Irreversible Schädigung möglich." },
+        { id:"d", text:"Die Bewertung des DVH ist ausschließlich Aufgabe des MPE – die MTR kommentiert nicht.", correct:false, feedback:"Nicht korrekt. Das Verstehen und kritische Einschätzen von DVH-Befunden gehört zur Fachkompetenz der MTR. Zwar entscheidet der Radioonkologe über die Planfreigabe – aber die MTR muss in der Lage sein, kritische Befunde zu erkennen und anzusprechen. Das ist Teil der professionellen Verantwortung (Säule 4: Prozessethik).", consequence:"Klinische Konsequenz: Eine MTR, die DVH-Befunde nicht interpretieren kann, ist in der klinischen Teambesprechung nicht handlungsfähig." }
+      ],
+      key_learning:"Rückenmark = serielles Risikoorgan | TD 5/5: 40–45 Gy | Dmax >45 Gy = Planüberarbeitung erforderlich | Volumenargument gilt NICHT für serielle Organe | Myelopathie ist irreversibel"
+    },
+    {
+      id:"s5", pillar:"2",
+      title:"Station 5 – Bestrahlungstechnik: Alt vs. Modern",
+      situation:"Im Unterricht fragt ein Azubi, warum bei modernen Ösophagusbestrahlungen VMAT/IMRT verwendet wird – schließlich hätten die alten Techniken (Mercedes-Stern, Friedenszeichen) doch auch funktioniert.",
+      question:"Welche Aussage beschreibt den Vorteil von IMRT/VMAT gegenüber den älteren Feldtechniken beim intrathorakalen Ösophagus korrekt?",
+      options:[
+        { id:"a", text:"IMRT/VMAT ist schneller in der Durchführung und deshalb bevorzugt – dosimetrisch sind beide Techniken gleichwertig.", correct:false, feedback:"Nicht korrekt. VMAT ist in der Tat oft schneller in der Durchführung – aber der Hauptvorteil liegt in der dosimetrischen Überlegenheit: bessere Konformität, steilere Dosisgradienten und deutlich bessere Risikoorganschonung (besonders Rückenmark, Lunge beidseits, Herz).", consequence:"Klinische Konsequenz: Dosimetrische Gleichwertigkeit ist falsch – IMRT/VMAT ist bei zentralen Thoraxtumoren dosimetrisch überlegen." },
+        { id:"b", text:"IMRT/VMAT ermöglicht durch konkave Dosisverteilungen eine bessere Schonung von Rückenmark, Lunge und Herz bei gleichzeitig optimaler Zielvolumenerfassung – was mit 3–4-Felder-Techniken nicht erreichbar ist.", correct:true, feedback:"Richtig. Der Ösophagus liegt zentral zwischen Rückenmark (dorsal), Lunge beidseits, Herz (ventral) und Hauptbronchus – alle mit engen Toleranzdosen. Ältere Techniken (Mercedes-Stern: 3 Felder mit Keilfilter; Friedenszeichen: 4 Felder) konnten diese Organe nicht ausreichend schonen. IMRT/VMAT erzeugt konkave Dosisverteilungen, die das Zielvolumen aus allen Richtungen erfassen und dabei seriellen Risikoorganen ausweichen.", consequence:"Klinische Konsequenz: Deutliche Reduktion von Pneumonitis, Myelopathie und Kardiotoxizität durch moderne Techniken." },
+        { id:"c", text:"Ältere Techniken waren dosimetrisch überlegen – VMAT wird nur wegen der kürzeren Behandlungszeit bevorzugt.", correct:false, feedback:"Nicht korrekt. Ältere 3–4-Felder-Techniken hatten aufgrund ihrer geometrischen Beschränkungen deutliche Nachteile bei der Risikoorganschonung zentraler Thoraxtumoren. IMRT/VMAT ist sowohl in der Dosiskonformität als auch in der Risikoorganschonung überlegen.", consequence:"Klinische Konsequenz: Diese Fehleinschätzung würde zum falschen Verständnis des technologischen Fortschritts in der RT führen." },
+        { id:"d", text:"Der Mercedes-Stern (3 Felder) und das Friedenszeichen (4 Felder) sind auch heute noch gleichwertige Alternativen zu VMAT.", correct:false, feedback:"Nicht korrekt für zentrale Thoraxtumoren. Bei einfachen, kleinen, peripher gelegenen Tumoren können konventionelle Feldtechniken noch eingesetzt werden – aber beim intrathorakalen Ösophagus mit zentraler Lage sind IMRT/VMAT klinischer Standard wegen der überlegenen Risikoorganschonung.", consequence:"Klinische Konsequenz: Einsatz veralteter Techniken beim Ösophagus-Ca. = vermeidbare Toxizität für Rückenmark, Lunge und Herz." }
+      ],
+      key_learning:"Mercedes-Stern (3 Felder) + Friedenszeichen (4 Felder) = historische Techniken | IMRT/VMAT = Standard | Vorteil: konkave Dosisverteilung → Rückenmark, Lunge beidseits, Herz besser geschont | Zentrale Lage des Ösophagus = anspruchsvolle Dosimetrie"
+    },
+    {
+      id:"s6", pillar:"4",
+      title:"Station 6 – Dosierungskonzepte: Definitiv vs. Neoadjuvant",
+      situation:"Herr M. fragt dich nach seiner Bestrahlung: 'Mein Nachbar hatte auch Speiseröhrenkrebs und wurde nur bis 50 Gy bestrahlt, dann operiert. Ich bekomme bis zu 66 Gy und keine Operation. Warum das?'",
+      question:"Welche Erklärung ist fachlich korrekt und für den Patienten verständlich?",
+      options:[
+        { id:"a", text:"Du erklärst, dass sein Nachbar eine schwerere Erkrankung hatte und deshalb eine Operation brauchte – bei ihm sei das zum Glück nicht nötig.", correct:false, feedback:"Nicht korrekt und kommunikativ problematisch. Diese Erklärung ist sachlich falsch (neoadjuvante RCT wird bei operablen Tumoren eingesetzt) und enthält eine bewertende Aussage über die Schwere der Erkrankung, die den Patienten verunsichert.", consequence:"Klinische Konsequenz: Falschinformation und mögliche Verunsicherung des Patienten über seinen Erkrankungsstatus." },
+        { id:"b", text:"Du erklärst, dass es zwei unterschiedliche Behandlungskonzepte gibt: Sein Nachbar erhielt eine neoadjuvante Bestrahlung vor einer OP (niedrigere Dosis, da die OP den Rest erledigt). Bei ihm ist aufgrund der Tumorlage keine OP möglich – deshalb muss die Strahlentherapie die volle Aufgabe übernehmen und gibt eine höhere Dosis.", correct:true, feedback:"Richtig. Neoadjuvante RCT (vor OP): GD 40–50,4 Gy – die Operation übernimmt die definitive Tumorkontrolle. Definitive RCT (ohne OP): GD 50,4 Gy (PTV1 Lymphabfluss) bis 60–66 Gy (Boost Tumor) – die Bestrahlung muss den Tumor alleine kontrollieren. Bei Herrn M. ist die Operation aufgrund der zentralen Lage und seines Allgemeinzustands nicht möglich. Diese Erklärung ist sachlich korrekt und patientengerecht formuliert.", consequence:"Klinische Konsequenz: Patient versteht seinen individuellen Behandlungsplan – verbessert Compliance und Vertrauen in das Behandlungsteam." },
+        { id:"c", text:"Du sagst, dass du das nicht genau weißt und er den Arzt fragen soll.", correct:false, feedback:"Unzureichend. Diese Frage ist für eine MTR mit Fachkenntnissen beantwortbar. 'Ich weiß es nicht' als Standardantwort signalisiert fehlende Kompetenz und lässt den Patienten allein mit seiner Sorge.", consequence:"Klinische Konsequenz: Vertrauensverlust. Patient fühlt sich nicht informiert. Compliance leidet." },
+        { id:"d", text:"Du erklärst, dass 66 Gy die Standarddosis beim Ösophaguskarzinom ist – es gibt keine geringere Option.", correct:false, feedback:"Nicht korrekt. Es gibt eindeutig unterschiedliche Dosiskonzepte: neoadjuvant (40–50,4 Gy vor OP) vs. definitiv (50,4–66 Gy ohne OP). Die Aussage, 66 Gy sei immer Standard, ist falsch.", consequence:"Klinische Konsequenz: Falschinformation führt zu Verwirrung, wenn der Patient weitere Informationen einholt." }
+      ],
+      key_learning:"Neoadjuvante RCT (vor OP): GD 40–50,4 Gy | Definitive RCT (ohne OP): GD bis 60–66 Gy Boost | Höhere Dosis bei definitiver RCT, da keine OP die Tumorrestkontrolle übernimmt | MTR kann und soll patientengerecht erklären"
+    },
+    {
+      id:"s7", pillar:"3",
+      title:"Station 7 – Fraktion 12: Ösophagitis und Ernährungsproblematik",
+      situation:"Herr M. erscheint zur 12. Fraktion deutlich abgemagert. Er berichtet, kaum noch schlucken zu können – jeder Schluck brennt wie Feuer. Er hat die letzten 3 Tage fast nichts gegessen. Er fragt dich: 'Kann ich das einfach weglassen, das Essen? Das ist sowieso alles sinnlos.'",
+      question:"Wie handelst du in dieser Situation – fachlich, kommunikativ und bezüglich der Patientensicherheit?",
+      options:[
+        { id:"a", text:"Du erklärst, dass Schluckschmerzen normal sind, und führst die Bestrahlung durch. Über das Essen soll er mit dem Arzt reden.", correct:false, feedback:"Unzureichend. 'Kaum essen für 3 Tage + starke Schluckbeschwerden + depressive Aussage (sinnlos)' ist eine klinisch relevante Kombination. Das geht über den normalen Nebenwirkungsverlauf hinaus und erfordert mehr als einen Verweis auf den Arzt – es erfordert sofortige Kommunikation und empathisches Handeln.", consequence:"Klinische Konsequenz: Mangelernährung gefährdet die Behandlungsdurchführbarkeit und den Allgemeinzustand des Patienten erheblich." },
+        { id:"b", text:"Du nimmst dir Zeit für den Patienten, erkennst die ernste Situation (Ösophagitis, Mangelernährung, mögliche psychische Belastung), dokumentierst, informierst den Arzt und ermöglichst eine zeitnahe ärztliche Evaluation – noch vor oder unmittelbar nach der Fraktion.", correct:true, feedback:"Richtig. Drei parallel vorliegende Probleme erfordern professionelle Reaktion: (1) Ösophagitis mit Dysphagie = typische Strahlenfolge, aber bei 3-tägigem Nahrungsverzicht klinisch relevant → Arzt informieren für supportive Therapie (Schmerzmittel, ggf. Ernährungssonde). (2) Mangelernährung = Behandlungsabbruchrisiko. (3) Die Aussage 'sinnlos' signalisiert mögliche psychische Belastung → empathisch ansprechen, nicht ignorieren. Dokumentation + Arztinformation sind Pflicht.", consequence:"Klinische Konsequenz: Früherkennung und Intervention verhindert Behandlungsabbruch. Ernährungssonde (nasogastral oder PEG) kann nötig werden. Psychoonkologische Unterstützung ist indiziert." },
+        { id:"c", text:"Du empfiehlst Herrn M., flüssige Kost zu sich zu nehmen und Bepanthen-Lösung zu schlucken.", correct:false, feedback:"Teilweise nützlich als Ergänzung, aber unzureichend als alleinige Reaktion. Flüssige Kost und Mundspülung können hilfreich sein – aber bei 3-tägigem Nahrungsverzicht und starken Schluckschmerzen ist eine ärztliche Evaluation zwingend. Außerdem: Bepanthenlotion ist für die Haut – nicht zum Schlucken bei Ösophagitis.", consequence:"Klinische Konsequenz: Symptomlinderung ohne ärztliche Abklärung und ohne Ansprechen der psychischen Dimension ist unzureichend." },
+        { id:"d", text:"Du fragst, ob er sich gut genug fühlt für die Bestrahlung, und führst sie durch, wenn er nickt.", correct:false, feedback:"Nicht korrekt. Eine kurze Ja/Nein-Frage ist keine adäquate Einschätzung des Patientenzustands. Die Situation – kaum Nahrungsaufnahme seit 3 Tagen, starke Schluckbeschwerden, depressive Aussage – erfordert eine strukturierte Reaktion und Dokumentation, nicht eine Compliance-Abfrage.", consequence:"Klinische Konsequenz: Kritischer Patientenzustand wird nicht erkannt und nicht gemeldet. Behandlungsabbruch und ernste Komplikationen möglich." }
+      ],
+      key_learning:"Ösophagitis = häufigste akute Strahlenfolge beim Ösophagus-Ca. | Dysphagie + Mangelernährung > 2 Tage = ärztliche Evaluation erforderlich | Psychische Belastungssignale ernst nehmen | Ernährungssonde (NGT/PEG) kann indiziert werden | Pflegemaßnahmen: weiche/flüssige Kost, Schmerzmittel, Mundspülung"
+    }
+  ],
+  transfer: {
+    title:"Abschluss-Reflexion: Besonderheiten des Ösophaguskarzinoms",
+    question:"Vergleiche das Ösophagus-Ca.-Case mit dem Rektum-Ca.-Case: Welche spezifischen Herausforderungen stellt das Ösophaguskarzinom an die MTR? Nenne mindestens 3 Unterschiede in Lagerung, Risikoorgan-Management und Patientenkommunikation.",
+    sample:"Lagerungsunterschiede: Beim Ösophagus-Ca. (thorakal) werden die Arme nach oben gelagert (keine Maske beim distalen Typ) – beim Rektum-Ca. liegt der Patient in Bauchlage auf dem Lochbrett. Die Lagerung beim proximalen Ösophagus erfordert zusätzlich eine Thermoplastmaske, was Klaustrophobie-Management erfordert. Risikoorgane: Das Rückenmark ist beim Ösophagus-Ca. das kritischste serielle Risikoorgan (TD 5/5: 40–45 Gy) – eine Myelopathie ist irreversibel. Beim Rektum-Ca. steht die Dünndarmschonung im Vordergrund (Lochbrett). Beim Ösophagus-Ca. sind Lunge beidseits (Pneumonitis), Herz (Kardiotoxizität) und Larynx (beim proximalen Typ) relevante Risikoorgane. Patientenkommunikation: Die Ösophagitis mit Dysphagie ist eine besonders belastende akute Strahlenfolge, die die Nahrungsaufnahme direkt beeinträchtigt – hier ist proaktive Kommunikation und Mangelernährungs-Monitoring essenziell. Die Klaustrophobie-Problematik bei der Maskenanpassung erfordert spezifische Kommunikationsstrategien.",
+    checklist:[
+      "Ich habe mindestens 2 Lagerungsunterschiede zwischen Ösophagus und Rektum beschrieben.",
+      "Ich habe das Rückenmark als kritisches serielles Risikoorgan beim Ösophagus-Ca. benannt und begründet.",
+      "Ich habe die Ösophagitis als typische akute Strahlenfolge und ihre klinische Relevanz (Mangelernährung) beschrieben.",
+      "Ich habe einen Unterschied in der Patientenkommunikation zwischen beiden Fällen herausgearbeitet.",
+      "Ich habe die Bedeutung der definitiven vs. neoadjuvanten RCT erklärt."
+    ]
+  }
+};
+
+const state = { current:0, answers:{}, submitted:{}, score:0, start:Date.now() };
+const app = document.getElementById('app');
+
+function init() {
+  state.current=0; state.answers={}; state.submitted={}; state.score=0; state.start=Date.now();
+  renderIntro();
+}
+
+function renderIntro() {
+  app.innerHTML = `<div class="card">
+    <span class="intro-badge">Klinischer Fall · MTR Strahlentherapie</span>
+    <h1 class="intro-title">${CASE.title}</h1>
+    <p class="intro-sub">${CASE.subtitle}</p>
+    <div class="patient-card">
+      <h3>Patient</h3>
+      <dl class="patient-grid">
+        <dt>Patient</dt><dd>${CASE.patient.name}</dd>
+        <dt>Diagnose</dt><dd>${CASE.patient.diagnose}</dd>
+        <dt>Therapieplan</dt><dd>${CASE.patient.plan}</dd>
+        <dt>Besonderheiten</dt><dd>${CASE.patient.besonderheiten}</dd>
+      </dl>
+    </div>
+    <p style="font-size:.9rem;color:var(--neutral);margin-bottom:24px;">
+      Begleite Herrn M. durch den gesamten Behandlungsprozess – von der Lagerungssimulation bis zur täglichen Bestrahlung.
+      <strong>${CASE.stations.length} klinische Stationen</strong> mit steigendem Schwierigkeitsniveau.
+    </p>
+    <button class="btn btn-primary btn-lg" id="start-btn">Fall starten →</button>
+  </div>`;
+  document.getElementById('start-btn').onclick = () => renderStation();
+}
+
+function renderStation() {
+  const s = CASE.stations[state.current];
+  const total = CASE.stations.length;
+  const pct = Math.round((state.current/total)*100);
+  const locked = !!state.submitted[s.id];
+  const sel = state.answers[s.id]||null;
+
+  app.innerHTML = `<div class="card">
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-label"><span>Station ${state.current+1} von ${total}</span><span>${state.score} richtig</span></div>
+    <div class="station-header">
+      <span class="station-num">Station ${state.current+1}</span>
+      <span class="station-pillar">Säule ${s.pillar} – ${CASE.pillars[s.pillar]}</span>
+    </div>
+    <h2 class="station-title">${s.title}</h2>
+    <div class="situation-box"><h4>Situation</h4><p>${s.situation}</p></div>
+    <p class="question">${s.question}</p>
+    <div class="options" id="opts">
+      ${s.options.map(o => {
+        let cls=''; const isSel=sel===o.id;
+        if(locked){ if(o.correct)cls='correct'; else if(isSel&&!o.correct)cls='wrong'; }
+        else if(isSel)cls='selected';
+        const icon=locked?(o.correct?'<span class="option-icon">✓</span>':(isSel&&!o.correct?'<span class="option-icon">✗</span>':'')):'';
+        return `<label class="option ${cls} ${locked?'locked':''}" data-id="${o.id}">
+          <input type="radio" name="opt" value="${o.id}" ${isSel?'checked':''} ${locked?'disabled':''}>
+          <span class="option-text">${o.text}</span>${icon}
+        </label>`;
+      }).join('')}
+    </div>
+    ${locked ? renderFeedback(s) : ''}
+    ${locked ? `<div class="key-learning"><strong>🔑 Merksatz</strong>${s.key_learning}</div>${XLINKS[s.id] ? `<div class="xlink visible"><p class="xlink-label">🔗 Verknüpfung zu anderen Modulen</p>${XLINKS[s.id]}</div>` : ''}` : ''}
+    <div class="actions">
+      ${!locked
+        ? `<button class="btn btn-primary" id="submit-btn" disabled>Antwort prüfen</button>`
+        : state.current<total-1
+          ? `<button class="btn btn-primary" id="next-btn">Nächste Station →</button>`
+          : `<button class="btn btn-primary" id="result-btn">Auswertung →</button>`
+      }
+    </div>
+  </div>`;
+
+  if(!locked){
+    document.getElementById('opts').addEventListener('change', e=>{
+      if(e.target.type==='radio'){ state.answers[s.id]=e.target.value; document.getElementById('submit-btn').disabled=false; }
+    });
+    document.getElementById('submit-btn').onclick=()=>submitStation(s);
+  }
+  document.getElementById('next-btn')?.addEventListener('click',()=>{ state.current++; renderStation(); });
+  document.getElementById('result-btn')?.addEventListener('click',renderResult);
+}
+
+function renderFeedback(s) {
+  const sub=state.submitted[s.id]; const opt=s.options.find(o=>o.id===state.answers[s.id]);
+  if(!opt)return '';
+  const cls=sub.correct?'correct':'wrong'; const label=sub.correct?'Richtig':'Nicht korrekt';
+  const parts=opt.feedback.split(/(?<=\.) /);
+  const summary=parts[0];
+  const detail=parts.slice(1).join(' ');
+  const detailHtml=detail?`<div class="feedback-detail hidden" id="fd-${s.id}"><p style="margin-bottom:6px;">${detail}</p><p class="consequence">${opt.consequence}</p></div><button class="feedback-toggle" onclick="toggleDetail('${s.id}')">Details einblenden ▾</button>`:`<p class="consequence" style="margin-top:8px;font-size:.85rem;color:var(--neutral);font-style:italic;">${opt.consequence}</p>`;
+  return `<div class="feedback ${cls}"><p class="feedback-label">${label}</p><p class="feedback-summary">${summary}</p>${detailHtml}</div>`;
+}
+
+function toggleDetail(id) {
+  const el=document.getElementById('fd-'+id);
+  const btn=el?.nextElementSibling;
+  if(!el)return;
+  const hidden=el.classList.toggle('hidden');
+  if(btn)btn.textContent=hidden?'Details einblenden ▾':'Details ausblenden ▴';
+}
+
+function submitStation(s){
+  const sel=state.answers[s.id]; const opt=s.options.find(o=>o.id===sel);
+  const correct=opt?.correct||false;
+  state.submitted[s.id]={correct}; if(correct)state.score++;
+  renderStation();
+}
+
+function renderResult(){
+  const total=CASE.stations.length; const pct=Math.round((state.score/total)*100);
+  try { localStorage.setItem('mtr_rt_case_oesophagus-ca-case', JSON.stringify({lastPct: pct})); } catch(e) {}
+  const elapsed=Math.round((Date.now()-state.start)/60000);
+  const g=pct>=86?{l:'Sehr sicher',n:'●●●●●',c:'r1'}:pct>=71?{l:'Sicher',n:'●●●●○',c:'r2'}:pct>=57?{l:'Gut vorbereitet',n:'●●●○○',c:'r3'}:pct>=43?{l:'In Entwicklung',n:'●●○○○',c:'r4'}:{l:'Noch Übungsbedarf',n:'●○○○○',c:'r5'};
+
+  app.innerHTML=`<div class="card">
+    <div class="result-header ${g.c}">
+      <p class="result-note">${g.n}</p>
+      <p class="result-label">${g.l}</p>
+      <p class="result-score">${state.score} / ${total} Stationen richtig (${pct}%) · ca. ${elapsed} Min.</p>
+    </div>
+    <div class="result-stations">
+      <h3>Auswertung nach Station</h3>
+      ${CASE.stations.map(s=>{
+        const correct=state.submitted[s.id]?.correct;
+        return `<div class="result-station-item">
+          <span class="result-icon">${correct?'✓':'✗'}</span>
+          <div><p class="result-station-title">${s.title}</p>
+          <p class="result-station-learning">🔑 ${s.key_learning}</p></div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="crosslink-section">
+      <h3>Verknüpfung zu anderen Fällen</h3>
+      <a href="rektum-ca-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">Rektumkarzinom – Herr S.</p>
+            <p class="crosslink-hint">Vergleich: Beim Rektum ist der Dünndarm das kritische Organ für die Lagerungsentscheidung. Welches serielle Organ übernimmt diese Rolle beim Ösophagus – und warum ist der Unterschied seriell vs. parallel entscheidend?</p>
+          </div>
+        </a><a href="hno-tumor-case.html" class="crosslink-card">
+          <span class="crosslink-icon">🔗</span>
+          <div>
+            <p class="crosslink-title">HNO-Tumor – Frau B.</p>
+            <p class="crosslink-hint">Vergleich: Beim Ösophagus (Station 7) und beim HNO (Station 7) gibt es schwere Ernährungsprobleme. Wie unterscheiden sich Ursache und Intervention – Ösophagitis vs. Mukositis, PEG-Ablehnung vs. Mangelernährung?</p>
+          </div>
+        </a>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" id="retry-btn">Fall neu starten</button>
+      <button class="btn btn-primary" id="transfer-btn">Zur Reflexionsaufgabe →</button>
+    </div>
+  </div>`;
+  document.getElementById('retry-btn').onclick=init;
+  document.getElementById('transfer-btn').onclick=renderTransfer;
+}
+
+function renderTransfer(){
+  const t=CASE.transfer;
+  app.innerHTML=`<div class="card">
+    <span class="intro-badge">Reflexionsaufgabe</span>
+    <h2 style="font-size:1.3rem;font-weight:700;color:var(--primary);margin-bottom:16px;">${t.title}</h2>
+    <p class="transfer-q">${t.question}</p>
+    <textarea class="transfer-textarea" id="ta" placeholder="Schreibe hier deine Antwort…"></textarea>
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn btn-primary" id="sample-btn">Musterlösung anzeigen</button>
+    </div>
+    <div class="sample-box" id="sample"><h4>Musterlösung</h4><p>${t.sample}</p></div>
+    <div class="checklist" id="checklist">
+      <h4>Selbstbewertung</h4>
+      ${t.checklist.map((item,i)=>`<div class="check-item"><input type="checkbox" id="c${i}"><label for="c${i}">${item}</label></div>`).join('')}
+    </div>
+    <div class="actions" style="margin-top:16px;">
+      <button class="btn btn-secondary" id="back-btn">← Zurück</button>
+      <button class="btn btn-primary" id="new-btn">Neuen Fall starten</button>
+    </div>
+  </div>`;
+  document.getElementById('sample-btn').onclick=()=>{
+    document.getElementById('sample').style.display='block';
+    document.getElementById('checklist').style.display='block';
+    document.getElementById('sample-btn').style.display='none';
+  };
+  document.getElementById('back-btn').onclick=renderResult;
+  document.getElementById('new-btn').onclick=init;
+}
+
+const XLINKS = {"s1": "→ Vergleiche mit <a href='rektum-ca-case.html'>Rektum Station 1</a> (Lochbrett) und <a href='hno-tumor-case.html'>HNO Station 2</a> (Maske): Drei Tumorentitäten – drei grundlegend verschiedene Lagerungsprinzipien.", "s4": "→ Beim <a href='hno-tumor-case.html'>HNO-Fall Station 4</a> steht die Parotis als lebensqualitätsrelevantes paralleles Risikoorgan im Vordergrund. Vergleiche: serielles Organ (Rückenmark) vs. paralleles Organ (Parotis) – was ändert sich in der DVH-Bewertung?", "s5": "→ Dieser Gewichtsverlust-Fall hat ein Pendant im <a href='rektum-ca-case.html'>Rektum-Fall Station 5</a>. Dort derselbe Grundsatz (Adaptive Replanning), anderes Risikoorgan. Was ist das Muster?"};
+init();
+</script>
+<!-- MTR Feedback Widget -->
+<style>
+/* ── MTR Feedback Widget ─────────────────── */
+#mtr-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;
+  background:#1a4f7a;color:#fff;border:none;font-size:1.4rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:9999;transition:transform .15s,background .15s;
+  display:flex;align-items:center;justify-content:center;}
+#mtr-fab:hover{background:#2c6ea6;transform:scale(1.08);}
+#mtr-fab.has-feedback{background:#1e6e42;}
+#mtr-fb-panel{position:fixed;bottom:88px;right:16px;width:310px;background:#fff;
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);padding:20px;z-index:9998;
+  border:1px solid #d1d9e0;animation:mtrSlideIn .18s ease;}
+@keyframes mtrSlideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+#mtr-fb-panel[hidden]{display:none;}
+.mtr-fb-head{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:#1a4f7a;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eef4fb;}
+.mtr-fb-q{font-size:.88rem;font-weight:600;color:#1a1a2e;margin-bottom:8px;}
+.mtr-stars{display:flex;gap:6px;margin-bottom:16px;cursor:default;}
+.mtr-star{font-size:1.7rem;cursor:pointer;color:#d1d9e0;transition:color .1s;line-height:1;user-select:none;}
+.mtr-star.active{color:#f0b429;}
+.mtr-fb-sub{font-size:.8rem;color:#4a5568;margin-bottom:14px;margin-top:-10px;}
+.mtr-fb-textarea{width:100%;min-height:72px;padding:8px 10px;border:1.5px solid #d1d9e0;
+  border-radius:6px;font-size:.88rem;font-family:inherit;resize:vertical;margin-bottom:12px;
+  color:#333;line-height:1.5;}
+.mtr-fb-textarea:focus{outline:none;border-color:#1a4f7a;}
+.mtr-fb-actions{display:flex;gap:8px;justify-content:flex-end;}
+.mtr-fb-btn{padding:8px 16px;border-radius:6px;font-size:.85rem;font-weight:600;border:none;cursor:pointer;transition:background .12s;}
+.mtr-fb-save{background:#1a4f7a;color:#fff;}
+.mtr-fb-save:hover{background:#2c6ea6;}
+.mtr-fb-cancel{background:#f8f9fa;color:#4a5568;border:1.5px solid #d1d9e0;}
+.mtr-fb-cancel:hover{border-color:#1a4f7a;color:#1a4f7a;}
+.mtr-fb-msg{font-size:.83rem;margin-bottom:8px;min-height:20px;}
+.mtr-fb-saved{color:#1e6e42;font-weight:600;}
+.mtr-fb-error{color:#8b1a1a;}
+@media(max-width:420px){#mtr-fb-panel{width:calc(100vw - 32px);right:8px;}}
+</style>
+<button id="mtr-fab" title="Feedback geben" aria-label="Feedback zu diesem Modul geben">💬</button>
+<div id="mtr-fb-panel" hidden role="dialog" aria-modal="true" aria-label="Modul-Feedback">
+  <p class="mtr-fb-head">Feedback – Ösophaguskarzinom – Herr M.</p>
+  <p class="mtr-fb-q">Wie hilfreich war dieses Modul?</p>
+  <div class="mtr-stars" id="mtr-stars" role="group" aria-label="Bewertung">
+    <span class="mtr-star" data-v="1" role="button" tabindex="0" aria-label="1 Stern">★</span>
+    <span class="mtr-star" data-v="2" role="button" tabindex="0" aria-label="2 Sterne">★</span>
+    <span class="mtr-star" data-v="3" role="button" tabindex="0" aria-label="3 Sterne">★</span>
+    <span class="mtr-star" data-v="4" role="button" tabindex="0" aria-label="4 Sterne">★</span>
+    <span class="mtr-star" data-v="5" role="button" tabindex="0" aria-label="5 Sterne">★</span>
+  </div>
+  <p class="mtr-fb-q">Was war unklar oder fehlt?</p>
+  <textarea class="mtr-fb-textarea" id="mtr-fb-text" placeholder="Optional – Freitext…" aria-label="Kommentar"></textarea>
+  <div class="mtr-fb-msg" id="mtr-fb-msg" aria-live="polite"></div>
+  <div class="mtr-fb-actions">
+    <button class="mtr-fb-btn mtr-fb-cancel" id="mtr-fb-cancel">Schließen</button>
+    <button class="mtr-fb-btn mtr-fb-save" id="mtr-fb-save">Speichern</button>
+  </div>
+</div>
+<script>
+(function(){
+  var MOD='oesophagus-ca-case', KEY='mtr_rt_feedback_'+MOD;
+  var fab=document.getElementById('mtr-fab');
+  var panel=document.getElementById('mtr-fb-panel');
+  var stars=document.querySelectorAll('.mtr-star');
+  var txt=document.getElementById('mtr-fb-text');
+  var msg=document.getElementById('mtr-fb-msg');
+  var rating=0;
+
+  function load(){
+    try{
+      var s=JSON.parse(localStorage.getItem(KEY));
+      if(s){rating=s.rating||0;txt.value=s.text||'';setStars(rating);fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';}
+    }catch(e){}
+  }
+  function setStars(v){
+    stars.forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.v)<=v);});
+  }
+  fab.addEventListener('click',function(){
+    panel.hidden=!panel.hidden;
+    if(!panel.hidden){msg.innerHTML='';txt.focus();}
+  });
+  stars.forEach(function(s){
+    s.addEventListener('click',function(){rating=parseInt(s.dataset.v);setStars(rating);});
+    s.addEventListener('mouseover',function(){setStars(parseInt(s.dataset.v));});
+    s.addEventListener('mouseout',function(){setStars(rating);});
+    s.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){rating=parseInt(s.dataset.v);setStars(rating);}});
+  });
+  document.getElementById('mtr-fb-cancel').addEventListener('click',function(){panel.hidden=true;});
+  document.getElementById('mtr-fb-save').addEventListener('click',function(){
+    if(!rating){msg.innerHTML='<span class="mtr-fb-error">Bitte zuerst Bewertung wählen.</span>';return;}
+    try{
+      localStorage.setItem(KEY,JSON.stringify({rating:rating,text:txt.value.trim(),module:'Ösophaguskarzinom – Herr M.',savedAt:new Date().toISOString()}));
+      msg.innerHTML='<span class="mtr-fb-saved">✓ Feedback gespeichert</span>';
+      fab.classList.add('has-feedback');fab.title='Feedback gespeichert ✓';
+      setTimeout(function(){panel.hidden=true;msg.innerHTML='';},1600);
+    }catch(e){msg.innerHTML='<span class="mtr-fb-error">Speichern fehlgeschlagen (localStorage blockiert?).</span>';}
+  });
+  load();
+})();
+</script>
+
+</body>
+</html>
