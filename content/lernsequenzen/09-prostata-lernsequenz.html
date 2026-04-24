@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Prostata – Lernsequenz v1</title>
+<style>
+/* === MTR RT Lernapp – Design-System === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { background: #f6f7f9; color: #1f2933; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.55; min-height: 100vh; }
+a { color: #1a5aa8; text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* Header */
+.header { position: sticky; top: 0; z-index: 100; background: #1f2933; color: #fff; padding: 0 1.25rem; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 3px solid #1a5aa8; }
+.header-left { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.header-title { font-size: 0.9rem; font-weight: 600; color: #fff; letter-spacing: 0.02em; white-space: nowrap; }
+.header-sub { font-size: 0.78rem; color: #9aa5b1; margin-top: 1px; }
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+.tool-btn { border: 1px solid #3e4c59; background: #2d3748; color: #cbd5e0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: background 0.15s, border-color 0.15s; }
+.tool-btn:hover { background: #3e4c59; color: #fff; }
+.tool-btn.active { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+.progress-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.progress-label { font-size: 0.78rem; color: #9aa5b1; white-space: nowrap; }
+.progress-track { width: 120px; height: 6px; background: #3e4c59; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: #16a34a; transition: width 0.3s ease; }
+
+/* Layout */
+.layout { display: flex; min-height: calc(100vh - 58px); }
+
+/* Sidebar */
+.sidebar { width: 260px; background: #fff; border-right: 1px solid #cbd2d9; padding: 1rem 0; position: sticky; top: 58px; height: calc(100vh - 58px); overflow-y: auto; flex-shrink: 0; }
+.sidebar-label { padding: 0 1rem 0.5rem; font-size: 0.72rem; color: #7b8794; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+.sidebar-note { margin: 0 0.75rem 1rem; padding: 0.75rem; background: #f0f5fb; border: 1px solid #dbeafe; border-radius: 6px; font-size: 0.82rem; color: #52606d; }
+.sidebar-note strong { color: #1f2933; }
+.mission-btn { display: flex; align-items: flex-start; gap: 0.6rem; width: 100%; border: none; background: none; color: #52606d; padding: 0.65rem 1rem; text-align: left; cursor: pointer; transition: background 0.12s, color 0.12s; position: relative; }
+.mission-btn:hover { background: #f0f4f8; color: #1f2933; }
+.mission-btn.active { background: #ebf2fb; color: #1a5aa8; font-weight: 500; }
+.mission-btn.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #1a5aa8; }
+.mission-btn.completed { color: #16a34a; }
+.mission-btn.practice { color: #b45309; }
+.m-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e3e7eb; border: 1px solid #cbd2d9; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; color: #52606d; }
+.mission-btn.active .m-num { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+.mission-btn.completed .m-num { background: #16a34a; border-color: #16a34a; color: #fff; }
+.mission-btn.practice .m-num { border-color: #f0a500; color: #b45309; background: #fffbeb; }
+.m-title { font-size: 0.85rem; font-weight: 600; }
+.m-meta { font-size: 0.75rem; color: #7b8794; margin-top: 1px; }
+
+/* Main */
+.main { flex: 1; max-width: 900px; padding: 1.75rem 1.75rem 4rem; }
+.mission-panel { display: none; }
+.mission-panel.active { display: block; }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, #ebf2fb, #f0f4f8); border: 1px solid #cbd2d9; border-left: 4px solid #1a5aa8; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; }
+.hero h1 { font-size: 1.45rem; line-height: 1.25; margin-bottom: 0.5rem; color: #1f2933; }
+.hero p { color: #52606d; max-width: 760px; }
+.hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+.hero-stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 6px; padding: 0.75rem; }
+.hero-stat strong { display: block; font-size: 0.75rem; color: #1a5aa8; margin-bottom: 3px; font-weight: 700; }
+.hero-stat span { font-size: 0.82rem; color: #52606d; }
+
+/* Mission Header */
+.mission-header { margin-bottom: 1.5rem; border-bottom: 1px solid #e3e7eb; padding-bottom: 1.1rem; }
+.mission-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: #1a5aa8; background: #dbeafe; border-radius: 999px; padding: 3px 10px; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.mission-tag.practice { color: #92400e; background: #fef3c7; }
+.mission-title { font-size: 1.55rem; line-height: 1.2; margin-bottom: 0.4rem; color: #1f2933; }
+.mission-subtitle { color: #52606d; font-size: 0.95rem; max-width: 760px; }
+.meta-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.meta-pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 4px 10px; background: #e3e7eb; font-size: 0.78rem; color: #52606d; }
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; }
+
+/* Cards */
+.card { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1.1rem; margin-bottom: 1rem; }
+.card h3 { font-size: 1.05rem; margin-bottom: 0.6rem; color: #1f2933; }
+.card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; color: #1a5aa8; }
+.card p, .card li { color: #52606d; font-size: 0.9rem; }
+.card ul { padding-left: 1.1rem; }
+.card ul li { margin-bottom: 3px; }
+.card strong { color: #1f2933; }
+
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.case-item { background: #f6f7f9; border: 1px solid #e3e7eb; border-radius: 6px; padding: 0.6rem 0.75rem; }
+.case-item-label { font-size: 0.72rem; color: #7b8794; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.case-item-value { font-size: 0.9rem; font-weight: 600; color: #1f2933; }
+
+/* Callouts */
+.callout { padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #1a5aa8; background: #f0f5fb; margin-bottom: 0.875rem; font-size: 0.9rem; color: #1f2933; }
+.callout.orange { border-left-color: #f0a500; background: #fffbeb; }
+.callout.green { border-left-color: #16a34a; background: #f0fdf4; }
+.callout.red { border-left-color: #dc2626; background: #fef2f2; }
+.callout strong { color: #1f2933; }
+
+/* Tasks */
+.task { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1.1rem; margin-bottom: 0.875rem; }
+.task.required-empty { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,.12); }
+.task h4 { font-size: 1rem; margin-bottom: 0.5rem; color: #1f2933; }
+.task p { color: #52606d; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.label-line { display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; margin-bottom: 0.6rem; }
+.output-tag { font-size: 0.72rem; font-weight: 600; color: #1a5aa8; background: #dbeafe; padding: 3px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+
+/* Formfelder */
+textarea, input[type="text"], select { width: 100%; background: #fff; color: #1f2933; border: 2px solid #cbd2d9; border-radius: 6px; padding: 0.6rem 0.75rem; outline: none; transition: border-color 0.15s; font-size: 0.9rem; }
+textarea:focus, input[type="text"]:focus, select:focus { border-color: #1a5aa8; }
+textarea { resize: vertical; min-height: 80px; }
+textarea.short { min-height: 56px; }
+
+/* Tabellen */
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.table th { background: #f0f4f8; color: #52606d; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.55rem 0.75rem; text-align: left; border: 1px solid #e3e7eb; }
+.table td { padding: 0.6rem 0.75rem; border: 1px solid #e3e7eb; vertical-align: top; color: #1f2933; }
+.table tr:nth-child(even) td { background: #f6f7f9; }
+.checkbox-list { list-style: none; padding: 0; }
+.checkbox-list li { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #e3e7eb; font-size: 0.9rem; }
+.checkbox-list li:last-child { border-bottom: none; }
+.checkbox-list input { margin-top: 2px; accent-color: #16a34a; }
+
+/* Hilfsmittelboxen */
+.support-box, .plus-box, .teacher-note, .self-check { margin-top: 0.75rem; border-radius: 6px; padding: 0.875rem 1rem; font-size: 0.88rem; }
+.support-box { background: #fffbeb; border: 1px solid #fcd34d; }
+.plus-box { background: #f5f3ff; border: 1px solid #c4b5fd; color: #4c1d95; }
+.plus-box strong { color: #4c1d95; }
+.self-check { background: #f0f4f8; border: 1px solid #cbd2d9; color: #52606d; }
+.self-check strong { color: #1f2933; }
+.teacher-note { display: none; background: #fffbeb; border: 1px dashed #fcd34d; color: #78350f; }
+body.show-teacher .teacher-note { display: block; }
+.teacher-note strong { color: #92400e; }
+
+/* Toggle */
+.toggle { width: 100%; text-align: left; border: 1px solid #cbd2d9; background: #f0f4f8; color: #1f2933; padding: 0.55rem 0.75rem; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; font-weight: 600; transition: background 0.12s; }
+.toggle:hover { background: #e3e7eb; }
+.toggle span { color: #52606d; font-weight: 400; font-size: 0.82rem; }
+.toggle-content { display: none; margin-top: 0.6rem; font-size: 0.88rem; color: #52606d; }
+.toggle-content.open { display: block; }
+.toggle-content ul { padding-left: 1.1rem; }
+.toggle-content li { margin-bottom: 4px; }
+
+/* Buttons */
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.1rem; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 6px; padding: 0.6rem 1.1rem; font-weight: 600; font-size: 0.9rem; transition: background 0.15s, transform 0.1s; text-decoration: none; }
+.btn-primary { background: #1a5aa8; color: #fff; }
+.btn-primary:hover { background: #144884; transform: translateY(-1px); }
+.btn-secondary { background: #e3e7eb; color: #1f2933; border: 1px solid #cbd2d9; }
+.btn-secondary:hover { background: #cbd2d9; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+
+/* Status */
+.inline-status { display: none; margin-top: 0.75rem; padding: 0.6rem 0.875rem; border-radius: 6px; font-size: 0.88rem; }
+.inline-status.show { display: block; }
+.inline-status.ok { background: #f0fdf4; border: 1px solid #16a34a; color: #15803d; }
+.inline-status.warn { background: #fef2f2; border: 1px solid #dc2626; color: #dc2626; }
+
+/* Wissen-Blöcke */
+.wissen-block { background: #f6f7f9; border: 1px solid #e3e7eb; border-left: 3px solid #1a5aa8; border-radius: 6px; padding: 0.875rem 1rem; margin-bottom: 0.6rem; }
+.wissen-block h5 { font-size: 0.78rem; font-weight: 700; color: #1a5aa8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.wissen-block p, .wissen-block li { font-size: 0.88rem; color: #52606d; }
+.wissen-block ul { padding-left: 1rem; }
+.wissen-block ul li { margin-bottom: 3px; }
+.wissen-block strong { color: #1f2933; }
+
+/* Dosis-Tabelle */
+.dosis-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.6rem; }
+.dosis-table th { background: #1f2933; color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.5rem 0.75rem; border: 1px solid #3e4c59; text-align: left; }
+.dosis-table td { padding: 0.55rem 0.75rem; border: 1px solid #e3e7eb; color: #52606d; vertical-align: top; }
+.dosis-table td strong { color: #1f2933; }
+.dosis-table tr:nth-child(even) td { background: #f6f7f9; }
+
+/* Bilder */
+.img-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 0.75rem 0 0; }
+.img-figure { flex: 1; min-width: 130px; margin: 0; }
+.img-figure img { border-radius: 6px; border: 1px solid #e3e7eb; height: 160px; width: 100%; object-fit: contain; background: #f6f7f9; }
+.img-caption { font-size: 0.75rem; color: #7b8794; text-align: center; margin-top: 0.3rem; line-height: 1.3; }
+
+/* Video */
+.video-wrap { margin: 0.75rem 0; }
+.video-wrap video { width: 100%; border-radius: 6px; border: 1px solid #e3e7eb; background: #000; display: block; }
+.video-label { font-size: 0.78rem; color: #7b8794; margin-top: 0.3rem; }
+
+/* Abschluss */
+.complete-screen { text-align: center; padding: 3rem 1rem; }
+.complete-screen h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #1a5aa8; }
+.complete-screen p { color: #52606d; max-width: 680px; margin: 0 auto 1.25rem; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.875rem; max-width: 720px; margin: 0 auto 1.5rem; }
+.stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1rem; }
+.stat strong { display: block; font-size: 1.8rem; color: #1a5aa8; font-weight: 700; }
+.stat span { font-size: 0.78rem; color: #52606d; }
+
+/* Feedback-Bogen */
+.feedback-section { background: #fff3cd; border: 2px solid #f0a500; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+.feedback-section h3 { color: #92400e; margin-bottom: 0.75rem; }
+.rating-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0; }
+.rating-btn { padding: 6px 14px; border: 2px solid #cbd2d9; background: #f6f7f9; border-radius: 6px; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: #52606d; transition: all 0.15s; }
+.rating-btn.selected { border-color: #1a5aa8; background: #dbeafe; color: #1a5aa8; }
+
+/* NW-Raster */
+.nw-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem; }
+.footer-space { height: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 960px) { .sidebar { display: none; } .main { max-width: none; padding: 1.25rem; } .hero-grid, .grid-3, .stats { grid-template-columns: 1fr 1fr; } .grid-2, .case-grid, .nw-row { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .header { height: auto; padding: 0.75rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; } .hero-grid, .grid-3, .stats { grid-template-columns: 1fr; } .mission-title { font-size: 1.25rem; } .main { padding: 1rem; } .header-actions { width: 100%; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="header-title">Mission Prostata // Lernsequenz v1 · TESTVERSION</div>
+      <div class="header-sub">3. Lehrjahr · RT-Prozess-Fokus · Praxisstation: PLCT · Feedback erwünscht</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="tool-btn" id="teacherToggle" onclick="toggleTeacherMode()">Dozentenmodus</button>
+    <button class="tool-btn" onclick="exportReport()">Export / Drucken</button>
+    <div class="progress-wrap">
+      <span class="progress-label" id="progressLabel">0 / 9</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Missionen</div>
+    <div class="sidebar-note"><strong>Pflichtspur:</strong> M1–9 (M8 bei Praxisaufruf).<br><strong>Praxisstation:</strong> M8 (PLCT) bei Aufruf öffnen.</div>
+    <button class="mission-btn active" id="mb1" onclick="showMission(1)"><span class="m-num">1</span><span><div class="m-title">Start &amp; Ablauf</div><div class="m-meta">6–8 Min · Orientierung</div></span></button>
+    <button class="mission-btn" id="mb2" onclick="showMission(2)"><span class="m-num">2</span><span><div class="m-title">Fallakte Herr K.</div><div class="m-meta">10–12 Min · Verordnung lesen</div></span></button>
+    <button class="mission-btn" id="mb3" onclick="showMission(3)"><span class="m-num">3</span><span><div class="m-title">Grundlagen kompakt</div><div class="m-meta">10–12 Min · Staging, Gleason, D'Amico</div></span></button>
+    <button class="mission-btn" id="mb4" onclick="showMission(4)"><span class="m-num">4</span><span><div class="m-title">Anatomie &amp; Zielvolumen</div><div class="m-meta">8–10 Min · GTV, CTV, PTV, OAR</div></span></button>
+    <button class="mission-btn" id="mb5" onclick="showMission(5)"><span class="m-num">5</span><span><div class="m-title">Therapie-Navi</div><div class="m-meta">8–10 Min · Warum RT + Boost?</div></span></button>
+    <button class="mission-btn" id="mb6" onclick="showMission(6)"><span class="m-num">6</span><span><div class="m-title">RT-Basics</div><div class="m-meta">10–12 Min · Dosis, VMAT, IGRT</div></span></button>
+    <button class="mission-btn" id="mb7" onclick="showMission(7)"><span class="m-num">7</span><span><div class="m-title">Planungs-CT</div><div class="m-meta">12–15 Min · Lagerung, Protokoll, Videos</div></span></button>
+    <button class="mission-btn practice" id="mb8" onclick="showMission(8)"><span class="m-num">⚑</span><span><div class="m-title">Praxisstation PLCT</div><div class="m-meta">bei Aufruf · Beobachtungsbogen CT</div></span></button>
+    <button class="mission-btn" id="mb9" onclick="showMission(9)"><span class="m-num">9</span><span><div class="m-title">Tägliche RT</div><div class="m-meta">12–15 Min · CBCT + Quiz NW</div></span></button>
+    <button class="mission-btn" id="mb10" onclick="showMission(10)"><span class="m-num">10</span><span><div class="m-title">Transfer &amp; Abschluss</div><div class="m-meta">12–15 Min · Fallvorstellung</div></span></button>
+  </aside>
+
+  <main class="main">
+
+<!-- ===== M1: START & ABLAUF ===== -->
+<section class="mission-panel active" id="m1">
+  <div class="hero">
+    <h1>Mission Prostata: Von der Verordnung zur Bestrahlung</h1>
+    <p>Du arbeitest heute mit einem echten anonymisierten Fall aus dem UKR. Dein Ziel ist nicht schnelles Durchklicken, sondern ein Verständnis, das du am Linac, im PLCT und in einer Fallvorstellung tragen kannst. Diese Sequenz ist eine Testversion – dein Feedback am Ende ist ausdrücklich Teil des Auftrags.</p>
+    <div class="hero-grid">
+      <div class="hero-stat"><strong>Pflichtzeit</strong><span>ca. 75–90 Min App + Praxisrotation</span></div>
+      <div class="hero-stat"><strong>Praxisoutput</strong><span>Beobachtungsbogen PLCT</span></div>
+      <div class="hero-stat"><strong>Endprodukt</strong><span>3-Min-Fallvorstellung aus MTR-Sicht</span></div>
+      <div class="hero-stat"><strong>Besonderheit</strong><span>Testversion – dein Feedback ist erwünscht</span></div>
+    </div>
+  </div>
+
+  <div class="mission-header">
+    <div class="mission-tag">Mission 01</div>
+    <h2 class="mission-title">Start &amp; Ablauf</h2>
+    <p class="mission-subtitle">Bevor du fachlich einsteigst: Was ist heute Pflicht? Wann gehst du an die Praxisstation? Und was ist dein sichtbares Endprodukt?</p>
+    <div class="meta-row">
+      <div class="meta-pill">⏱ 6–8 Min</div>
+      <div class="meta-pill">🎯 Output: persönlicher Lernfokus</div>
+    </div>
+  </div>
+
+  <div class="callout"><strong>Arbeitsregel:</strong> Mission 8 (PLCT) ist deine Praxisstation – öffne sie, sobald deine Gruppe aufgerufen wird. Alle anderen Missionen sind unterbrechbar und jederzeit fortsetzbar.</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Was du heute können sollst</h3>
+      <ul>
+        <li>eine STT-Verordnung für Prostata-Ca. fachlich einordnen</li>
+        <li>Lagerung und Vorbereitung für ein PLCT-Becken begründen</li>
+        <li>CBCT-Bilder beschreiben und Lagekorrektur erläutern</li>
+        <li>Risikoorgane, Dosiskonzept und Therapielogik benennen</li>
+        <li>den Fall Herr K. in einer 3-Minuten-Fallvorstellung darstellen</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>So arbeitest du sinnvoll</h3>
+      <ul>
+        <li><strong>Pflicht</strong>: immer bearbeiten, Felder ausfüllen</li>
+        <li><strong>Support</strong>: öffnen wenn du Struktur brauchst</li>
+        <li><strong>Plus</strong>: für schnelle oder stärkere SuS</li>
+        <li>am Ende jeder Mission: <strong>Praxisanker</strong> lesen</li>
+        <li>Mission 9 enthält den <strong>Testfeedback-Bogen</strong> – das ist Pflicht</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: persönlicher Lernfokus</h4><span class="output-tag">Pflichtprodukt</span></div>
+    <p>Formuliere handlungsnah, worauf du heute besonders achten willst. Nicht allgemein – sondern konkret bezogen auf das, was dir bei Prostata-Ca. bisher noch unklar ist.</p>
+    <textarea id="m1_t1" data-required="true" data-label="Mission 1 – Persönlicher Lernfokus" placeholder="Beispiel: Ich möchte heute verstehen, warum Blase und Enddarm bei der Prostata-Bestrahlung so eine kritische Rolle spielen und wie ich das am PLCT konkret kontrolliere."></textarea>
+    <div class="support-box">
+      <button class="toggle" onclick="toggleBox('m1_help1')">Support öffnen <span>Leitfragen</span></button>
+      <div class="toggle-content" id="m1_help1">
+        <ul>
+          <li>Was fällt dir bei Prostata-Ca. bisher noch schwer – Anatomie, Therapieablauf, IGRT, Fachsprache?</li>
+          <li>Welcher Praxisschritt macht dir am meisten Kopfzerbrechen?</li>
+          <li>Was willst du so gut verstehen, dass du es jemandem erklären kannst?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Fordere 1–2 Stimmen laut im Plenum ein. So wird aus der App eine echte Arbeitsverabredung. SuS des 3. Jahres tendieren dazu, zu allgemein zu bleiben – konkrete Beispiele einfordern.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Einsatzregeln</h4><span class="output-tag">Verbindlichkeit</span></div>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m1_c1" data-required="true" data-label="Mission 1 – Praxisstation verstanden"><label for="m1_c1">Ich weiß: Mission 8 ist meine Praxisstation (PLCT).</label></li>
+      <li><input type="checkbox" id="m1_c2" data-required="true" data-label="Mission 1 – Unterbrechbarkeit verstanden"><label for="m1_c2">Ich weiß: Ich kann die App unterbrechen – mein Fortschritt bleibt gespeichert.</label></li>
+      <li><input type="checkbox" id="m1_c3" data-required="true" data-label="Mission 1 – Endprodukt verstanden"><label for="m1_c3">Ich weiß: Mein Endprodukt ist eine kurze Fallvorstellung aus MTR-Sicht.</label></li>
+      <li><input type="checkbox" id="m1_c4" data-required="true" data-label="Mission 1 – Endprodukt Fallvorstellung verstanden"><label for="m1_c4">Ich weiß: Mein Endprodukt ist eine 3-Minuten-Fallvorstellung aus MTR-Sicht – vorbereitet in Mission 11.</label></li>
+    </ul>
+  </div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Wenn du gleich an die Praxisstation gehst, ist das kein Problem. Genau dafür ist diese App gebaut.</div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="completeMission(1,2)">Mission als bearbeitet markieren →</button>
+    <button class="btn btn-secondary" onclick="showMission(8)">Direkt zur Praxisstation</button>
+  </div>
+  <div class="inline-status" id="status1"></div>
+</section>
+
+<!-- ===== M2: FALLAKTE HERR K. ===== -->
+<section class="mission-panel" id="m2">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 02</div>
+    <h2 class="mission-title">Fallakte Herr K.</h2>
+    <p class="mission-subtitle">Du liest hier eine echte, anonymisierte STT-Verordnung aus dem UKR. Aus diesem Dokument leitest du dein Handeln ab – am PLCT, an der Ersteinstellung und bei der täglichen Bestrahlung.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: handlungsrelevante Schlüsselinformationen</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Patientenakte – Herr K.</h3>
+    <div class="case-grid">
+      <div class="case-item"><div class="case-item-label">Alter</div><div class="case-item-value">67 Jahre</div></div>
+      <div class="case-item"><div class="case-item-label">Diagnose</div><div class="case-item-value">C61 – Prostatakarzinom</div></div>
+      <div class="case-item"><div class="case-item-label">Histologie</div><div class="case-item-value">Gleason 7b (3+4), iPSA 15 ng/ml</div></div>
+      <div class="case-item"><div class="case-item-label">TNM</div><div class="case-item-value">T1c · N0 · M0</div></div>
+      <div class="case-item"><div class="case-item-label">Biopsie</div><div class="case-item-value">5 von 12 Stanzen positiv</div></div>
+      <div class="case-item"><div class="case-item-label">Staging</div><div class="case-item-value">Unauffällig (cM0)</div></div>
+      <div class="case-item"><div class="case-item-label">Karnofsky</div><div class="case-item-value">70 % · 172 cm · 83 kg</div></div>
+      <div class="case-item"><div class="case-item-label">Vorerkrankungen</div><div class="case-item-value">VHF (Lixiana), rheum. Arthritis</div></div>
+      <div class="case-item"><div class="case-item-label">Allergie</div><div class="case-item-value">Penicillin (?)</div></div>
+      <div class="case-item"><div class="case-item-label">Schrittmacher</div><div class="case-item-value">Nein</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Bestrahlungsverordnung (Auszug)</h3>
+    <div class="case-grid">
+      <div class="case-item"><div class="case-item-label">Intention</div><div class="case-item-value">Kurativ – definitiv</div></div>
+      <div class="case-item"><div class="case-item-label">Zielvolumen</div><div class="case-item-value">Prostata + Samenblasen-Region</div></div>
+      <div class="case-item"><div class="case-item-label">Dosierung</div><div class="case-item-value">ED 2 Gy → GD 60 Gy, Boost bis 76–80 Gy</div></div>
+      <div class="case-item"><div class="case-item-label">Gerät</div><div class="case-item-value">L3 (Linac)</div></div>
+      <div class="case-item"><div class="case-item-label">Systemtherapie</div><div class="case-item-value">ADT sequentiell (Urologie)</div></div>
+      <div class="case-item"><div class="case-item-label">PLCT-Termin</div><div class="case-item-value">02.03.2026 · 11:30 Uhr</div></div>
+      <div class="case-item"><div class="case-item-label">Ersteinstellung</div><div class="case-item-value">10.03.2026 · 11:15 Uhr</div></div>
+      <div class="case-item"><div class="case-item-label">Lagerung PLCT</div><div class="case-item-value">Rückenlage, Arme auf Brust, Bluebag</div></div>
+      <div class="case-item"><div class="case-item-label">Blase</div><div class="case-item-value">Voll</div></div>
+      <div class="case-item"><div class="case-item-label">Enddarm</div><div class="case-item-value">Leer</div></div>
+    </div>
+  </div>
+
+  <div class="callout orange"><strong>Hinweis Lixiana:</strong> Herr K. nimmt Lixiana (Edoxaban) – ein NOAK zur Antikoagulation bei Vorhofflimmern. Relevanz: Bei der Biopsie und ggf. bei Gold-Marker-Implantation muss die Antikoagulation gemanagt werden. Als MTR ist das keine deine Entscheidung – aber du solltest es kennen.</div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Was leite ich aus der Verordnung für mein Handeln ab?</h4><span class="output-tag">Schlüsselinformationen</span></div>
+    <p>Notiere die drei wichtigsten Informationen, die dein Handeln am PLCT und am Linac direkt beeinflussen.</p>
+    <textarea id="m2_t1" data-required="true" data-label="Mission 2 – Handlungsrelevante Informationen" placeholder="Beispiel: 1. Blase muss voll sein → Patient muss vorher ausreichend trinken und pünktlich kommen. 2. ..."></textarea>
+    <div class="support-box">
+      <button class="toggle" onclick="toggleBox('m2_help1')">Support öffnen <span>Worauf achten?</span></button>
+      <div class="toggle-content" id="m2_help1">
+        <ul>
+          <li>Lagerung: Was genau brauche ich? (Hilfsmittel, Position, Arme)</li>
+          <li>Organzustand: Welche Anforderungen an Blase und Enddarm – und wie prüfe ich das?</li>
+          <li>Gerät: L3 – welche IGRT-Methode ist dort Standard?</li>
+          <li>Zielvolumen: Prostata + SB-Region – warum ist das relevant für die Lagerungsgenauigkeit?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> 3. Lehrjahr sollte eigenständig auf Blase/Enddarm, Lagerung und CBCT-Relevanz kommen. Falls nicht: gezielt nachfragen, was passiert, wenn die Blase leer ist beim PLCT vs. bei der Bestrahlung.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Risikoklasse bestimmen</h4><span class="output-tag">Prüfungswissen</span></div>
+    <p>Welcher Risikoklasse nach D'Amico gehört Herr K.? Begründe anhand der Falldaten.</p>
+    <textarea id="m2_t2" class="short" data-required="true" data-label="Mission 2 – D'Amico Risikoklasse" placeholder="Risikoklasse: ... Begründung: iPSA ... Gleason ... TNM ..."></textarea>
+  </div>
+
+  <div class="plus-box"><strong>Plus:</strong> Was bedeutet es für die Therapie, wenn Herr K. intermediate-risk statt low-risk wäre? Welche Konsequenz hätte das für die Samenblasen und die ADT?</div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Die Verordnung ist dein Arbeitsauftrag. Jede Abweichung vom dokumentierten Setting – z.B. Blase nicht voll – muss vor der Bildgebung erkannt und korrigiert werden, nicht danach.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(2,3)">Mission als bearbeitet markieren →</button></div>
+  <div class="inline-status" id="status2"></div>
+</section>
+
+<!-- ===== M3: GRUNDLAGEN KOMPAKT ===== -->
+<section class="mission-panel" id="m3">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 03</div>
+    <h2 class="mission-title">Grundlagen kompakt – Prostata-Ca.</h2>
+    <p class="mission-subtitle">Du bist im 3. Jahr – die Grundlagen sitzen. Diese Mission ist kein Nachschlagebuch, sondern ein Kondensieren auf das, was prüfungsrelevant und am Linac handlungsrelevant ist.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Einordnung des Falls + Prüfungswissen</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Kompaktwissen Prostata-Ca.</h3>
+    <div class="wissen-block">
+      <h5>Epidemiologie</h5>
+      <ul>
+        <li>Häufigstes malignes Tumor beim Mann in Deutschland (~70.000 Neuerkrankungen/Jahr)</li>
+        <li>Mittleres Erkrankungsalter: ~70 Jahre; Inzidenz steigt mit Alter stark an</li>
+        <li>Meist langsam wachsend – <strong>5-Jahres-Überlebensrate lokal begrenzt: &gt;95 %</strong></li>
+        <li>Screening: PSA-Test (nicht offiziell empfohlen, aber weit verbreitet); DRU</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Diagnose</h5>
+      <ul>
+        <li><strong>PSA (Prostataspezifisches Antigen):</strong> Grenzwert kontextabhängig, &gt;4 ng/ml gilt als erhöht (alters- und volumenabhängig)</li>
+        <li><strong>DRU (Digitale rektale Untersuchung):</strong> Tastbefund – Härte, Symmetrie, Kapselüberschreitung</li>
+        <li><strong>MRT-Prostata:</strong> PI-RADS-Score (1–5), Lokalisation und Ausdehnung des Tumorherds</li>
+        <li><strong>Stanzbiopsie (TRUS-gesteuert oder MRT-fusioniert):</strong> Histologische Sicherung; Anzahl positiver Stanzen relevant für Risikoklasse</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Gleason-Score – das Wichtigste für die Prüfung</h5>
+      <ul>
+        <li>Bewertet das Differenzierungsmuster des Prostatakarzinoms (1–5 pro Muster)</li>
+        <li><strong>Gleason 6 (3+3):</strong> niedriggradiges Ca., gut differenziert</li>
+        <li><strong>Gleason 7a (3+4):</strong> überwiegend gut differenziert, <strong>günstiger</strong></li>
+        <li><strong>Gleason 7b (4+3):</strong> überwiegend schlecht differenziert, <strong>ungünstiger</strong> → wie bei Herr K.</li>
+        <li><strong>Gleason 8–10:</strong> schlecht differenziert, high-risk</li>
+        <li>Relevant: erstgenannter Wert = vorherrschendes Muster (dominiert die Prognose)</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>D'Amico-Risikoklassifikation (prüfungsrelevant)</h5>
+      <table class="dosis-table" style="margin-top:0.4rem">
+        <thead><tr><th>Risikoklasse</th><th>PSA</th><th>Gleason</th><th>TNM</th></tr></thead>
+        <tbody>
+          <tr><td>Low risk</td><td>&lt; 10 ng/ml</td><td>≤ 6</td><td>cT1–T2a</td></tr>
+          <tr><td><strong>Intermediate risk</strong></td><td><strong>10–20 ng/ml</strong></td><td><strong>7 (a oder b)</strong></td><td><strong>cT2b</strong></td></tr>
+          <tr><td>High risk</td><td>&gt; 20 ng/ml</td><td>8–10</td><td>≥ cT2c</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.5rem"><strong>Herr K.: iPSA 15 ng/ml + Gleason 7b + T1c → intermediate risk</strong> (PSA-Kriterium + Gleason-Kriterium erfüllt)</p>
+    </div>
+    <div class="wissen-block">
+      <h5>Therapieoptionen im Überblick</h5>
+      <ul>
+        <li><strong>Active Surveillance:</strong> nur bei low-risk, regelmäßige PSA-Kontrollen und Re-Biopsie</li>
+        <li><strong>Radikale Prostatektomie (RP):</strong> operative Entfernung der Prostata inkl. Samenblasen</li>
+        <li><strong>Externe Strahlentherapie (EBRT):</strong> IMRT/VMAT, konventionell oder hypofraktioniert; mit oder ohne ADT</li>
+        <li><strong>SBRT:</strong> 5 Fraktionen à ca. 7,25 Gy (stereotaktisch, nicht am UKR Standard)</li>
+        <li><strong>Brachytherapie:</strong> LDR (Seeds) oder HDR – Option bei low/intermediate risk</li>
+        <li><strong>ADT (Androgendeprivationstherapie):</strong> ergänzend bei intermediate/high risk; verbessert das Gesamtüberleben</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Einordnung Herr K.</h4><span class="output-tag">Prüfungsantwort</span></div>
+    <p>Erkläre in 3–4 Sätzen: Warum entscheidet sich das Tumorboard bei Herr K. für eine externe RT statt einer OP – und warum ist die Samenblasen-Region Teil des Zielvolumens?</p>
+    <textarea id="m3_t1" data-required="true" data-label="Mission 3 – Therapieentscheidung begründen"></textarea>
+    <div class="support-box">
+      <button class="toggle" onclick="toggleBox('m3_help1')">Support öffnen <span>Denkrichtung</span></button>
+      <div class="toggle-content" id="m3_help1">
+        <ul>
+          <li>Was spricht bei Gleason 7b für eine RT gegenüber Active Surveillance?</li>
+          <li>Welches Risiko besteht bei Gleason 7b für eine Beteiligung der Samenblasen?</li>
+          <li>Warum kann der Patient trotzdem die RT einem Eingriff vorziehen?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Gewünschte Inhalte: Gleason 7b = ungünstiges intermediate risk, erhöhtes Risiko Samenblasenbeteiligung (CTV = Prostata + SB-Region sinnvoll), Patientenwunsch RT, Karnofsky 70% → OP mit höherem Risiko. ADT sequentiell = typisches Vorgehen bei intermediate risk.</div>
+  </div>
+
+  <div class="plus-box"><strong>Plus:</strong> Was wäre bei Gleason 8 anders? Welche Konsequenz hätte das für Zielvolumen, ADT-Dauer und Lymphknoten-Mitbestrahlung?</div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Den Gleason-Score wirst du immer in der Verordnung finden. Er entscheidet mit darüber, was ins Zielvolumen muss – und damit, wie aufwändig dein PLCT-Setting wird.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(3,4)">Mission als bearbeitet markieren →</button></div>
+  <div class="inline-status" id="status3"></div>
+</section>
+
+<!-- ===== M4: ANATOMIE & ZIELVOLUMEN ===== -->
+<section class="mission-panel" id="m4">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 04</div>
+    <h2 class="mission-title">Anatomie &amp; Zielvolumen</h2>
+    <p class="mission-subtitle">Wenn du nicht weißt, was du schonen willst, kannst du es nicht schonen. Und wenn du nicht weißt, was du treffen willst, kannst du nicht prüfen, ob du es getroffen hast.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: OAR-Hierarchie + Zielvolumen-Logik</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Zielvolumen-Konzept bei Herr K.</h3>
+    <div class="wissen-block">
+      <h5>GTV – Gross Tumor Volume</h5>
+      <ul>
+        <li>Beim lokal begrenzten Prostata-Ca. (T1c) kein bildgebend abgrenzbares GTV</li>
+        <li>Bei Vorliegen eines MRT-gesicherten Tumorherds: GTV als Boost-Volumen möglich (FLAME-Konzept)</li>
+        <li>Herr K.: <strong>kein eigenständiges GTV</strong> – die gesamte Prostata gilt als Risikozone</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>CTV – Clinical Target Volume</h5>
+      <ul>
+        <li><strong>CTV1 (Prostata):</strong> die gesamte Drüse inkl. Kapsel</li>
+        <li><strong>CTV2 (Samenblasen-Region):</strong> proximale Samenblasen bei intermediate risk (Gleason 7b)</li>
+        <li>Bei high risk: ggf. distale Samenblasen + pelvine Lymphknoten (Herr K. nicht)</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>PTV – Planning Target Volume</h5>
+      <ul>
+        <li>CTV + Sicherheitssaum für Lagerungsunsicherheiten und Organverschiebung</li>
+        <li>Typisch Prostata-Ca.: <strong>7–10 mm allseitig</strong>, posterior (zum Rektum) reduziert auf <strong>3–5 mm</strong></li>
+        <li>Begründung posterior: Rektum liegt direkt an – größerer Saum → Rektumüberdosierung</li>
+        <li>Goldmarker ermöglichen präziseres Matching → kleinerer PTV-Saum möglich</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>OAR – Organs at Risk (Hierarchie kennen!)</h5>
+      <ul>
+        <li><strong>Rektum (kritischste OAR!):</strong> liegt direkt dorsal der Prostata; Proktitis, Blutung, Fisteln</li>
+        <li><strong>Blase:</strong> liegt anterior/superior; Zystitis, Kapazitätsverlust, Hämaturie</li>
+        <li><strong>Femurkopfköpfe (bds.):</strong> Strahlennekrose möglich; V50Gy &lt;5 %</li>
+        <li><strong>Dünndarm:</strong> nur relevant wenn pelvine LK mitbestrahlt werden</li>
+        <li><strong>Urethra:</strong> bei Boost-Konzepten relevant (Striktur)</li>
+      </ul>
+    </div>
+    <div class="img-row">
+      <figure class="img-figure">
+        <img src="../../../Bildmaterial/ZIelvolumen%20Konzept/PCA%20Anatomie%20+%20Zielgebiet.jpg" alt="Anatomie der Prostata mit Zielgebiet und umgebenden Strukturen" loading="lazy">
+        <figcaption class="img-caption">Prostata: Anatomie und Zielgebiet</figcaption>
+      </figure>
+      <figure class="img-figure">
+        <img src="../../../Bildmaterial/Anatomie%20Bilder/lymphknoten%20PCA.jpg" alt="Lymphknotenabflusswege beim Prostatakarzinom" loading="lazy">
+        <figcaption class="img-caption">Lymphabfluss Prostata-Ca.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: OAR-Hierarchie begründen</h4><span class="output-tag">Prüfungswissen</span></div>
+    <p>Warum ist das Rektum die wichtigste OAR bei der Prostata-Bestrahlung – und nicht die Blase? Begründe mit anatomischer Lage und klinischer Konsequenz.</p>
+    <textarea id="m4_t1" data-required="true" data-label="Mission 4 – OAR-Hierarchie Begründung"></textarea>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Erwartete Kernantwort: Rektum liegt direkt dorsal (keine fette Schicht, kein Puffer), bei nicht-angepasstem PTV posterior ist Dosisübertrag unvermeidbar. Blase hat größere Volumenpufferung, liegt anterior. Klinisch: Proktitis ist häufiger und schwerer dosislimitierend als Zystitis bei korrektem Setting.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Standardauftrag: PTV-Logik erklären</h4><span class="output-tag">Verständnis</span></div>
+    <p>Warum ist der PTV-Saum posterior (Richtung Rektum) kleiner als lateral und anterior?</p>
+    <textarea id="m4_t2" class="short" data-label="Mission 4 – PTV-Saum posterior"></textarea>
+  </div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Beim CBCT wirst du Prostata, Blase und Rektum beurteilen müssen. Wenn der Enddarm voll ist, verschiebt sich die Prostata nach ventral – und dein PTV stimmt nicht mehr. Das erkennst du nur, wenn du die Anatomie kennst.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(4,5)">Mission als bearbeitet markieren →</button></div>
+  <div class="inline-status" id="status4"></div>
+</section>
+
+<!-- ===== M5: THERAPIE-NAVI ===== -->
+<section class="mission-panel" id="m5">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 05</div>
+    <h2 class="mission-title">Therapie-Navi – Warum RT und Boost?</h2>
+    <p class="mission-subtitle">Als MTR führst du nicht die Therapieentscheidung durch – aber du musst sie erklären können. In der Fallvorstellung und gegenüber dem Patienten.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: Therapielogik in eigenen Worten</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Das Konzept bei Herr K. verstehen</h3>
+    <div class="wissen-block">
+      <h5>Schritt 1: Grunddosis auf Prostata + SB-Region</h5>
+      <ul>
+        <li>GD 60 Gy in 30 Fraktionen à 2 Gy (konventionell fraktioniert)</li>
+        <li>Zielvolumen: Prostata + Samenblasen (wegen Gleason 7b = intermediate-risk)</li>
+        <li>Begründung SB: Bei Gleason 7b erhöhtes Risiko für mikroskopische Tumorausbreitung in die proximalen Samenblasen (&gt;25 %)</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Schritt 2: Boost auf die Prostata (FLAME-Konzept)</h5>
+      <ul>
+        <li>Zusätzliche Dosiserhöhung auf die Prostata bis GD 76–80 Gy</li>
+        <li>Boost-Variante: <strong>simultan integrierter Boost (SIB)</strong> via VMAT, oder sequenzieller Boost</li>
+        <li>Rationale: Dosiseskalation verbessert die biochemische Kontrolle (PSA-Rezidivfreiheit)</li>
+        <li>Problem: Höhere Dosis → höheres Rektumrisiko → präzise IGRT entscheidend</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Schritt 3: ADT (sequenziell durch Urologie)</h5>
+      <ul>
+        <li>Androgendeprivationstherapie = Senkung des Testosteronspiegels</li>
+        <li>Wirkung: Prostata schrumpft (PTV kleiner), Tumorzellen sensibler für RT</li>
+        <li>Bei intermediate risk: typisch 6 Monate; bei high risk: 2–3 Jahre</li>
+        <li>Herr K.: sequenziell (nicht simultan) → Urologie koordiniert</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Warum kein OP? – Argumente kennen</h5>
+      <ul>
+        <li>Karnofsky 70 % → erhöhtes Narkoserisiko, Wundheilungsrisiko</li>
+        <li>Rheumatoide Arthritis mit Immunsuppressivum → Wundheilungsstörung möglich</li>
+        <li>Antikoagulation (Lixiana) → Bridging perioperativ aufwändig</li>
+        <li>Patientenwunsch RT → ethisch und rechtlich bindend</li>
+        <li>Onkologisches Ergebnis: RT ≈ OP bei intermediate risk (vergleichbare 10-JÜR)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Therapielogik in eigenen Worten</h4><span class="output-tag">Fallvorstellung</span></div>
+    <p>Erkläre in 4–5 Sätzen das Therapiekonzept bei Herr K. – so, als würdest du es einem Kommilitonen ohne Verordnung erklären. Fachlich korrekt, aber verständlich.</p>
+    <textarea id="m5_t1" data-required="true" data-label="Mission 5 – Therapiekonzept erklären"></textarea>
+    <div class="self-check"><strong>Selbstcheck:</strong> Deine Antwort ist gut, wenn sie enthält: Zielvolumen (Prostata + SB), Dosiskonzept (60 Gy + Boost), Boost-Begründung (Dosiseskalation), ADT-Rolle und eine Begründung für RT statt OP.</div>
+  </div>
+
+  <div class="plus-box"><strong>Plus:</strong> Herr K. fragt dich nach dem PLCT: "Was ist eigentlich dieser Boost, von dem der Arzt gesprochen hat?" Formuliere eine patientengerechte Antwort (ohne Fachjargon, ohne falsche Versprechen).</div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Wenn du das Therapiekonzept erklären kannst, kannst du auch begründen, warum präzises Matching am CBCT keine Formalie ist, sondern direkten Einfluss auf den Therapieerfolg hat.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(5,6)">Mission als bearbeitet markieren →</button></div>
+  <div class="inline-status" id="status5"></div>
+</section>
+
+<!-- ===== M6: RT-BASICS ===== -->
+<section class="mission-panel" id="m6">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 06</div>
+    <h2 class="mission-title">RT-Basics – Dosis, Technik, IGRT</h2>
+    <p class="mission-subtitle">Dosis ist nicht nur eine Zahl in der Verordnung. Du musst wissen, wie sie verteilt wird, was sie bei den Risikoorganen anrichten kann und warum täglich ein CBCT gemacht wird.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Dosiskonzept + IGRT-Begründung</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Dosiskonzept Herr K. – Übersicht</h3>
+    <table class="dosis-table">
+      <thead><tr><th>Zielvolumen</th><th>Technik</th><th>ED</th><th>Gesamtdosis</th><th>Fraktionen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Prostata + SB-Region</strong></td><td>VMAT (L3)</td><td>2,0 Gy</td><td>60 Gy</td><td>30 Fx</td></tr>
+        <tr><td><strong>Boost Prostata</strong></td><td>SIB via VMAT</td><td>+0,5–0,67 Gy</td><td>Gesamt 76–80 Gy</td><td>simultan</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:0.6rem; font-size:0.85rem; color:#52606d">SIB = simultan integrierter Boost: Boost-Volumen erhält pro Fraktion eine höhere Dosis als das Gesamtzielvolumen – in derselben Sitzung.</p>
+
+    <div class="wissen-block" style="margin-top:0.75rem">
+      <h5>Toleranzdosen OAR (prüfungsrelevant)</h5>
+      <table class="dosis-table">
+        <thead><tr><th>Organ</th><th>Constraint</th><th>Klinische Bedeutung</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Rektum</strong></td><td>V70Gy &lt;15 %, V60Gy &lt;25 %, V50Gy &lt;50 %</td><td>Proktitis, Blutung, Fistel</td></tr>
+          <tr><td><strong>Blase</strong></td><td>V65Gy &lt;50 %, V80Gy &lt;15 %</td><td>Zystitis, Kapazitätsverlust</td></tr>
+          <tr><td><strong>Femurköpfe</strong></td><td>V50Gy &lt;5 %</td><td>Strahlennekrose</td></tr>
+          <tr><td><strong>Urethra</strong></td><td>D0,1cc &lt;80 Gy</td><td>Harnröhrenstriktur</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="wissen-block" style="margin-top:0.75rem">
+      <h5>Bestrahlungstechnik: VMAT am Linac L3</h5>
+      <ul>
+        <li><strong>VMAT (Volumetric Modulated Arc Therapy):</strong> Gantry rotiert, Dosis wird pro Winkelposition moduliert</li>
+        <li>Vorteil gegenüber 3D-CRT: bessere Dosiskonformität, mehr Rektumschonung möglich</li>
+        <li>Typisch: 1–2 Bögen, Tischwinkel 0°</li>
+        <li>Photonen: 6 MV (oder 6 MV FFF bei speziellen Protokollen)</li>
+      </ul>
+      <div class="img-row">
+        <figure class="img-figure">
+          <img src="../../../Bildmaterial/RT%20Technik/RT%20Plan%20PCA/Isodosen+%20Arc%20PCA.jpg" alt="Isodosenverteilung und Arc-Anordnung beim Prostatakarzinom-VMAT-Plan" loading="lazy">
+          <figcaption class="img-caption">VMAT Isodosen + Arc – Prostata</figcaption>
+        </figure>
+        <figure class="img-figure">
+          <img src="../../../Bildmaterial/RT%20Technik/RT%20Plan%20PCA/DVH%20PCA.jpg" alt="Dosis-Volumen-Histogramm beim Prostatakarzinom" loading="lazy">
+          <figcaption class="img-caption">DVH – Zielvolumen und OAR</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="wissen-block" style="margin-top:0.75rem">
+      <h5>IGRT: Warum täglich CBCT bei Prostata-Ca.?</h5>
+      <ul>
+        <li>Prostata ist ein <strong>bewegliches Organ</strong> – abhängig von Blasen- und Rektumfüllung</li>
+        <li>Inter-Fraktion-Bewegung: täglich bis zu 5–10 mm möglich</li>
+        <li>CBCT ermöglicht: Knochenmatching oder (besser) <strong>Soft-Tissue-Matching / Goldmarker-Matching</strong></li>
+        <li>Goldmarker (Fiducials): 2–3 Marker werden transrektal TRUS-gesteuert implantiert (durch Urologie)</li>
+        <li>Toleranz am UKR: Verschiebung &lt;3–5 mm → Korrektur; größer → MTR-Arzt-Rücksprache</li>
+        <li>Enddarmfüllung im CBCT beurteilen: starke Abweichung → Behandlung verschieben</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: IGRT-Begründung</h4><span class="output-tag">Prüfungsantwort</span></div>
+    <p>Warum ist ein tägliches CBCT bei Herr K. wichtiger als bei einer Kopf-Hals-Bestrahlung? Begründe mit zwei verschiedenen Argumenten.</p>
+    <textarea id="m6_t1" data-required="true" data-label="Mission 6 – IGRT-Begründung"></textarea>
+    <div class="support-box">
+      <button class="toggle" onclick="toggleBox('m6_help1')">Support öffnen <span>Denkrichtung</span></button>
+      <div class="toggle-content" id="m6_help1">
+        <ul>
+          <li>Was ändert sich von Tag zu Tag in der Beckenregion, was im Kopf-Hals-Bereich eher nicht passiert?</li>
+          <li>Welche Konsequenz hat eine tägliche Prostatabewegung für das PTV und die Rektumbelastung?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Kernantworten: (1) Inter-Fraktion-Organbewegung durch Blase/Rektum-Füllung → tägliche Positionsänderung der Prostata; (2) Boost auf Prostata = hohe Dosis auf kleines Volumen → geringe Toleranz für Positionsabweichungen → CBCT zur Sicherung der tatsächlichen Prostataposition, nicht nur des Knochens.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Standardauftrag: Rektum-Constraint einordnen</h4><span class="output-tag">Prüfungswissen</span></div>
+    <p>Was bedeutet "V70Gy &lt;15 %" für das Rektum in der Praxis? Was passiert, wenn dieser Wert überschritten wird?</p>
+    <textarea id="m6_t2" class="short" data-label="Mission 6 – Rektum-Constraint"></textarea>
+  </div>
+
+  <div class="plus-box"><strong>Plus:</strong> Goldmarker ermöglichen ein Soft-Tissue-Matching statt Knochenmatching. Welchen konkreten Vorteil hat das beim Prostata-CBCT – und was kann trotzdem nicht detektiert werden?</div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Wenn du am Linac ein CBCT auswertest, ist dein Blick auf Prostataposition, Blasenfüllung und Rektuminhalt kein bürokratischer Akt – sondern der entscheidende Schritt, der über Treffgenauigkeit und Normalgewebsschonung entscheidet.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(6,7)">Mission als bearbeitet markieren →</button></div>
+  <div class="inline-status" id="status6"></div>
+</section>
+
+<!-- ===== M7: PLANUNGS-CT ===== -->
+<section class="mission-panel" id="m7">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 07</div>
+    <h2 class="mission-title">Planungs-CT – Vorbereitung und Durchführung</h2>
+    <p class="mission-subtitle">Das PLCT ist das Fundament jeder Bestrahlung. Was hier falsch gemacht wird, reproduziert sich täglich über 30 Fraktionen. Jeder Schritt hat eine Begründung – die musst du kennen.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 12–15 Min</div><div class="meta-pill">🎯 Output: PLCT-Checkliste + Video-Beobachtung</div></div>
+  </div>
+
+  <div class="card">
+    <h3>PLCT-Setting Herr K. – alles mit Begründung</h3>
+    <div class="wissen-block">
+      <h5>Lagerung (aus der CT-Anforderung)</h5>
+      <ul>
+        <li><strong>Rückenlage:</strong> Standard Becken – reproduzierbar, Prostata relativ stabil</li>
+        <li><strong>Arme auf der Brust:</strong> aus dem Scanbereich → keine Streustrahlung, keine Artefakte</li>
+        <li><strong>Bluebag:</strong> Vakuumkissen unter Knie/Unterschenkel → Bein-Reproduzierbarkeit</li>
+        <li><strong>Kopfschale:</strong> Kopfposition reproduzierbar → reduziert Rotation des Beckens</li>
+        <li><strong>Kein Knee step, keine Knierolle:</strong> laut CT-Anforderung nicht vorgesehen</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Blasenfüllung: voll – warum?</h5>
+      <ul>
+        <li>Volle Blase → Blase verlagert sich nach superior → <strong>weg vom PTV</strong></li>
+        <li>Weniger Blasenvolumen im Hochdosisbereich → <strong>bessere Blasenschonung</strong></li>
+        <li>Prostata wird durch volle Blase leicht nach dorsal-inferior gedrückt → stabilere Position</li>
+        <li>Reproduzierbarkeit: Patient trinkt 500 ml Wasser ca. 60 Min vor PLCT und jedem Bestrahlungstermin</li>
+        <li><strong>Achtung:</strong> Wenn Patient zu viel getrunken hat oder dringend muss → kurz warten, oder ärztliche Rücksprache</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Enddarm: leer – warum?</h5>
+      <ul>
+        <li>Voller Enddarm → Prostata wird nach <strong>ventral gedrängt</strong> → PTV-Verschiebung</li>
+        <li>Gasblase im Rektum → CBCT-Artefakte, Dosisabweichungen</li>
+        <li>Leerer Enddarm bei PLCT = Referenzzustand für alle folgenden Bestrahlungen</li>
+        <li>Vorbereitung: Einlauf oder Abführmaßnahmen nach Protokoll vor dem PLCT</li>
+        <li><strong>Am Linac:</strong> täglich CBCT prüft Rektumfüllung – starke Abweichung = Kontraindikation</li>
+      </ul>
+    </div>
+    <div class="wissen-block">
+      <h5>Qualitätskontrolle nach dem CT (6 Pflichtpunkte aus der CT-Doku)</h5>
+      <ul>
+        <li>1. Wirbelsäule optisch und im Scout gerade gelagert? Keine metallischen Lagerungshilfen im Bild?</li>
+        <li>2. Referenzmarkierung (Bleikugeln) im CT-Schnitt auf einer Schicht nachweisbar?</li>
+        <li>3. Blasen-/Rektumfüllung kontrolliert und dokumentiert?</li>
+        <li>4. KM-Reste in Darm/Blase → Arzt hinzuziehen</li>
+        <li>5. Ganzer Patientenumfang wird rekonstruiert?</li>
+        <li>6. Bei Kontroll-CT: Was wurde mit Bleikugeln markiert?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>PLCT-Videos – Herr K. (anonymisiert, UKR intern)</h3>
+    <p style="font-size:0.88rem; color:#52606d; margin-bottom:0.75rem">Schau dir zunächst Video 1 an. Danach folgt eine Entscheidungsaufgabe – Video 2 wird erst nach deiner Antwort freigeschaltet.</p>
+    <div class="callout orange" style="margin-bottom:0.75rem"><strong>Situation Video 1:</strong> Erster PLCT-Versuch. Der Arzt bewertet den Enddarm nach dem Scan als <strong>zu voll</strong>. Der Scan ist nicht verwertbar – es muss eine Entscheidung getroffen werden.</div>
+    <div class="video-wrap">
+      <video controls preload="none">
+        <source src="../../media/Fallbeispiel%20_PCA_01/1.PLCT_PCA_01.mp4" type="video/mp4">
+        Video nicht verfügbar – Datei lokal prüfen.
+      </video>
+      <div class="video-label">PLCT Video 1 – Erster Versuch: Enddarm zu voll (Scan nicht verwertbar)</div>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Klinische Entscheidung am PLCT</h4><span class="output-tag">Entscheidungsaufgabe</span></div>
+    <p>Nach dem ersten PLCT (Video 1) ist klar: Der Enddarm ist zu voll. Der Scan ist nicht verwertbar. Was ist die richtige Handlung als MTR?</p>
+    <p style="font-size:0.85rem;color:#52606d;margin-bottom:0.75rem">Wähle eine Option und begründe deine Wahl. Video 2 wird nach deiner Entscheidung freigeschaltet.</p>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.75rem" id="plct_options">
+      <label id="plct_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.75rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:border-color 0.15s">
+        <input type="radio" name="plct_choice" value="a" id="m7_mc_a" data-label="Mission 7 – PLCT-Entscheidung" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealPLCTFeedback('a')">
+        <span><strong>a)</strong> PLCT so belassen – der Rektuminhalt sieht reproduzierbar aus, also ist der Scan verwertbar.</span>
+      </label>
+      <label id="plct_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.75rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:border-color 0.15s">
+        <input type="radio" name="plct_choice" value="b" id="m7_mc_b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealPLCTFeedback('b')">
+        <span><strong>b)</strong> Patient auf die Toilette schicken, danach erneut scannen.</span>
+      </label>
+      <label id="plct_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.75rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:border-color 0.15s">
+        <input type="radio" name="plct_choice" value="c" id="m7_mc_c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealPLCTFeedback('c')">
+        <span><strong>c)</strong> Arzt informieren – Entscheidung über weitere Maßnahmen dem Arzt überlassen.</span>
+      </label>
+    </div>
+    <div id="plct_feedback" style="display:none;margin-bottom:0.75rem"></div>
+    <div class="label-line" style="margin-top:0.5rem"><h4>Begründe deine Wahl:</h4></div>
+    <textarea id="m7_t_decision" data-required="true" data-label="Mission 7 – PLCT-Entscheidung Begründung" class="short" placeholder="Ich habe ... gewählt, weil ..."></textarea>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Richtige Antwort: c) Arzt informieren. a) ist falsch, weil die Reproduzierbarkeit der Rektumfüllung NICHT die MTR entscheidet – das ist eine ärztliche Entscheidung. b) ist suboptimal: Toilettengang hat kaum Einfluss auf Rektuminhalt, Patient muss erneut trinken und warten. Im Fallbeispiel wurde nach dem zweiten Versuch entschieden: Rektumfüllung ist reproduzierbar → Scan wird belassen. Diese Entscheidung trifft der Arzt.</div>
+  </div>
+
+  <div id="plct_video2_section" style="display:none">
+    <div class="card">
+      <div class="callout orange" style="margin-bottom:0.75rem"><strong>Situation Video 2:</strong> Zweiter PLCT-Versuch nach einem Darmentleerungsversuch. Ergebnis: wenig bis kaum Verbesserung. Der Arzt entscheidet: Aufnahme wird <strong>so belassen</strong>, da die Rektumfüllung offensichtlich reproduzierbar ist.</div>
+      <div class="video-wrap">
+        <video controls preload="none">
+          <source src="../../media/Fallbeispiel%20_PCA_01/2.PLCT_PCA_01.mp4" type="video/mp4">
+          Video nicht verfügbar – Datei lokal prüfen.
+        </video>
+        <div class="video-label">PLCT Video 2 – Zweiter Versuch: Ärztliche Entscheidung, Scan zu belassen</div>
+      </div>
+    </div>
+    <div class="callout green" style="margin-bottom:1rem"><strong>Auflösung:</strong> Der Arzt hat abgewogen und entschieden: Die Rektumfüllung ist für diesen Patienten reproduzierbar – der zweite Scan wird als Planungs-CT verwendet. Konsequenz: Alle täglichen CBCTs werden mit genau diesem Füllstand verglichen. In Mission 10 siehst du, ob das aufgegangen ist.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: PLCT-Checkliste</h4><span class="output-tag">mit in die Praxis nehmen</span></div>
+    <table class="table">
+      <thead><tr><th style="width:30%">Schritt</th><th>Deine Notizen / Begründung</th></tr></thead>
+      <tbody>
+        <tr><td>Blasenvorbereitung</td><td><textarea id="m7_tab1" class="short" data-label="PLCT-Checkliste – Blasenvorbereitung" style="border:none; padding:0.3rem; min-height:44px"></textarea></td></tr>
+        <tr><td>Enddarmvorbereitung</td><td><textarea id="m7_tab2" class="short" data-label="PLCT-Checkliste – Enddarmvorbereitung" style="border:none; padding:0.3rem; min-height:44px"></textarea></td></tr>
+        <tr><td>Lagerung (Hilfsmittel)</td><td><textarea id="m7_tab3" class="short" data-label="PLCT-Checkliste – Lagerung" style="border:none; padding:0.3rem; min-height:44px"></textarea></td></tr>
+        <tr><td>Referenzmarkierung</td><td><textarea id="m7_tab4" class="short" data-label="PLCT-Checkliste – Referenzmarkierung" style="border:none; padding:0.3rem; min-height:44px"></textarea></td></tr>
+        <tr><td>Qualitätskontrolle CT</td><td><textarea id="m7_tab5" class="short" data-label="PLCT-Checkliste – Qualitätskontrolle" style="border:none; padding:0.3rem; min-height:44px"></textarea></td></tr>
+      </tbody>
+    </table>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Checkliste soll mit in die Praxisstation genommen werden. SuS können sie auf Papier drucken oder auf dem Handy öffnen. Wichtig: Die Checkliste wird in M8 aktiv genutzt.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Video-Beobachtung</h4><span class="output-tag">Praxisvorbereitung</span></div>
+    <p>Was hast du in den Videos beobachtet? Beschreibe konkret – kein Fachwissen, sondern das, was du gesehen hast. Stelle auch eine offene Frage, die du an der Praxisstation klären willst.</p>
+    <textarea id="m7_t1" data-required="true" data-label="Mission 7 – Video-Beobachtung und offene Frage"></textarea>
+  </div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Was du jetzt in der App gelernt hast, wirst du gleich live sehen. Deine Aufgabe an der Praxisstation ist nicht „zuschauen", sondern gezielt beobachten, was und warum.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(7,8)">Mission als bearbeitet markieren →</button><button class="btn btn-secondary" onclick="showMission(8)">Weiter zur Praxisstation →</button></div>
+  <div class="inline-status" id="status7"></div>
+</section>
+
+<!-- ===== M8: PRAXISSTATION PLCT ===== -->
+<section class="mission-panel" id="m8">
+  <div class="mission-header">
+    <div class="mission-tag practice">Praxisstation</div>
+    <h2 class="mission-title">Praxisstation – Planungs-CT</h2>
+    <p class="mission-subtitle">Du bist jetzt am Planungs-CT. Diese Seite ist dein Beobachtungsprotokoll für das PLCT-Setting. Öffne sie sobald deine Gruppe aufgerufen wird.</p>
+    <div class="meta-row">
+      <div class="meta-pill">⚑ Praxisstation bei Aufruf</div>
+      <div class="meta-pill">👥 3er-Rotation</div>
+      <div class="meta-pill">📋 Beobachtungsbogen PLCT</div>
+    </div>
+  </div>
+
+  <div class="callout orange"><strong>Rollensystem (3er-Gruppe):</strong> Wechselt die Rollen. Rolle 1: Hauptverantwortliche/r MTR (führt durch). Rolle 2: Beobachter/in mit Checkliste (diese App). Rolle 3: Zeitnehmer/in und Fragesteller/in.</div>
+
+  <div class="card">
+    <h3>Beobachtungsbogen: Planungs-CT</h3>
+    <p style="font-size:0.88rem;color:#52606d;margin-bottom:0.75rem">Markiere, was du beobachtest. Ergänze Begründungen in den Freitextfeldern.</p>
+
+    <h4 style="margin-bottom:0.5rem">Vorbereitung (vor dem CT)</h4>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m8_a1" data-label="PLCT – Blasenvorbereitung geprüft"><label for="m8_a1">Blasenfüllung des Patienten geprüft / erfragt</label></li>
+      <li><input type="checkbox" id="m8_a2" data-label="PLCT – Enddarm-Status geprüft"><label for="m8_a2">Enddarmstatus erfragt / dokumentiert</label></li>
+      <li><input type="checkbox" id="m8_a3" data-label="PLCT – CT-Anforderung gelesen"><label for="m8_a3">CT-Anforderung gelesen und verstanden</label></li>
+      <li><input type="checkbox" id="m8_a4" data-label="PLCT – Lagerungshilfen bereitgestellt"><label for="m8_a4">Lagerungshilfen bereitgestellt (Bluebag, Kopfschale)</label></li>
+      <li><input type="checkbox" id="m8_a5" data-label="PLCT – Patient aufgeklärt"><label for="m8_a5">Patient über Ablauf informiert</label></li>
+    </ul>
+
+    <h4 style="margin-bottom:0.5rem;margin-top:0.75rem">Lagerung am CT</h4>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m8_a6" data-label="PLCT – Rückenlage"><label for="m8_a6">Rückenlage korrekt ausgeführt</label></li>
+      <li><input type="checkbox" id="m8_a7" data-label="PLCT – Arme auf Brust"><label for="m8_a7">Arme auf Brust positioniert</label></li>
+      <li><input type="checkbox" id="m8_a8" data-label="PLCT – Bluebag korrekt"><label for="m8_a8">Bluebag unter Knie/Unterschenkel</label></li>
+      <li><input type="checkbox" id="m8_a9" data-label="PLCT – Kopfschale"><label for="m8_a9">Kopfschale korrekt positioniert</label></li>
+      <li><input type="checkbox" id="m8_a10" data-label="PLCT – Tischposition dokumentiert"><label for="m8_a10">Tischhöhe und Referenzpunkt dokumentiert</label></li>
+    </ul>
+
+    <h4 style="margin-bottom:0.5rem;margin-top:0.75rem">Qualitätskontrolle nach CT</h4>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m8_a11" data-label="PLCT – QK Wirbelsäule"><label for="m8_a11">Wirbelsäule gerade im Scout kontrolliert</label></li>
+      <li><input type="checkbox" id="m8_a12" data-label="PLCT – QK Bleikugeln"><label for="m8_a12">Referenzmarkierung (Bleikugeln) im CT-Schnitt erkennbar</label></li>
+      <li><input type="checkbox" id="m8_a13" data-label="PLCT – QK Blasen/Rektum"><label for="m8_a13">Blasen-/Rektumfüllung im CT beurteilt und dokumentiert</label></li>
+      <li><input type="checkbox" id="m8_a14" data-label="PLCT – QK Umfang"><label for="m8_a14">Ganzer Patientenumfang rekonstruiert</label></li>
+    </ul>
+
+    <div class="task" style="margin-top:0.75rem">
+      <div class="label-line"><h4>Beobachtung: Was war anders als erwartet?</h4><span class="output-tag">Reflexion</span></div>
+      <textarea id="m8_t1" class="short" data-label="PLCT Praxisstation – Beobachtung Besonderheiten" placeholder="Was habe ich beobachtet, das ich so nicht erwartet hätte? Was war unklar?"></textarea>
+    </div>
+  </div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Das PLCT ist die Basis aller 30 Fraktionen. Jede Abweichung im Setting reproduziert sich täglich. Was du hier siehst und dokumentierst, ist echter klinischer Alltag.</div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="completeMission(8,9)">Praxisstation PLCT abschließen →</button>
+  </div>
+  <div class="inline-status" id="status8"></div>
+</section>
+
+
+<!-- ===== M10: TÄGLICHE RT – CBCT + QUIZ ===== -->
+<section class="mission-panel" id="m9">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 09</div>
+    <h2 class="mission-title">Tägliche RT – CBCT-Analyse &amp; Nebenwirkungen</h2>
+    <p class="mission-subtitle">Herr K. ist seit einigen Tagen in Behandlung. Du analysierst echte CBCT-Aufnahmen von Tag 4 und Tag 5 – und prüfst dein Wissen zu Nebenwirkungen, Toleranzdosen und Pflegemaßnahmen.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 12–15 Min</div><div class="meta-pill">🎯 Output: CBCT-Beurteilung + Quiz-Antworten</div></div>
+  </div>
+
+  <div class="callout"><strong>Referenz:</strong> Beim PLCT wurde der Enddarm als reproduzierbar voll dokumentiert, die Blase war voll. Das ist dein Vergleichsmaßstab für jede CBCT-Beurteilung.</div>
+
+  <!-- CBCT VIDEOS -->
+  <div class="card">
+    <h3>CBCT-Aufnahmen – Tag 4 und Tag 5 der Bestrahlung</h3>
+    <p style="font-size:0.88rem;color:#52606d;margin-bottom:0.75rem">Beurteile für jeden Tag: Sind Blase und Rektum vergleichbar mit dem PLCT? Kann die RT durchgeführt werden?</p>
+
+    <h4 style="margin-bottom:0.4rem">Tag 4 der Bestrahlung</h4>
+    <div class="video-wrap">
+      <video controls preload="none">
+        <source src="../../media/Fallbeispiel%20_PCA_01/1.OBI_axial_PCA_01.mp4" type="video/mp4">
+        Video nicht verfügbar.
+      </video>
+      <div class="video-label">CBCT Tag 4 – Axiale Ansicht (Prostata, Blase, Rektum)</div>
+    </div>
+    <div class="video-wrap" style="margin-top:0.6rem">
+      <video controls preload="none">
+        <source src="../../media/Fallbeispiel%20_PCA_01/1.OBI_Saggital_PCA_01.mp4" type="video/mp4">
+        Video nicht verfügbar.
+      </video>
+      <div class="video-label">CBCT Tag 4 – Sagittale Ansicht (Prostata-Position, Rektuminhalt)</div>
+    </div>
+
+    <h4 style="margin-bottom:0.4rem;margin-top:1rem">Tag 5 der Bestrahlung</h4>
+    <div class="video-wrap">
+      <video controls preload="none">
+        <source src="../../media/Fallbeispiel%20_PCA_01/2.OBI_axial_PCA_01.mp4" type="video/mp4">
+        Video nicht verfügbar.
+      </video>
+      <div class="video-label">CBCT Tag 5 – Axiale Ansicht (Vergleich zu Tag 4)</div>
+    </div>
+    <div class="video-wrap" style="margin-top:0.6rem">
+      <video controls preload="none">
+        <source src="../../media/Fallbeispiel%20_PCA_01/2.OBI_sagittal_PCA_01.mp4" type="video/mp4">
+        Video nicht verfügbar.
+      </video>
+      <div class="video-label">CBCT Tag 5 – Sagittale Ansicht (Prostata-Position, Rektuminhalt)</div>
+    </div>
+
+    <h4 style="margin-bottom:0.5rem;margin-top:0.75rem">CBCT-Prozess: Was hast du beobachtet?</h4>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m10_c1" data-label="CBCT – Matching Goldmarker Tag 4"><label for="m10_c1">Tag 4: Goldmarker-Matching erkennbar (nicht reines Knochenmatching)</label></li>
+      <li><input type="checkbox" id="m10_c2" data-label="CBCT – Rektumfüllung Tag 4 ähnlich PLCT"><label for="m10_c2">Tag 4: Rektumfüllung ähnlich wie beim PLCT → Referenz bestätigt</label></li>
+      <li><input type="checkbox" id="m10_c3" data-label="CBCT – Tag 5 Vergleich"><label for="m10_c3">Tag 5: Vergleich mit Tag 4 – Füllstände sind ähnlich</label></li>
+      <li><input type="checkbox" id="m10_c4" data-label="CBCT – Entscheidung RT möglich"><label for="m10_c4">Beide Tage: RT durchführbar (Verschiebung im Toleranzbereich)</label></li>
+    </ul>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: CBCT-Entscheidung Tag 4 und Tag 5</h4><span class="output-tag">Klinische Entscheidung</span></div>
+    <p>Beurteile anhand der CBCT-Videos: Sind Blase und Rektum an Tag 4 und Tag 5 vergleichbar mit der Referenz aus dem PLCT? Kann die Bestrahlung jeweils durchgeführt werden?</p>
+    <p style="font-size:0.85rem;color:#52606d;margin-bottom:0.75rem">Beantworte für jeden Tag: Befund + Begründung + Entscheidung.</p>
+    <textarea id="m10_t1" data-required="true" data-label="Mission 10 – CBCT-Entscheidung Tag 4 und Tag 5" placeholder="Tag 4: Rektum ... Blase ... → RT durchführbar / nicht durchführbar, weil ...&#10;Tag 5: Rektum ... Blase ... → RT durchführbar / nicht durchführbar, weil ..."></textarea>
+    <div class="self-check"><strong>Selbstcheck:</strong> Vollständig wenn enthalten: Rektumfüllung (Vergleich PLCT), Blasenfüllung, Prostataposition, Entscheidung mit Begründung. Richtige Antwort: Füllstände sind an beiden Tagen reproduzierbar ähnlich → RT durchführbar.</div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Zielantwort: Tag 4 und Tag 5 RT durchführbar. Prostata liegt reproduzierbar. Kritische Nachfragen: "Was wenn Rektum Tag 5 deutlich voller?" → Prostata nach ventral → PTV-Unterdeckung posterior, Rektum überdosiert. "Was wenn Blase fast leer?" → Prostata dorsokaudal, superiores PTV gefährdet. Ziel: SuS verstehen, dass Reproduzierbarkeit keine Selbstverständlichkeit ist.</div>
+  </div>
+
+  <!-- QUIZ NEBENWIRKUNGEN -->
+  <div class="card" style="margin-top:1rem">
+    <h3>Quiz: Nebenwirkungen, Toleranzdosen &amp; Pflegemaßnahmen</h3>
+    <p style="font-size:0.88rem;color:#52606d;margin-bottom:0.75rem">6 Fragen – wähle die beste Antwort. Feedback erscheint sofort nach deiner Auswahl.</p>
+
+    <!-- Q1 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 1: Akute Blasenreaktion</h4><span class="output-tag">NW erkennen</span></div>
+      <p>Herr K. berichtet in Woche 3: häufiges Wasserlassen, Brennen beim Urinieren, starker Harndrang. Welche Strahlenreaktion beschreibt das?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q1_opts">
+        <label id="m10_q1_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q1" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q1','a')"> <span><strong>a)</strong> Akute Strahlenzystitis</span></label>
+        <label id="m10_q1_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q1" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q1','b')"> <span><strong>b)</strong> Harnröhrenstriktur (Spätfolge)</span></label>
+        <label id="m10_q1_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q1" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q1','c')"> <span><strong>c)</strong> Akute Strahlenproktitis</span></label>
+        <label id="m10_q1_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q1" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q1','d')"> <span><strong>d)</strong> Bestrahlungsinduzierte Fatigue</span></label>
+      </div>
+      <div id="m10_q1_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 2: Akute Strahlenproktitis</h4><span class="output-tag">NW erkennen</span></div>
+      <p>Welche Symptomkombination ist typisch für eine akute Strahlenproktitis?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q2_opts">
+        <label id="m10_q2_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q2" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q2','a')"> <span><strong>a)</strong> Haarausfall, Übelkeit, Schwindel</span></label>
+        <label id="m10_q2_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q2" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q2','b')"> <span><strong>b)</strong> Harndrang, Brennen beim Wasserlassen</span></label>
+        <label id="m10_q2_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q2" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q2','c')"> <span><strong>c)</strong> Tenesmen, weicher Stuhlgang, Schleimbeimengung</span></label>
+        <label id="m10_q2_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q2" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q2','d')"> <span><strong>d)</strong> Knochenschmerzen, Lymphknotenschwellung</span></label>
+      </div>
+      <div id="m10_q2_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+
+
+    <!-- Q3 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 3: Rektum-Toleranzdosis</h4><span class="output-tag">Toleranzdosen</span></div>
+      <p>Was bedeutet der Dosisconstraint "V70Gy &lt; 15 %" für das Rektum?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q3_opts">
+        <label id="m10_q3_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q3" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q3','a')"> <span><strong>a)</strong> Das Rektum darf maximal 15 Gy erhalten</span></label>
+        <label id="m10_q3_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q3" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q3','b')"> <span><strong>b)</strong> Höchstens 15 % des Rektumvolumens darf eine Dosis ≥ 70 Gy erhalten</span></label>
+        <label id="m10_q3_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q3" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q3','c')"> <span><strong>c)</strong> Das Rektum muss mindestens 15 % der Strahlung abschirmen</span></label>
+        <label id="m10_q3_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q3" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q3','d')"> <span><strong>d)</strong> 15 Fraktionen dürfen je maximal 70 Gy überschreiten</span></label>
+      </div>
+      <div id="m10_q3_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 4: Pflegemaßnahme Proktitis</h4><span class="output-tag">Pflege</span></div>
+      <p>Welche Pflegemaßnahme ist bei akuter Strahlenproktitis klinisch sinnvoll?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q4_opts">
+        <label id="m10_q4_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q4" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q4','a')"> <span><strong>a)</strong> Klysma täglich zur Darmreinigung vor der Bestrahlung</span></label>
+        <label id="m10_q4_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q4" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q4','b')"> <span><strong>b)</strong> Sitzbäder, schonende Hautreinigung, ballaststoffarme Kost, ggf. Loperamid</span></label>
+        <label id="m10_q4_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q4" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q4','c')"> <span><strong>c)</strong> Antibiotika prophylaktisch, Kortison-Injektion rektal</span></label>
+        <label id="m10_q4_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q4" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q4','d')"> <span><strong>d)</strong> Bestrahlung pausieren bis alle Symptome abgeklungen sind</span></label>
+      </div>
+      <div id="m10_q4_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 5: CBCT-Entscheidung im Alltag</h4><span class="output-tag">Klinische Entscheidung</span></div>
+      <p>Das CBCT zeigt: Rektum deutlich voller als beim PLCT, Prostata nach ventral verschoben ca. 7 mm. Was ist die richtige Handlung?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q5_opts">
+        <label id="m10_q5_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q5" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q5','a')"> <span><strong>a)</strong> Bestrahlung starten – Verschiebungen kommen täglich vor</span></label>
+        <label id="m10_q5_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q5" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q5','b')"> <span><strong>b)</strong> Tischkorrektur für die 7 mm anwenden und bestrahlen</span></label>
+        <label id="m10_q5_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q5" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q5','c')"> <span><strong>c)</strong> Bestrahlung nicht starten – Arzt informieren wegen Rektumfüllung</span></label>
+        <label id="m10_q5_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q5" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q5','d')"> <span><strong>d)</strong> Patient auf Toilette schicken, sofort erneut scannen</span></label>
+      </div>
+      <div id="m10_q5_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="task">
+      <div class="label-line"><h4>Frage 6: Spätfolge nach Prostata-RT</h4><span class="output-tag">NW Spät</span></div>
+      <p>Welche Spätfolge ist nach kurativer perkutaner Prostata-Bestrahlung am häufigsten zu erwarten?</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;margin:0.5rem 0" id="m10_q6_opts">
+        <label id="m10_q6_opt_a" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q6" value="a" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q6','a')"> <span><strong>a)</strong> Harninkontinenz Grad 3–4</span></label>
+        <label id="m10_q6_opt_b" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q6" value="b" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q6','b')"> <span><strong>b)</strong> Rektumfistel</span></label>
+        <label id="m10_q6_opt_c" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q6" value="c" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q6','c')"> <span><strong>c)</strong> Erektile Dysfunktion</span></label>
+        <label id="m10_q6_opt_d" style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.65rem;border:2px solid #cbd2d9;border-radius:6px;cursor:pointer;font-size:0.9rem;transition:all 0.15s"><input type="radio" name="m10_q6" value="d" style="width:auto;margin-top:2px;flex-shrink:0" onchange="revealQuizAnswer('q6','d')"> <span><strong>d)</strong> Blasenkrebs als Strahlenfolge</span></label>
+      </div>
+      <div id="m10_q6_feedback" style="display:none;margin-top:0.5rem"></div>
+    </div>
+  </div>
+
+  <div class="callout green"><strong>Praxisanker:</strong> Tägliche CBCT-Beurteilung und die Kenntnis von Nebenwirkungen sind kein Fachwissen „für die Prüfung" – sie sind der Kern deines täglichen Handelns am Linac.</div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="completeMission(9,10)">Mission abschließen →</button>
+    <button class="btn btn-secondary" onclick="showMission(8)">Zurück zu M8</button>
+  </div>
+  <div class="inline-status" id="status9"></div>
+</section>
+
+<!-- ===== M11: TRANSFER & ABSCHLUSS ===== -->
+<section class="mission-panel" id="m10">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 10</div>
+    <h2 class="mission-title">Transfer &amp; Abschluss</h2>
+    <p class="mission-subtitle">Du hast den gesamten RT-Prozess bei Herr K. durchgearbeitet – von der Verordnung bis zur täglichen Bestrahlung. Jetzt bringst du alles zusammen.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 12–15 Min</div><div class="meta-pill">🎯 Output: 3-Minuten-Fallvorstellung</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Nebenwirkungen – Prüfungsübersicht</h3>
+    <div class="nw-row">
+      <div class="wissen-block">
+        <h5>Akute NW (während Therapie)</h5>
+        <ul>
+          <li><strong>Zystitis:</strong> Dysurie, Pollakisurie, Harndrang</li>
+          <li><strong>Proktitis:</strong> Tenesmen, weicher Stuhlgang, Schleimbeimengung</li>
+          <li><strong>Fatigue:</strong> allg. Erschöpfung, besonders gegen Ende der Therapie</li>
+          <li>Erektile Dysfunktion (kurzfristig durch Ödeme)</li>
+        </ul>
+      </div>
+      <div class="wissen-block">
+        <h5>Späte NW (Monate – Jahre)</h5>
+        <ul>
+          <li><strong>Rektum:</strong> Blutung, chron. Proktitis, selten Fistel</li>
+          <li><strong>Blase:</strong> Kapazitätsverlust, Harninkontinenz (selten)</li>
+          <li><strong>Erektile Dysfunktion:</strong> häufigste Spätfolge, langfristig</li>
+          <li>Harnröhrenstriktur (Urethra, v.a. bei Boost-Konzepten)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: 3-Minuten-Fallvorstellung</h4><span class="output-tag">Endprodukt</span></div>
+    <p>Bereite eine Fallvorstellung von Herr K. aus MTR-Sicht vor. Struktur: Diagnose → Therapiekonzept → PLCT-Setting (Begründung) → IGRT-Vorgehen → 1 prüfungsrelevante Besonderheit.</p>
+    <textarea id="m11_t1" data-required="true" data-label="Mission 11 – Fallvorstellung Herr K." placeholder="Diagnose: ... Therapiekonzept: ... PLCT-Setting: ... IGRT: ... Besonderheit: ..."></textarea>
+    <div class="self-check"><strong>Selbstcheck:</strong> Enthält deine Fallvorstellung: Gleason + D'Amico-Klasse + Zielvolumen + Dosiskonzept + Lagerungsbesonderheiten + CBCT-Begründung? 5 von 5 = bereit für die Prüfung.</div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Mündliche Fallvorstellung im Plenum (2–3 SuS). Gezielte Nachfragen: "Warum ist der Enddarm leer beim PLCT?" / "Was machst du wenn das CBCT 8 mm zeigt?" / "Was bedeutet Boost für das Rektumrisiko?" – klassische Prüfungsfragen. Feedbackbögen jetzt austeilen.</div>
+  </div>
+
+  <div class="task">
+    <div class="label-line"><h4>Prüfungsfrage: Szenario-Entscheidung</h4><span class="output-tag">Prüfungsformat</span></div>
+    <p>Herr K. kommt zur Bestrahlung (Fraktion 14). Das CBCT zeigt eine Verschiebung der Prostata von 8 mm nach ventral. Der Enddarm ist stark gefüllt. Was tust du – und warum?</p>
+    <textarea id="m11_t2" data-required="true" data-label="Mission 11 – Szenario Bestrahlung Fraktion 14"></textarea>
+    <div class="self-check"><strong>Selbstcheck:</strong> Gute Antwort: (1) Bestrahlung nicht starten – Enddarm zu voll, Prostata verschoben außerhalb Toleranz. (2) Arzt informieren. (3) 8 mm ventral = außerhalb der 5-mm-Toleranz, Rektum wäre überdosiert, PTV nicht korrekt abgedeckt.</div>
+  </div>
+
+  <div class="callout orange"><strong>Hinweis:</strong> Dein Feedback zu dieser Lernsequenz wird separat über den ausgeteilten Papierbogen erfasst. Bitte den Bogen vollständig ausfüllen – anonym, direkt, ehrlich. Er ist die Grundlage für die Weiterentwicklung.</div>
+
+  <div class="btn-row">
+    <button class="btn btn-success" onclick="completeMission(10,'complete')">Lernsequenz abschließen &amp; Export →</button>
+  </div>
+  <div class="inline-status" id="status10"></div>
+</section>
+
+<!-- ===== ABSCHLUSS ===== -->
+<section class="mission-panel" id="m-complete">
+  <div class="complete-screen">
+    <h1>Lernsequenz abgeschlossen</h1>
+    <p>Du hast alle Missionen bearbeitet. Dein Protokoll enthält Fallanalyse, Checklisten, Praxisbeobachtung und CBCT-Entscheidungen. Nutze den Export für dein Portfolio oder die Nachbesprechung.</p>
+    <div class="stats">
+      <div class="stat"><strong id="finalCompleted">0</strong><span>Missionen abgeschlossen</span></div>
+      <div class="stat"><strong>10</strong><span>Gesamt</span></div>
+      <div class="stat"><strong>v1</strong><span>Testversion</span></div>
+      <div class="stat"><strong>UKR</strong><span>Klinik für Strahlentherapie</span></div>
+    </div>
+    <div class="btn-row" style="justify-content:center">
+      <button class="btn btn-secondary" onclick="showMission(1)">Zurück zum Start</button>
+      <button class="btn btn-primary" onclick="exportReport()">Export / Drucken</button>
+    </div>
+  </div>
+</section>
+
+    <div class="footer-space"></div>
+  </main>
+</div>
+
+<script>
+const TOTAL_MISSIONS = 10;
+const STORAGE_KEY = 'mtr_rt_mission_prostata_v1';
+let state = {completed: [], teacherMode: false, fields: {}};
+
+function defaultState(){ return {completed: [], teacherMode: false, fields: {}}; }
+function loadState(){
+  try { const raw = localStorage.getItem(STORAGE_KEY); if(raw){ state = {...defaultState(), ...JSON.parse(raw)}; } } catch(e){ state = defaultState(); }
+}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function applyTeacherMode(){ document.body.classList.toggle('show-teacher', !!state.teacherMode); document.getElementById('teacherToggle').classList.toggle('active', !!state.teacherMode); }
+function toggleTeacherMode(){ state.teacherMode = !state.teacherMode; applyTeacherMode(); saveState(); }
+function showMission(n){
+  document.querySelectorAll('.mission-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mission-btn').forEach(b => b.classList.remove('active'));
+  const id = n === 'complete' ? 'm-complete' : 'm'+n;
+  const panel = document.getElementById(id);
+  if(panel) panel.classList.add('active');
+  const btn = document.getElementById('mb'+n);
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function updateProgress(){
+  const count = state.completed.length;
+  document.getElementById('progressLabel').textContent = count + ' / ' + TOTAL_MISSIONS;
+  document.getElementById('progressFill').style.width = ((count/TOTAL_MISSIONS)*100) + '%';
+  const fc = document.getElementById('finalCompleted');
+  if(fc) fc.textContent = count;
+  for(let i=1; i<=TOTAL_MISSIONS; i++){
+    const btn = document.getElementById('mb'+i);
+    if(btn){ btn.classList.toggle('completed', state.completed.includes(i)); }
+  }
+}
+function setStatus(n, type, text){ const box = document.getElementById('status'+n); if(!box) return; box.className = 'inline-status show ' + type; box.innerHTML = text; }
+function validateMission(n){
+  const panel = document.getElementById('m'+n);
+  if(!panel) return true;
+  let ok = true;
+  panel.querySelectorAll('.task').forEach(t => t.classList.remove('required-empty'));
+  const required = panel.querySelectorAll('[data-required="true"]');
+  required.forEach(el => {
+    let valid = true;
+    if(el.type === 'checkbox') valid = el.checked;
+    else if(el.type === 'hidden') valid = !!el.value;
+    else valid = !!el.value && el.value.trim() !== '';
+    if(!valid){ ok = false; const task = el.closest('.task'); if(task) task.classList.add('required-empty'); }
+  });
+  if(!ok) setStatus(n, 'warn', 'Es fehlen noch Pflichtfelder in dieser Mission. Leere Felder sind rot markiert.');
+  return ok;
+}
+function completeMission(n, next){
+  if(!validateMission(n)) return;
+  if(!state.completed.includes(n)) state.completed.push(n);
+  state.completed.sort(function(a,b){ return a-b; });
+  saveState(); updateProgress();
+  setStatus(n, 'ok', 'Mission gespeichert. Du kannst jederzeit zurückkommen.');
+  if(next === 'complete') showMission('complete');
+  else if(typeof next === 'number') showMission(next);
+}
+function toggleBox(id){ const el = document.getElementById(id); if(el) el.classList.toggle('open'); }
+
+function revealPLCTFeedback(choice){
+  const fb = document.getElementById('plct_feedback');
+  if(!fb) return;
+  const opts = {
+    a: {ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Als MTR entscheidest du nicht über die Verwertbarkeit eines PLCT-Scans. Die Frage, ob ein Scan trotz voller Rektumfüllung belassen werden kann, liegt in der ärztlichen Verantwortung. Ein zu voller Enddarm verschiebt die Prostata nach ventral – das beeinflusst die Dosisverteilung systematisch über alle 30 Fraktionen.</div>'},
+    b: {ok:false, text:'<div class="callout orange"><strong>Suboptimal.</strong> Ein Toilettengang hat kaum Einfluss auf den Rektuminhalt – der Darm entleert sich nicht auf Kommando. Danach müsste der Patient erneut trinken und 60 Min warten. Kein sicheres Verfahren. Richtiger Weg: Arzt informieren.</div>'},
+    c: {ok:true, text:'<div class="callout green"><strong>Richtig.</strong> Den Arzt zu informieren ist die einzig korrekte Handlung. Der Arzt entscheidet über Darmoptimierung (z.B. Klysma) oder akzeptiert die Rektumfüllung als reproduzierbar – wie hier in Video 2 geschehen. Als MTR informierst du, du entscheidest nicht medizinisch.</div>'}
+  };
+  const res = opts[choice];
+  if(!res) return;
+  fb.innerHTML = res.text;
+  fb.style.display = 'block';
+  const v2 = document.getElementById('plct_video2_section');
+  if(v2){ v2.style.display = 'block'; setTimeout(function(){ v2.scrollIntoView({behavior:'smooth', block:'start'}); }, 100); }
+  ['a','b','c'].forEach(function(k){
+    const lbl = document.getElementById('plct_opt_' + k);
+    if(!lbl) return;
+    lbl.style.borderColor = '';
+    lbl.style.background = '';
+  });
+  const sel = document.getElementById('plct_opt_' + choice);
+  if(sel){ sel.style.borderColor = res.ok ? '#16a34a' : '#dc2626'; sel.style.background = res.ok ? '#f0fdf4' : '#fef2f2'; }
+  state.fields['m7_decision_choice'] = choice; saveState();
+}
+
+const M10_QUIZ = {
+  q1: {correct:'a', feedback:{
+    a:{ok:true, text:'<div class="callout green"><strong>Richtig – Akute Strahlenzystitis.</strong> Dysurie, Pollakisurie und Harndrang sind klassische Zeichen der Strahlenzystitis ab Woche 2–3. Ursache: Schleimhautreizung der Blase durch ionisierende Strahlung.</div>'},
+    b:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Harnröhrenstriktur ist eine Spätfolge (Monate bis Jahre nach RT). Die beschriebenen akuten Symptome passen nicht dazu.</div>'},
+    c:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Strahlenproktitis äußert sich rektal (Tenesmen, Schleimbeimengung) – nicht als Blasensymptomatik.</div>'},
+    d:{ok:false, text:'<div class="callout orange"><strong>Nicht korrekt.</strong> Fatigue ist unspezifisch und äußert sich nicht als Blasensymptom. Die Symptome sind klar der Blase zuzuordnen.</div>'}
+  }},
+  q2: {correct:'c', feedback:{
+    a:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Haarausfall, Übelkeit und Schwindel entstehen nicht bei der lokalen Becken-RT. Diese Symptome sind eher bei systemischer Therapie zu erwarten.</div>'},
+    b:{ok:false, text:'<div class="callout orange"><strong>Nicht korrekt.</strong> Harndrang und Brennen beim Wasserlassen beschreiben die Strahlenzystitis, nicht die Proktitis.</div>'},
+    c:{ok:true, text:'<div class="callout green"><strong>Richtig – Akute Strahlenproktitis.</strong> Tenesmen (schmerzhafter Stuhldrang), weicher Stuhlgang und Schleimbeimengung sind die typische Symptomtrias. Ursache: Schleimhautentzündung des Rektums durch Strahlung.</div>'},
+    d:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Knochenschmerzen und Lymphknotenschwellung sind keine lokalen Strahlennebenwirkungen.</div>'}
+  }},
+  q3: {correct:'b', feedback:{
+    a:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> V70Gy beschreibt keinen Gesamtdosis-Grenzwert, sondern einen Volumenanteil.</div>'},
+    b:{ok:true, text:'<div class="callout green"><strong>Richtig.</strong> V70Gy &lt; 15 % bedeutet: Maximal 15 % des Rektumvolumens darf eine Dosis ≥ 70 Gy erhalten. Schützt vor schwerer Proktitis und Rektumfisteln – besonders relevant bei Boost-Konzepten.</div>'},
+    c:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Das Rektum schirmt nichts ab – es ist ein Risikoorgan, das geschont werden muss.</div>'},
+    d:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Constraints beziehen sich auf Volumenanteile oder Maximaldosen – nicht auf Fraktionszahlen.</div>'}
+  }},
+  q4: {correct:'b', feedback:{
+    a:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Tägliche Klysmas würden die Reproduzierbarkeit des PLCT-Settings zerstören und sind bei Proktitis nicht indiziert.</div>'},
+    b:{ok:true, text:'<div class="callout green"><strong>Richtig.</strong> Sitzbäder lindern lokale Irritation, ballaststoffarme Kost reduziert Stuhlfrequenz, Loperamid bei Diarrhoe. Das sind die Standardmaßnahmen bei akuter Strahlenproktitis.</div>'},
+    c:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Antibiotika und Kortikosteroid-Injektionen sind bei akuter Strahlenproktitis nicht indiziert – es ist keine bakterielle Infektion.</div>'},
+    d:{ok:false, text:'<div class="callout orange"><strong>Nicht korrekt.</strong> Akute Strahlenreaktionen Grad 1–2 sind kein Grund, die Therapie zu unterbrechen. Das entscheidet der Arzt.</div>'}
+  }},
+  q5: {correct:'c', feedback:{
+    a:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> 7 mm Verschiebung durch veränderten Rektuminhalt ist keine akzeptable Abweichung. PTV wäre falsch abgedeckt, Rektum überdosiert.</div>'},
+    b:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Eine Tischkorrektur behebt das Problem nicht: Die Prostata hat sich durch das volle Rektum organisch verschoben. Das Rektum wäre weiterhin überdosiert.</div>'},
+    c:{ok:true, text:'<div class="callout green"><strong>Richtig.</strong> Arzt informieren. Bei deutlich veränderter Rektumfüllung und Prostataverschiebung jenseits der Toleranz (>5 mm) entscheidet der Arzt: Termin verschieben, Darmoptimierung oder erneutes CBCT.</div>'},
+    d:{ok:false, text:'<div class="callout orange"><strong>Suboptimal.</strong> Toilettengang hat kaum Einfluss auf Rektuminhalt. Danach muss die Blase neu gefüllt werden. Die Entscheidung liegt beim Arzt.</div>'}
+  }},
+  q6: {correct:'c', feedback:{
+    a:{ok:false, text:'<div class="callout orange"><strong>Nicht die häufigste.</strong> Schwere Harninkontinenz (Grad 3–4) ist nach perkutaner RT selten – häufiger nach radikaler Prostatektomie.</div>'},
+    b:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Rektumfisteln sind schwere, aber seltene Komplikationen bei Toleranzdosis-Überschreitungen.</div>'},
+    c:{ok:true, text:'<div class="callout green"><strong>Richtig – Erektile Dysfunktion.</strong> Sie ist die häufigste Spätfolge nach kurativer Prostata-RT. Ursache: Schädigung der Gefäße und Nerven rund um die Prostata. Relevant für die Patientenaufklärung.</div>'},
+    d:{ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Strahleninduzierter Blasenkrebs ist eine extrem seltene Spätfolge (Jahre bis Jahrzehnte) – keine typische Komplikation nach Prostata-RT.</div>'}
+  }}
+};
+
+function revealQuizAnswer(qId, choice){
+  const q = M10_QUIZ[qId];
+  if(!q) return;
+  const res = q.feedback[choice];
+  if(!res) return;
+  const fb = document.getElementById('m10_' + qId + '_feedback');
+  if(fb){ fb.innerHTML = res.text; fb.style.display = 'block'; }
+  ['a','b','c','d'].forEach(function(k){
+    const lbl = document.getElementById('m10_' + qId + '_opt_' + k);
+    if(lbl){ lbl.style.borderColor = ''; lbl.style.background = ''; }
+  });
+  const sel = document.getElementById('m10_' + qId + '_opt_' + choice);
+  if(sel){ sel.style.borderColor = res.ok ? '#16a34a' : '#dc2626'; sel.style.background = res.ok ? '#f0fdf4' : '#fef2f2'; }
+  if(!res.ok){
+    const correctLbl = document.getElementById('m10_' + qId + '_opt_' + q.correct);
+    if(correctLbl){ correctLbl.style.borderColor = '#16a34a'; correctLbl.style.background = '#f0fdf4'; }
+  }
+  state.fields['m10_' + qId + '_choice'] = choice; saveState();
+}
+
+function bindAutosave(){
+  document.querySelectorAll('textarea, input[type="text"], select, input[type="checkbox"]').forEach(el => {
+    if(!el.id) return;
+    const val = state.fields[el.id];
+    if(typeof val !== 'undefined'){
+      if(el.type === 'checkbox') el.checked = !!val;
+      else el.value = val;
+    }
+    const eventName = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(eventName, function(){
+      state.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+      saveState();
+    });
+  });
+}
+
+function restoreInteractive(){
+  const m7choice = state.fields['m7_decision_choice'];
+  if(m7choice){
+    const radio = document.getElementById('m7_mc_' + m7choice);
+    if(radio){ radio.checked = true; revealPLCTFeedback(m7choice); }
+  }
+  ['q1','q2','q3','q4','q5','q6'].forEach(function(qId){
+    const choice = state.fields['m10_' + qId + '_choice'];
+    if(!choice) return;
+    const radio = document.getElementById('m10_' + qId + '_opt_' + choice);
+    if(radio){ radio.checked = true; revealQuizAnswer(qId, choice); }
+  });
+}
+
+function exportReport(){
+  const lines = [];
+  lines.push('Mission Prostata – Lernprotokoll (Testversion v1)');
+  lines.push('UKR Klinik für Strahlentherapie');
+  lines.push('--------------------------------------------');
+  lines.push('Abgeschlossene Missionen: ' + state.completed.length + ' / ' + TOTAL_MISSIONS);
+  lines.push('');
+  document.querySelectorAll('[data-label]').forEach(el => {
+    let value = '';
+    if(el.type === 'checkbox') value = el.checked ? 'Ja (\u2713)' : 'Nein';
+    else value = (el.value || '').trim();
+    if(value && value !== 'Nein'){ lines.push(el.dataset.label + ':'); lines.push(value); lines.push(''); }
+  });
+  const content = lines.join('\n');
+  const win = window.open('', '_blank');
+  if(!win) return;
+  win.document.write('<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Prostata Lernprotokoll \u2013 Export<\/title><style>body{font-family:Arial,sans-serif;line-height:1.6;padding:32px;white-space:pre-wrap;max-width:800px}button{margin-bottom:20px;padding:10px 14px;cursor:pointer}<\/style><\/head><body><button onclick="window.print()">Drucken \/ als PDF sichern<\/button><pre>' + content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '<\/pre><\/body><\/html>');
+  win.document.close();
+}
+loadState();
+applyTeacherMode();
+bindAutosave();
+restoreInteractive();
+updateProgress();
+</script>
+</body>
+</html>
