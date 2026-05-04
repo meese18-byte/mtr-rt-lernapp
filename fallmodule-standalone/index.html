@@ -187,6 +187,7 @@ body{font-family:var(--font);background:#f0f4f8;color:#1a1a2e;min-height:100vh;}
       <span class="dot" title="Rektum-Ca."></span>
       <span class="dot" title="Ösophagus-Ca."></span>
       <span class="dot" title="HNO-Tumor"></span>
+      <span class="dot" title="Bronchial-Ca. PLCT-Kompetenzwerkstatt"></span>
     </div>
   </div>
 
@@ -330,6 +331,35 @@ body{font-family:var(--font);background:#f0f4f8;color:#1a1a2e;min-height:100vh;}
         <a href="hno-tumor-case.html" class="btn-start" onclick="markStarted(3)">Starten →</a>
       </div>
     </div>
+
+    <!-- Bronchial-Ca. PLCT-Kompetenzwerkstatt – TESTMODUL (außerhalb Lernapp-Logik) -->
+    <div class="module-card" id="card-4">
+      <div class="card-header">
+        <div class="card-icon">🫁</div>
+        <div class="card-info">
+          <span class="card-type" style="background:#fef3c7;color:#92400e;">Kompetenzwerkstatt</span>
+          <h3 class="card-title">Bronchial-Ca. – PLCT-Kompetenzwerkstatt</h3>
+          <p class="card-sub">Rotationsbasierte Lernumgebung · 2. Lehrjahr · Mission Thorax V5.1 · parallel zur PLCT-Praxisstation</p>
+        </div>
+        <span class="card-status" id="status-4">Nicht gestartet</span>
+      </div>
+      <div class="card-body">
+        <span class="tag">Thorax-PLCT</span>
+        <span class="tag">Scanbereich &amp; OAR</span>
+        <span class="tag">Lagerungstoleranz</span>
+        <span class="tag">4D-CT · ITV · DIBH</span>
+        <span class="tag">CT-Video Thorax</span>
+        <span class="tag">Handover-Dokumentation</span>
+        <span class="tag">Rotationsprinzip</span>
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="card-meta">⏱ ca. 60 Min gesamt · 11 Missionen · Rotationsformat</div>
+          <div class="card-score" id="score-4"></div>
+        </div>
+        <a href="bronchialca-plct-kompetenzwerkstatt.html" class="btn-start" onclick="markStarted(4)">Starten →</a>
+      </div>
+    </div>
   </div>
 
   <!-- Tip -->
@@ -376,7 +406,8 @@ const KEYS = [
   'mtr_rt_quiz_grundlagen-pruefungstraining-quiz',
   'mtr_rt_case_rektum-ca-case',
   'mtr_rt_case_oesophagus-ca-case',
-  'mtr_rt_case_hno-tumor-case'
+  'mtr_rt_case_hno-tumor-case',
+  'mission_thorax_bronchial_v51'
 ];
 
 function markStarted(idx) {
@@ -402,6 +433,28 @@ function updateProgress() {
     const card = document.getElementById('card-' + i);
     const status = document.getElementById('status-' + i);
     const scoreEl = document.getElementById('score-' + i);
+
+    // Sonderfall: Kompetenzwerkstatt (index 4) nutzt eigenes Speicherformat
+    if (i === 4 && data) {
+      const total = 11;
+      const completedCount = Array.isArray(data.completed) ? data.completed.length : 0;
+      if (completedCount > 0) {
+        if (completedCount >= total) {
+          done++;
+          if (card) card.classList.add('completed');
+          if (status) { status.textContent = 'Abgeschlossen'; status.classList.add('done'); }
+          if (dots[i]) dots[i].classList.add('done');
+        } else {
+          if (status) status.textContent = `In Bearbeitung (${completedCount}/${total})`;
+          if (dots[i]) dots[i].classList.add('active');
+        }
+        if (scoreEl) { scoreEl.textContent = `Missionen: ${completedCount} / ${total}`; scoreEl.classList.add('visible'); }
+      } else if (started) {
+        if (status) status.textContent = 'In Bearbeitung';
+        if (dots[i]) dots[i].classList.add('active');
+      }
+      return;
+    }
 
     if (data && data.lastPct !== undefined) {
       done++;
