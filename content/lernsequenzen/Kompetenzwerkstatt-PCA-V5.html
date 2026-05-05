@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Prostata – PLCT-Kompetenzwerkstatt V5</title>
+<style>
+/* === MTR RT Lernapp – Design-System === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { background: #f6f7f9; color: #1f2933; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.55; min-height: 100vh; }
+a { color: #1a5aa8; text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* Header */
+.header { position: sticky; top: 0; z-index: 100; background: #1f2933; color: #fff; padding: 0 1.25rem; height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 3px solid #1a5aa8; }
+.header-left { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.header-title { font-size: 0.9rem; font-weight: 600; color: #fff; letter-spacing: 0.02em; white-space: nowrap; }
+.header-sub { font-size: 0.78rem; color: #9aa5b1; margin-top: 1px; }
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+.tool-btn { border: 1px solid #3e4c59; background: #2d3748; color: #cbd5e0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: background 0.15s, border-color 0.15s; }
+.tool-btn:hover { background: #3e4c59; color: #fff; }
+.tool-btn.active { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+.progress-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.progress-label { font-size: 0.78rem; color: #9aa5b1; white-space: nowrap; }
+.progress-track { width: 120px; height: 6px; background: #3e4c59; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: #16a34a; transition: width 0.3s ease; }
+
+/* Layout */
+.layout { display: flex; min-height: calc(100vh - 58px); }
+
+/* Sidebar */
+.sidebar { width: 260px; background: #fff; border-right: 1px solid #cbd2d9; padding: 1rem 0; position: sticky; top: 58px; height: calc(100vh - 58px); overflow-y: auto; flex-shrink: 0; }
+.sidebar-label { padding: 0 1rem 0.5rem; font-size: 0.72rem; color: #7b8794; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+.sidebar-note { margin: 0 0.75rem 1rem; padding: 0.75rem; background: #f0f5fb; border: 1px solid #dbeafe; border-radius: 6px; font-size: 0.82rem; color: #52606d; }
+.sidebar-note strong { color: #1f2933; }
+.mission-btn { display: flex; align-items: flex-start; gap: 0.6rem; width: 100%; border: none; background: none; color: #52606d; padding: 0.65rem 1rem; text-align: left; cursor: pointer; transition: background 0.12s, color 0.12s; position: relative; }
+.mission-btn:hover { background: #f0f4f8; color: #1f2933; }
+.mission-btn.active { background: #ebf2fb; color: #1a5aa8; font-weight: 500; }
+.mission-btn.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #1a5aa8; }
+.mission-btn.completed { color: #16a34a; }
+.mission-btn.practice { color: #b45309; }
+.m-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e3e7eb; border: 1px solid #cbd2d9; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; color: #52606d; }
+.mission-btn.active .m-num { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+.mission-btn.completed .m-num { background: #16a34a; border-color: #16a34a; color: #fff; }
+.mission-btn.practice .m-num { border-color: #f0a500; color: #b45309; background: #fffbeb; }
+.m-title { font-size: 0.85rem; font-weight: 600; }
+.m-meta { font-size: 0.75rem; color: #7b8794; margin-top: 1px; }
+
+/* Main */
+.main { flex: 1; max-width: 900px; padding: 1.75rem 1.75rem 4rem; }
+.mission-panel { display: none; }
+.mission-panel.active { display: block; }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, #ebf2fb, #f0f4f8); border: 1px solid #cbd2d9; border-left: 4px solid #1a5aa8; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; }
+.hero h1 { font-size: 1.45rem; line-height: 1.25; margin-bottom: 0.5rem; color: #1f2933; }
+.hero p { color: #52606d; max-width: 760px; }
+.hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+.hero-stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 6px; padding: 0.75rem; }
+.hero-stat strong { display: block; font-size: 0.75rem; color: #1a5aa8; margin-bottom: 3px; font-weight: 700; }
+.hero-stat span { font-size: 0.82rem; color: #52606d; }
+
+/* Mission Header */
+.mission-header { margin-bottom: 1.5rem; border-bottom: 1px solid #e3e7eb; padding-bottom: 1.1rem; }
+.mission-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: #1a5aa8; background: #dbeafe; border-radius: 999px; padding: 3px 10px; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.mission-tag.practice { color: #92400e; background: #fef3c7; }
+.mission-title { font-size: 1.55rem; line-height: 1.2; margin-bottom: 0.4rem; color: #1f2933; }
+.mission-subtitle { color: #52606d; font-size: 0.95rem; max-width: 760px; }
+.meta-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.meta-pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 4px 10px; background: #e3e7eb; font-size: 0.78rem; color: #52606d; }
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; }
+
+/* Cards */
+.card { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1.1rem; margin-bottom: 1rem; }
+.card h3 { font-size: 1.05rem; margin-bottom: 0.6rem; color: #1f2933; }
+.card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; color: #1a5aa8; }
+.card p, .card li { color: #52606d; font-size: 0.9rem; }
+.card ul { padding-left: 1.1rem; }
+.card ul li { margin-bottom: 3px; }
+.card strong { color: #1f2933; }
+
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.case-item { background: #f6f7f9; border: 1px solid #e3e7eb; border-radius: 6px; padding: 0.6rem 0.75rem; }
+.case-item-label { font-size: 0.72rem; color: #7b8794; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.case-item-value { font-size: 0.9rem; font-weight: 600; color: #1f2933; }
+
+/* Callouts */
+.callout { padding: 0.75rem 1rem; border-radius: 6px; border-left: 4px solid #1a5aa8; background: #f0f5fb; margin-bottom: 0.875rem; font-size: 0.9rem; color: #1f2933; }
+.callout.orange { border-left-color: #f0a500; background: #fffbeb; }
+.callout.green { border-left-color: #16a34a; background: #f0fdf4; }
+.callout.red { border-left-color: #dc2626; background: #fef2f2; }
+.callout strong { color: #1f2933; }
+
+/* Tasks */
+.task { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1.1rem; margin-bottom: 0.875rem; }
+.task.required-empty { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,.12); }
+.task h4 { font-size: 1rem; margin-bottom: 0.5rem; color: #1f2933; }
+.task p { color: #52606d; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.label-line { display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; margin-bottom: 0.6rem; }
+.output-tag { font-size: 0.72rem; font-weight: 600; color: #1a5aa8; background: #dbeafe; padding: 3px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+
+/* Formfelder */
+textarea, input[type="text"], select { width: 100%; background: #fff; color: #1f2933; border: 2px solid #cbd2d9; border-radius: 6px; padding: 0.6rem 0.75rem; outline: none; transition: border-color 0.15s; font-size: 0.9rem; }
+textarea:focus, input[type="text"]:focus, select:focus { border-color: #1a5aa8; }
+textarea { resize: vertical; min-height: 80px; }
+textarea.short { min-height: 56px; }
+
+/* Tabellen */
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.table th { background: #f0f4f8; color: #52606d; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.55rem 0.75rem; text-align: left; border: 1px solid #e3e7eb; }
+.table td { padding: 0.6rem 0.75rem; border: 1px solid #e3e7eb; vertical-align: top; color: #1f2933; }
+.table tr:nth-child(even) td { background: #f6f7f9; }
+.checkbox-list { list-style: none; padding: 0; }
+.checkbox-list li { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #e3e7eb; font-size: 0.9rem; }
+.checkbox-list li:last-child { border-bottom: none; }
+.checkbox-list input { margin-top: 2px; accent-color: #16a34a; }
+
+/* Hilfsmittelboxen */
+.support-box, .plus-box, .teacher-note, .self-check { margin-top: 0.75rem; border-radius: 6px; padding: 0.875rem 1rem; font-size: 0.88rem; }
+.support-box { background: #fffbeb; border: 1px solid #fcd34d; }
+.plus-box { background: #f5f3ff; border: 1px solid #c4b5fd; color: #4c1d95; }
+.plus-box strong { color: #4c1d95; }
+.self-check { background: #f0f4f8; border: 1px solid #cbd2d9; color: #52606d; }
+.self-check strong { color: #1f2933; }
+.teacher-note { display: none; background: #fffbeb; border: 1px dashed #fcd34d; color: #78350f; }
+body.show-teacher .teacher-note { display: block; }
+.teacher-note strong { color: #92400e; }
+
+/* Toggle */
+.toggle { width: 100%; text-align: left; border: 1px solid #cbd2d9; background: #f0f4f8; color: #1f2933; padding: 0.55rem 0.75rem; border-radius: 6px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; font-weight: 600; transition: background 0.12s; }
+.toggle:hover { background: #e3e7eb; }
+.toggle span { color: #52606d; font-weight: 400; font-size: 0.82rem; }
+.toggle-content { display: none; margin-top: 0.6rem; font-size: 0.88rem; color: #52606d; }
+.toggle-content.open { display: block; }
+.toggle-content ul { padding-left: 1.1rem; }
+.toggle-content li { margin-bottom: 4px; }
+
+/* Buttons */
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.1rem; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 6px; padding: 0.6rem 1.1rem; font-weight: 600; font-size: 0.9rem; transition: background 0.15s, transform 0.1s; text-decoration: none; }
+.btn-primary { background: #1a5aa8; color: #fff; }
+.btn-primary:hover { background: #144884; transform: translateY(-1px); }
+.btn-secondary { background: #e3e7eb; color: #1f2933; border: 1px solid #cbd2d9; }
+.btn-secondary:hover { background: #cbd2d9; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+
+/* Status */
+.inline-status { display: none; margin-top: 0.75rem; padding: 0.6rem 0.875rem; border-radius: 6px; font-size: 0.88rem; }
+.inline-status.show { display: block; }
+.inline-status.ok { background: #f0fdf4; border: 1px solid #16a34a; color: #15803d; }
+.inline-status.warn { background: #fef2f2; border: 1px solid #dc2626; color: #dc2626; }
+
+/* Wissen-Blöcke */
+.wissen-block { background: #f6f7f9; border: 1px solid #e3e7eb; border-left: 3px solid #1a5aa8; border-radius: 6px; padding: 0.875rem 1rem; margin-bottom: 0.6rem; }
+.wissen-block h5 { font-size: 0.78rem; font-weight: 700; color: #1a5aa8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.wissen-block p, .wissen-block li { font-size: 0.88rem; color: #52606d; }
+.wissen-block ul { padding-left: 1rem; }
+.wissen-block ul li { margin-bottom: 3px; }
+.wissen-block strong { color: #1f2933; }
+
+/* Dosis-Tabelle */
+.dosis-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.6rem; }
+.dosis-table th { background: #1f2933; color: #fff; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.5rem 0.75rem; border: 1px solid #3e4c59; text-align: left; }
+.dosis-table td { padding: 0.55rem 0.75rem; border: 1px solid #e3e7eb; color: #52606d; vertical-align: top; }
+.dosis-table td strong { color: #1f2933; }
+.dosis-table tr:nth-child(even) td { background: #f6f7f9; }
+
+/* Bilder */
+.img-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 0.75rem 0 0; }
+.img-figure { flex: 1; min-width: 130px; margin: 0; }
+.img-figure img { border-radius: 6px; border: 1px solid #e3e7eb; height: 160px; width: 100%; object-fit: contain; background: #f6f7f9; }
+.img-caption { font-size: 0.75rem; color: #7b8794; text-align: center; margin-top: 0.3rem; line-height: 1.3; }
+
+/* Video */
+.video-wrap { margin: 0.75rem 0; }
+.video-wrap video { width: 100%; border-radius: 6px; border: 1px solid #e3e7eb; background: #000; display: block; }
+.video-label { font-size: 0.78rem; color: #7b8794; margin-top: 0.3rem; }
+
+/* Abschluss */
+.complete-screen { text-align: center; padding: 3rem 1rem; }
+.complete-screen h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #1a5aa8; }
+.complete-screen p { color: #52606d; max-width: 680px; margin: 0 auto 1.25rem; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.875rem; max-width: 720px; margin: 0 auto 1.5rem; }
+.stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1rem; }
+.stat strong { display: block; font-size: 1.8rem; color: #1a5aa8; font-weight: 700; }
+.stat span { font-size: 0.78rem; color: #52606d; }
+
+/* Feedback-Bogen */
+.feedback-section { background: #fff3cd; border: 2px solid #f0a500; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+.feedback-section h3 { color: #92400e; margin-bottom: 0.75rem; }
+.rating-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0; }
+.rating-btn { padding: 6px 14px; border: 2px solid #cbd2d9; background: #f6f7f9; border-radius: 6px; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: #52606d; transition: all 0.15s; }
+.rating-btn.selected { border-color: #1a5aa8; background: #dbeafe; color: #1a5aa8; }
+
+/* NW-Raster */
+.nw-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem; }
+.footer-space { height: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 960px) { .sidebar { display: none; } .main { max-width: none; padding: 1.25rem; } .hero-grid, .grid-3, .stats { grid-template-columns: 1fr 1fr; } .grid-2, .case-grid, .nw-row { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .header { height: auto; padding: 0.75rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; } .hero-grid, .grid-3, .stats { grid-template-columns: 1fr; } .mission-title { font-size: 1.25rem; } .main { padding: 1rem; } .header-actions { width: 100%; } }
+
+
+/* === Erweiterungen Kompetenzwerkstatt V5 === */
+.reset-btn { border-color:#7f1d1d; background:#3b1f1f; color:#fecaca; }
+.reset-btn:hover { background:#7f1d1d; color:#fff; }
+.expectation { display:none; margin-top:0.75rem; padding:0.85rem 1rem; border-radius:6px; border-left:4px solid #16a34a; background:#f0fdf4; color:#14532d; font-size:0.88rem; }
+.expectation.show { display:block; }
+.expectation h5 { margin-bottom:0.35rem; color:#14532d; font-size:0.86rem; }
+.choice-list { display:flex; flex-direction:column; gap:0.45rem; margin:0.7rem 0; }
+.choice { display:flex; align-items:flex-start; gap:0.6rem; padding:0.72rem; border:2px solid #cbd2d9; border-radius:6px; cursor:pointer; font-size:0.9rem; transition: all .15s; background:#fff; }
+.choice input { width:auto; margin-top:2px; flex-shrink:0; }
+.choice.selected-ok { border-color:#16a34a; background:#f0fdf4; }
+.choice.selected-warn { border-color:#dc2626; background:#fef2f2; }
+.choice.correct-hint { border-color:#16a34a; background:#f0fdf4; }
+.oar-grid { display:grid; grid-template-columns: 1.15fr 0.7fr 1.65fr; gap:0.45rem; align-items:start; }
+.oar-grid .head { background:#f0f4f8; color:#52606d; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; padding:0.55rem; border:1px solid #e3e7eb; }
+.oar-grid .cell { padding:0.45rem; border:1px solid #e3e7eb; background:#fff; min-height:64px; }
+.oar-grid .structure { font-weight:700; color:#1f2933; font-size:0.88rem; }
+.word-hint { font-size:0.74rem; color:#7b8794; margin-top:0.25rem; }
+.word-hint.bad { color:#dc2626; font-weight:600; }
+.source-box { background:#f8fafc; border:1px solid #cbd2d9; border-radius:8px; padding:1rem; font-size:0.84rem; color:#52606d; }
+.source-box ul { padding-left:1.1rem; }
+.path-card { background:#fff; border:1px solid #cbd2d9; border-radius:8px; padding:1rem; }
+.path-card h3 { color:#1f2933; font-size:1rem; margin-bottom:0.45rem; }
+.role-table input[type="text"] { min-height:38px; }
+.compact-list li { margin-bottom:0.4rem; }
+.bonus-tag { background:#ede9fe; color:#5b21b6; }
+@media (max-width: 760px) { .oar-grid { grid-template-columns:1fr; } .oar-grid .head { display:none; } .oar-grid .cell { min-height:auto; } }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="header-title">Mission Prostata // PLCT-Kompetenzwerkstatt V5 · TESTVERSION</div>
+      <div class="header-sub">Rotationsfähige Lernumgebung · 3. Lehrjahr · HTML-Eigenarbeit parallel zur PLCT-Praxisstation · Erwartungshorizonte gesperrt</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="tool-btn" id="teacherToggle" onclick="toggleTeacherMode()">Dozentenmodus</button>
+    <button class="tool-btn" onclick="exportReport()">Export / Drucken</button>
+    <button class="tool-btn reset-btn" onclick="resetWorkshop()">Zurücksetzen</button>
+    <div class="progress-wrap">
+      <span class="progress-label" id="progressLabel">0 / 10</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Missionen</div>
+    <div class="sidebar-note"><strong>Pflichtmissionen:</strong> M1–M10 (M8 bei Praxisaufruf öffnen).<br><strong>Optional:</strong> Bonus A und B für Plusniveau.</div>
+    <button class="mission-btn active" id="mb1" onclick="showMission(1)"><span class="m-num">1</span><span><div class="m-title">Start & Ablauf</div><div class="m-meta">zwei Spuren · Rotationsregel</div></span></button>
+    <button class="mission-btn" id="mb2" onclick="showMission(2)"><span class="m-num">2</span><span><div class="m-title">Becken-PLCT</div><div class="m-meta">Grundlogik · Setup</div></span></button>
+    <button class="mission-btn" id="mb3" onclick="showMission(3)"><span class="m-num">3</span><span><div class="m-title">Anatomie & OAR</div><div class="m-meta">Relevanz begründen</div></span></button>
+    <button class="mission-btn" id="mb4" onclick="showMission(4)"><span class="m-num">4</span><span><div class="m-title">Blase & Rektum</div><div class="m-meta">Reproduzierbarkeit</div></span></button>
+    <button class="mission-btn" id="mb5" onclick="showMission(5)"><span class="m-num">5</span><span><div class="m-title">Entscheidungslogik</div><div class="m-meta">anpassen · stoppen · eskalieren</div></span></button>
+    <button class="mission-btn" id="mb6" onclick="showMission(6)"><span class="m-num">6</span><span><div class="m-title">Dokumentation</div><div class="m-meta">Handover für Linac</div></span></button>
+    <button class="mission-btn" id="mb7" onclick="showMission(7)"><span class="m-num">7</span><span><div class="m-title">Ready for Practice</div><div class="m-meta">Startkarte · Rollen</div></span></button>
+    <button class="mission-btn practice" id="mb8" onclick="showMission(8)"><span class="m-num">⚑</span><span><div class="m-title">Praxisstation PLCT</div><div class="m-meta">jederzeit öffnen</div></span></button>
+    <button class="mission-btn" id="mb9" onclick="showMission(9)"><span class="m-num">9</span><span><div class="m-title">Tägliche Bestrahlung</div><div class="m-meta">CBCT · Fraktionsentscheidung</div></span></button>
+    <button class="mission-btn" id="mb10" onclick="showMission(10)"><span class="m-num">10</span><span><div class="m-title">Sicherung / Exit</div><div class="m-meta">Transfer · Reflexion</div></span></button>
+    <button class="mission-btn" id="mbbonusA" onclick="showMission('bonusA')"><span class="m-num">+</span><span><div class="m-title">Bonus A</div><div class="m-meta">Epidemiologie · Ätiologie</div></span></button>
+    <button class="mission-btn" id="mbbonusB" onclick="showMission('bonusB')"><span class="m-num">+</span><span><div class="m-title">Bonus B</div><div class="m-meta">Klinik · Diagnostik</div></span></button>
+  </aside>
+
+  <main class="main">
+
+<section class="mission-panel active" id="m1">
+  <div class="hero">
+    <h1>Heute gibt es zwei klare Spuren: Praxis und Kompetenztraining</h1>
+    <p>Diese HTML ist keine lineare Vorlesung und kein digitales Skript. Sie trainiert die Entscheidungen, die für ein Prostata-PLCT im Becken wirklich relevant sind: Vorbereitung, Reproduzierbarkeit, OAR-Denken, Dokumentation und Übergabe an den Linac.</p>
+    <div class="hero-grid">
+      <div class="hero-stat"><strong>Spur A</strong><span>PLCT-Praxisstation mit Herr M.</span></div>
+      <div class="hero-stat"><strong>Spur B</strong><span>HTML-Kompetenzwerkstatt</span></div>
+      <div class="hero-stat"><strong>Endprodukt</strong><span>Handover + Exit-Reflexion</span></div>
+      <div class="hero-stat"><strong>Prinzip</strong><span>Pflicht · Support · Plus</span></div>
+    </div>
+  </div>
+  <div class="mission-header">
+    <div class="mission-tag">Mission 01</div>
+    <h2 class="mission-title">Start & Ablauf</h2>
+    <p class="mission-subtitle">Orientierung vor Inhalt. Das verhindert Chaos in der Rotation.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 6–8 Min</div><div class="meta-pill">🎯 Output: Arbeitsvertrag</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Gemeinsames Dach</h3>
+      <p>Prostata-PLCT: Beckenlagerung, Blasenfüllung, Enddarmfüllung, OAR-Bezug, Reproduzierbarkeit und Dokumentation.</p>
+      <p>Die Praxisstation nutzt den konkreten Fall Herr M. Die HTML trainiert das Denken hinter dieser Handlung.</p>
+    </div>
+    <div class="card">
+      <h3>Was heute nicht passieren soll</h3>
+      <ul class="compact-list">
+        <li>kein vollständiger Onkologie-Unterricht</li>
+        <li>kein blindes Nachstellen einer Demo</li>
+        <li>kein „Wir scannen halt mal“-Denken</li>
+        <li>kein sofort sichtbarer Erwartungshorizont vor eigener Antwort</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout"><strong>Rotationsregel:</strong> Mission 8 ist immer gültig. Wer zuerst an den PLCT geht, öffnet Mission 8 direkt. Wer später geht, arbeitet bis zum Aufruf in den Kompetenzmissionen weiter.</div>
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Arbeitsvertrag bestätigen</h4><span class="output-tag">Verbindlichkeit</span></div>
+    <ul class="checkbox-list">
+      <li><input type="checkbox" id="m1_c1" data-required="true" data-label="M1 – Praxisstation jederzeit"><label for="m1_c1">Ich weiß: Mission 8 ist die Praxisstation und kann jederzeit geöffnet werden.</label></li>
+      <li><input type="checkbox" id="m1_c2" data-required="true" data-label="M1 – Unterbrechbarkeit"><label for="m1_c2">Ich weiß: Die HTML darf unterbrochen und später fortgesetzt werden.</label></li>
+      <li><input type="checkbox" id="m1_c3" data-required="true" data-label="M1 – Handover als Kernprodukt"><label for="m1_c3">Ich weiß: Am Ende brauche ich einen fachlich tragfähigen Handover-Satz.</label></li>
+    </ul>
+  </div>
+  <div class="task">
+    <div class="label-line"><h4>Persönlicher Lernfokus</h4><span class="output-tag">Reflexion</span></div>
+    <p>Notiere einen konkreten Punkt, auf den du heute besonders achten willst.</p>
+    <textarea id="m1_focus" data-required="true" data-min-words="8" data-label="M1 – Persönlicher Lernfokus" placeholder="Ich möchte heute besonders darauf achten, wie Blase und Rektum das PLCT-Setting beeinflussen."></textarea>
+    <div class="word-hint">Mindestens 8 Wörter.</div>
+    <div class="teacher-note"><strong>Dozentenhinweis:</strong> Lass 1–2 Beispiele laut nennen. So wird aus der HTML kein Klickmedium, sondern ein verbindlicher Arbeitsauftrag.</div>
+  </div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(1,2)">Mission abschließen →</button><button class="btn btn-secondary" onclick="showMission(8)">Direkt zur Praxisstation</button></div>
+  <div class="inline-status" id="status1"></div>
+</section>
+
+<section class="mission-panel" id="m2">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 02</div>
+    <h2 class="mission-title">Becken-PLCT-Grundlogik</h2>
+    <p class="mission-subtitle">Du brauchst eine stabile Standardlogik. Aber beim Prostata-Ca. reicht Lagerung allein nicht: Blase und Rektum entscheiden mit über Planbarkeit.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: Setup-Kernpunkte</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Standardlogik</h3>
+      <ul>
+        <li>Rückenlage, achsgerechtes Becken</li>
+        <li>Arme auf Brust oder außerhalb des Scanbereichs</li>
+        <li>Beinlagerung reproduzierbar, z. B. Bluebag/Vakuumkissen</li>
+        <li>Kopf- und Beinposition dokumentierbar</li>
+        <li>Blase geplant gefüllt, Rektum möglichst leer bzw. reproduzierbar</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Kritischer Satz</h3>
+      <p><strong>Das Prostata-PLCT ist kein reines Lagerungsproblem.</strong></p>
+      <p>Eine perfekte Rückenlage nützt wenig, wenn Blase oder Rektum nicht zum geplanten Referenzzustand passen.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Bildanker</h3>
+    <div class="img-row">
+      <figure class="img-figure"><img src="../../media/images/eigene/prostata/pca-anatomie-zielgebiet.jpg" alt="Anatomie der Prostata mit Zielgebiet und umgebenden Strukturen" loading="lazy"><figcaption class="img-caption">Prostata, Blase, Rektum und Zielgebiet</figcaption></figure>
+      <figure class="img-figure"><img src="../../media/images/eigene/prostata/lymphknoten-pca.jpg" alt="Lymphknotenabflusswege beim Prostatakarzinom" loading="lazy"><figcaption class="img-caption">Lymphabfluss / mögliche Erweiterung des Zielvolumens</figcaption></figure>
+    </div>
+  </div>
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: drei sichtbare Qualitätskriterien</h4><span class="output-tag">Praxisanker</span></div>
+    <p>Nenne drei Dinge, die du am PLCT sichtbar oder gezielt prüfbar bewerten kannst, bevor du das Setting akzeptierst.</p>
+    <textarea id="m2_qk" data-required="true" data-min-words="18" data-label="M2 – Drei sichtbare Qualitätskriterien"></textarea>
+    <div class="support-box"><button class="toggle" onclick="toggleBox('m2_help')">Support öffnen <span>Denke nicht nur an Lagerung</span></button><div class="toggle-content" id="m2_help"><ul><li>Beckenachse und Rotation</li><li>Blasenfüllung und Trinkprotokoll</li><li>Rektumfüllung / Gas / Stuhl</li><li>Hilfsmittel reproduzierbar und dokumentierbar</li><li>Referenzmarkierung plausibel</li></ul></div></div>
+  </div>
+  <div class="task" id="m2_decision_scope">
+    <div class="label-line"><h4>Entscheidung: Was ist fachlich besser?</h4><span class="output-tag">Konsequenz</span></div>
+    <div class="choice-list">
+      <label class="choice" id="m2_choice_a"><input type="radio" name="m2_choice" value="a" onchange="revealChoice('m2','a')"><span><strong>A:</strong> Hauptsache der Patient liegt bequem; Blase und Rektum werden später am Linac korrigiert.</span></label>
+      <label class="choice" id="m2_choice_b"><input type="radio" name="m2_choice" value="b" onchange="revealChoice('m2','b')"><span><strong>B:</strong> Lagerung, Blase und Rektum müssen als gemeinsamer Referenzzustand geplant, geprüft und dokumentiert werden.</span></label>
+      <label class="choice" id="m2_choice_c"><input type="radio" name="m2_choice" value="c" onchange="revealChoice('m2','c')"><span><strong>C:</strong> Die Bestrahlungsplanung kann Füllungsabweichungen vollständig kompensieren.</span></label>
+    </div>
+    <div id="m2_feedback" style="display:none"></div>
+  </div>
+  <div class="callout green"><strong>Praxisanker:</strong> Wenn du Mission 8 öffnest, übertrage diese drei Qualitätskriterien direkt auf Herr M.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(1)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(2,3)">Mission abschließen →</button></div>
+  <div class="inline-status" id="status2"></div>
+</section>
+
+<section class="mission-panel" id="m3">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 03</div>
+    <h2 class="mission-title">Anatomie, OAR und Scanbereich</h2>
+    <p class="mission-subtitle">OAR sind keine Liste zum Auswendiglernen. Du musst einschätzen, was für Zielvolumen, Planung und spätere CBCT-Beurteilung wirklich relevant ist.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: OAR- und Scanbereichslogik</div></div>
+  </div>
+  <div class="card">
+    <h3>Arbeitslogik</h3>
+    <p>Erst selbst einschätzen, dann vergleichen. Wähle bei jeder Struktur, ob sie für ein Prostata-PLCT relevant oder eher weniger relevant ist. Begründe jede Auswahl in mindestens einem vollständigen Satz.</p>
+  </div>
+    <div class="card">
+      <h3>Räumliche Orientierung</h3>
+      <div class="img-row">
+        <figure class="img-figure"><img src="../../media/images/eigene/prostata/pca-anatomie-zielgebiet.jpg" alt="Prostata mit Zielgebiet und OAR" loading="lazy"><figcaption class="img-caption">Prostata, Blase, Rektum und Zielgebiet</figcaption></figure>
+        <figure class="img-figure"><img src="../../media/images/eigene/prostata/lymphknoten-pca.jpg" alt="Lymphabfluss beim Prostatakarzinom" loading="lazy"><figcaption class="img-caption">Lymphabfluss – Erweiterung des Zielvolumens</figcaption></figure>
+      </div>
+    </div>
+  <div class="task" id="m3_oar_scope">
+    <div class="label-line"><h4>Pflichtauftrag: OAR einschätzen und begründen</h4><span class="output-tag">Fachlogik</span></div>
+    <div class="oar-grid">
+      <div class="head">Struktur</div><div class="head">Einschätzung</div><div class="head">Begründung – mindestens 8 Wörter</div>
+      <div class="cell"><span class="structure">Rektum</span></div><div class="cell"><select id="m3_rektum_sel" data-required="true" data-label="M3 – Rektum Einschätzung"><option value="">wählen</option><option>relevant</option><option>weniger relevant</option></select></div><div class="cell"><textarea id="m3_rektum_txt" class="short" data-required="true" data-min-words="8" data-label="M3 – Rektum Begründung"></textarea></div>
+      <div class="cell"><span class="structure">Blase</span></div><div class="cell"><select id="m3_blase_sel" data-required="true" data-label="M3 – Blase Einschätzung"><option value="">wählen</option><option>relevant</option><option>weniger relevant</option></select></div><div class="cell"><textarea id="m3_blase_txt" class="short" data-required="true" data-min-words="8" data-label="M3 – Blase Begründung"></textarea></div>
+      <div class="cell"><span class="structure">Femurköpfe bds.</span></div><div class="cell"><select id="m3_femur_sel" data-required="true" data-label="M3 – Femurköpfe Einschätzung"><option value="">wählen</option><option>relevant</option><option>weniger relevant</option></select></div><div class="cell"><textarea id="m3_femur_txt" class="short" data-required="true" data-min-words="8" data-label="M3 – Femurköpfe Begründung"></textarea></div>
+      <div class="cell"><span class="structure">Dünndarm</span></div><div class="cell"><select id="m3_duenn_sel" data-required="true" data-label="M3 – Dünndarm Einschätzung"><option value="">wählen</option><option>relevant</option><option>weniger relevant</option></select></div><div class="cell"><textarea id="m3_duenn_txt" class="short" data-required="true" data-min-words="8" data-label="M3 – Dünndarm Begründung"></textarea></div>
+      <div class="cell"><span class="structure">Urethra</span></div><div class="cell"><select id="m3_urethra_sel" data-required="true" data-label="M3 – Urethra Einschätzung"><option value="">wählen</option><option>relevant</option><option>weniger relevant</option></select></div><div class="cell"><textarea id="m3_urethra_txt" class="short" data-required="true" data-min-words="8" data-label="M3 – Urethra Begründung"></textarea></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m3_oar_scope','m3_expectation')">OAR-Einschätzung einreichen und Erwartungshorizont anzeigen</button></div>
+    <div class="expectation" id="m3_expectation"><h5>Erwartungshorizont</h5><p><strong>Rektum</strong> ist hoch relevant, weil es direkt dorsal an der Prostata liegt und bei voller Füllung die Prostata ventral verschieben kann. <strong>Blase</strong> ist relevant, weil Füllung und Dosisbelastung zusammenhängen. <strong>Femurköpfe</strong> sind als OAR planungsrelevant, aber meist weniger entscheidend als Rektum/Blase. <strong>Dünndarm</strong> ist vor allem bei erweitertem Becken-/Lymphknoten-Zielvolumen stärker relevant. <strong>Urethra</strong> ist besonders bei Boost-/Hochdosis-Konzepten relevant.</p></div>
+  </div>
+  <div class="task" id="m3_scan_scope">
+    <div class="label-line"><h4>Scanbereich: Was ist das Problem bei zu knappem CT?</h4><span class="output-tag">Transfer</span></div>
+    <textarea id="m3_scan" data-required="true" data-min-words="12" data-label="M3 – Scanbereich Problem"></textarea>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m3_scan_scope','m3_scan_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div>
+    <div class="expectation" id="m3_scan_expectation"><h5>Erwartungshorizont</h5><p>Ein zu knapper Datensatz kann Zielvolumen, Sicherheitsbereiche oder Risikoorgane unvollständig erfassen. Planung, Dosisbeurteilung und spätere Reproduzierbarkeit werden unsicher; im ungünstigen Fall muss das PLCT wiederholt werden.</p></div>
+  </div>
+  <div class="callout green"><strong>Praxisanker:</strong> Beschreibe in Mission 8 den Scanbereich verbal. Nicht millimetergenau, aber fachlich plausibel und nicht zu knapp.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(2)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(3,4)">Mission abschließen →</button></div>
+  <div class="inline-status" id="status3"></div>
+</section>
+
+<section class="mission-panel" id="m4">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 04</div>
+    <h2 class="mission-title">Blase, Rektum und Reproduzierbarkeit</h2>
+    <p class="mission-subtitle">Beim Prostata-Ca. ist die tägliche Anatomie nicht konstant. Genau deshalb ist der Referenzzustand aus dem PLCT so wichtig.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Vorbereitung mit Begründung</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><h3>Volle Blase</h3><ul><li>verlagert Blasenanteile aus dem Hochdosisbereich</li><li>unterstützt einen reproduzierbaren Beckenreferenzzustand</li><li>muss planbar und für den Patienten tolerierbar sein</li><li>zu volle Blase kann ebenfalls problematisch werden</li></ul></div>
+    <div class="card"><h3>Leerer / reproduzierbarer Enddarm</h3><ul><li>verhindert ventrale Prostataverschiebung durch Füllung oder Gas</li><li>reduziert systematische Abweichungen zwischen PLCT und Fraktionen</li><li>ist für CBCT-Vergleich und Matching zentral</li><li>nicht jeder Darmzustand lässt sich sofort „wegorganisieren“</li></ul></div>
+  </div>
+  <div class="task" id="m4_prepare_scope">
+    <div class="label-line"><h4>Pflichtauftrag: Patientenvorbereitung formulieren</h4><span class="output-tag">Kommunikation</span></div>
+    <p>Formuliere eine kurze patientengerechte Erklärung: Warum soll Herr M. mit voller Blase und möglichst leerem Enddarm zum PLCT und später zur Bestrahlung kommen?</p>
+    <textarea id="m4_patient" data-required="true" data-min-words="25" data-label="M4 – Patientengerechte Vorbereitung"></textarea>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m4_prepare_scope','m4_prepare_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div>
+    <div class="expectation" id="m4_prepare_expectation"><h5>Erwartungshorizont</h5><p>Eine starke Antwort erklärt verständlich: Die Organe im Becken liegen eng beieinander. Eine ähnlich gefüllte Blase und ein möglichst vergleichbarer Enddarm helfen, die Prostata jeden Tag in ähnlicher Lage zu haben und Blase/Rektum zu schonen. Keine Drohkulisse, sondern klare Mitarbeitserklärung.</p></div>
+  </div>
+  <div class="task" id="m4_cases_scope">
+    <div class="label-line"><h4>Mini-Fälle: Was prüfst du zuerst?</h4><span class="output-tag">Priorität</span></div>
+    <table class="table"><thead><tr><th>Situation</th><th>Deine erste Prüfung / Handlung</th></tr></thead><tbody>
+      <tr><td>Patient hat kaum getrunken.</td><td><textarea id="m4_case1" class="short" data-required="true" data-min-words="8" data-label="M4 – Fall kaum getrunken" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Patient hat starken Harndrang.</td><td><textarea id="m4_case2" class="short" data-required="true" data-min-words="8" data-label="M4 – Fall starker Harndrang" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Scout/CT zeigt stark gasgefülltes Rektum.</td><td><textarea id="m4_case3" class="short" data-required="true" data-min-words="8" data-label="M4 – Fall gasgefülltes Rektum" style="border:none; padding:0.3rem"></textarea></td></tr>
+    </tbody></table>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m4_cases_scope','m4_cases_expectation')">Antworten einreichen und Erwartungshorizont anzeigen</button></div>
+    <div class="expectation" id="m4_cases_expectation"><h5>Erwartungshorizont</h5><p>Kaum getrunken: Trink-/Wartekonzept prüfen, nicht blind scannen. Starker Harndrang: Toleranz und Reproduzierbarkeit kritisch prüfen; ggf. kurze Entlastung und Neuaufbau des Trinkschemas. Gasgefülltes Rektum: nicht einfach akzeptieren; Befund erkennen, Rücksprache/erneute Entscheidung einleiten und dokumentieren.</p></div>
+  </div>
+  <div class="callout orange"><strong>Kritischer Punkt:</strong> „Voll“ und „leer“ sind keine moralischen Kategorien. Entscheidend ist, ob der Zustand planbar, tolerierbar, dokumentiert und später reproduzierbar ist.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(3)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(4,5)">Mission abschließen →</button></div>
+  <div class="inline-status" id="status4"></div>
+</section>
+
+<section class="mission-panel" id="m5">
+  <div class="mission-header">
+    <div class="mission-tag">Mission 05</div>
+    <h2 class="mission-title">Entscheidungslogik: anpassen, stoppen, eskalieren</h2>
+    <p class="mission-subtitle">Eine gute MTR-Entscheidung ist nicht nur „richtig“, sondern priorisiert Planbarkeit, Patientensicherheit und Dokumentation.</p>
+    <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Ampelentscheidung</div></div>
+  </div>
+  <div class="card">
+    <h3>Ampelprinzip</h3>
+    <table class="table"><thead><tr><th>Ampel</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+      <tr><td><strong>Grün</strong></td><td>MTR kann zunächst selbst handeln und prüfen.</td><td>Patient trinkt nach, Lagerung wird ruhig neu aufgebaut.</td></tr>
+      <tr><td><strong>Gelb</strong></td><td>kritisch beobachten, Alternative prüfen, Rücksprache vorbereiten.</td><td>Blase deutlich zu voll, Patient kann Zustand nicht halten.</td></tr>
+      <tr><td><strong>Rot</strong></td><td>nicht einfach fortsetzen; Klärung/Rücksprache nötig.</td><td>Rektum stark abweichend, Prostata deutlich verschoben.</td></tr>
+    </tbody></table>
+  </div>
+  <div class="card">
+    <h3>PLCT-Video – Entscheidungssituation</h3>
+    <div class="callout orange"><strong>Situation Video 1:</strong> Erster PLCT-Versuch. Der Enddarm wird nach dem Scan als zu voll bewertet. Der Scan ist fraglich verwertbar.</div>
+    <div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/1.PLCT_PCA_01.mp4" type="video/mp4">Video nicht verfügbar – Datei lokal prüfen.</video><div class="video-label">PLCT Video 1 – erster Versuch: Enddarm kritisch</div></div>
+  </div>
+  <div class="task" id="m5_plct_scope">
+    <div class="label-line"><h4>Entscheidung 1: Enddarm im PLCT kritisch</h4><span class="output-tag">Konsequenz</span></div>
+    <div class="choice-list">
+      <label class="choice" id="m5_choice_a"><input type="radio" name="m5_choice" value="a" onchange="revealChoice('m5','a')"><span><strong>A:</strong> Scan belassen. Wenn der Patient immer so liegt, ist das automatisch reproduzierbar.</span></label>
+      <label class="choice" id="m5_choice_b"><input type="radio" name="m5_choice" value="b" onchange="revealChoice('m5','b')"><span><strong>B:</strong> Patient auf Toilette schicken und ohne weitere Klärung sofort neu scannen.</span></label>
+      <label class="choice" id="m5_choice_c"><input type="radio" name="m5_choice" value="c" onchange="revealChoice('m5','c')"><span><strong>C:</strong> Befund erkennen, nicht selbst endgültig freigeben, Rücksprache/Entscheidung einleiten und Vorgehen dokumentieren.</span></label>
+    </div>
+    <div id="m5_feedback" style="display:none"></div>
+    <textarea id="m5_decision_reason" data-required="true" data-min-words="12" data-label="M5 – Entscheidung Enddarm Begründung" placeholder="Ich würde ..., weil ..."></textarea>
+  </div>
+  <div id="m5_video2" style="display:none">
+    <div class="card">
+      <div class="callout orange"><strong>Situation Video 2:</strong> Zweiter Versuch. Es zeigt sich wenig Verbesserung. Die ärztliche Entscheidung kann sein, den Zustand als patientenspezifisch reproduzierbaren Referenzzustand zu akzeptieren – aber das ist nicht die automatische MTR-Freigabe.</div>
+      <div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/2.PLCT_PCA_01.mp4" type="video/mp4">Video nicht verfügbar – Datei lokal prüfen.</video><div class="video-label">PLCT Video 2 – zweiter Versuch / ärztliche Abwägung</div></div>
+    </div>
+  </div>
+  <div class="task" id="m5_ampel_scope">
+    <div class="label-line"><h4>Pflichtauftrag: eigene Ampelentscheidung</h4><span class="output-tag">Transfer</span></div>
+    <p>Ordne diese Situation einer Ampel zu und begründe: „Der Patient kommt zur Fraktion 12. Das CBCT zeigt einen deutlich volleren Enddarm als im PLCT und die Prostata ist sichtbar nach ventral verschoben.“</p>
+    <textarea id="m5_ampel" data-required="true" data-min-words="20" data-label="M5 – Ampelentscheidung CBCT"></textarea>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m5_ampel_scope','m5_ampel_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div>
+    <div class="expectation" id="m5_ampel_expectation"><h5>Erwartungshorizont</h5><p>Mindestens Gelb bis Rot, je nach Ausmaß. Nicht einfach bestrahlen. Begründung: Enddarmfüllung verändert die Prostataposition, Tischkorrektur allein löst das Organfüllungsproblem nicht sicher. Rücksprache/erneute Beurteilung, ggf. Darmoptimierung und erneutes CBCT sind fachlich plausibel.</p></div>
+  </div>
+  <div class="callout green"><strong>Praxisanker:</strong> In Mission 8 gilt: Nicht nur lagern, sondern laut begründen, wann das Setting akzeptiert oder neu bewertet werden muss.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(4)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(5,6)">Mission abschließen →</button></div>
+  <div class="inline-status" id="status5"></div>
+</section>
+
+<section class="mission-panel" id="m6">
+  <div class="mission-header"><div class="mission-tag">Mission 06</div><h2 class="mission-title">Dokumentation und Handover</h2><p class="mission-subtitle">Eine gute PLCT-Handlung ist erst vollständig, wenn sie für das Linac-Team nachvollziehbar dokumentiert ist.</p><div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Handover-Satz</div></div></div>
+  <div class="grid-2">
+    <div class="card"><h3>Schlecht</h3><p>„Prostata-CT gemacht. Blase voll. Rektum okay.“</p><p><strong>Problem:</strong> keine konkrete Lagerung, keine Füllungsbewertung, keine Abweichung, keine Reproduzierbarkeitsinformation.</p></div>
+    <div class="card"><h3>Gut</h3><p>„Prostata-PLCT in Rückenlage mit Bluebag, Arme auf Brust. Blase nach Trinkschema gefüllt, Enddarm nach Beurteilung akzeptabel/reproduzierbar. Referenzmarkierung plausibel, Hinweis für CBCT: Füllstände mit PLCT vergleichen.“</p></div>
+  </div>
+  <div class="task">
+    <div class="label-line"><h4>Pflichtauftrag: Dokumentationsbausteine</h4><span class="output-tag">Handover</span></div>
+    <table class="table"><thead><tr><th>Baustein</th><th>deine Formulierung</th></tr></thead><tbody>
+      <tr><td>Lagerung / Hilfsmittel</td><td><textarea id="m6_doc1" class="short" data-required="true" data-min-words="8" data-label="M6 – Lagerung/Hilfsmittel" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Blasenstatus</td><td><textarea id="m6_doc2" class="short" data-required="true" data-min-words="8" data-label="M6 – Blasenstatus" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Rektumstatus</td><td><textarea id="m6_doc3" class="short" data-required="true" data-min-words="8" data-label="M6 – Rektumstatus" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Abweichung / Rücksprache</td><td><textarea id="m6_doc4" class="short" data-required="true" data-min-words="8" data-label="M6 – Abweichung/Rücksprache" style="border:none; padding:0.3rem"></textarea></td></tr>
+      <tr><td>Hinweis für Ersteinstellung</td><td><textarea id="m6_doc5" class="short" data-required="true" data-min-words="8" data-label="M6 – Hinweis Ersteinstellung" style="border:none; padding:0.3rem"></textarea></td></tr>
+    </tbody></table>
+  </div>
+  <div class="task" id="m6_handover_scope"><div class="label-line"><h4>Pflichtauftrag: finaler Handover-Satz</h4><span class="output-tag">Abgabeprodukt</span></div><textarea id="m6_handover" data-required="true" data-min-words="25" data-label="M6 – Finaler Handover-Satz"></textarea><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m6_handover_scope','m6_handover_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="m6_handover_expectation"><h5>Erwartungshorizont</h5><p>Ein guter Handover-Satz nennt Lagerung, Hilfsmittel, Blasen-/Rektumstatus, Besonderheit/Abweichung, Reproduzierbarkeit, Rücksprache ja/nein und einen konkreten Hinweis für Ersteinstellung oder tägliches CBCT.</p></div><div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Mission ist das wichtigste Kontrollfenster der Eigenarbeitsphase. Anhand des Handover-Satzes sieht man, ob Handlung, Entscheidung und Dokumentation verbunden wurden.</div></div>
+  <div class="callout green"><strong>Praxisanker:</strong> Nach Mission 8 sollte dieser Handover-Satz mit den realen Beobachtungen aus der Praxisstation abgeglichen werden.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(5)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(6,7)">Mission abschließen →</button></div><div class="inline-status" id="status6"></div>
+</section>
+
+<section class="mission-panel" id="m7">
+  <div class="mission-header"><div class="mission-tag">Mission 07</div><h2 class="mission-title">Ready for Practice – Startkarte vor oder nach der PLCT-Station</h2><p class="mission-subtitle">Diese Mission ist keine zusätzliche Theorieaufgabe. Sie verhindert, dass ihr beim Wechsel zwischen HTML und PLCT die Orientierung verliert.</p><div class="meta-row"><div class="meta-pill">⏱ 5–8 Min</div><div class="meta-pill">🎯 Output: Praxisstart- oder Rückkehrplan</div></div></div>
+  <div class="callout"><strong>Zweck:</strong> Wenn ihr noch nicht am PLCT wart, baut ihr hier euren Startplan. Wenn ihr bereits am PLCT wart, nutzt ihr dieselben Felder als Rückkehrcheck: Was habt ihr praktisch gemacht, was müsst ihr fachlich sichern, was muss dokumentiert werden?</div>
+  <div class="task"><div class="label-line"><h4>Pflichtauftrag: Praxisstart in 3 × 3</h4><span class="output-tag">Praxisanker</span></div><p>Fülle die Felder so aus, dass eine andere Gruppe daraus erkennen könnte, worauf am PLCT besonders zu achten ist.</p><table class="table"><thead><tr><th>Bereich</th><th>3 konkrete Punkte</th></tr></thead><tbody><tr><td>Patientenfragen</td><td><textarea id="m7_start1" class="short" data-required="true" data-min-words="10" data-label="M7 – Patientenfragen" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Lagerungspunkte</td><td><textarea id="m7_start2" class="short" data-required="true" data-min-words="10" data-label="M7 – Lagerungspunkte" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Dokumentationshinweise</td><td><textarea id="m7_start3" class="short" data-required="true" data-min-words="10" data-label="M7 – Dokumentationshinweise" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table></div>
+  <div class="task"><div class="label-line"><h4>Rollen im Dreierteam planen</h4><span class="output-tag">Team</span></div><p>Die Rollen müssen nicht perfekt sein, aber sie verhindern, dass alle gleichzeitig „irgendwas“ machen.</p><table class="table role-table"><thead><tr><th>Rolle</th><th>Name / konkrete Aufgabe</th></tr></thead><tbody><tr><td>MTR A – Kommunikation</td><td><input type="text" id="m7_role1" data-label="M7 – Rolle Kommunikation"></td></tr><tr><td>MTR B – Lagerung / Technik</td><td><input type="text" id="m7_role2" data-label="M7 – Rolle Lagerung"></td></tr><tr><td>MTR C – Beobachtung / Doku</td><td><input type="text" id="m7_role3" data-label="M7 – Rolle Beobachtung"></td></tr></tbody></table><div class="teacher-note"><strong>Dozentenhinweis:</strong> Mission 7 ist der organisatorische Puffer gegen Rotationschaos. Sie ersetzt keine Praxis, sondern stabilisiert den Übergang zwischen eigenständiger HTML-Arbeit und PLCT-Handlung.</div></div>
+  <div class="callout orange"><strong>Wenn eure Gruppe jetzt aufgerufen wird:</strong> Nicht hektisch suchen. Direkt Mission 8 öffnen. Wenn ihr schon an der Praxisstation wart, nutzt Mission 7 als fachliche Nachsortierung.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(6)">← Zurück</button><button class="btn btn-primary" onclick="completeMission(7,8)">Mission abschließen →</button><button class="btn btn-secondary" onclick="showMission(8)">Jetzt zur Praxisstation</button></div><div class="inline-status" id="status7"></div>
+</section>
+
+<section class="mission-panel" id="m8">
+  <div class="mission-header"><div class="mission-tag practice">Praxisstation</div><h2 class="mission-title">PLCT-Praxisstation: Herr M.</h2><p class="mission-subtitle">Diese Mission funktioniert unabhängig davon, wie weit ihr in der HTML seid. Sie strukturiert eure praktische Handlung am PLCT.</p><div class="meta-row"><div class="meta-pill">⚑ ca. 30 Min pro Gruppe</div><div class="meta-pill">👥 3er-Rotation</div><div class="meta-pill">🎯 Output: Praxisprotokoll</div></div></div>
+  <div class="callout orange"><strong>Sofortstart für Gruppe 1:</strong> Wenn ihr direkt als erste Gruppe ans PLCT geht, lest nur diese Fallkarte, verteilt Rollen und beginnt. Die Kompetenzmissionen holt ihr danach nach.</div>
+  <div class="card"><h3>Fallkarte Herr M.</h3><div class="case-grid"><div class="case-item"><div class="case-item-label">Patient</div><div class="case-item-value">Herr M., 72 Jahre</div></div><div class="case-item"><div class="case-item-label">Indikation</div><div class="case-item-value">C61 – Prostatakarzinom</div></div><div class="case-item"><div class="case-item-label">Befund</div><div class="case-item-value">Adenokarzinom, Gleason 7b (4+3), iPSA 18,4 ng/ml</div></div><div class="case-item"><div class="case-item-label">Stadium</div><div class="case-item-value">cT2b · cN0 · cM0 · ungünstiges Intermediate Risk</div></div><div class="case-item"><div class="case-item-label">Begleiterkrankungen</div><div class="case-item-value">arterielle Hypertonie, Diabetes mellitus Typ 2, Nykturie bei BPH</div></div><div class="case-item"><div class="case-item-label">Situation</div><div class="case-item-value">Planungs-CT Becken / Prostata, kurative definitive RT</div></div><div class="case-item"><div class="case-item-label">Lagerung</div><div class="case-item-value">Rückenlage, Arme auf Brust, Bluebag/Vakuumkissen, Referenzmarkierung</div></div><div class="case-item"><div class="case-item-label">Vorbereitung</div><div class="case-item-value">Blase geplant gefüllt, Enddarm möglichst leer bzw. reproduzierbar</div></div></div></div>
+  <div class="grid-3"><div class="path-card"><h3>MTR A – Kommunikation</h3><p>fragt Trinkstatus, Harndrang, Darmentleerung, Beschwerden und Liegetoleranz ab.</p></div><div class="path-card"><h3>MTR B – Lagerung / Technik</h3><p>wählt Hilfsmittel, richtet Becken achsgerecht aus und prüft Referenzmarkierung.</p></div><div class="path-card"><h3>MTR C – Beobachtung / Doku</h3><p>prüft Füllstände, Scanbereich, Reproduzierbarkeit, Abweichungen und formuliert Handover.</p></div></div>
+  <div class="card"><h3>Zweck des Beobachtungsbogens light</h3><p>Er ist keine Benotungsliste und kein zusätzliches Arbeitsblatt. Er zwingt Rolle C dazu, die praktische Handlung fachlich zu beobachten: Was war sicher? Was war kritisch? Was müsste dokumentiert oder rückgesprochen werden? Dadurch entsteht Peer-Feedback, auch wenn der Vertretungsdozent gerade am Gerät gebunden ist.</p></div>
+  <div class="task"><div class="label-line"><h4>Beobachtungsbogen light</h4><span class="output-tag">während der Praxis</span></div><ul class="checkbox-list"><li><input type="checkbox" id="m8_b1" data-label="M8 – Patientenvorbereitung abgefragt"><label for="m8_b1">Patientenvorbereitung wurde aktiv abgefragt.</label></li><li><input type="checkbox" id="m8_b2" data-label="M8 – Blasenstatus geprüft"><label for="m8_b2">Blasenstatus wurde geprüft oder plausibel erfragt.</label></li><li><input type="checkbox" id="m8_b3" data-label="M8 – Rektumstatus berücksichtigt"><label for="m8_b3">Rektumstatus wurde berücksichtigt.</label></li><li><input type="checkbox" id="m8_b4" data-label="M8 – Lagerung begründet"><label for="m8_b4">Lagerungshilfen wurden begründet ausgewählt.</label></li><li><input type="checkbox" id="m8_b5" data-label="M8 – Becken achsgerecht"><label for="m8_b5">Becken lag achsgerecht und nicht offensichtlich rotiert.</label></li><li><input type="checkbox" id="m8_b6" data-label="M8 – Scanbereich verbal"><label for="m8_b6">Scanbereich wurde verbal plausibel beschrieben.</label></li><li><input type="checkbox" id="m8_b7" data-label="M8 – Fachkommunikation"><label for="m8_b7">Im Team wurde fachlich gesprochen, nicht nur „gemacht“.</label></li></ul><div class="self-check"><strong>Regel:</strong> Nutze die Haken nicht mechanisch. Ein Haken bedeutet: Die Gruppe kann den Punkt kurz fachlich begründen.</div></div>
+  <div class="task"><div class="label-line"><h4>Praxisrückmeldung nach der Rotation</h4><span class="output-tag">Reflexion</span></div><textarea id="m8_reflex" data-required="true" data-min-words="15" data-label="M8 – Praxisrückmeldung" placeholder="Was war fachlich sicher? Was war kritisch? Was muss dokumentiert werden?"></textarea><div class="teacher-note"><strong>Dozentenhinweis:</strong> Vertretung konzentriert sich hier auf die praktische Handlung. Die HTML übernimmt Struktur, Beobachtung und Kurzreflexion. Der Beobachtungsbogen dient der Peer-Rückmeldung, nicht der formalen Bewertung.</div></div>
+  <div class="callout green"><strong>Praxisanker:</strong> Praxis ohne Rückmeldung bleibt Erlebnis. Erst die kurze Reflexion macht daraus Kompetenzaufbau.</div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(8,9)">Praxisstation abschließen →</button><button class="btn btn-secondary" onclick="showMission(7)">Zurück zur HTML-Spur</button></div><div class="inline-status" id="status8"></div>
+</section>
+
+<section class="mission-panel" id="m9">
+  <div class="mission-header"><div class="mission-tag">Mission 09</div><h2 class="mission-title">Tägliche Bestrahlung – CBCT und Fraktionsentscheidung</h2><p class="mission-subtitle">Diese Station ist bewusst Pflicht. Beim Prostata-Ca. entscheidet die tägliche Reproduzierbarkeit von Blase, Rektum und Prostataposition darüber, ob der Plan sicher auf den Patienten übertragen werden kann.</p><div class="meta-row"><div class="meta-pill">⏱ 12–15 Min</div><div class="meta-pill">🎯 Output: CBCT-Entscheidung Tag 4/5</div><div class="meta-pill">Pflichtstation</div></div></div>
+  <div class="callout"><strong>Warum Pflicht?</strong> Die tägliche Bestrahlung ist der eigentliche Realitätscheck des PLCT. Ein schönes Planungs-CT ist wertlos, wenn Füllstände und Prostataposition im Alltag nicht wiedererkannt, bewertet und bei Abweichung eskaliert werden.</div>
+  <div class="grid-2">
+    <div class="card"><h3>Was du im CBCT beurteilst</h3><ul><li>Vergleich der Blasenfüllung mit dem PLCT</li><li>Vergleich der Rektumfüllung / Gas / Stuhl mit dem PLCT</li><li>Lage der Prostata bzw. Goldmarker im Verhältnis zur Referenz</li><li>Entscheidung: bestrahlen, korrigieren, erneut scannen oder Rücksprache</li></ul></div>
+    <div class="card"><h3>Was du nicht tun sollst</h3><ul><li>nicht nur Knochen anschauen und Organfüllung ignorieren</li><li>nicht automatisch jeden Shift übernehmen</li><li>nicht bei deutlicher Rektumabweichung „einfach bestrahlen“</li><li>nicht Tischkorrektur mit Lösung des Organfüllungsproblems verwechseln</li></ul></div>
+  </div>
+  <div class="card"><h3>CBCT-Aufnahmen – Tag 4 und Tag 5</h3><p>Beurteile für jeden Tag: Sind Blase und Rektum mit dem PLCT vergleichbar? Ist die Prostataposition plausibel? Kann die RT durchgeführt werden?</p><h4>Tag 4</h4><div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/1.OBI_axial_PCA_01.mp4" type="video/mp4">Video nicht verfügbar.</video><div class="video-label">CBCT Tag 4 – axial: Blase, Rektum, Prostataposition</div></div><div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/1.OBI_Saggital_PCA_01.mp4" type="video/mp4">Video nicht verfügbar.</video><div class="video-label">CBCT Tag 4 – sagittal: Füllstände und ventral/dorsale Lagebeziehung</div></div><h4>Tag 5</h4><div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/2.OBI_axial_PCA_01.mp4" type="video/mp4">Video nicht verfügbar.</video><div class="video-label">CBCT Tag 5 – axial: Vergleich zur Referenz und zu Tag 4</div></div><div class="video-wrap"><video controls preload="none"><source src="../../media/Fallbeispiel%20_PCA_01/2.OBI_sagittal_PCA_01.mp4" type="video/mp4">Video nicht verfügbar.</video><div class="video-label">CBCT Tag 5 – sagittal: Rektumfüllung, Blasenfüllung, Prostataverschiebung</div></div></div>
+  <div class="task" id="m9_cbct_scope"><div class="label-line"><h4>Pflichtauftrag: CBCT-Entscheidung Tag 4 und Tag 5</h4><span class="output-tag">Bildanalyse</span></div><p>Formuliere für beide Tage jeweils: Befund – Vergleich zum PLCT – Entscheidung. Schreibe nicht nur „sieht gut aus“, sondern begründe anhand von Blase, Rektum und Prostataposition.</p><textarea id="m9_cbct" data-required="true" data-min-words="35" data-label="M9 – CBCT-Entscheidung Tag 4 und Tag 5" placeholder="Tag 4: ...
+Tag 5: ...
+Entscheidung: ..."></textarea><div class="word-hint">Mindestens 35 Wörter.</div><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m9_cbct_scope','m9_cbct_expectation')">CBCT-Analyse einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="m9_cbct_expectation"><h5>Erwartungshorizont</h5><p>Gute Antworten vergleichen Rektumfüllung, Blasenfüllung und Prostataposition mit dem PLCT. Wenn Füllstände und Zielstruktur reproduzierbar vergleichbar sind, ist die RT durchführbar. Bei deutlicher Abweichung, z. B. stark gefülltem Rektum mit ventraler Prostataverschiebung, ist Rücksprache und ggf. erneutes Vorgehen nötig.</p></div></div>
+  <div class="task" id="m9_scenario_scope"><div class="label-line"><h4>Pflichtauftrag: Störung in der täglichen RT</h4><span class="output-tag">klinische Entscheidung</span></div><p>Fraktion 14 bei Herr M.: Das CBCT zeigt einen deutlich volleren Enddarm als im PLCT. Die Prostata ist etwa 7–8 mm nach ventral verschoben. Was tust du als MTR – und warum?</p><textarea id="m9_scenario" data-required="true" data-min-words="25" data-label="M9 – Szenario tägliche RT: Rektum voll, Prostata ventral"></textarea><div class="word-hint">Mindestens 25 Wörter.</div><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m9_scenario_scope','m9_scenario_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="m9_scenario_expectation"><h5>Erwartungshorizont</h5><p>Die RT wird nicht automatisch gestartet. Die Abweichung liegt außerhalb eines üblichen Toleranzdenkens, das Organfüllungsproblem bleibt trotz Tischkorrektur bestehen. Fachlich korrekt: Situation erkennen, Behandlung stoppen, Rücksprache/ärztliche Entscheidung einleiten, ggf. Darm-/Blasenmanagement und erneutes CBCT, anschließend dokumentieren.</p></div></div>
+  <div class="callout green"><strong>Praxisanker:</strong> Die tägliche RT ist nicht nur „Patient rein, CBCT, Shift, Start“. Beim Prostata-Ca. ist die Beurteilung der Organfüllung ein zentraler Sicherheits- und OAR-Schutzschritt.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(8)">← Praxisstation PLCT</button><button class="btn btn-primary" onclick="completeMission(9,10)">Mission abschließen →</button></div><div class="inline-status" id="status9"></div>
+</section>
+
+<section class="mission-panel" id="m10">
+  <div class="mission-header"><div class="mission-tag">Mission 10</div><h2 class="mission-title">Sicherung / Exit light</h2><p class="mission-subtitle">Am Ende zählt nicht, wie viele Stationen geklickt wurden, sondern ob PLCT, tägliche Bestrahlung und klinische Entscheidung zusammen gedacht werden.</p><div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: Exit-Reflexion</div></div></div>
+  <div class="task"><div class="label-line"><h4>Drei Sicherungsfragen</h4><span class="output-tag">Kernwissen</span></div><table class="table"><thead><tr><th>Frage</th><th>deine Antwort</th></tr></thead><tbody><tr><td>Was ist die Standardlogik des Prostata-PLCT und der täglichen RT?</td><td><textarea id="m10_q1" class="short" data-required="true" data-min-words="10" data-label="M10 – Standardlogik" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Was kann diese Standardlogik im PLCT und im CBCT gefährden?</td><td><textarea id="m10_q2" class="short" data-required="true" data-min-words="10" data-label="M10 – Gefährdung Standardlogik" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Was muss bei deutlichen Abweichungen in der täglichen RT passieren?</td><td><textarea id="m10_q3" class="short" data-required="true" data-min-words="10" data-label="M10 – Umgang mit Abweichungen" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table></div>
+  <div class="task" id="m10_exit_scope"><div class="label-line"><h4>Exit light</h4><span class="output-tag">Abschlussprodukt</span></div><p>Was wäre im gesamten Prozess — PLCT bis tägliches CBCT — der kritischste Fehler gewesen und warum?</p><textarea id="m10_exit" data-required="true" data-min-words="20" data-label="M10 – Kritischster Fehler Prostata-PLCT/tägliche RT"></textarea><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('m10_exit_scope','m10_exit_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="m10_exit_expectation"><h5>Erwartungshorizont</h5><p>Gute Antworten nennen z. B. Blase/Rektum am PLCT nicht prüfen, einen nicht reproduzierbaren Referenzzustand akzeptieren, deutliche Organfüllungsabweichungen im CBCT ignorieren, Beckenrotation übersehen, nur Knochenmatching denken, Tischkorrektur mit Organfüllungsproblem verwechseln oder Abweichungen nicht dokumentieren bzw. nicht rücksprechen.</p></div></div>
+  <div class="task"><div class="label-line"><h4>Selbstbewertung</h4><span class="output-tag">Lernstand</span></div><ul class="checkbox-list"><li><input type="checkbox" id="m10_s1" data-label="M10 – kann Standardsetting erklären"><label for="m10_s1">Ich kann das Prostata-PLCT-Standardsetting erklären.</label></li><li><input type="checkbox" id="m10_s2" data-label="M10 – kann Blase/Rektum begründen"><label for="m10_s2">Ich kann erklären, warum Blase und Rektum am PLCT und im täglichen CBCT zentral sind.</label></li><li><input type="checkbox" id="m10_s3" data-label="M10 – kann Handover formulieren"><label for="m10_s3">Ich kann einen fachlich brauchbaren Handover- und CBCT-Entscheidungssatz formulieren.</label></li></ul></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(9)">← Tägliche Bestrahlung</button><button class="btn btn-success" onclick="completeMission(10,'complete')">Abschluss anzeigen →</button></div><div class="inline-status" id="status10"></div>
+</section>
+
+<section class="mission-panel" id="mbonusA">
+  <div class="mission-header"><div class="mission-tag bonus-tag">Bonus A</div><h2 class="mission-title">Zusatzstation: Epidemiologie, Ätiologie und Patientenkommunikation</h2><p class="mission-subtitle">Diese Station ist kein Lückenfüller. Sie ist eine kleine Recherche-Werkstatt: Du prüfst Quellen, leitest Kernaussagen ab und formulierst patientengerecht.</p><div class="meta-row"><div class="meta-pill">optional Plusniveau</div><div class="meta-pill">Recherche · Leitfragen · Patientenantwort</div></div></div>
+  <div class="callout orange"><strong>Arbeitsregel:</strong> Nutze mindestens zwei der verlinkten Quellen. Schreibe nicht ab, sondern übersetze die Informationen in MTR-taugliche Sprache.</div>
+  <div class="grid-2">
+    <div class="card"><h3>Quellenstart</h3><div class="wissen-block"><h5>Seriöse Recherchepfade</h5><ul><li><a href="https://www.krebsdaten.de/Krebs/DE/Content/Krebsarten/Prostatakrebs/prostatakrebs_node.html" target="_blank" rel="noopener">RKI/ZfKD: Krebsdaten Prostatakrebs</a></li><li><a href="https://www.krebsinformationsdienst.de/prostatakrebs" target="_blank" rel="noopener">DKFZ Krebsinformationsdienst: Prostatakrebs Überblick</a></li><li><a href="https://www.leitlinienprogramm-onkologie.de/leitlinien/prostatakarzinom" target="_blank" rel="noopener">S3-Leitlinie Prostatakarzinom</a></li><li><a href="https://www.meta-treff.de/news/prostatakarzinom-fur-patienten-prof-hilke-vorwerk" target="_blank" rel="noopener">Tumor Target Therapy / Prof. Hilke Vorwerk: Video- und Playlist-Hinweise</a></li></ul></div></div>
+    <div class="card"><h3>Recherchefokus</h3><div class="wissen-block"><h5>Worauf du achten sollst</h5><ul><li>Wie häufig ist Prostatakrebs im klinischen Alltag?</li><li>Welche Risikofaktoren sind gesichert, welche eher unspezifisch?</li><li>Warum ist Alter fachlich wichtig, aber kein Grund für stereotype Kommunikation?</li><li>Welche Informationen helfen dir bei patientengerechter Erklärung?</li></ul></div></div>
+  </div>
+  <div class="task" id="ba_fact_scope"><div class="label-line"><h4>Rechercheauftrag 1: Faktencheck statt Bauchgefühl</h4><span class="output-tag">Quellenarbeit</span></div><p>Trage zu jedem Punkt eine kurze, quellenbasierte Aussage ein. Keine langen Texte – aber fachlich belastbar.</p><table class="table"><thead><tr><th>Leitfrage</th><th>deine quellenbasierte Kurzantwort</th></tr></thead><tbody><tr><td>Häufigkeit / Altersbezug</td><td><textarea id="ba_fact1" class="short" data-required="true" data-min-words="10" data-label="Bonus A – Häufigkeit/Altersbezug" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Gesicherte Risikofaktoren</td><td><textarea id="ba_fact2" class="short" data-required="true" data-min-words="10" data-label="Bonus A – Risikofaktoren" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Was ist für MTR-Kommunikation relevant?</td><td><textarea id="ba_fact3" class="short" data-required="true" data-min-words="12" data-label="Bonus A – MTR-Kommunikationsrelevanz" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table><div class="word-hint">Jede Antwort: mindestens 10–12 Wörter.</div></div>
+  <div class="task" id="ba_patient_scope"><div class="label-line"><h4>Rechercheauftrag 2: Patientenfrage beantworten</h4><span class="output-tag">Kommunikation</span></div><p>Herr M. fragt beim PLCT: „Habe ich irgendetwas falsch gemacht, dass ich Prostatakrebs bekommen habe?“ Formuliere eine Antwort, die fachlich korrekt, entlastend und nicht bagatellisierend ist.</p><textarea id="ba_patient" data-required="true" data-min-words="35" data-label="Bonus A – Patientenantwort Schuldfrage"></textarea><div class="word-hint">Mindestens 35 Wörter.</div><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('ba_patient_scope','ba_patient_expectation')">Antwort einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="ba_patient_expectation"><h5>Erwartungshorizont</h5><p>Eine gute Antwort vermeidet Schuldzuweisung, nennt Alter und familiäre/genetische Faktoren als relevante Risikofaktoren, relativiert Lebensstil ohne ihn zu leugnen und verweist bei individuellen Ursachen-/Therapiefragen an Ärztin/Arzt. MTR-Aufgabe: beruhigen, verständlich erklären, keine ärztliche Beratung ersetzen.</p></div></div>
+  <div class="task" id="ba_ampel_scope"><div class="label-line"><h4>Rechercheauftrag 3: Aussagen prüfen</h4><span class="output-tag">Ampelcheck</span></div><p>Bewerte die Aussagen mit „tragfähig“, „verkürzt“ oder „problematisch“ und begründe jeweils kurz.</p><table class="table"><thead><tr><th>Aussage</th><th>Bewertung</th><th>Begründung</th></tr></thead><tbody><tr><td>„Prostatakrebs ist vor allem eine Erkrankung älterer Männer.“</td><td><select id="ba_ampel1_sel" data-required="true" data-label="Bonus A – Ampel Alter"><option value="">wählen</option><option>tragfähig</option><option>verkürzt</option><option>problematisch</option></select></td><td><textarea id="ba_ampel1_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus A – Begründung Alter" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>„Wenn der PSA-Wert hoch ist, hat der Patient sicher Krebs.“</td><td><select id="ba_ampel2_sel" data-required="true" data-label="Bonus A – Ampel PSA"><option value="">wählen</option><option>tragfähig</option><option>verkürzt</option><option>problematisch</option></select></td><td><textarea id="ba_ampel2_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus A – Begründung PSA" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>„Epidemiologie ist für die Lagerung egal, aber für Fallverständnis und Kommunikation nützlich.“</td><td><select id="ba_ampel3_sel" data-required="true" data-label="Bonus A – Ampel Epidemiologie"><option value="">wählen</option><option>tragfähig</option><option>verkürzt</option><option>problematisch</option></select></td><td><textarea id="ba_ampel3_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus A – Begründung Epidemiologie" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table></div>
+  <div class="source-box"><strong>Fachliche Orientierung:</strong> RKI/ZfKD Krebsdaten Deutschland; DKFZ Krebsinformationsdienst; S3-Leitlinie Prostatakarzinom; Tumor Target Therapy als videobasierte Vertiefung.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission(10)">← Zurück zur Sicherung</button><button class="btn btn-primary" onclick="completeBonus('bonusA','bonusB')">Bonus A abschließen →</button></div><div class="inline-status" id="statusbonusA"></div>
+</section>
+
+<section class="mission-panel" id="mbonusB">
+  <div class="mission-header"><div class="mission-tag bonus-tag">Bonus B</div><h2 class="mission-title">Zusatzstation: Klinik, Diagnostik und Therapiegespräch</h2><p class="mission-subtitle">Diese Station nutzt die Quellen nicht als Lesetext, sondern als Material für klinisches Denken: Symptome einordnen, Befundsprache übersetzen, Kommunikationsgrenzen erkennen.</p><div class="meta-row"><div class="meta-pill">optional Plusniveau</div><div class="meta-pill">Klinik · Diagnostik · Patientengespräch</div></div></div>
+  <div class="grid-2">
+    <div class="card"><h3>Recherchequellen</h3><div class="wissen-block"><h5>Nutze gezielt</h5><ul><li><a href="https://www.krebsinformationsdienst.de/prostatakrebs/symptome" target="_blank" rel="noopener">DKFZ: Symptome und Anzeichen</a></li><li><a href="https://www.krebsinformationsdienst.de/prostatakrebs/strahlentherapie" target="_blank" rel="noopener">DKFZ: Bestrahlung bei Prostatakrebs</a></li><li><a href="https://www.krebshilfe.de/informieren/ueber-krebs/krebsarten/prostatakrebs/" target="_blank" rel="noopener">Deutsche Krebshilfe: Prostatakrebs</a></li><li><a href="https://www.meta-treff.de/news/prostatakarzinom-fur-patienten-prof-hilke-vorwerk" target="_blank" rel="noopener">Tumor Target Therapy: Videoreihe Prostatakarzinom</a></li></ul></div></div>
+    <div class="card"><h3>Fallakte Herr M. – neu</h3><div class="case-grid"><div class="case-item"><div class="case-item-label">Alter</div><div class="case-item-value">72 Jahre</div></div><div class="case-item"><div class="case-item-label">Diagnose</div><div class="case-item-value">C61 – Prostatakarzinom</div></div><div class="case-item"><div class="case-item-label">Histologie</div><div class="case-item-value">Gleason 7b (4+3), ISUP 3</div></div><div class="case-item"><div class="case-item-label">PSA / TNM</div><div class="case-item-value">iPSA 18,4 ng/ml · cT2b cN0 cM0</div></div><div class="case-item"><div class="case-item-label">Begleiterkrankungen</div><div class="case-item-value">Hypertonie, Diabetes Typ 2, Nykturie bei BPH</div></div><div class="case-item"><div class="case-item-label">Therapie</div><div class="case-item-value">kurative definitive RT, VMAT/IGRT, ADT geplant</div></div></div></div>
+  </div>
+  <div class="task" id="bb_translate_scope"><div class="label-line"><h4>Rechercheauftrag 1: Vom Befund zum Arbeitsauftrag</h4><span class="output-tag">Praxisübersetzung</span></div><p><strong>Nicht akademisch zerlegen.</strong> Nutze die Quellen, um die Fallakte von Herr M. in einfache Arbeitsaussagen zu übersetzen: Was bedeutet das für Gespräch, PLCT-Vorbereitung und tägliche Bestrahlung?</p><div class="callout orange"><strong>Arbeitsregel:</strong> Du musst PSA, Gleason und TNM nicht vollständig klassifizieren. Entscheidend ist: Was folgt daraus für dein Denken als MTR?</div><table class="table"><thead><tr><th>Situation aus der Fallakte</th><th>Welche einfache Aussage passt?</th><th>Was bedeutet das praktisch für MTR?</th></tr></thead><tbody><tr><td><strong>Herr M. hat fast keine Beschwerden.</strong><br><span style="font-size:0.8rem;color:#7b8794">Er fragt: „Warum ist das dann überhaupt ernst?“</span></td><td><select id="bb_tr1_sel" data-required="true" data-label="Bonus B – Einordnung symptomarm"><option value="">wählen</option><option>Beschwerdearm kann trotzdem behandlungsbedürftig sein</option><option>Ohne Schmerzen ist keine Therapie nötig</option><option>Beschwerden sagen sicher, wie weit der Tumor ist</option></select></td><td><textarea id="bb_rel1" class="short" data-required="true" data-min-words="14" data-label="Bonus B – Praxisbedeutung symptomarm" style="border:none; padding:0.3rem" placeholder="Beispielrichtung: ruhig erklären, dass frühe Prostatatumoren wenig Beschwerden machen können; ärztliche Therapieentscheidung nicht selbst bewerten."></textarea></td></tr><tr><td><strong>PSA 18,4 + Gleason 7b + cT2b.</strong><br><span style="font-size:0.8rem;color:#7b8794">Die Fallakte wirkt nicht wie ein Niedrigrisiko-Zufallsbefund.</span></td><td><select id="bb_tr2_sel" data-required="true" data-label="Bonus B – Einordnung Risikoprofil"><option value="">wählen</option><option>Der Fall braucht eine ernsthafte kurative Therapieplanung</option><option>Die Werte sind für MTR völlig bedeutungslos</option><option>Der Patient ist automatisch palliativ</option></select></td><td><textarea id="bb_rel2" class="short" data-required="true" data-min-words="14" data-label="Bonus B – Praxisbedeutung Risikoprofil" style="border:none; padding:0.3rem" placeholder="Beispielrichtung: sorgfältiges PLCT, reproduzierbare Organzustände, tägliche IGRT ernst nehmen, keine Prognoseaussagen machen."></textarea></td></tr><tr><td><strong>BPH/Nykturie + geplante volle Blase.</strong><br><span style="font-size:0.8rem;color:#7b8794">Der Patient muss für PLCT und RT kooperieren können.</span></td><td><select id="bb_tr3_sel" data-required="true" data-label="Bonus B – Einordnung Blasenproblem"><option value="">wählen</option><option>Die Blasenvorbereitung muss realistisch und patientengerecht angeleitet werden</option><option>Nykturie ist für das PLCT egal</option><option>Der Patient soll einfach möglichst viel trinken</option></select></td><td><textarea id="bb_rel3" class="short" data-required="true" data-min-words="14" data-label="Bonus B – Praxisbedeutung Blasenvorbereitung" style="border:none; padding:0.3rem" placeholder="Beispielrichtung: Trinkmenge erklären, Harndrang ernst nehmen, nicht beschämen, bei Problemen rückmelden."></textarea></td></tr></tbody></table><div class="word-hint">Je Praxisbegründung mindestens 14 Wörter. Ziel: verständliche Handlungsableitung, keine Lehrbuchdefinition.</div><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('bb_translate_scope','bb_translate_expectation')">Arbeitsauftrag einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="bb_translate_expectation"><h5>Erwartungshorizont</h5><p>Gute Antworten erkennen: Prostatakarzinom kann früh symptomarm sein; PSA/Gleason/TNM zeigen, dass der Fall ernsthaft kurativ geplant wird, ohne dass MTR Prognosen stellen; BPH/Nykturie sind praktisch relevant, weil volle Blase und reproduzierbare Vorbereitung patientengerecht erklärt und beobachtet werden müssen. Der Schwerpunkt liegt auf PLCT-Qualität, täglicher IGRT und klarer Kompetenzgrenze.</p></div></div>
+  <div class="task" id="bb_patient_scope"><div class="label-line"><h4>Rechercheauftrag 2: fiktive Patientenfragen</h4><span class="output-tag">Patientengespräch</span></div><p>Beantworte drei Fragen von Herr M. fachlich korrekt, aber innerhalb deiner MTR-Kompetenzgrenze.</p><table class="table"><thead><tr><th>Patientenfrage</th><th>deine Antwort</th></tr></thead><tbody><tr><td>„Ich habe fast keine Beschwerden. Warum muss ich dann überhaupt bestrahlt werden?“</td><td><textarea id="bb_patient1" data-required="true" data-min-words="25" data-label="Bonus B – Patientenfrage asymptomatisch" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>„Warum muss ich jeden Tag mit ähnlicher Blase und ähnlichem Darm kommen?“</td><td><textarea id="bb_patient2" data-required="true" data-min-words="25" data-label="Bonus B – Patientenfrage Reproduzierbarkeit" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>„Was ist besser: Operation oder Bestrahlung?“</td><td><textarea id="bb_patient3" data-required="true" data-min-words="25" data-label="Bonus B – Patientenfrage OP oder RT" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table><div class="word-hint">Jede Antwort: mindestens 25 Wörter.</div><div class="btn-row"><button class="btn btn-primary" onclick="showExpectation('bb_patient_scope','bb_patient_expectation')">Patientenantworten einreichen und Erwartungshorizont anzeigen</button></div><div class="expectation" id="bb_patient_expectation"><h5>Erwartungshorizont</h5><p>Gute Antworten erklären: Prostatakrebs kann früh symptomarm sein; Therapieentscheidung hängt von Risiko, Befund und ärztlicher Beratung ab; Blase/Rektum müssen reproduzierbar sein, weil die Prostata beweglich ist und Risikoorgane geschont werden müssen; OP-vs-RT ist keine MTR-Entscheidung, sondern ärztliche Aufklärung.</p></div></div>
+  <div class="task" id="bb_boundary_scope"><div class="label-line"><h4>Rechercheauftrag 3: Kompetenzgrenze markieren</h4><span class="output-tag">Rollenklärung</span></div><p>Ordne zu: Was darfst du als MTR sachlich erklären, was gehört in ärztliche Aufklärung?</p><table class="table"><thead><tr><th>Aussage / Thema</th><th>Einordnung</th><th>kurze Begründung</th></tr></thead><tbody><tr><td>Ablauf am PLCT und Lagerungshilfen</td><td><select id="bb_bound1_sel" data-required="true" data-label="Bonus B – Grenze PLCT"><option value="">wählen</option><option>MTR sachlich erklärbar</option><option>ärztliche Aufklärung</option></select></td><td><textarea id="bb_bound1_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus B – Begründung PLCT" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Individuelle Prognose und Heilungschance</td><td><select id="bb_bound2_sel" data-required="true" data-label="Bonus B – Grenze Prognose"><option value="">wählen</option><option>MTR sachlich erklärbar</option><option>ärztliche Aufklärung</option></select></td><td><textarea id="bb_bound2_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus B – Begründung Prognose" style="border:none; padding:0.3rem"></textarea></td></tr><tr><td>Warum Blasen-/Rektumfüllung für CBCT wichtig ist</td><td><select id="bb_bound3_sel" data-required="true" data-label="Bonus B – Grenze Füllung"><option value="">wählen</option><option>MTR sachlich erklärbar</option><option>ärztliche Aufklärung</option></select></td><td><textarea id="bb_bound3_txt" class="short" data-required="true" data-min-words="8" data-label="Bonus B – Begründung Füllung" style="border:none; padding:0.3rem"></textarea></td></tr></tbody></table></div>
+  <div class="source-box"><strong>Fachliche Orientierung:</strong> DKFZ Krebsinformationsdienst zu Symptomen und Strahlentherapie; Deutsche Krebshilfe; Tumor Target Therapy; S3-Leitlinie Prostatakarzinom.</div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="showMission('bonusA')">← Bonus A</button><button class="btn btn-primary" onclick="completeBonus('bonusB','complete')">Bonus B abschließen →</button></div><div class="inline-status" id="statusbonusB"></div>
+</section>
+
+<section class="mission-panel" id="m-complete">
+  <div class="complete-screen"><h1>Mission Prostata abgeschlossen</h1><p>Du hast die Kompetenzwerkstatt, die PLCT-Praxisstation, die Pflichtstation zur täglichen Bestrahlung und ggf. Zusatzstationen bearbeitet. Exportiere jetzt dein Lernprotokoll oder drucke es als PDF.</p><div class="stats"><div class="stat"><strong id="finalCompleted">0</strong><span>Pflichtmissionen abgeschlossen</span></div><div class="stat"><strong>1</strong><span>PLCT-Praxisstation jederzeit öffnbar</span></div><div class="stat"><strong>1</strong><span>CBCT-Pflichtstation</span></div><div class="stat"><strong>V5</strong><span>Testversion</span></div></div><div class="source-box"><strong>Fachliche Orientierung:</strong><ul><li>S3-Leitlinie Prostatakarzinom, Leitlinienprogramm Onkologie, Version 8.1, 2025.</li><li>RKI/ZfKD: Krebsdaten Deutschland, Prostatakrebs.</li><li>DKFZ Krebsinformationsdienst und Deutsche Krebshilfe für patientengerechte Informationen.</li><li>Tumor Target Therapy / Prof. Hilke Vorwerk als videobasierte Vertiefung.</li><li>UKR-interne Fall-/Bild-/Videomaterialien aus der vorhandenen Prostata-Lernsequenz.</li><li>Lokale SOPs und ärztliche Entscheidungen bleiben im klinischen Einsatz verbindlich.</li></ul></div><div class="btn-row" style="justify-content:center"><button class="btn btn-primary" onclick="exportReport()">Export / Drucken</button><button class="btn btn-secondary" onclick="showMission(1)">Zurück zum Start</button></div></div>
+</section>
+
+    <div class="footer-space"></div>
+  </main>
+</div>
+<script>
+const TOTAL_MISSIONS = 10;
+const STORAGE_KEY = 'mtr_rt_prostata_plct_kompetenzwerkstatt_v5';
+let state = {completed: [], bonusCompleted: [], teacherMode: false, fields: {}};
+const CHOICES = {
+  m2: {correct:'b', feedback: {
+    a: {ok:false, text:'<div class="callout red"><strong>Nicht tragfähig.</strong> Komfort ist wichtig, ersetzt aber nicht den geplanten Referenzzustand. Füllungszustände lassen sich am Linac nicht beliebig korrigieren.</div>'},
+    b: {ok:true, text:'<div class="callout green"><strong>Richtig.</strong> Beim Prostata-PLCT gehören Lagerung, Blase und Rektum zusammen. Nur so entsteht ein belastbarer Referenzzustand für Planung und CBCT.</div>'},
+    c: {ok:false, text:'<div class="callout red"><strong>Falsch.</strong> Planung kompensiert keine beliebigen täglichen Organfüllungen. Reproduzierbarkeit bleibt Voraussetzung.</div>'}
+  }},
+  m5: {correct:'c', feedback: {
+    a: {ok:false, text:'<div class="callout red"><strong>Nicht korrekt.</strong> Reproduzierbarkeit darf nicht behauptet werden, nur weil ein Zustand einmal gesehen wurde. Außerdem ist die Verwertbarkeit eine ärztlich/planerisch zu klärende Entscheidung.</div>'},
+    b: {ok:false, text:'<div class="callout orange"><strong>Zu kurz gedacht.</strong> Ein Toilettengang kann helfen, löst aber Rektuminhalt/Gas nicht sicher. Außerdem müssen Blase, Zeit und erneuter Referenzzustand mitgedacht werden.</div>'},
+    c: {ok:true, text:'<div class="callout green"><strong>Richtig.</strong> Als MTR erkennst du das Problem, stoppst die automatische Routine, leitest Rücksprache/Entscheidung ein und dokumentierst das Vorgehen.</div>'}
+  }}
+};
+function defaultState(){ return {completed: [], bonusCompleted: [], teacherMode: false, fields: {}}; }
+function loadState(){ try { const raw = localStorage.getItem(STORAGE_KEY); if(raw) state = {...defaultState(), ...JSON.parse(raw)}; } catch(e) { state = defaultState(); } }
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function applyTeacherMode(){ document.body.classList.toggle('show-teacher', !!state.teacherMode); const btn=document.getElementById('teacherToggle'); if(btn) btn.classList.toggle('active', !!state.teacherMode); }
+function toggleTeacherMode(){ state.teacherMode = !state.teacherMode; applyTeacherMode(); saveState(); }
+function missionPanelId(n){ return (typeof n === 'string' && n.startsWith('bonus')) ? 'm'+n : (n === 'complete' ? 'm-complete' : 'm'+n); }
+function missionButtonId(n){ return (typeof n === 'string' && n.startsWith('bonus')) ? 'mb'+n : 'mb'+n; }
+function showMission(n){
+  document.querySelectorAll('.mission-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mission-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(missionPanelId(n)); if(panel) panel.classList.add('active');
+  const btn = document.getElementById(missionButtonId(n)); if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function updateProgress(){
+  const count = state.completed.length;
+  document.getElementById('progressLabel').textContent = count + ' / ' + TOTAL_MISSIONS;
+  document.getElementById('progressFill').style.width = ((count/TOTAL_MISSIONS)*100) + '%';
+  const fc = document.getElementById('finalCompleted'); if(fc) fc.textContent = count;
+  for(let i=1; i<=TOTAL_MISSIONS; i++){ const btn=document.getElementById('mb'+i); if(btn) btn.classList.toggle('completed', state.completed.includes(i)); }
+  ['bonusA','bonusB'].forEach(b => { const btn=document.getElementById('mb'+b); if(btn) btn.classList.toggle('completed', (state.bonusCompleted||[]).includes(b)); });
+}
+function setStatus(n,type,text){ const box=document.getElementById('status'+n); if(!box) return; box.className='inline-status show '+type; box.innerHTML=text; }
+function wordCount(v){ return (v||'').trim().split(/\s+/).filter(Boolean).length; }
+function validateElement(el){
+  let valid = true;
+  if(el.type === 'checkbox') valid = el.checked;
+  else if(el.tagName === 'SELECT') valid = !!el.value;
+  else valid = !!el.value && el.value.trim() !== '';
+  const min = parseInt(el.dataset.minWords || '0',10);
+  if(valid && min>0 && wordCount(el.value) < min) valid = false;
+  return valid;
+}
+function markInvalid(el){ const task = el.closest('.task') || el.closest('.cell'); if(task) task.classList.add('required-empty'); const hint = el.parentElement.querySelector('.word-hint'); if(hint) hint.classList.add('bad'); }
+function clearInvalid(scope){ scope.querySelectorAll('.required-empty').forEach(t => t.classList.remove('required-empty')); scope.querySelectorAll('.word-hint.bad').forEach(h => h.classList.remove('bad')); }
+function validateScope(scopeId){
+  const scope = document.getElementById(scopeId); if(!scope) return true;
+  clearInvalid(scope);
+  let ok=true;
+  scope.querySelectorAll('[data-required="true"], [data-min-words]').forEach(el => { if(!validateElement(el)) { ok=false; markInvalid(el); } });
+  return ok;
+}
+function validateMission(n){
+  const id = missionPanelId(n); const panel = document.getElementById(id); if(!panel) return true;
+  clearInvalid(panel);
+  let ok = true;
+  panel.querySelectorAll('[data-required="true"]').forEach(el => { if(!validateElement(el)) { ok=false; markInvalid(el); } });
+  if(!ok) setStatus(n,'warn','Es fehlen Pflichtfelder oder Mindestwortzahlen. Markierte Felder prüfen.');
+  return ok;
+}
+function completeMission(n,next){
+  if(!validateMission(n)) return;
+  if(!state.completed.includes(n)) state.completed.push(n);
+  state.completed.sort((a,b)=>a-b); saveState(); updateProgress(); setStatus(n,'ok','Mission gespeichert. Du kannst jederzeit zurückkommen.');
+  if(next === 'complete') showMission('complete'); else showMission(next);
+}
+function completeBonus(n,next){ if(!validateMission(n)) return; if(!state.bonusCompleted) state.bonusCompleted=[]; if(!state.bonusCompleted.includes(n)) state.bonusCompleted.push(n); saveState(); updateProgress(); setStatus(n,'ok','Bonus gespeichert.'); showMission(next); }
+function toggleBox(id){ const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
+function showExpectation(scopeId, expectationId){
+  if(!validateScope(scopeId)) { const exp=document.getElementById(expectationId); if(exp) exp.classList.remove('show'); return; }
+  const exp = document.getElementById(expectationId); if(exp) exp.classList.add('show');
+}
+function revealChoice(group, choice){
+  const cfg = CHOICES[group]; if(!cfg) return; const res = cfg.feedback[choice]; if(!res) return;
+  ['a','b','c','d'].forEach(k => { const lbl=document.getElementById(group+'_choice_'+k); if(lbl) lbl.classList.remove('selected-ok','selected-warn','correct-hint'); });
+  const sel = document.getElementById(group+'_choice_'+choice); if(sel) sel.classList.add(res.ok ? 'selected-ok' : 'selected-warn');
+  if(!res.ok) { const correct=document.getElementById(group+'_choice_'+cfg.correct); if(correct) correct.classList.add('correct-hint'); }
+  const fb=document.getElementById(group+'_feedback'); if(fb) { fb.innerHTML=res.text; fb.style.display='block'; }
+  state.fields[group+'_choice'] = choice; saveState();
+  if(group === 'm5'){ const v2=document.getElementById('m5_video2'); if(v2) v2.style.display='block'; }
+}
+function bindAutosave(){
+  document.querySelectorAll('textarea,input[type="text"],select,input[type="checkbox"]').forEach(el => {
+    if(!el.id) return;
+    const val = state.fields[el.id];
+    if(typeof val !== 'undefined'){ if(el.type === 'checkbox') el.checked=!!val; else el.value=val; }
+    const eventName = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(eventName, function(){ state.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value; saveState(); });
+  });
+}
+function restoreInteractive(){
+  ['m2','m5'].forEach(g => { const choice = state.fields[g+'_choice']; if(choice) { const radio = document.querySelector('input[name="'+g+'_choice"][value="'+choice+'"]'); if(radio) radio.checked=true; revealChoice(g,choice); } });
+}
+function exportReport(){
+  const lines=[]; lines.push('Mission Prostata – PLCT-Kompetenzwerkstatt V5'); lines.push('Lernprotokoll / Export'); lines.push('--------------------------------------------'); lines.push('Pflichtmissionen abgeschlossen: '+state.completed.length+' / '+TOTAL_MISSIONS); lines.push('');
+  document.querySelectorAll('[data-label]').forEach(el => { let value=''; if(el.type==='checkbox') value=el.checked ? 'Ja (✓)' : 'Nein'; else value=(el.value||'').trim(); if(value && value !== 'Nein'){ lines.push(el.dataset.label+':'); lines.push(value); lines.push(''); } });
+  const content = lines.join('\\n'); const win = window.open('', '_blank'); if(!win) return;
+  win.document.write('<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Prostata Kompetenzwerkstatt Export</title><style>body{font-family:Arial,sans-serif;line-height:1.6;padding:32px;white-space:pre-wrap;max-width:840px}button{margin-bottom:20px;padding:10px 14px;cursor:pointer}</style></head><body><button onclick="window.print()">Drucken / als PDF sichern</button><pre>'+content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</pre></body></html>'); win.document.close();
+}
+function resetWorkshop(){ if(confirm('Alle gespeicherten Eingaben dieser Testversion löschen?')){ localStorage.removeItem(STORAGE_KEY); state=defaultState(); location.reload(); } }
+loadState(); applyTeacherMode(); bindAutosave(); restoreInteractive(); updateProgress();
+</script>
+</body>
+</html>
