@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTR Lernmodul – Strahlentherapie-Prozess · Physik · Biologie · Bestrahlungstechniken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Zum Inhalt springen</a>
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Modul-Navigation">
+    <div class="sidebar-header">
+      <div class="logo-pill" role="text">🎯 MTR Lernmodul · Beta</div>
+      <h1 class="sidebar-title">Strahlentherapie-Prozess, Physik/Biologie & Plancheck</h1>
+      <div class="sidebar-sub">Abteilung · Kausalkette · DVH · MTR-Handlung</div>
+    </div>
+    <div class="path-indicator"
+         role="button"
+         tabindex="0"
+         onclick="navigate('intro')"
+         aria-label="Aktuell gewählter Lernpfad — klicken oder Enter drücken, um den Pfad zu wechseln"
+         title="Klick: zur Pfad-Auswahl">
+      <div class="path-indicator-row">
+        <div class="path-indicator-tag">Pfad</div>
+        <div id="pathLabel"></div>
+      </div>
+      <div class="path-indicator-action" aria-hidden="true">ändern →</div>
+    </div>
+    <div class="progress-area"
+         role="region"
+         aria-label="Lernfortschritt">
+      <div class="progress-meta"><span>Fortschritt</span><span id="progText" aria-live="polite">0 / 19</span></div>
+      <div class="progress-track" role="progressbar" aria-labelledby="progText" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-fill" id="progFill" style="width:0%"></div>
+      </div>
+    </div>
+    <nav class="nav-body" id="navBody" aria-label="Section-Auswahl"></nav>
+  </aside>
+  <main class="main" id="main-content" tabindex="-1"></main>
+</div>
+
+<div id="srLive" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="js/app.js" defer></script>
+
+<!-- Überarbeitete Version V5: erweitert um Abteilungsprozess, Strahlenphysik/Strahlenbiologie-Kausalkette, therapeutisches Verhältnis und berufliche Handlungskompetenz. Quellenbasis: Unterrichts-PPTs, Deep-Research-Bericht, ICRU 50/83, DEGRO/IAEA/Strahlenschutz- und MT-Rechtsrahmen. -->
+</body>
+</html>
