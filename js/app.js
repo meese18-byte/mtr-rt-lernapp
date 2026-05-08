@@ -90,7 +90,14 @@ async function renderDashboard() {
 function buildCard(mod, progress) {
   const a = document.createElement('a');
   a.className = 'module-card';
-  a.href = `#/module/${mod.id}`;
+  // Lernsequenzen sind eigenständige HTML-Seiten – direkt verlinken
+  a.href = mod.type === 'sequence' && mod.file
+    ? mod.file
+    : `#/module/${mod.id}`;
+  if (mod.type === 'sequence') {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  }
   a.setAttribute('aria-label', `Modul öffnen: ${mod.title}`);
   const statusBadge = progress.status === 'completed'
     ? '<span class="badge status-completed">abgeschlossen</span>'
@@ -112,7 +119,8 @@ function typeLabel(t) {
     'case': 'Fall',
     'image-analysis': 'Bildanalyse',
     'quiz': 'Quiz',
-    'transfer': 'Transfer'
+    'transfer': 'Transfer',
+    'sequence': 'Lernsequenz'
   }[t] || t;
 }
 function difficultyLabel(d) {
@@ -121,6 +129,15 @@ function difficultyLabel(d) {
 
 async function renderModule(id) {
   viewEl.innerHTML = '<p class="loading">Modul wird geladen…</p>';
+
+  // Lernsequenzen: Registry-Eintrag prüfen, dann zur HTML-Seite weiterleiten
+  const registry = await loadRegistry();
+  const meta = registry.modules.find(m => m.id === id);
+  if (meta && meta.type === 'sequence' && meta.file) {
+    window.location.href = meta.file;
+    return;
+  }
+
   const module = await loadModule(id);
   const type = module.type;
   if (!renderers[type]) {

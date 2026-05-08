@@ -66,6 +66,26 @@ Die JSON-Schemas sind verbindlich und in `references/modul-schemas.md` im `lerna
 
 ---
 
+### Sondertyp 6 – Lernsequenz (`sequence`)
+
+**Dokumentiert:** 2026-04-22 | **Begründung:** Das Mamma-Ca.-Modul (10-mamma-lernsequenz) erfordert eine verkettete Unterrichtsstruktur mit Praxisrotation, Dozentenmodus und Export, die in keinem der fünf Standardtypen abgebildet werden kann.
+
+**Zugelassen, wenn alle drei Bedingungen erfüllt sind:**
+1. Der Lerninhalt umfasst >60 Minuten strukturierte Arbeitszeit.
+2. Eine Praxisrotation oder Praxisstation ist integriert.
+3. Dozentenmodus und Export/Drucken sind vorhanden.
+
+**Technische Regeln (identisch zu Standardmodulen):**
+- Nur Vanilla HTML5, CSS3, ES6+ – kein Framework, keine externen Skripte.
+- Keine externen Schriftarten (Google Fonts verboten). Systemfont-Stack verwenden.
+- localStorage ausschließlich mit Präfix `mtr_rt_`.
+- Dateipfad: `content/lernsequenzen/[id].html`
+- Keine neuen Unterordner ohne Architektur-Entscheidung.
+
+**Dieser Typ ist keine Freifahrt für beliebige HTML-Seiten.** Jede neue Lernsequenz braucht eine explizite Freigabe hier in ARCHITECTURE.md.
+
+---
+
 ## 5. Dateistruktur
 
 ```

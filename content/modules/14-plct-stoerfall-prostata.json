@@ -1,0 +1,63 @@
+{
+  "id": "14-plct-stoerfall-prostata",
+  "type": "case",
+  "title": "PLCT-Simulation: Prostata-Ca – leere Blase kurz vor Lagerung",
+  "category": "Prüfungsvorbereitung – Teil 3",
+  "difficulty": "pruefungsreife",
+  "kapitel": 14,
+  "reihenfolge": 4,
+  "pflichtgrad": "pflicht",
+  "phase": "P3",
+  "estimatedMinutes": 10,
+  "learningGoals": [
+    "Die klinische Bedeutung einer gefüllten Harnblase bei der Prostata-Bestrahlung begründen.",
+    "Erkennen, dass eine leere Blase zwingend zur Unterbrechung der Lagerung führt.",
+    "Die korrekte Handlungskette (Trinken, Wartepause, Lagerung) ableiten und begründen."
+  ],
+  "tags": [
+    "prostata",
+    "blase",
+    "organvorbereitung",
+    "stoerfall",
+    "dünndarm",
+    "reproduzierbarkeit",
+    "pruefung"
+  ],
+  "examRelevance": "MTAPrV Teil A – praktische Prüfung: Störungsmanagement am PLCT (Störungspool Prostata ST-PRO-01)",
+  "relatedModules": [
+    "prostata-planungs-ct-enddarm",
+    "14-quiz-gesamtwissen"
+  ],
+  "relatedInfotexte": [
+    "enddarmvorbereitung-becken"
+  ],
+  "body": {
+    "scenario": {
+      "situation": "Herr Weber kommt zur Tagesbestrahlung (Prostata-Ca, Fraktion 8 von 39). Die Akte gibt an: Becken-Standardvorbereitung – volle Blase (500 ml Wasser, 30 Minuten vor Termin), leeres Rektum. Sie begrüßen Herrn Weber und leiten die Identifikation ein. Er sagt gut gelaunt: \"Ich war draußen nochmal kurz auf Toilette – die Blase ist jetzt komplett leer. Macht das was?\"",
+      "question": "Wie handeln Sie?"
+    },
+    "options": [
+      {
+        "label": "Lagerung beginnen – der CBCT vor der Bestrahlung gleicht kleine Positionsabweichungen ohnehin aus.",
+        "correct": false,
+        "feedback": "Falsch. Der CBCT kann knöcherne und weichteilige Strukturen verifikationsbasiert korrigieren – aber er kann keine leere Blase mit Luft oder Dünndarm füllen. Bei leerer Blase rutscht der Dünndarm in das Strahlenfeld (in unmittelbarer Nähe der Prostata), das Bestrahlungsfeld trifft dann direkt die Dünndarmschlingen. Folge: erhöhtes Risiko für strahleninduzierte Enteritis und Dünndarmperforation. Dies ist kein CBCT-korrigierbares Problem."
+      },
+      {
+        "label": "Lagerung abbrechen. Patient soll 500 ml trinken und 30 Minuten warten, dann neu starten.",
+        "correct": true,
+        "feedback": "Richtig. Die volle Blase hat eine konkrete anatomische Schutzfunktion: Sie drängt den Dünndarm aus dem Bestrahlungsfeld und stabilisiert die Prostata in reproduzierbarer Lage. Ohne volle Blase liegt der Dünndarm ungeschützt im Hochdosisbereich. Korrekte Handlungskette: (1) Lagerung freundlich und klar abbrechen, (2) Herrn Weber erklären, warum die Blasenfüllung medizinisch notwendig ist, (3) 500 ml Wasser trinken lassen, (4) 30 Minuten warten, (5) Lagerung neu beginnen, (6) Verzögerung im Bestrahlungsprotokoll dokumentieren."
+      },
+      {
+        "label": "Bestrahlung trotzdem durchführen und den Arzt nach der Fraktion informieren.",
+        "correct": false,
+        "feedback": "Nicht akzeptabel. Die Bestrahlung ohne volle Blase gefährdet den Patienten aktiv: Dünndarm im Hochdosisbereich ist ein dosislimitierendes Risikoorgan (TD 5/5 ca. 45–50 Gy). Eine einmalige Fraktion mit ungeschütztem Dünndarm im Feld erhöht das Schädigungsrisiko erheblich. Den Arzt erst nach der Fraktion zu informieren bedeutet, eine vermeidbare Schädigung billigend in Kauf zu nehmen. KO-Kriterium in der Prüfung: Patientensicherheit vor Terminvorgaben."
+      },
+      {
+        "label": "Das Prostata-Protokoll anpassen – Lagerung ohne Blasenfüllung als Ausnahme dokumentieren.",
+        "correct": false,
+        "feedback": "Nicht zulässig. Eine MTR darf das ärztlich angeordnete Protokoll (inkl. Vorbereitungsschema) nicht eigenmächtig anpassen oder Ausnahmen definieren. Das Vorbereitungsschema ist medizinisch begründet und Teil des Bestrahlungsplans. Eine Protokollanpassung bedürfte einer ärztlichen Entscheidung und einer Planrevision. Der einzig korrekte Weg: Organzustand herstellen, dann bestrahlen."
+      }
+    ],
+    "reinforcement": "Volle Blase bei Prostata-Ca = Dünndarmschutz. Leere Blase = Dünndarm im Feld = inakzeptables Risiko. Immer abbrechen, trinken lassen (500 ml), 30 Min warten, neu lagern. Das gilt für jede Fraktion – ohne Ausnahme."
+  }
+}

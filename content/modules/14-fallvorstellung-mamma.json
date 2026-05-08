@@ -1,0 +1,53 @@
+{
+  "id": "14-fallvorstellung-mamma",
+  "type": "transfer",
+  "title": "Fallvorstellung: Mammakarzinom links mit DIBH – 10-Minuten-Monolog",
+  "category": "Prüfungsvorbereitung – Teil 3",
+  "difficulty": "pruefungsreife",
+  "kapitel": 14,
+  "reihenfolge": 2,
+  "pflichtgrad": "pflicht",
+  "phase": "P3",
+  "estimatedMinutes": 20,
+  "learningGoals": [
+    "Das adjuvante, kurative Therapieziel beim Mamma-Ca klar benennen.",
+    "Die DIBH-Technik und ihre Indikation (Herzschonung bei linksseitigem Mamma-Ca) fachlich begründen.",
+    "Zielvolumen (Restdrüsenkörper/Brustwand), Risikoorgane (Herz, ipsilaterale Lunge) und Lagerung (Breastboard) korrekt darstellen.",
+    "Besonderheiten wie OP-Narbe, Lymphabfluss und Hautpflege in die Fallvorstellung integrieren.",
+    "Einen strukturierten 10-minütigen Monolog flüssig und prüfungsreif präsentieren."
+  ],
+  "tags": [
+    "mamma",
+    "brustkrebs",
+    "dibh",
+    "breastboard",
+    "fallvorstellung",
+    "kurativ",
+    "adjuvant",
+    "pruefung"
+  ],
+  "examRelevance": "MTAPrV Teil B – Fallvorstellung: Planungsbesprechung (10 Minuten strukturierter Monolog)",
+  "relatedModules": [
+    "14-quiz-gesamtwissen"
+  ],
+  "relatedInfotexte": [
+    "mamma-ca-lagerung-dibh"
+  ],
+  "body": {
+    "prompt": "Vor dir liegt die folgende Fallakte. Bereite einen strukturierten 10-Minuten-Monolog vor, als würdest du ihn vor dem Prüfungsausschuss halten. Schreibe deinen Monolog vollständig aus – stelle dir vor, du sprichst laut. Nutze das 6-Punkte-Raster: (1) Patientin & Diagnose, (2) Therapiekonzept & Ziel, (3) Zielvolumen & Risikoorgane, (4) Dosiskonzept, (5) Bestrahlungstechnik & Lagerung, (6) Besonderheiten & Patienteninformation.\n\n---\n\nFALLAKTE: Frau Sandra Hoffmann, geb. 03.05.1967\nDiagnose: Mammakarzinom links, pT2 pN0 M0, G2, HR+/HER2−. Z.n. brusterhaltender Operation (BET) links.\nTherapiekonzept: Adjuvante Radiotherapie nach BET. Ziel: kurativ.\nZielvolumen: Restdrüsenkörper links (gesamte Brust) inkl. Narbenregion. Lymphknoten nicht indiziert (N0).\nRisikoorgane: Herz (Herzschonung Priorität 1), ipsilaterale Lunge links.\nDosiskonzept: 15 × 2,67 Gy (Hypofrakt.), Gesamtdosis 40,05 Gy. Optional Boost Tumorbett: 5 × 2,0 Gy.\nTechnik: VMAT mit DIBH (Deep Inspiration Breath Hold) zur Herzschonung.\nLagerung: Rückenlage, Breastboard (Arme beidseitig in Schalen über dem Kopf).\nBesonderheiten: OP-Narbe links lateral, Arm links eingeschränkte Abduktion (max. 90°), Patientin erhält parallel antihormonelle Therapie (Aromatasehemmer, z.B. Letrozol).",
+    "minWords": 300,
+    "maxWords": 1200,
+    "sampleAnswer": "Ich stelle vor: Frau Sandra Hoffmann, geboren am 3. Mai 1967. Die Patientin leidet an einem linksseitigen Mammakarzinom, Stadium pT2 pN0 M0, Grading G2, Hormonrezeptor-positiv und HER2-negativ. Sie wurde brusterhaltend operiert – kurz BET. Lymphknotenmetastasen wurden nicht nachgewiesen, sodass eine Lymphknoten-Bestrahlung nicht indiziert ist.\n\nDas Therapiekonzept ist adjuvant und kurativ. Die Bestrahlung erfolgt nach der brusterhaltenden Operation, um das Lokalrezidivrisiko zu minimieren und damit die kurative Absicht der Gesamttherapie zu sichern.\n\nDas Zielvolumen umfasst den gesamten Restdrüsenkörper der linken Brust inklusive der Narbenregion nach BET. Die Risikoorgane sind das Herz – mit höchster Priorität aufgrund der linksseitigen Tumorlokalisation – sowie die ipsilaterale linke Lunge. Eine erhöhte Herzdosis ist bei linksseitigem Mamma-Ca mit einem langfristig erhöhten Risiko für koronare Herzerkrankungen assoziiert, weshalb die Herzschonung das zentrale Ziel der Technikwahl ist.\n\nDas Dosiskonzept ist hypofraktioniert: 15 Fraktionen à 2,67 Gray, Gesamtdosis 40,05 Gray. Dies entspricht dem aktuellen Standard nach der START-B-Studie. Bei histologisch engem Resektionsrand ist ein Boost auf das Tumorbett möglich: zusätzlich 5 × 2,0 Gray.\n\nZur Bestrahlungstechnik: Es wird VMAT eingesetzt, kombiniert mit der DIBH-Technik – Deep Inspiration Breath Hold. Bei tiefer Einatmung senkt sich das Zwerchfell, die Lunge füllt sich mit Luft und das Herz verlagert sich nach kaudal und dorsal – damit vergrößert sich der Abstand zwischen Herz und Bestrahlungsfeld erheblich. Frau Hoffmann atmet nach Anleitung tief ein und hält die Luft an; die Bestrahlung wird nur in diesem Atemhalteintervall ausgelöst.\n\nZur Lagerung: Die Patientin liegt in Rückenlage auf einem Breastboard. Beide Arme werden in speziellen Schalen über dem Kopf fixiert. Hier ist eine Besonderheit zu beachten: Frau Hoffmann hat eine OP-Narbe links lateral und eine eingeschränkte Abduktion des linken Arms – maximal 90°. Die Lagerung muss an diese Einschränkung angepasst werden, eine Abweichung vom Standard ist zu dokumentieren.\n\nZu den Besonderheiten: Die Patientin erhält parallel eine antihormonelle Therapie mit einem Aromatasehemmer (z.B. Letrozol) – bei postmenopausalen Patientinnen der Standard. Bezüglich der Patienteninformation ist sie über Hautreaktionen im Bestrahlungsfeld aufzuklären sowie über die Notwendigkeit der Hautpflege. Auf das erhöhte Lymphödemrisiko des linken Arms ist hinzuweisen.",
+    "selfAssessment": {
+      "intro": "Vergleiche deinen Monolog mit diesen 6 Pflichtpunkten des Prüfungsrasters. Hake ab, was du sicher und korrekt benannt hast.",
+      "checklist": [
+        "B1 – Patientin & Diagnose: Mamma-Ca links, Z.n. BET, pN0 korrekt eingeordnet; adjuvante Situation erklärt.",
+        "B2 – Therapiekonzept: Kuratives Ziel klar benannt, adjuvant nach BET begründet (Lokalrezidivreduktion).",
+        "B3 – Zielvolumen & Risikoorgane: Restdrüsenkörper/Brustwand benannt, Herz (Prio 1) und ipsilaterale Lunge als OAR fokussiert.",
+        "B4 – Dosiskonzept: Hypofraktionierung 15 × 2,67 Gy = 40,05 Gy genannt; optional Boost erwähnt.",
+        "B5 – Technik & Lagerung: DIBH fachlich korrekt begründet (Herzabstand ↑ bei Inspiration), Breastboard und Armlagerung beschrieben.",
+        "B6 – Besonderheiten: Narbenschmerz / Bewegungseinschränkung links UND Hautpflege-Aufklärung erwähnt; Monolog strukturiert und im Zeitrahmen."
+      ]
+    }
+  }
+}

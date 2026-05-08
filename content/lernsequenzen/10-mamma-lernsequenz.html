@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Mamma – Lernsequenz v4</title>
+<style>
+/* === MTR RT Lernapp – Design-System (passend zu app.css) === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: #f6f7f9;
+  color: #1f2933;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+a { color: #1a5aa8; text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* === Header === */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: #1f2933;
+  color: #fff;
+  padding: 0 1.25rem;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  border-bottom: 3px solid #1a5aa8;
+}
+.header-left { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.header-title { font-size: 0.9rem; font-weight: 600; color: #fff; letter-spacing: 0.02em; white-space: nowrap; }
+.header-sub { font-size: 0.78rem; color: #9aa5b1; margin-top: 1px; }
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+
+.tool-btn {
+  border: 1px solid #3e4c59;
+  background: #2d3748;
+  color: #cbd5e0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tool-btn:hover { background: #3e4c59; color: #fff; }
+.tool-btn.active { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+
+.progress-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.progress-label { font-size: 0.78rem; color: #9aa5b1; white-space: nowrap; }
+.progress-track { width: 120px; height: 6px; background: #3e4c59; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: #16a34a; transition: width 0.3s ease; }
+
+/* === Layout === */
+.layout { display: flex; min-height: calc(100vh - 58px); }
+
+/* === Sidebar === */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid #cbd2d9;
+  padding: 1rem 0;
+  position: sticky; top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-label {
+  padding: 0 1rem 0.5rem;
+  font-size: 0.72rem;
+  color: #7b8794;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.sidebar-note {
+  margin: 0 0.75rem 1rem;
+  padding: 0.75rem;
+  background: #f0f5fb;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #52606d;
+}
+.sidebar-note strong { color: #1f2933; }
+
+.mission-btn {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  width: 100%; border: none; background: none;
+  color: #52606d;
+  padding: 0.65rem 1rem;
+  text-align: left; cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+}
+.mission-btn:hover { background: #f0f4f8; color: #1f2933; }
+.mission-btn.active { background: #ebf2fb; color: #1a5aa8; font-weight: 500; }
+.mission-btn.active::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #1a5aa8;
+}
+.mission-btn.completed { color: #16a34a; }
+.mission-btn.practice { color: #b45309; }
+
+.m-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #e3e7eb;
+  border: 1px solid #cbd2d9;
+  font-size: 0.7rem; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+  color: #52606d;
+}
+.mission-btn.active .m-num { background: #1a5aa8; border-color: #1a5aa8; color: #fff; }
+.mission-btn.completed .m-num { background: #16a34a; border-color: #16a34a; color: #fff; }
+.mission-btn.practice .m-num { border-color: #f0a500; color: #b45309; background: #fffbeb; }
+.m-title { font-size: 0.85rem; font-weight: 600; }
+.m-meta { font-size: 0.75rem; color: #7b8794; margin-top: 1px; }
+
+/* === Main Content === */
+.main { flex: 1; max-width: 900px; padding: 1.75rem 1.75rem 4rem; }
+.mission-panel { display: none; }
+.mission-panel.active { display: block; }
+
+/* === Hero === */
+.hero {
+  background: linear-gradient(135deg, #ebf2fb, #f0f4f8);
+  border: 1px solid #cbd2d9;
+  border-left: 4px solid #1a5aa8;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.hero h1 { font-size: 1.45rem; line-height: 1.25; margin-bottom: 0.5rem; color: #1f2933; }
+.hero p { color: #52606d; max-width: 760px; }
+.hero-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem; margin-top: 1rem;
+}
+.hero-stat {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+.hero-stat strong { display: block; font-size: 0.75rem; color: #1a5aa8; margin-bottom: 3px; font-weight: 700; }
+.hero-stat span { font-size: 0.82rem; color: #52606d; }
+
+/* === Mission Header === */
+.mission-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e3e7eb;
+  padding-bottom: 1.1rem;
+}
+.mission-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 700;
+  color: #1a5aa8;
+  background: #dbeafe;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.mission-tag.practice { color: #92400e; background: #fef3c7; }
+.mission-title { font-size: 1.55rem; line-height: 1.2; margin-bottom: 0.4rem; color: #1f2933; }
+.mission-subtitle { color: #52606d; font-size: 0.95rem; max-width: 760px; }
+.meta-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.meta-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 999px; padding: 4px 10px;
+  background: #e3e7eb;
+  font-size: 0.78rem; color: #52606d;
+}
+
+/* === Grids === */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; }
+
+/* === Cards === */
+.card {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+}
+.card h3 { font-size: 1.05rem; margin-bottom: 0.6rem; color: #1f2933; }
+.card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; color: #1a5aa8; }
+.card p, .card li { color: #52606d; font-size: 0.9rem; }
+.card ul { padding-left: 1.1rem; }
+.card ul li { margin-bottom: 3px; }
+.card strong { color: #1f2933; }
+
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.case-item {
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+.case-item-label { font-size: 0.72rem; color: #7b8794; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.case-item-value { font-size: 0.9rem; font-weight: 600; color: #1f2933; }
+
+/* === Callouts === */
+.callout {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border-left: 4px solid #1a5aa8;
+  background: #f0f5fb;
+  margin-bottom: 0.875rem;
+  font-size: 0.9rem;
+  color: #1f2933;
+}
+.callout.orange { border-left-color: #f0a500; background: #fffbeb; }
+.callout.green { border-left-color: #16a34a; background: #f0fdf4; }
+.callout.purple { border-left-color: #7c3aed; background: #f5f3ff; }
+.callout strong { color: #1f2933; }
+
+/* === Tasks === */
+.task {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1.1rem;
+  margin-bottom: 0.875rem;
+}
+.task.required-empty { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,.12); }
+.task h4 { font-size: 1rem; margin-bottom: 0.5rem; color: #1f2933; }
+.task p { color: #52606d; font-size: 0.9rem; margin-bottom: 0.5rem; }
+
+.label-line { display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; margin-bottom: 0.6rem; }
+.output-tag {
+  font-size: 0.72rem; font-weight: 600;
+  color: #1a5aa8;
+  background: #dbeafe;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* === Formfelder === */
+textarea, input[type="text"], select {
+  width: 100%;
+  background: #fff;
+  color: #1f2933;
+  border: 2px solid #cbd2d9;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s;
+  font-size: 0.9rem;
+}
+textarea:focus, input[type="text"]:focus, select:focus { border-color: #1a5aa8; }
+textarea { resize: vertical; min-height: 80px; }
+textarea.short { min-height: 56px; }
+
+/* === Tabellen === */
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.table th {
+  background: #f0f4f8;
+  color: #52606d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border: 1px solid #e3e7eb;
+}
+.table td { padding: 0.6rem 0.75rem; border: 1px solid #e3e7eb; vertical-align: top; color: #1f2933; }
+.table tr:nth-child(even) td { background: #f6f7f9; }
+
+.checkbox-list { list-style: none; padding: 0; }
+.checkbox-list li { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #e3e7eb; font-size: 0.9rem; }
+.checkbox-list li:last-child { border-bottom: none; }
+.checkbox-list input { margin-top: 2px; accent-color: #16a34a; }
+
+/* === Ressourcen === */
+.resource-list { display: grid; gap: 0.6rem; }
+.resource {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+.resource-icon {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  color: #1a5aa8;
+  font-size: 13px; flex-shrink: 0;
+}
+.resource h5 { font-size: 0.9rem; margin-bottom: 2px; color: #1f2933; }
+.resource p { font-size: 0.82rem; color: #52606d; margin-bottom: 4px; }
+.resource a { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: #1a5aa8; }
+.resource a::after { content: '↗'; }
+
+/* === Hilfsmittelboxen === */
+.support-box, .plus-box, .teacher-note, .self-check {
+  margin-top: 0.75rem;
+  border-radius: 6px;
+  padding: 0.875rem 1rem;
+  font-size: 0.88rem;
+}
+.support-box { background: #fffbeb; border: 1px solid #fcd34d; }
+.plus-box { background: #f5f3ff; border: 1px solid #c4b5fd; color: #4c1d95; }
+.plus-box strong { color: #4c1d95; }
+.self-check { background: #f0f4f8; border: 1px solid #cbd2d9; color: #52606d; }
+.self-check strong { color: #1f2933; }
+.teacher-note { display: none; background: #fffbeb; border: 1px dashed #fcd34d; color: #78350f; }
+body.show-teacher .teacher-note { display: block; }
+.teacher-note strong { color: #92400e; }
+
+/* === Toggle-Akkordeon === */
+.toggle {
+  width: 100%; text-align: left;
+  border: 1px solid #cbd2d9;
+  background: #f0f4f8;
+  color: #1f2933;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.88rem; font-weight: 600;
+  transition: background 0.12s;
+}
+.toggle:hover { background: #e3e7eb; }
+.toggle span { color: #52606d; font-weight: 400; font-size: 0.82rem; }
+.toggle-content { display: none; margin-top: 0.6rem; font-size: 0.88rem; color: #52606d; }
+.toggle-content.open { display: block; }
+.toggle-content ul { padding-left: 1.1rem; }
+.toggle-content li { margin-bottom: 4px; }
+
+/* === Buttons === */
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.1rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; cursor: pointer;
+  border-radius: 6px; padding: 0.6rem 1.1rem;
+  font-weight: 600; font-size: 0.9rem;
+  transition: background 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+.btn-primary { background: #1a5aa8; color: #fff; }
+.btn-primary:hover { background: #144884; transform: translateY(-1px); }
+.btn-secondary { background: #e3e7eb; color: #1f2933; border: 1px solid #cbd2d9; }
+.btn-secondary:hover { background: #cbd2d9; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+
+/* === Status-Nachrichten === */
+.inline-status { display: none; margin-top: 0.75rem; padding: 0.6rem 0.875rem; border-radius: 6px; font-size: 0.88rem; }
+.inline-status.show { display: block; }
+.inline-status.ok { background: #f0fdf4; border: 1px solid #16a34a; color: #15803d; }
+.inline-status.warn { background: #fef2f2; border: 1px solid #dc2626; color: #dc2626; }
+
+/* === Abschluss-Screen === */
+.complete-screen { text-align: center; padding: 3rem 1rem; }
+.complete-screen h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #1a5aa8; }
+.complete-screen p { color: #52606d; max-width: 680px; margin: 0 auto 1.25rem; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.875rem; max-width: 720px; margin: 0 auto 1.5rem; }
+.stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1rem; }
+.stat strong { display: block; font-size: 1.8rem; color: #1a5aa8; font-weight: 700; }
+.stat span { font-size: 0.78rem; color: #52606d; }
+
+/* === Kompaktwissen-Blöcke (v4) === */
+.wissen-block {
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-left: 3px solid #1a5aa8;
+  border-radius: 6px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.wissen-block h5 {
+  font-size: 0.78rem; font-weight: 700;
+  color: #1a5aa8;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.wissen-block p, .wissen-block li { font-size: 0.88rem; color: #52606d; }
+.wissen-block ul { padding-left: 1rem; }
+.wissen-block ul li { margin-bottom: 3px; }
+.wissen-block strong { color: #1f2933; }
+
+/* === Dosis-Tabelle (v4) === */
+.dosis-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.6rem; }
+.dosis-table th {
+  background: #1f2933; color: #fff;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #3e4c59;
+  text-align: left;
+}
+.dosis-table td { padding: 0.55rem 0.75rem; border: 1px solid #e3e7eb; color: #52606d; vertical-align: top; }
+.dosis-table td strong { color: #1f2933; }
+.dosis-table tr:nth-child(even) td { background: #f6f7f9; }
+
+/* === Bilder in Missionen === */
+.img-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 0.75rem 0 0; }
+.img-figure { flex: 1; min-width: 130px; margin: 0; }
+.img-figure img { border-radius: 6px; border: 1px solid #e3e7eb; height: 160px; width: 100%; object-fit: contain; background: #f6f7f9; }
+.img-caption { font-size: 0.75rem; color: #7b8794; text-align: center; margin-top: 0.3rem; line-height: 1.3; }
+
+/* === Wordwall (v4) === */
+.wordwall-wrap {
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+.wordwall-wrap p { font-size: 0.85rem; color: #52606d; margin-bottom: 0.75rem; }
+.wordwall-wrap iframe { border-radius: 6px; max-width: 100%; }
+
+/* === NW-Raster (v4) === */
+.nw-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem; }
+
+.footer-space { height: 1.5rem; }
+
+/* === Responsive === */
+@media (max-width: 960px) {
+  .sidebar { display: none; }
+  .main { max-width: none; padding: 1.25rem; }
+  .hero-grid, .grid-3, .stats { grid-template-columns: 1fr 1fr; }
+  .grid-2, .case-grid, .nw-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .header { height: auto; padding: 0.75rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .hero-grid, .grid-3, .stats { grid-template-columns: 1fr; }
+  .mission-title { font-size: 1.25rem; }
+  .main { padding: 1rem; }
+  .header-actions { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="header-title">Mission Mamma // Lernsequenz v4</div>
+      <div class="header-sub">2. Lehrjahr · fachpraktischer Unterricht · 12 SuS · parallele 3er-Rotation am PLCT</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="tool-btn" id="teacherToggle" onclick="toggleTeacherMode()">Dozentenmodus</button>
+    <button class="tool-btn" onclick="exportReport()">Export / Drucken</button>
+    <div class="progress-wrap">
+      <span class="progress-label" id="progressLabel">0 / 9</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Missionen</div>
+    <div class="sidebar-note"><strong>Pflichtspur:</strong> Mission 1–7 und 9.<br><strong>Praxis:</strong> Mission 8 jederzeit öffnen, sobald eure 3er-Gruppe aufgerufen wird.</div>
+    <button class="mission-btn active" id="mb1" onclick="showMission(1)"><span class="m-num">1</span><span><div class="m-title">Start &amp; Ablauf</div><div class="m-meta">6–8 Min · Orientierung</div></span></button>
+    <button class="mission-btn" id="mb2" onclick="showMission(2)"><span class="m-num">2</span><span><div class="m-title">Fallakte Frau S.</div><div class="m-meta">8–10 Min · Auftrag klären</div></span></button>
+    <button class="mission-btn" id="mb3" onclick="showMission(3)"><span class="m-num">3</span><span><div class="m-title">Grundlagen kompakt</div><div class="m-meta">10–12 Min · Epidemiologie, Ätiologie, Klinik</div></span></button>
+    <button class="mission-btn" id="mb4" onclick="showMission(4)"><span class="m-num">4</span><span><div class="m-title">Anatomie &amp; OAR</div><div class="m-meta">8–10 Min · Zielgebiet verstehen</div></span></button>
+    <button class="mission-btn" id="mb5" onclick="showMission(5)"><span class="m-num">5</span><span><div class="m-title">Therapie-Navi</div><div class="m-meta">8–10 Min · Warum RT?</div></span></button>
+    <button class="mission-btn" id="mb6" onclick="showMission(6)"><span class="m-num">6</span><span><div class="m-title">RT-Basics</div><div class="m-meta">10–12 Min · Dosis, Fraktionierung, PTV</div></span></button>
+    <button class="mission-btn" id="mb7" onclick="showMission(7)"><span class="m-num">7</span><span><div class="m-title">Planungs-CT &amp; Techniken</div><div class="m-meta">10–12 Min · Ready for PLCT</div></span></button>
+    <button class="mission-btn practice" id="mb8" onclick="showMission(8)"><span class="m-num">⚑</span><span><div class="m-title">Praxisstation</div><div class="m-meta">bei Aufruf öffnen · Rollen &amp; Beobachtung</div></span></button>
+    <button class="mission-btn" id="mb9" onclick="showMission(9)"><span class="m-num">9</span><span><div class="m-title">Nebenwirkungen &amp; Fallvorstellung</div><div class="m-meta">10–14 Min · Transfer + Lernspiel</div></span></button>
+  </aside>
+  <main class="main">
+
+    <!-- M1: Start & Ablauf -->
+    <section class="mission-panel active" id="m1">
+      <div class="hero">
+        <h1>Mission Mamma: Von der Fallakte zum PLCT-Setting</h1>
+        <p>Diese App ist für den parallelen Einsatz mit der Praxisstation gebaut. Du arbeitest selbstständig, unterbrichst bei Bedarf für eure 3er-Rotation am Phantom bzw. PLCT und steigst danach wieder ein. Ziel ist nicht „schnell fertig", sondern ein tragfähiges Verständnis, das du praktisch anwenden und in einer Fallvorstellung begründen kannst.</p>
+        <div class="hero-grid">
+          <div class="hero-stat"><strong>Pflichtzeit</strong><span>ca. 75–90 Min App-Zeit plus Praxisrotation</span></div>
+          <div class="hero-stat"><strong>Praxisoutput</strong><span>Rollenbogen, Beobachtung, Transfernotizen</span></div>
+          <div class="hero-stat"><strong>Endprodukt</strong><span>3-Minuten-Fallvorstellung aus MTR-Sicht</span></div>
+          <div class="hero-stat"><strong>Arbeitslogik</strong><span>Pflicht · Support · Plus für schnelle SuS</span></div>
+        </div>
+      </div>
+      <div class="mission-header">
+        <div class="mission-tag">Mission 01</div>
+        <h2 class="mission-title">Start &amp; Ablauf</h2>
+        <p class="mission-subtitle">Bevor du fachlich einsteigst, brauchst du eine saubere Orientierung: Was ist Pflicht? Wann gehst du an die Praxisstation? Was ist am Ende dein sichtbares Produkt?</p>
+        <div class="meta-row">
+          <div class="meta-pill">⏱ 6–8 Min</div>
+          <div class="meta-pill">🎯 Output: persönlicher Arbeitsplan</div>
+          <div class="meta-pill">🧭 Funktion: Orientierung &amp; Verbindlichkeit</div>
+        </div>
+      </div>
+      <div class="callout"><strong>Arbeitsregel:</strong> Mission 8 ist eure Praxisstation. Sobald eure Gruppe aufgerufen wird, könnt ihr direkt dorthin springen. Alle anderen Missionen dürfen unterbrochen und später fortgesetzt werden.</div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Was du heute können sollst</h3>
+          <ul>
+            <li>den Fall Frau S. fachlich einordnen</li>
+            <li>ein PLCT-Setting für eine Standard-Mamma-BET begründet vorbereiten</li>
+            <li>wichtige Risikoorgane, Zielvolumina und Qualitätsaspekte benennen</li>
+            <li>deine praktische Handlung sprachlich sauber in einer Fallvorstellung darstellen</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>So arbeitest du sinnvoll</h3>
+          <ul>
+            <li><strong>Pflicht</strong>: immer bearbeiten</li>
+            <li><strong>Support</strong>: nutzen, wenn du Struktur brauchst</li>
+            <li><strong>Plus</strong>: für schnelle oder stärkere SuS</li>
+            <li>am Ende jeder Mission steht ein <strong>Praxisanker</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: persönlicher Lernfahrplan</h4><span class="output-tag">Pflichtprodukt</span></div>
+        <p>Formuliere für dich selbst knapp, worauf du heute besonders achten willst. Wähle nicht allgemein, sondern handlungsnah.</p>
+        <textarea id="m1_t1" data-required="true" data-label="Mission 1 – Persönlicher Lernfokus" placeholder="Beispiel: Ich möchte heute sicher verstehen, warum ... für das Planungs-CT wichtig ist und worauf ich praktisch achten muss."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m1_help1')">Support öffnen <span>Leitfragen statt Lösung</span></button>
+          <div class="toggle-content" id="m1_help1">
+            <ul>
+              <li>Was fällt dir bei Mamma-Ca. bisher noch schwer: Anatomie, Therapieablauf, Lagerung, Fachsprache oder Fallvorstellung?</li>
+              <li>Welcher Teil der Praxis macht dir am meisten Kopfzerbrechen?</li>
+              <li>Was willst du heute so gut verstehen, dass du es am Ende jemand anderem erklären könntest?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese erste Mission wirkt nur dann, wenn die SuS nicht „irgendwas" schreiben. Fordere im Einstieg 1–2 mündliche Beispiele ein. So wird aus der App eine echte Arbeitsverabredung statt einer Klickoberfläche.</div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Einsatzregeln für die Rotation</h4><span class="output-tag">Verbindlichkeit</span></div>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="m1_c1" data-required="true" data-label="Mission 1 – Rotationsregel verstanden"><label for="m1_c1">Ich weiß: Mission 8 ist meine Praxisstation und kann jederzeit geöffnet werden.</label></li>
+          <li><input type="checkbox" id="m1_c2" data-required="true" data-label="Mission 1 – Unterbrechbarkeit verstanden"><label for="m1_c2">Ich weiß: Ich darf die App unterbrechen und später weiterarbeiten.</label></li>
+          <li><input type="checkbox" id="m1_c3" data-required="true" data-label="Mission 1 – Endprodukt verstanden"><label for="m1_c3">Ich weiß: Am Ende brauche ich eine kurze Fallvorstellung aus MTR-Sicht.</label></li>
+        </ul>
+      </div>
+      <div class="callout green"><strong>Praxisanker:</strong> Wenn du gleich unterbrochen wirst, ist das kein Problem. Diese App ist genau dafür gebaut.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(1,2)">Mission als bearbeitet markieren →</button><button class="btn btn-secondary" onclick="showMission(8)">Direkt zur Praxisstation</button></div>
+      <div class="inline-status" id="status1"></div>
+    </section>
+
+    <!-- M2: Fallakte Frau S. -->
+    <section class="mission-panel" id="m2">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 02</div>
+        <h2 class="mission-title">Fallakte Frau S.</h2>
+        <p class="mission-subtitle">Hier legst du das Fundament. Du musst nicht alles auswendig wissen, aber du musst aus einem Fall die Informationen herausziehen können, die dein Handeln am Planungs-CT tatsächlich steuern.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: handlungsrelevante Infos + offene Fragen</div></div>
+      </div>
+      <div class="card">
+        <h3>Patientenakte Frau S.</h3>
+        <div class="case-grid">
+          <div class="case-item"><div class="case-item-label">Alter</div><div class="case-item-value">58 Jahre</div></div>
+          <div class="case-item"><div class="case-item-label">Diagnose</div><div class="case-item-value">Mammakarzinom links, pT2 N0 M0</div></div>
+          <div class="case-item"><div class="case-item-label">Histologie</div><div class="case-item-value">invasiv-duktal, G2, ER+/PR+, HER2–</div></div>
+          <div class="case-item"><div class="case-item-label">OP</div><div class="case-item-value">BET links, R0, Sentinel-LK negativ</div></div>
+          <div class="case-item"><div class="case-item-label">Systemtherapie</div><div class="case-item-value">Tamoxifen geplant</div></div>
+          <div class="case-item"><div class="case-item-label">Heute</div><div class="case-item-value">Planungs-CT</div></div>
+          <div class="case-item"><div class="case-item-label">Besonderheit</div><div class="case-item-value">ängstlich, fragt viel</div></div>
+          <div class="case-item"><div class="case-item-label">Leitfrage</div><div class="case-item-value">Wie bereitest du sie sicher und nachvollziehbar vor?</div></div>
+        </div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Was ist sofort handlungsrelevant?</h4><span class="output-tag">3 konkrete Punkte</span></div>
+        <textarea id="m2_t1" data-required="true" data-label="Mission 2 – handlungsrelevante Informationen" placeholder="Notiere drei Informationen aus der Fallakte und schreibe jeweils dazu, warum sie dein Handeln am Planungs-CT beeinflussen."></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> Starke Antworten nennen nicht nur Informationen, sondern immer den <em>praktischen Effekt</em>, z.B. Seitenbezug, Herzschonung, Narbe/Boost, Kommunikationsbedarf.</div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Was fehlt dir noch?</h4><span class="output-tag">mind. 2 Rückfragen</span></div>
+        <textarea id="m2_t2" data-required="true" data-label="Mission 2 – offene Fragen" placeholder="Welche Informationen würdest du vor dem PLCT noch klären wollen, damit du dich praktisch sicher fühlst?"></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m2_help2')">Support öffnen <span>Denk in Arbeitsabläufen</span></button>
+          <div class="toggle-content" id="m2_help2">
+            <ul>
+              <li>Bestrahlungsvolumen nur Brust oder zusätzlich Lymphabfluss?</li>
+              <li>Standard-Mammazange oder DIBH/weitere Technik?</li>
+              <li>Welche Markierungen sollen gesetzt werden?</li>
+              <li>Gibt es Bewegungseinschränkungen von Schulter oder Arm?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Antwort an die Patientin</h4><span class="output-tag">2–3 verständliche Sätze</span></div>
+        <p>Frau S. fragt: „Warum muss ich nach der OP noch bestrahlt werden? Es ist doch alles entfernt." Formuliere eine fachlich korrekte, ruhige und verständliche Antwort.</p>
+        <textarea id="m2_t3" class="short" data-label="Mission 2 – Patientenkommunikation" placeholder="Schreibe in Patientensprache, ohne ärztliche Aufklärung zu ersetzen."></textarea>
+      </div>
+      <div class="plus-box"><strong>Plus für schnelle SuS:</strong> Ergänze einen Satz, worin die Grenze zwischen deiner Rolle als MTR und ärztlicher Aufklärung liegt.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Wer den Fall sauber liest, braucht am PLCT weniger Zufall und weniger Nachfragen.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Mission ist ein guter Ort für einen kurzen Stopp im Plenum. Lasse 2–3 SuS je eine handlungsrelevante Info nennen. So wird die Falllogik gemeinsam kalibriert.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(2,3)">Mission als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status2"></div>
+    </section>
+
+    <!-- M3: Grundlagen kompakt -->
+    <section class="mission-panel" id="m3">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 03</div>
+        <h2 class="mission-title">Grundlagen kompakt: Epidemiologie, Ätiologie, Klinik</h2>
+        <p class="mission-subtitle">Dieses Wissen soll nicht als isolierte Theorie hängenbleiben. Du brauchst es, damit der Fall Frau S. im Kopf einordbar wird und du weißt, worüber im Team überhaupt gesprochen wird.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: Kurzprotokoll Grundlagenwissen</div></div>
+      </div>
+
+      <!-- NEU v4: Kompaktwissen aus Widget Tab 3 -->
+      <div class="card">
+        <h3>Kompaktwissen Mamma-Ca.</h3>
+        <div class="wissen-block">
+          <h5>Epidemiologie</h5>
+          <ul>
+            <li>Häufigster bösartiger Tumor der Frau, zweithäufigste Krebstodesursache</li>
+            <li>Ca. <strong>70.000 Neuerkrankungen/Jahr</strong> in Deutschland</li>
+            <li>Mittleres Erkrankungsalter: ca. <strong>63 Jahre</strong></li>
+            <li>Fast jede 10. Frau erkrankt im Laufe ihres Lebens</li>
+            <li>Besonderes Risiko: Z.n. Hodgkin-Lymphom (ca. 35 % erkranken später an Mamma-Ca.)</li>
+          </ul>
+        </div>
+        <div class="wissen-block">
+          <h5>Ätiologie / Risikofaktoren</h5>
+          <ul>
+            <li>Nur ca. 20 % erblich-familiär bedingt – die Mehrheit entsteht sporadisch</li>
+            <li><strong>Hormonsensible Faktoren:</strong> frühe Menarche, späte Menopause, Nullipara</li>
+            <li><strong>Genetisch:</strong> BRCA1/BRCA2-Mutation, p53-Veränderung</li>
+            <li><strong>Lebensstil:</strong> erhöhter Fettkonsum, mangelnde körperliche Aktivität</li>
+            <li>Atypische duktale oder lobuläre Hyperplasie als histologischer Risikobefund</li>
+          </ul>
+        </div>
+        <div class="wissen-block">
+          <h5>Klinik &amp; Diagnostik</h5>
+          <p style="margin-bottom:8px">Häufig stellt die Patientin selbst die Verdachtsdiagnose durch einen tastbaren Knoten.</p>
+          <p style="margin-bottom:6px"><strong>Diagnostischer Stufenplan:</strong></p>
+          <ul>
+            <li>Mammographie (2 Ebenen) → Erstscreening und Verlauf</li>
+            <li>Mammasonographie → ergänzend, besonders bei dichtem Gewebe</li>
+            <li>MRT → bei Multizentrizitätsverdacht, Rezidiv, jungen Frauen mit dichtem Drüsengewebe (höchste Sensitivität)</li>
+            <li>Stanzbiopsie / Feinnadelpunktion → obligate histologische Sicherung</li>
+          </ul>
+          <p style="margin-top:8px"><strong>Typische Symptome:</strong> tastbarer Knoten, Orangenhaut, Hauteinziehungen, Mamillenveränderungen (Sekretion, Formveränderung, Einziehung), Allgemeinsymptome bei Metastasierung.</p>
+        </div>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">▶</div><div><h5>Tumor Target Therapy – Mammakarzinom Playlist</h5><p>Für die Falllogik, das medizinische Gesamtbild und die Sprache des Themas.</p><a href="https://www.youtube.com/playlist?list=PLuazEnTdVYdh4dFiIVYXBatsZZDdTJ7PV" target="_blank" rel="noopener">Playlist öffnen</a></div></div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Grundlagenwissen sichern</h4><span class="output-tag">4 Felder ausfüllen</span></div>
+        <table class="table">
+          <thead><tr><th>Bereich</th><th>Deine Notizen</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Epidemiologie</strong><br><span style="color:var(--text-muted)">Einordnung des Mammakarzinoms</span></td><td><textarea id="m3_t1" class="short" data-required="true" data-label="Mission 3 – Epidemiologie"></textarea></td></tr>
+            <tr><td><strong>Ätiologie / Risikofaktoren</strong><br><span style="color:var(--text-muted)">Welche Faktoren spielen eine Rolle?</span></td><td><textarea id="m3_t2" class="short" data-required="true" data-label="Mission 3 – Ätiologie"></textarea></td></tr>
+            <tr><td><strong>Klinik / Diagnostik</strong><br><span style="color:var(--text-muted)">Symptome und Diagnostikschritte</span></td><td><textarea id="m3_t3" class="short" data-required="true" data-label="Mission 3 – Klinik"></textarea></td></tr>
+            <tr><td><strong>Relevanz für die MTR</strong><br><span style="color:var(--text-muted)">Warum muss ich das im praktischen Unterricht wissen?</span></td><td><textarea id="m3_t4" class="short" data-required="true" data-label="Mission 3 – Relevanz für MTR"></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Frau S. im Kontext</h4><span class="output-tag">2–3 Sätze</span></div>
+        <p>Warum ist es für dich als MTR hilfreich zu wissen, dass Frau S. ein hormonrezeptorpositives, HER2-negatives Mammakarzinom hat – auch wenn du daraus keine Therapieentscheidung ableitest?</p>
+        <textarea id="m3_t5" class="short" data-label="Mission 3 – Fallkontext"></textarea>
+      </div>
+      <div class="plus-box"><strong>Plus:</strong> Formuliere einen Unterschied zwischen „theoretisch kennen" und „im Fall anwenden können" am Beispiel Mammakarzinom.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Wer das Krankheitsbild nur als Wort kennt, bleibt in der Praxis mechanisch. Wer es einordnen kann, arbeitet zielgerichteter.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Das Kompaktwissen oben ersetzt nicht die eigenständige Auseinandersetzung – es gibt die Leitplanken. Fordere gezielt: Was davon ist für das PLCT-Setting direkt relevant?</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(3,4)">Mission als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status3"></div>
+    </section>
+
+    <!-- M4: Anatomie & OAR -->
+    <section class="mission-panel" id="m4">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 04</div>
+        <h2 class="mission-title">Anatomie, Zielgebiet und Risikoorgane</h2>
+        <p class="mission-subtitle">Hier geht es nicht um Selbstzweck-Anatomie. Du brauchst Orientierung: Was soll bestrahlt werden? Was muss geschont werden? Und was ist nur je nach Indikation relevant?</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: saubere Zuordnung + Seitenbezug</div></div>
+      </div>
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">▶</div><div><h5>Tumor Target Therapy – Strahlentherapie Playlist</h5><p>Zur Auffrischung von Begriffen aus dem Unterricht.</p><a href="https://www.youtube.com/playlist?list=PLuazEnTdVYdiUmlY2FcegATuoU0_usFkd" target="_blank" rel="noopener">Playlist öffnen</a></div></div>
+        <div class="resource"><div class="resource-icon">∞</div><div><h5>Medizinphysik-Wiki – OAR</h5><p>Kurze Definition und Einordnung von Risikoorganen in der Strahlentherapie.</p><a href="https://medizinphysik.wiki/glossar/oar-organ-at-risk/" target="_blank" rel="noopener">OAR öffnen</a></div></div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Dreifach-Zuordnung</h4><span class="output-tag">Zielgebiet / je nach Indikation / Risikoorgan</span></div>
+        <table class="table">
+          <thead><tr><th>Struktur</th><th>Deine Zuordnung</th><th>kurze Begründung</th></tr></thead>
+          <tbody>
+            <tr><td>Gesamte linke Brust nach BET</td><td><select id="m4_s1" data-required="true" data-label="Mission 4 – linke Brust"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b1" data-required="true" data-label="Mission 4 – Begründung linke Brust"></td></tr>
+            <tr><td>Tumorbett / Operationsnarbe</td><td><select id="m4_s2" data-required="true" data-label="Mission 4 – Tumorbett"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b2" data-required="true" data-label="Mission 4 – Begründung Tumorbett"></td></tr>
+            <tr><td>Herz</td><td><select id="m4_s3" data-required="true" data-label="Mission 4 – Herz"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b3" data-required="true" data-label="Mission 4 – Begründung Herz"></td></tr>
+            <tr><td>Ipsilaterale Lunge</td><td><select id="m4_s4" data-required="true" data-label="Mission 4 – Lunge"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b4" data-required="true" data-label="Mission 4 – Begründung Lunge"></td></tr>
+            <tr><td>Axilla</td><td><select id="m4_s5" data-required="true" data-label="Mission 4 – Axilla"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b5" data-required="true" data-label="Mission 4 – Begründung Axilla"></td></tr>
+            <tr><td>Kontralaterale Brust</td><td><select id="m4_s6" data-required="true" data-label="Mission 4 – kontralaterale Brust"><option value="">wählen</option><option>primäres Zielgebiet</option><option>je nach Indikation</option><option>Risikoorgan</option></select></td><td><input type="text" id="m4_b6" data-required="true" data-label="Mission 4 – Begründung kontralaterale Brust"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Warum macht links/rechts so einen Unterschied?</h4><span class="output-tag">1–2 Sätze</span></div>
+        <textarea id="m4_t2" class="short" data-required="true" data-label="Mission 4 – Seitenbezug"></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> Eine starke Antwort verbindet <em>Seitenbezug</em>, <em>Herznähe</em> und <em>Spätfolgen/Risikoorgane</em>.</div>
+      </div>
+      <div class="plus-box"><strong>Plus:</strong> Notiere zusätzlich, warum die Axilla im Fall Frau S. nicht automatisch in die gleiche Kategorie fällt wie Herz oder Brust.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Gute Lagerung beginnt nicht bei Hilfsmitteln, sondern bei der räumlichen Vorstellung des Falls.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Die 3er-Kategorie vermeidet die fachliche Schieflage „Axilla = Risikoorgan". Diese Mission ist bewusst präziser gebaut.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(4,5)">Mission als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status4"></div>
+    </section>
+
+    <!-- M5: Therapie-Navi -->
+    <section class="mission-panel" id="m5">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 05</div>
+        <h2 class="mission-title">Therapie-Navi: Warum ist Frau S. in der Strahlentherapie?</h2>
+        <p class="mission-subtitle">RT ist Teil eines Gesamtkonzepts. Wenn du nur „Bestrahlung" hörst, aber nicht weißt, warum sie hier gebraucht wird, bleibt dein Handeln am PLCT oberflächlich.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 8–10 Min</div><div class="meta-pill">🎯 Output: Therapielogik in eigenen Worten</div></div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Therapiebausteine sinnvoll ordnen</h4><span class="output-tag">3 Schritte + Begründung</span></div>
+        <textarea id="m5_t1" data-required="true" data-label="Mission 5 – Therapiereihenfolge" placeholder="Ordne OP, adjuvante RT und Tamoxifen in die richtige Logik ein und erkläre kurz den Zweck jedes Schritts."></textarea>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Warum RT nach BET?</h4><span class="output-tag">2–3 Sätze</span></div>
+        <textarea id="m5_t2" data-required="true" data-label="Mission 5 – Indikation RT nach BET"></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m5_help1')">Support öffnen <span>Fokus auf Rezidivrisiko und Sicherheit</span></button>
+          <div class="toggle-content" id="m5_help1">
+            <ul>
+              <li>Nach BET bleibt Brustgewebe erhalten – damit bleibt auch ein Rest-Risiko im ehemaligen Tumorgebiet.</li>
+              <li>Die RT ist eine adjuvante Maßnahme, also eine zusätzliche Sicherung nach der OP.</li>
+              <li>Durch die postoperative RT wird das Rezidivrisiko je nach Risikoprofil um bis zu 80 % gesenkt.</li>
+              <li>Du musst keine Tumorkonferenz nachspielen – aber die klinische Logik erklären können.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- NEU v4: BET/MRM-Kurzreferenz aus Widget Tab 4 -->
+        <div class="support-box" style="margin-top:8px">
+          <button class="toggle" onclick="toggleBox('m5_help2')">Referenz: BET vs. MRM <span>Indikationen kompakt</span></button>
+          <div class="toggle-content" id="m5_help2">
+            <div class="wissen-block" style="margin-bottom:8px">
+              <h5>Brusterhaltende Therapie (BET)</h5>
+              <p>Tumorektomie + Sentinel-Biopsie ± Axilla-Dissektion. Ca. <strong>70–80 %</strong> aller Patientinnen werden brusterhaltend operiert.</p>
+            </div>
+            <div class="wissen-block">
+              <h5>Mastektomie (MRM) – Indikationen</h5>
+              <ul>
+                <li>Tumordurchmesser &gt;3 cm oder unzureichendes kosmetisches Ergebnis nach BET erwartet</li>
+                <li>Ausgedehnte Fixierung des Tumors an Haut oder Faszien</li>
+                <li>Multizentrisch wachsender Tumor</li>
+                <li>Inflammatorisches Mammakarzinom (aggressive Form)</li>
+                <li>Keine R0-Resektion bei BET erreichbar</li>
+                <li>Patientinnenwunsch</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Patientensprache</h4><span class="output-tag">kommunikativ</span></div>
+        <p>Formuliere einen Satz, den du Frau S. sagen könntest, wenn sie fragt, warum die Bestrahlung trotz R0-Resektion nötig ist.</p>
+        <textarea id="m5_t3" class="short" data-label="Mission 5 – Patientensprache"></textarea>
+      </div>
+      <div class="plus-box"><strong>Plus:</strong> Erkläre, warum Tamoxifen zwar wichtig ist, aber deine konkrete Lagerung am Planungs-CT nicht direkt ersetzt oder bestimmt.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Wer den Therapiegrund versteht, kommuniziert sicherer und kann das Setting im Team besser begründen.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Mission hält den Fall onkologisch zusammen. Sie verhindert, dass RT in der Wahrnehmung der SuS nur ein technischer Nachklapp der OP bleibt.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(5,6)">Mission als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status5"></div>
+    </section>
+
+    <!-- M6: RT-Basics -->
+    <section class="mission-panel" id="m6">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 06</div>
+        <h2 class="mission-title">RT-Basics: Dosis, Fraktionierung, Zielvolumen und OAR</h2>
+        <p class="mission-subtitle">Hier liegt die fachliche Brücke zwischen Wissen und Präzision. Wenn du verstehst, warum jeder Millimeter zählt, verstehst du auch, warum reproduzierbare Lagerung keine Formalie ist.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: PTV-Logik + Dosisverständnis</div></div>
+      </div>
+
+      <!-- NEU v4: Dosistabelle aus Widget Tab 4 -->
+      <div class="card">
+        <h3>Dosiskonzepte beim Mamma-Ca. – Referenz</h3>
+        <table class="dosis-table">
+          <thead>
+            <tr><th>Konzept</th><th>Einzeldosis</th><th>Gesamtdosis</th><th>Fraktionen/Besonderheit</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Normofraktionierung (Brust)</strong></td><td>1,8–2,0 Gy</td><td>50,4–54 Gy</td><td>28–30 Fx</td></tr>
+            <tr><td><strong>Boost (Tumorbett, alternierend)</strong></td><td>2,0 Gy</td><td>10–16 Gy</td><td>5–8 Fx; gesamt therap. Dosis: 60–70 Gy</td></tr>
+            <tr><td><strong>Hypofraktionierung (Standard)</strong></td><td>2,67 Gy</td><td>40,05 Gy</td><td>15 Fx; nach START-B-Studie</td></tr>
+            <tr><td><strong>SIB (simultan integrierter Boost)</strong></td><td>2,25 Gy</td><td>ca. 63 Gy</td><td>28 Fx; Boost simultan, nicht alternierend</td></tr>
+            <tr><td><strong>INTRABEAM (intraoperativer Boost)</strong></td><td>einmalig</td><td>21 Gy</td><td>1 Fx intraoperativ; danach perkutane RT 45 Gy</td></tr>
+            <tr><td><strong>Thoraxwand nach MRM</strong></td><td>1,8–2,0 Gy</td><td>50–50,4 Gy</td><td>inkl. Narbe; ggf. Lymphknoten</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:10px;font-size:12px;color:var(--text-dim)">Risikoorgane (Priorität): Herz (Prio 1 bei links), ipsilaterale Lunge, kontralaterale Brust, Rückenmark, Larynx</p>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">∞</div><div><h5>Medizinphysik-Wiki – PTV</h5><p>CTV/PTV/Lagerungsunsicherheit sauber verknüpfen.</p><a href="https://medizinphysik.wiki/glossar/planning-target-volume/" target="_blank" rel="noopener">PTV öffnen</a></div></div>
+        <div class="resource"><div class="resource-icon">▶</div><div><h5>Tumor Target Therapy – Therapieverschreibung verstehen</h5><p>Optional, wenn Dosis und Fraktionierung sprachlich noch unsicher sind.</p><a href="https://www.youtube.com/watch?v=gs67j3WwJ_Y" target="_blank" rel="noopener">Video öffnen</a></div></div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Dosis und Behandlungsdauer</h4><span class="output-tag">Rechnung + Bedeutung</span></div>
+        <p>Beispiel: 1,8 Gy × 28 = 50,4 Gy plus Boost 2,0 Gy × 8. Berechne die Gesamtdosis und erkläre in einem Satz, was das für die Behandlungsdauer bedeutet.</p>
+        <textarea id="m6_t1" data-required="true" data-label="Mission 6 – Dosis und Dauer"></textarea>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: CTV → PTV → Lagerungsunsicherheit</h4><span class="output-tag">max. 3 Sätze</span></div>
+        <textarea id="m6_t2" data-required="true" data-label="Mission 6 – PTV-Logik"></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> Deine Antwort ist erst dann gut, wenn sie den Sicherheitssaum <em>und</em> die praktische Konsequenz für Lagerung und Schonung von Normalgewebe enthält.</div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Was bedeutet Hypofraktionierung für Frau S.?</h4><span class="output-tag">Vergleich</span></div>
+        <textarea id="m6_t3" class="short" data-label="Mission 6 – Hypofraktionierung"></textarea>
+      </div>
+      <div class="plus-box"><strong>Plus:</strong> Formuliere einen Satz dazu, warum ein größeres PTV zwar Sicherheit schafft, aber gleichzeitig das Problem der Schonung verschärfen kann.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Je klarer dir PTV und OAR sind, desto eher verstehst du, warum unsaubere Lagerung nicht „nur ein bisschen schief" ist.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Die Dosistabelle oben gibt den Lernenden eine Referenz, die sie sonst mühsam aus Fragmenten zusammensuchen müssten. Entscheidend bleibt die Verbindung von Zielvolumenkonzept, Normalgewebsschonung und Lagerungsqualität.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(6,7)">Mission als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status6"></div>
+    </section>
+
+    <!-- M7: Planungs-CT & Techniken -->
+    <section class="mission-panel" id="m7">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 07</div>
+        <h2 class="mission-title">Planungs-CT und RT-Techniken: Ready for PLCT</h2>
+        <p class="mission-subtitle">Jetzt wird aus Theorie Vorbereitung. Was brauchst du für das Setting? Welche Technik ist warum relevant? Und wie denkst du Herzschonung bei links?</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 10–12 Min</div><div class="meta-pill">🎯 Output: PLCT-Checkliste</div></div>
+      </div>
+
+      <!-- NEU v4: Technik-Kompaktwissen aus Widget Tab 5 -->
+      <div class="card">
+        <h3>Bestrahlungstechniken beim Mamma-Ca. – Kompaktübersicht</h3>
+        <div class="wissen-block">
+          <h5>1. Mamma-Zange (Tangentiale Gegenfeldtechnik)</h5>
+          <ul>
+            <li>6 MV oder 15 MV Photonen; homogene Dosisverteilung der gesamten Brust</li>
+            <li>Gantry wird <strong>3°–5° überkippt</strong> → keine isozentrischen Gegenfelder</li>
+            <li>Isozentrum liegt mittig in der Mamma; Feld überstrahlt Brust + Lungensaum (Atemausgleich)</li>
+            <li>Keilfilter (manuell, automatisch oder virtuell) für homogenere Dosisverteilung</li>
+          </ul>
+          <div class="img-row">
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-zange.jpg" alt="Mamma-Zange: tangentiale Gegenfelder in der Draufsicht" loading="lazy">
+              <figcaption class="img-caption">Tangentiale Gegenfelder (Mamma-Zange)</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-zange-keilfilter.png" alt="Mamma-Zange mit Keilfiltern zur Dosishomogenisierung" loading="lazy">
+              <figcaption class="img-caption">Keilfilter für homogenere Dosisverteilung</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="wissen-block">
+          <h5>2. Erweiterte Zange mit Supra (Half-Beam-Technik)</h5>
+          <ul>
+            <li>Zusätzliches Zielvolumen: supraklavikuläre Lymphknoten (ggf. zervikal)</li>
+            <li>Problem klassische Kombination: <strong>Hot Spots</strong> (Dosisüberhöhung) und <strong>Cold Spots</strong> (Dosiseinfall) am Feldanschluss</li>
+            <li>Lösung <strong>Half-Beam</strong>: Blende bis zum Zentralstrahl → ein Isozentrum auf Klavikula, keine Tischdrehung nötig → sauberer Feldanschluss</li>
+          </ul>
+          <div class="img-row">
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-isozentren-zange-supra.jpg" alt="Isozentren-Anordnung bei Zange mit Suprafeld" loading="lazy">
+              <figcaption class="img-caption">Isozentren: Zange + Supra</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-zange-supra-tischdrehung.jpg" alt="Tischdrehung bei erweiterter Mamma-Zange mit Suprafeld" loading="lazy">
+              <figcaption class="img-caption">Tischdrehung: Zange + Supra</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="wissen-block">
+          <h5>3. Boost-Varianten</h5>
+          <ul>
+            <li><strong>Alternierend (Narbenboost):</strong> Elektronenstehfeld, FHA 100 cm, Energie nach CT-Messung (z.B. 3 cm Tiefe → 9 MeV); 36 Sitzungen gesamt</li>
+            <li><strong>SIB (simultan integrierter Boost):</strong> innerhalb VMAT/IMRT, OP-Bereich separat markiert → 28 Sitzungen statt 36</li>
+            <li><strong>INTRABEAM (intraoperativer Boost):</strong> einmalig 21 Gy intraoperativ via kV-Röntgen; Kontraindikationen: Wundheilungsstörung, zu großer Tumor</li>
+          </ul>
+          <div class="img-row">
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-elektronen-stehfeld.jpg" alt="Elektronen-Stehfeld als alternierender Narbenboost" loading="lazy">
+              <figcaption class="img-caption">Elektronen-Stehfeld (alternierender Boost)</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-narbenboost.png" alt="Narbenboost-Dosisplanung beim Mammakarzinom" loading="lazy">
+              <figcaption class="img-caption">Narbenboost-Dosisplan</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-sib.jpg" alt="SIB – simultan integrierter Boost beim Mammakarzinom" loading="lazy">
+              <figcaption class="img-caption">SIB (simultan integrierter Boost)</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="wissen-block">
+          <h5>4. Moderner Standard: VMAT + DIBH</h5>
+          <ul>
+            <li><strong>VMAT:</strong> dynamisch, viele Segmente mit variabler Dosisintensität, Gantry rotiert – optimale Dosiskonformität</li>
+            <li><strong>DIBH (Deep Inspiration Breath Hold):</strong> Patientin atmet tief ein und hält Atem → Herz verlagert sich nach kaudal/dorsal → <strong>Herzabstand ↑</strong></li>
+            <li>Überwachung via Oberflächenscanner (z.B. Catalyst, C-Rad); Bestrahlung nur im Atemhalteintervall</li>
+            <li>Besondere Bedeutung bei <strong>linksseitigem</strong> Mamma-Ca. zur Herzschonung</li>
+          </ul>
+          <div class="img-row">
+            <figure class="img-figure">
+              <img src="../../media/images/klinik-intern/mamma-vmat.jpg" alt="VMAT-Dosisverteilung beim Mammakarzinom" loading="lazy">
+              <figcaption class="img-caption">VMAT Mamma-Ca.</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/eigene/mamma-dibh.jpg" alt="DIBH-Atemhalteverfahren: Herzabstand bei linksseitigem Mamma-Ca." loading="lazy">
+              <figcaption class="img-caption">DIBH: Herzabstand bei Atemhalte</figcaption>
+            </figure>
+            <figure class="img-figure">
+              <img src="../../media/images/eigene/dibh-grafik.jpg" alt="Grafik: Herzabstandsvergleich freie Atmung vs. DIBH" loading="lazy">
+              <figcaption class="img-caption">Herzabstand: freie Atmung vs. DIBH</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">▶</div><div><h5>Ablauf der Vorbereitungsphase einer Bestrahlung</h5><p>Pflichtvideo für den Ablaufgedanken. Schaue gezielt: Was davon braucht Frau S. heute?</p><a href="https://www.youtube.com/watch?v=kc0fJeKLsaw" target="_blank" rel="noopener">Video öffnen</a></div></div>
+        <div class="resource"><div class="resource-icon">▶</div><div><h5>Atemgating am CT</h5><p>Optional/vertiefend für das Thema Herzschonung und linksseitige Mamma.</p><a href="https://www.youtube.com/watch?v=y0pRgrXkmdk" target="_blank" rel="noopener">Video öffnen</a></div></div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: PLCT-Checkliste erstellen</h4><span class="output-tag">mit in die Praxis nehmen</span></div>
+        <table class="table">
+          <thead><tr><th>Bereich</th><th>Deine Notizen</th></tr></thead>
+          <tbody>
+            <tr><td>Material / Hilfsmittel</td><td><textarea id="m7_t1" class="short" data-required="true" data-label="Mission 7 – Material Hilfsmittel"></textarea></td></tr>
+            <tr><td>Lagerung</td><td><textarea id="m7_t2" class="short" data-required="true" data-label="Mission 7 – Lagerung"></textarea></td></tr>
+            <tr><td>Markierungen / Referenzpunkte</td><td><textarea id="m7_t3" class="short" data-required="true" data-label="Mission 7 – Markierungen Referenzpunkte"></textarea></td></tr>
+            <tr><td>Kommunikation mit Frau S.</td><td><textarea id="m7_t4" class="short" data-required="true" data-label="Mission 7 – Kommunikation PLCT"></textarea></td></tr>
+            <tr><td>Typische Fehlerquellen</td><td><textarea id="m7_t5" class="short" data-required="true" data-label="Mission 7 – Fehlerquellen"></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Wann ist DIBH bei Frau S. eine sinnvolle Überlegung?</h4><span class="output-tag">Herzschonung</span></div>
+        <textarea id="m7_t6" class="short" data-label="Mission 7 – DIBH"></textarea>
+      </div>
+      <div class="support-box">
+        <button class="toggle" onclick="toggleBox('m7_help')">Support öffnen <span>Woran du in der Checkliste denken solltest</span></button>
+        <div class="toggle-content" id="m7_help">
+          <ul>
+            <li>nicht nur Lagerung nennen, sondern auch Reproduzierbarkeit und Nachvollziehbarkeit</li>
+            <li>Markierungen und Referenzpunkte mitdenken, nicht erst nach dem CT</li>
+            <li>bei linksseitiger Mamma Herzschonung nicht vergessen</li>
+            <li>Kommunikation ist Teil des Settings, nicht Bonus</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout green"><strong>Praxisanker:</strong> Diese Checkliste ist dein echtes Arbeitsinstrument für Mission 8. Ohne sie wird die Praxis schnell nur Nachstellen.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Die Technik-Kompaktübersicht oben ist bewusst als Nachschlagewerk konzipiert, nicht als Lesetext. Fordere die SuS auf, genau einen Technikunterschied zu benennen, bevor sie die Checkliste ausfüllen.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(7,8)">Mission als bearbeitet markieren →</button><button class="btn btn-secondary" onclick="showMission(8)">Jetzt zur Praxisstation</button></div>
+      <div class="inline-status" id="status7"></div>
+    </section>
+
+    <!-- M8: Praxisstation -->
+    <section class="mission-panel" id="m8">
+      <div class="mission-header">
+        <div class="mission-tag practice">Praxisstation</div>
+        <h2 class="mission-title">Praxisstation: Rollen, Beobachtung, Rückmeldung</h2>
+        <p class="mission-subtitle">Diesen Abschnitt öffnest du, sobald deine 3er-Gruppe an die Praxisstation geht. Er funktioniert unabhängig vom Bearbeitungsstand der anderen Missionen.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ während der Rotation</div><div class="meta-pill">🎯 Output: Praxisprotokoll</div></div>
+      </div>
+      <div class="callout orange"><strong>Wichtig:</strong> Mission 8 ist kein Lese-Tab. Sie soll eure praktische Arbeit strukturieren. Rollen verteilen, durchführen, beobachten, kurz reflektieren.</div>
+
+      <div class="card">
+        <h3>Lagerungshilfen – visuelle Referenz</h3>
+        <div class="img-row">
+          <figure class="img-figure">
+            <img src="../../media/images/eigene/lagerung-breaststep.jpg" alt="BreastStep-Lagerungsrampe für Mamma-Ca.-Bestrahlung" loading="lazy">
+            <figcaption class="img-caption">BreastStep</figcaption>
+          </figure>
+          <figure class="img-figure">
+            <img src="../../media/images/eigene/lagerung-wingstep.jpg" alt="Wingstep-Lagerungshilfe für Mamma-Ca.-Bestrahlung" loading="lazy">
+            <figcaption class="img-caption">Wingstep</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><h3>Rolle A – Durchführung</h3><p>führt das Setting aktiv durch, spricht zentrale Schritte laut mit und bleibt strukturiert.</p></div>
+        <div class="card"><h3>Rolle B – Assistenz</h3><p>bereitet Material vor, unterstützt bei Lagerung und achtet auf Ablauf sowie Referenzpunkte.</p></div>
+        <div class="card"><h3>Rolle C – Beobachtung</h3><p>arbeitet mit dem Beobachtungsbogen, notiert Fehlerquellen und gibt kurzes Feedback.</p></div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Beobachtungsbogen</h4><span class="output-tag">während der Praxis</span></div>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="m8_c1" data-required="true" data-label="Mission 8 – Seite korrekt kommuniziert"><label for="m8_c1">Seite/Fragestellung wurde korrekt identifiziert und laut kommuniziert.</label></li>
+          <li><input type="checkbox" id="m8_c2" data-required="true" data-label="Mission 8 – Hilfsmittel bereit"><label for="m8_c2">Hilfsmittel waren vor dem Lagern bereit.</label></li>
+          <li><input type="checkbox" id="m8_c3" data-required="true" data-label="Mission 8 – Lagerung nachvollziehbar"><label for="m8_c3">Lagerung und Armposition waren nachvollziehbar und reproduzierbar.</label></li>
+          <li><input type="checkbox" id="m8_c4" data-required="true" data-label="Mission 8 – Markierungen bedacht"><label for="m8_c4">Markierungen/Referenzpunkte wurden mitgedacht oder umgesetzt.</label></li>
+          <li><input type="checkbox" id="m8_c5" data-required="true" data-label="Mission 8 – Kommunikation im Team"><label for="m8_c5">Im Team wurde fachlich gesprochen, nicht nur „gemacht".</label></li>
+        </ul>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Praxisrückmeldung</h4><span class="output-tag">nach der Rotation</span></div>
+        <textarea id="m8_t1" class="short" data-required="true" data-label="Mission 8 – Was lief gut was war schwierig" placeholder="Was lief gut? Was war schwieriger als gedacht?"></textarea>
+        <textarea id="m8_t2" class="short" data-required="true" data-label="Mission 8 – ein direkter Theorie-Praxis-Moment" placeholder="Nenne einen Moment, in dem dir Wissen aus einer früheren Mission direkt geholfen hat."></textarea>
+      </div>
+      <div class="plus-box"><strong>Plus:</strong> Wenn ihr schnell seid: Notiert eine Verbesserung, die der nächsten 3er-Gruppe konkret helfen würde.</div>
+      <div class="callout green"><strong>Praxisanker:</strong> Diese Mission ist die Brücke. Ohne Rückmeldung bleibt Praxis oft Erlebnis, aber keine Kompetenz.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Mission macht die App dozentenunabhängiger, weil sie Beobachtung und Rückmeldung direkt in die Lernumgebung zieht. Trotzdem lohnt sich ein kurzes mündliches Debriefing pro Rotation.</div>
+      <div class="btn-row"><button class="btn btn-success" onclick="completeMission(8,9)">Praxisstation als bearbeitet markieren →</button></div>
+      <div class="inline-status" id="status8"></div>
+    </section>
+
+    <!-- M9: Nebenwirkungen & Fallvorstellung -->
+    <section class="mission-panel" id="m9">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 09</div>
+        <h2 class="mission-title">Nebenwirkungen, Kommunikation und Fallvorstellung</h2>
+        <p class="mission-subtitle">Jetzt wird das Gelernte rund. Du brauchst nicht nur Technik, sondern auch Patientensicht, MTR-Rolle und eine klare Sprache für deine Fallvorstellung.</p>
+        <div class="meta-row"><div class="meta-pill">⏱ 10–14 Min</div><div class="meta-pill">🎯 Output: 3-Minuten-Fallvorstellung + Lernspiel</div></div>
+      </div>
+
+      <!-- NEU v4: Nebenwirkungen-Kompaktwissen aus Widget Tab 7 -->
+      <div class="card">
+        <h3>Nebenwirkungen der Mamma-RT – Kompaktreferenz</h3>
+        <div class="nw-row">
+          <div class="wissen-block">
+            <h5>Akute NW (bis Tag 90 nach Beginn)</h5>
+            <ul>
+              <li>Hautrötung, Hautschuppung</li>
+              <li>Schwellung, Überwärmung der Brust</li>
+              <li>Pigmentierung (bei Rauchern: bräunlich-lederartig)</li>
+              <li>Pneumonitis (Strahlenreaktion der Lunge)</li>
+            </ul>
+          </div>
+          <div class="wissen-block">
+            <h5>Späte NW (ab Tag 91 nach Ende)</h5>
+            <ul>
+              <li>Lungenfibrose</li>
+              <li>Myokarditis</li>
+              <li>Perikarditis</li>
+            </ul>
+          </div>
+        </div>
+        <div class="wissen-block">
+          <h5>Pflegemaßnahmen – MTR-Empfehlungsrahmen</h5>
+          <ul>
+            <li>Sonne und Solarium während der Therapie vermeiden</li>
+            <li>Bepanthen-Lotion o.Ä. – <strong>NICHT unmittelbar vor der Sitzung</strong> auftragen</li>
+            <li>Nicht zu heiß duschen; Bestrahlungsfeld schonend behandeln</li>
+            <li>Kühlpads bei überwärmter Brust (kein direkter Eiskontakt)</li>
+            <li>Leichte Baumwollkleidung, kein Deo im Bestrahlungsfeld</li>
+            <li>Schmerzmittel nur nach ärztlicher Anweisung</li>
+          </ul>
+        </div>
+        <div class="callout" style="margin-top:10px;margin-bottom:0">
+          <strong>Wichtig für die Patientenkommunikation:</strong> Die strahleninduzierte Hautrötung ist eine <em>Entzündungsreaktion</em> – keine Verbrennung. Das Schreckgespenst der „Verbrennung durch Bestrahlung" aus früheren Zeiten hält sich hartnäckig. Du kannst Patientinnen sachlich und kompetent widersprechen.
+        </div>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">∞</div><div><h5>Medizinphysik-Wiki – Radiodermatitis</h5><p>Zur Auffrischung von Nebenwirkungen und alltagsnahen Pflegemaßnahmen.</p><a href="https://medizinphysik.wiki/glossar/radiodermatitis/" target="_blank" rel="noopener">Radiodermatitis öffnen</a></div></div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Nebenwirkungen und MTR-Rolle</h4><span class="output-tag">3 alltagstaugliche Hinweise</span></div>
+        <textarea id="m9_t1" data-required="true" data-label="Mission 9 – Nebenwirkungen Hinweise" placeholder="Welche typischen Nebenwirkungen oder Belastungen sprichst du an? Welche alltagstauglichen Hinweise kannst du geben, ohne ärztliche Aufklärung zu ersetzen?"></textarea>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Pflichtauftrag: Fallvorstellung aus MTR-Sicht</h4><span class="output-tag">Stichwortgerüst</span></div>
+        <table class="table">
+          <thead><tr><th>Baustein</th><th>Deine Stichpunkte</th></tr></thead>
+          <tbody>
+            <tr><td>Patientin / Ausgangssituation</td><td><textarea id="m9_t2" class="short" data-required="true" data-label="Mission 9 – Fallvorstellung Patientin"></textarea></td></tr>
+            <tr><td>Therapiekonzept / warum RT</td><td><textarea id="m9_t3" class="short" data-required="true" data-label="Mission 9 – Fallvorstellung Therapiekonzept"></textarea></td></tr>
+            <tr><td>PLCT-Setting / Lagerung / Hilfsmittel</td><td><textarea id="m9_t4" class="short" data-required="true" data-label="Mission 9 – Fallvorstellung Setting"></textarea></td></tr>
+            <tr><td>Risikoorgane / Schonung / Technik</td><td><textarea id="m9_t5" class="short" data-required="true" data-label="Mission 9 – Fallvorstellung OAR Technik"></textarea></td></tr>
+            <tr><td>Besonderheit / Kommunikation / Herausforderung</td><td><textarea id="m9_t6" class="short" data-required="true" data-label="Mission 9 – Fallvorstellung Besonderheit"></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Standardauftrag: Selbstbewertung</h4><span class="output-tag">Reflexion</span></div>
+        <textarea id="m9_t7" class="short" data-label="Mission 9 – Selbstbewertung" placeholder="Was kannst du nach dieser Mission sicher? Wo brauchst du noch Übung?"></textarea>
+      </div>
+
+      <!-- NEU v4: Wordwall-Lernspiel aus Widget Tab 8 -->
+      <div class="plus-box">
+        <strong>Plus – Lernspiel: Mamma-Ca. Quiz</strong>
+        <p style="margin-top:6px;font-size:13px;color:var(--text-muted)">Wenn du schnell fertig bist oder die Gruppe noch etwas Zeit hat: Teste dein Wissen interaktiv. Das Spiel läuft direkt hier im Browser.</p>
+        <div class="wordwall-wrap">
+          <p>Das Spiel lädt – bei schlechter Verbindung einfach neu laden.</p>
+          <iframe style="max-width:100%;border-radius:10px" src="https://wordwall.net/de/embed/4a4f9b4a06e84480a7cab0a39a027c0a?themeId=23&templateId=49&fontStackId=0" width="500" height="380" frameborder="0" allowfullscreen loading="lazy" title="Lernspiel Mamma-Ca."></iframe>
+        </div>
+      </div>
+
+      <div class="callout green"><strong>Praxisanker:</strong> Wenn du die Fallvorstellung jetzt sauber füllen kannst, ist die Theorie nicht nur gelesen, sondern wirklich verarbeitet.</div>
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Schlussmission ist das wichtigste Kontrollfenster. Hier siehst du, ob aus vielen Einzelaufgaben ein beruflich brauchbarer Zusammenhang geworden ist. Das Wordwall-Spiel eignet sich auch für ein kurzes gemeinsames Abschluss-Spielen im Plenum.</div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="completeMission(9,'complete')">Mission als bearbeitet markieren → Abschluss</button></div>
+      <div class="inline-status" id="status9"></div>
+    </section>
+
+    <!-- Abschluss -->
+    <section class="mission-panel" id="m-complete">
+      <div class="complete-screen">
+        <h1>Mission abgeschlossen</h1>
+        <p>Du hast die Pflichtspur bearbeitet und ein Arbeitsprotokoll aufgebaut, das sich für Praxisstation, Fallvorstellung und Dozentenfeedback nutzen lässt.</p>
+        <div class="stats">
+          <div class="stat"><strong id="finalCompleted">0</strong><span>Missionen markiert</span></div>
+          <div class="stat"><strong>9</strong><span>Missionen insgesamt</span></div>
+          <div class="stat"><strong>75–90</strong><span>Min App-Zeit</span></div>
+          <div class="stat"><strong>1</strong><span>Fall · viele Transferpunkte</span></div>
+        </div>
+        <div class="card" style="max-width:760px;margin:0 auto 20px;text-align:left">
+          <h3>Was v4 besser macht als v3</h3>
+          <ul>
+            <li>Kompaktwissen direkt in der App – kein Internetzugang für den Einstieg nötig</li>
+            <li>Dosistabelle als Referenz in Mission 6</li>
+            <li>Technik-Übersicht (Mamma-Zange, Half-Beam, DIBH, SIB) in Mission 7</li>
+            <li>Nebenwirkungen-Referenz inkl. Pflegehinweise und Kommunikationstipp in Mission 9</li>
+            <li>Wordwall-Lernspiel als Abschluss-Plus</li>
+            <li>Keine externen Schriftarten – läuft vollständig offline</li>
+          </ul>
+        </div>
+        <div class="btn-row" style="justify-content:center"><button class="btn btn-secondary" onclick="showMission(1)">Zurück zum Start</button><button class="btn btn-primary" onclick="exportReport()">Export / Drucken</button></div>
+      </div>
+    </section>
+
+    <div class="footer-space"></div>
+  </main>
+</div>
+<script>
+const TOTAL_MISSIONS = 9;
+const STORAGE_KEY = 'mtr_rt_mission_mamma_v3';
+let state = {completed: [], teacherMode: false, fields: {}};
+
+function defaultState(){return {completed: [], teacherMode: false, fields: {}}}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ state = {...defaultState(), ...JSON.parse(raw)}; }
+  }catch(e){ state = defaultState(); }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function applyTeacherMode(){
+  document.body.classList.toggle('show-teacher', !!state.teacherMode);
+  document.getElementById('teacherToggle').classList.toggle('active', !!state.teacherMode);
+}
+function toggleTeacherMode(){ state.teacherMode = !state.teacherMode; applyTeacherMode(); saveState(); }
+function showMission(n){
+  document.querySelectorAll('.mission-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mission-btn').forEach(b => b.classList.remove('active'));
+  const id = n === 'complete' ? 'm-complete' : 'm'+n;
+  const panel = document.getElementById(id);
+  if(panel) panel.classList.add('active');
+  const btn = document.getElementById('mb'+n);
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function updateProgress(){
+  const count = state.completed.length;
+  document.getElementById('progressLabel').textContent = count + ' / ' + TOTAL_MISSIONS;
+  document.getElementById('progressFill').style.width = ((count/TOTAL_MISSIONS)*100) + '%';
+  document.getElementById('finalCompleted').textContent = count;
+  for(let i=1;i<=TOTAL_MISSIONS;i++){
+    const btn = document.getElementById('mb'+i);
+    if(btn){ btn.classList.toggle('completed', state.completed.includes(i)); }
+  }
+}
+function setStatus(n, type, text){
+  const box = document.getElementById('status'+n);
+  if(!box) return;
+  box.className = 'inline-status show ' + type;
+  box.innerHTML = text;
+}
+function validateMission(n){
+  const panel = document.getElementById('m'+n);
+  if(!panel) return true;
+  let ok = true;
+  panel.querySelectorAll('.task').forEach(t => t.classList.remove('required-empty'));
+  const required = panel.querySelectorAll('[data-required="true"]');
+  required.forEach(el => {
+    let valid = true;
+    if(el.type === 'checkbox') valid = el.checked;
+    else valid = !!el.value && el.value.trim() !== '';
+    if(!valid){
+      ok = false;
+      const task = el.closest('.task');
+      if(task) task.classList.add('required-empty');
+    }
+  });
+  if(!ok) setStatus(n, 'warn', 'Es fehlen noch Pflichtfelder in dieser Mission. Leere Felder sind rot markiert.');
+  return ok;
+}
+function completeMission(n,next){
+  if(!validateMission(n)) return;
+  if(!state.completed.includes(n)) state.completed.push(n);
+  state.completed.sort(function(a,b){return a-b;});
+  saveState(); updateProgress();
+  setStatus(n, 'ok', 'Mission gespeichert. Du kannst später jederzeit zurückkommen und weiterbearbeiten.');
+  if(next === 'complete') showMission('complete');
+  else if(typeof next === 'number') showMission(next);
+}
+function toggleBox(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+function bindAutosave(){
+  document.querySelectorAll('textarea,input[type="text"],select,input[type="checkbox"]').forEach(el => {
+    if(!el.id) return;
+    const val = state.fields[el.id];
+    if(typeof val !== 'undefined'){
+      if(el.type === 'checkbox') el.checked = !!val;
+      else el.value = val;
+    }
+    const eventName = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(eventName, function(){
+      state.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+      saveState();
+    });
+  });
+}
+function exportReport(){
+  const lines = [];
+  lines.push('Mission Mamma – Lernprotokoll');
+  lines.push('--------------------------------------------');
+  lines.push('Abgeschlossene Missionen: ' + state.completed.length + ' / ' + TOTAL_MISSIONS);
+  lines.push('');
+  document.querySelectorAll('[data-label]').forEach(el => {
+    let value = '';
+    if(el.type === 'checkbox') value = el.checked ? 'Ja' : 'Nein';
+    else value = (el.value || '').trim();
+    if(value){
+      lines.push(el.dataset.label + ':');
+      lines.push(value);
+      lines.push('');
+    }
+  });
+  const content = lines.join('\n');
+  const win = window.open('', '_blank');
+  if(!win) return;
+  win.document.write('<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><title>Mission Mamma – Export<\/title><style>body{font-family:Arial,sans-serif;line-height:1.5;padding:32px;white-space:pre-wrap}button{margin-bottom:20px;padding:10px 14px}<\/style><\/head><body><button onclick="window.print()">Drucken / als PDF sichern<\/button><pre>' + content.replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}) + '<\/pre><\/body><\/html>');
+  win.document.close();
+}
+function init(){
+  loadState();
+  bindAutosave();
+  applyTeacherMode();
+  updateProgress();
+}
+init();
+</script>
+</body>
+</html>

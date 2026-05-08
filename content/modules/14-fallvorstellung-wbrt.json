@@ -1,0 +1,52 @@
+{
+  "id": "14-fallvorstellung-wbrt",
+  "type": "transfer",
+  "title": "Fallvorstellung: Ganzhirnbestrahlung (WBRT) – 10-Minuten-Monolog",
+  "category": "Prüfungsvorbereitung – Teil 3",
+  "difficulty": "pruefungsreife",
+  "kapitel": 14,
+  "reihenfolge": 1,
+  "pflichtgrad": "pflicht",
+  "phase": "P3",
+  "estimatedMinutes": 20,
+  "learningGoals": [
+    "Den onkologischen Kontext (Hirnmetastasen vs. Primärtumor) korrekt benennen.",
+    "Therapieziel palliativ klar von kurativ abgrenzen.",
+    "Zielvolumen (Neurocranium), Risikoorgane (Augenlinsen) und Dosiskonzept (10 × 3,0 Gy) sicher wiedergeben.",
+    "Lagerung, Technik (VMAT) und medizinische Besonderheiten (Dexamethason, Alopezie) fachlich korrekt darstellen.",
+    "Einen strukturierten 10-minütigen Monolog flüssig und prüfungsreif präsentieren."
+  ],
+  "tags": [
+    "wbrt",
+    "ganzhirnbestrahlung",
+    "hirnmetastasen",
+    "palliation",
+    "fallvorstellung",
+    "pruefung"
+  ],
+  "examRelevance": "MTAPrV Teil B – Fallvorstellung: Planungsbesprechung (10 Minuten strukturierter Monolog)",
+  "relatedModules": [
+    "14-plct-stoerfall-hno",
+    "14-quiz-gesamtwissen"
+  ],
+  "relatedInfotexte": [
+    "wbrt-ganzhirnbestrahlung"
+  ],
+  "body": {
+    "prompt": "Vor dir liegt die folgende Fallakte. Bereite einen strukturierten 10-Minuten-Monolog vor, als würdest du ihn vor dem Prüfungsausschuss halten. Schreibe deinen Monolog vollständig aus – stelle dir vor, du sprichst laut. Nutze das 6-Punkte-Raster: (1) Patient & Diagnose, (2) Therapiekonzept & Ziel, (3) Zielvolumen & Risikoorgane, (4) Dosiskonzept, (5) Bestrahlungstechnik & Lagerung, (6) Besonderheiten & Patienteninformation.\n\n---\n\nFALLAKTE: Herr Klaus Wagner, geb. 14.08.1955\nDiagnose: Multiple zerebrale Filiae (Hirnmetastasen) bei bekanntem nicht-kleinzelligem Bronchialkarzinom (NSCLC), ED 10/2024, Z.n. palliativer Chemotherapie.\nAllgemeinzustand: Karnofsky-Index 70%. Zunehmender Schwindel, morgendliche Kopfschmerzen, leichte Armparese links.\nTherapiekonzept: Palliative Ganzhirnbestrahlung (WBRT). Dosiskonzept: 10 × 3,0 Gy (GD 30,0 Gy).\nZielvolumen: Gesamtes Neurocranium inkl. Meningen, Schädelbasis bis Foramen magnum.\nRisikoorgane: Augenlinsen beidseits (Katarakt-Prophylaxe).\nTechnik: VMAT (2 Halbbögen zur optimalen Linsenschonung).\nLagerung: Rückenlage, 3-Punkt-Thermoplastmaske, Kopfschale B, Kniematte.\nMedikation: Dexamethason (Hirnödem-Prophylaxe).\nAufklärung: Alopezie ab Woche 2, Fatigue, Übelkeit.",
+    "minWords": 300,
+    "maxWords": 1200,
+    "sampleAnswer": "Ich stelle vor: Herrn Klaus Wagner, geboren am 14. August 1955. Herr Wagner leidet an einem bekannten nicht-kleinzelligen Bronchialkarzinom, das im Oktober 2024 erstdiagnostiziert wurde. Im Verlauf haben sich multiple zerebrale Filiae entwickelt – also Hirnmetastasen, die sekundär aus dem Primärtumor entstanden sind, nicht ein primärer Hirntumor. Der Allgemeinzustand ist mit einem Karnofsky-Index von 70% eingeschränkt. Klinisch zeigt der Patient Schwindel, morgendliche Kopfschmerzen und eine leichte Schwäche des linken Arms.\n\nDas Therapiekonzept ist palliativ. Ziel ist nicht die Heilung, sondern die Symptomlinderung und die Verhinderung weiterer neurologischer Ausfälle. Die Indikation lautet: palliative Ganzhirnbestrahlung, kurz WBRT – Whole Brain Radiotherapy.\n\nDas Zielvolumen umfasst das gesamte Neurocranium inklusive der Meningen, nach kaudal begrenzt durch die Schädelbasis beziehungsweise das Foramen magnum. Als Risikoorgane müssen zwingend die Augenlinsen beidseits geschont werden, um eine strahleninduzierte Katarakt zu verhindern.\n\nDas Dosiskonzept bei der WBRT lautet: 10 Fraktionen à 3,0 Gray, Gesamtdosis 30,0 Gray. Dies ist das klinische Standardregime für die palliative WBRT.\n\nZur Bestrahlungstechnik: Es wird VMAT eingesetzt – Volumetric Modulated Arc Therapy mit zwei Halbbögen. Diese Technik erlaubt eine sehr konforme Dosisverteilung mit optimaler Schonung der Augenlinsen. Zur Lagerung: Der Patient liegt in Rückenlage auf einer Kopfschale B, fixiert mit einer 3-Punkt-Thermoplastmaske. Eine Kniematte sorgt für die Stabilisierung der Lendenwirbelsäule.\n\nZu den Besonderheiten: Herr Wagner erhält begleitend Dexamethason zur Prophylaxe und Behandlung eines strahleninduzierten Hirnödems. Bezüglich der Patienteninformation muss er über Alopezie – also vollständigen Haarausfall – aufgeklärt werden, der typischerweise ab der zweiten Behandlungswoche einsetzt. Außerdem sind Fatigue und Übelkeit als typische Akutreaktionen zu erwarten, über die er ebenfalls aufgeklärt werden muss.",
+    "selfAssessment": {
+      "intro": "Vergleiche deinen Monolog mit diesen 6 Pflichtpunkten des Prüfungsrasters (B1–B6). Hake ab, was du sicher und korrekt benannt hast.",
+      "checklist": [
+        "B1 – Patient & Diagnose: Hirnmetastasen korrekt als sekundär (nicht Primärtumor) benannt, Grunderkrankung NSCLC genannt.",
+        "B2 – Therapiekonzept: Palliatives Ziel klar benannt (Symptomlinderung, keine Heilung), Abgrenzung zu kurativem Konzept erkennbar.",
+        "B3 – Zielvolumen & Risikoorgane: Gesamtes Neurocranium inkl. Meningen benannt, Augenlinsen beidseits als OAR fokussiert.",
+        "B4 – Dosiskonzept: 10 × 3,0 Gy = 30,0 Gy sicher und vollständig wiedergegeben.",
+        "B5 – Technik & Lagerung: VMAT fachlich korrekt begründet (Linsenschonung), Lagerungsdetails (3-Punkt-Maske, Kopfschale B) genannt.",
+        "B6 – Besonderheiten: Dexamethason (Hirnödem) UND Alopezie (ab Woche 2) genannt, Struktur flüssig und zeitlich im Rahmen."
+      ]
+    }
+  }
+}

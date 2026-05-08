@@ -131,6 +131,7 @@ h3 { font-size: 1.1rem; margin: 1.25rem 0 0.4rem; }
 .badge.type-image-analysis { background: #dcfce7; color: #14532d; }
 .badge.type-quiz        { background: #fee2e2; color: #7f1d1d; }
 .badge.type-transfer    { background: #ede9fe; color: #4c1d95; }
+.badge.type-sequence    { background: #f0fdf4; color: #14532d; border: 1px solid #16a34a; }
 .badge.status-completed { background: #16a34a; color: #fff; }
 .badge.status-in-progress { background: #f59e0b; color: #fff; }
 

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedbackbogen – Lernsequenz Prostata v1</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; background: #fff; padding: 0; }
+.page { max-width: 800px; margin: 0 auto; padding: 2cm 2.2cm; }
+
+.header-block { border: 2px solid #1a5aa8; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+.header-block h1 { font-size: 16pt; color: #1a5aa8; margin-bottom: 0.2rem; }
+.header-block .sub { font-size: 9.5pt; color: #555; margin-bottom: 0.75rem; }
+.header-block .meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+.meta-field { }
+.meta-field label { font-size: 8.5pt; color: #666; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+.meta-field .line { border-bottom: 1px solid #999; width: 140px; height: 1.4em; }
+.meta-field .line-wide { width: 240px; }
+
+.intro { background: #fff8e1; border: 1px solid #f0c040; border-left: 4px solid #f0a500; border-radius: 4px; padding: 0.65rem 0.875rem; margin-bottom: 1.25rem; font-size: 9.5pt; color: #5a3e00; }
+
+.section { margin-bottom: 1.1rem; }
+.section-title { font-size: 10pt; font-weight: 700; color: #1a5aa8; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1.5px solid #1a5aa8; padding-bottom: 3px; margin-bottom: 0.65rem; }
+
+/* Skala */
+.skala-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 10pt; }
+.skala-label { flex: 1; }
+.skala-boxes { display: flex; gap: 4px; flex-shrink: 0; }
+.skala-box { width: 26px; height: 26px; border: 1.5px solid #888; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 8.5pt; color: #666; }
+.skala-legend { display: flex; justify-content: space-between; font-size: 8pt; color: #666; margin-bottom: 0.75rem; }
+
+/* Auswahl */
+.choice-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.choice-item { display: flex; align-items: center; gap: 0.4rem; font-size: 10pt; }
+.choice-box { width: 16px; height: 16px; border: 1.5px solid #888; border-radius: 50%; flex-shrink: 0; }
+.choice-box.square { border-radius: 2px; }
+
+/* Freitext */
+.freetext-label { font-size: 10pt; font-weight: 600; margin-bottom: 0.4rem; }
+.lines { margin-top: 0.1rem; }
+.text-line { border-bottom: 1px solid #bbb; height: 1.65em; margin-bottom: 0; }
+
+/* Tabelle */
+table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+th { background: #e8f0fb; color: #1a5aa8; font-weight: 700; text-align: left; padding: 5px 8px; border: 1px solid #c0d0e8; font-size: 9pt; }
+td { padding: 5px 8px; border: 1px solid #dde3ec; vertical-align: top; }
+td.check-col { width: 60px; text-align: center; }
+.check-circle { display: inline-block; width: 14px; height: 14px; border: 1.5px solid #888; border-radius: 50%; }
+
+.footer { margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid #ddd; font-size: 8.5pt; color: #777; text-align: center; }
+.thankyou { margin-top: 1rem; background: #f0fdf4; border: 1px solid #16a34a; border-radius: 4px; padding: 0.6rem 0.875rem; font-size: 10pt; color: #155724; text-align: center; }
+
+@media print {
+  body { background: #fff; }
+  .page { padding: 1.5cm 2cm; max-width: none; }
+  .no-print { display: none !important; }
+}
+.print-btn { display: block; text-align: center; margin: 1rem auto 0; }
+.print-btn button { background: #1a5aa8; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 11pt; font-weight: 600; }
+.print-btn button:hover { background: #144884; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="print-btn no-print">
+    <button onclick="window.print()">Drucken / als PDF speichern</button>
+  </div>
+
+  <div style="height:0.75rem" class="no-print"></div>
+
+  <div class="header-block">
+    <h1>Feedbackbogen – Lernsequenz Prostata v1</h1>
+    <div class="sub">UKR · Klinik für Strahlentherapie · MTR-Ausbildung 3. Lehrjahr · TESTVERSION</div>
+    <div class="meta">
+      <div class="meta-field">
+        <label>Datum</label>
+        <div class="line"></div>
+      </div>
+      <div class="meta-field">
+        <label>Kurs / Gruppe</label>
+        <div class="line"></div>
+      </div>
+      <div class="meta-field">
+        <label>Anonym – keine Namenseingabe nötig</label>
+        <div class="line line-wide" style="border:none; height:auto; font-size:9pt; color:#666; padding-top:4px">✓ dieser Bogen ist anonym</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro">
+    <strong>Warum dein Feedback wichtig ist:</strong> Diese Lernsequenz ist eine Testversion. Deine Einschätzung entscheidet, was bleibt, was geändert und was gestrichen wird. Bitte direkt, konkret und ehrlich antworten – kein Feedback ist falsch.
+  </div>
+
+  <!-- ABSCHNITT 1: Gesamtbewertung -->
+  <div class="section">
+    <div class="section-title">1 – Gesamtbewertung</div>
+
+    <div class="skala-row">
+      <div class="skala-label"><strong>Wie bewertest du die Lernsequenz insgesamt?</strong></div>
+      <div class="skala-boxes">
+        <div class="skala-box">1</div>
+        <div class="skala-box">2</div>
+        <div class="skala-box">3</div>
+        <div class="skala-box">4</div>
+        <div class="skala-box">5</div>
+      </div>
+    </div>
+    <div class="skala-legend" style="margin-left:auto;width:162px;margin-bottom:1rem"><span>sehr schlecht</span><span>sehr gut</span></div>
+
+    <div class="skala-row">
+      <div class="skala-label"><strong>Verständlichkeit der Inhalte</strong></div>
+      <div class="skala-boxes">
+        <div class="skala-box">1</div>
+        <div class="skala-box">2</div>
+        <div class="skala-box">3</div>
+        <div class="skala-box">4</div>
+        <div class="skala-box">5</div>
+      </div>
+    </div>
+    <div class="skala-legend" style="margin-left:auto;width:162px;margin-bottom:0.75rem"><span>schwer</span><span>sehr klar</span></div>
+
+    <div class="skala-row">
+      <div class="skala-label"><strong>Fachliche Tiefe (passend für 3. Lehrjahr?)</strong></div>
+      <div class="skala-boxes">
+        <div class="skala-box">1</div>
+        <div class="skala-box">2</div>
+        <div class="skala-box">3</div>
+        <div class="skala-box">4</div>
+        <div class="skala-box">5</div>
+      </div>
+    </div>
+    <div class="skala-legend" style="margin-left:auto;width:162px;margin-bottom:0.75rem"><span>zu einfach</span><span>zu schwer</span></div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Zeitaufwand:</div>
+    <div class="choice-row">
+      <div class="choice-item"><div class="choice-box"></div> Zu lang</div>
+      <div class="choice-item"><div class="choice-box"></div> Passend</div>
+      <div class="choice-item"><div class="choice-box"></div> Zu kurz</div>
+    </div>
+  </div>
+
+  <!-- ABSCHNITT 2: Einzelne Elemente -->
+  <div class="section">
+    <div class="section-title">2 – Einzelne Elemente bewerten</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th class="check-col">Hilfreich</th>
+          <th class="check-col">OK</th>
+          <th class="check-col">Wenig sinnvoll</th>
+          <th style="width:120px">Kommentar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Fallakte Herr K. (M2)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Grundlagen &amp; Gleason-Tabelle (M3)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Anatomie &amp; Zielvolumen (M4)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>PLCT-Videos + Entscheidungsfrage (M7)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Praxisstation PLCT (M8)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Praxisstation Linac (M9)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>CBCT-Videos Tag 4 + Tag 5 (M10)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Quiz Nebenwirkungen / Toleranzdosen (M10)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Fallvorstellung als Abschluss (M11)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Support- und Plus-Boxen insgesamt</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+        <tr><td>Dozentenhinweise (Lehrperson)</td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td class="check-col"><span class="check-circle"></span></td><td>&nbsp;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ABSCHNITT 3: Technik und Bedienung -->
+  <div class="section">
+    <div class="section-title">3 – Technik und Bedienung</div>
+
+    <div class="skala-row">
+      <div class="skala-label">Wie einfach war die Bedienung der App?</div>
+      <div class="skala-boxes">
+        <div class="skala-box">1</div>
+        <div class="skala-box">2</div>
+        <div class="skala-box">3</div>
+        <div class="skala-box">4</div>
+        <div class="skala-box">5</div>
+      </div>
+    </div>
+    <div class="skala-legend" style="margin-left:auto;width:162px;margin-bottom:0.75rem"><span>kompliziert</span><span>sehr einfach</span></div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Haben die Videos funktioniert?</div>
+    <div class="choice-row" style="margin-bottom:0.5rem">
+      <div class="choice-item"><div class="choice-box"></div> Ja, alle</div>
+      <div class="choice-item"><div class="choice-box"></div> Teilweise</div>
+      <div class="choice-item"><div class="choice-box"></div> Nein</div>
+    </div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Welches Gerät hast du verwendet?</div>
+    <div class="choice-row" style="margin-bottom:0.75rem">
+      <div class="choice-item"><div class="choice-box square"></div> Schul-PC / Laptop</div>
+      <div class="choice-item"><div class="choice-box square"></div> Eigenes Smartphone</div>
+      <div class="choice-item"><div class="choice-box square"></div> Eigenes Tablet</div>
+      <div class="choice-item"><div class="choice-box square"></div> Sonstiges</div>
+    </div>
+  </div>
+
+  <!-- ABSCHNITT 4: Freitext -->
+  <div class="section">
+    <div class="section-title">4 – Offene Fragen</div>
+
+    <div class="freetext-label">Was hat gut funktioniert und sollte bleiben?</div>
+    <div class="lines">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div style="height:0.6rem"></div>
+    <div class="freetext-label">Was war unklar, überflüssig oder hat gestört?</div>
+    <div class="lines">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div style="height:0.6rem"></div>
+    <div class="freetext-label">Was hat gefehlt? Was würdest du dir noch wünschen?</div>
+    <div class="lines">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+
+    <div style="height:0.6rem"></div>
+    <div class="freetext-label">Freitext: Alles, was du sonst noch sagen möchtest</div>
+    <div class="lines">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+  </div>
+
+  <!-- ABSCHNITT 5: Abschlussfragen -->
+  <div class="section">
+    <div class="section-title">5 – Abschlussfragen</div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Würdest du diese App wieder nutzen?</div>
+    <div class="choice-row" style="margin-bottom:0.75rem">
+      <div class="choice-item"><div class="choice-box"></div> Ja, auf jeden Fall</div>
+      <div class="choice-item"><div class="choice-box"></div> Eher ja</div>
+      <div class="choice-item"><div class="choice-box"></div> Eher nein</div>
+      <div class="choice-item"><div class="choice-box"></div> Nein</div>
+    </div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Hat die Lernsequenz dein Verständnis des Themas verbessert?</div>
+    <div class="choice-row" style="margin-bottom:0.75rem">
+      <div class="choice-item"><div class="choice-box"></div> Deutlich</div>
+      <div class="choice-item"><div class="choice-box"></div> Etwas</div>
+      <div class="choice-item"><div class="choice-box"></div> Kaum</div>
+      <div class="choice-item"><div class="choice-box"></div> Nicht</div>
+    </div>
+
+    <div style="font-size:10pt;font-weight:600;margin-bottom:0.3rem">Für welche weiteren Themen wünschst du dir eine ähnliche Lernsequenz?</div>
+    <div class="lines">
+      <div class="text-line"></div>
+      <div class="text-line"></div>
+    </div>
+  </div>
+
+  <div class="thankyou">Danke für dein Feedback – es macht den Unterschied.</div>
+
+  <div class="footer">
+    Lernsequenz Prostata v1 · UKR Klinik für Strahlentherapie · Anonym · Nicht für Bewertungszwecke
+  </div>
+
+</div>
+
+</body>
+</html>

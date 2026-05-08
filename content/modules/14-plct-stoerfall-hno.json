@@ -1,0 +1,61 @@
+{
+  "id": "14-plct-stoerfall-hno",
+  "type": "case",
+  "title": "PLCT-Simulation: HNO-Tumor – fehlende Zahnschiene",
+  "category": "Prüfungsvorbereitung – Teil 3",
+  "difficulty": "pruefungsreife",
+  "kapitel": 14,
+  "reihenfolge": 3,
+  "pflichtgrad": "pflicht",
+  "phase": "P3",
+  "estimatedMinutes": 10,
+  "learningGoals": [
+    "Erkennen, dass eine fehlende individuelle Zahnschiene die Reproduzierbarkeit der Lagerung gefährdet.",
+    "Die korrekte Handlungskette bei unvollständiger Patientenvorbereitung ableiten.",
+    "Begründen, warum eine Lagerung ohne alle individuellen Hilfsmittel zwingend abgebrochen werden muss."
+  ],
+  "tags": [
+    "hno",
+    "oropharynx",
+    "zahnschiene",
+    "maske",
+    "reproduzierbarkeit",
+    "stoerfall",
+    "pruefung"
+  ],
+  "examRelevance": "MTAPrV Teil A – praktische Prüfung: Störungsmanagement am PLCT (Störungspool HNO)",
+  "relatedModules": [
+    "14-fallvorstellung-wbrt",
+    "14-quiz-gesamtwissen"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "scenario": {
+      "situation": "Sie beginnen die Lagerung für Herrn Meier (Oropharynx-Karzinom). Die Verordnung lautet: Rückenlage, 5-Punkt-Thermoplastmaske, Kopfschale C. Aus der Patientenakte geht hervor, dass Herr Meier eine individuelle Zahnschiene zur Zungendepression trägt, die extra für ihn angefertigt wurde. Sie haben die Lagerungsphase gerade begonnen, als der Patient sagt: \"Ach, die Plastik-Zahnschiene liegt noch auf Station. Geht das auch ohne?\"",
+      "question": "Wie handeln Sie?"
+    },
+    "options": [
+      {
+        "label": "Lagerung fortsetzen – die Maske fixiert den Kopf ohnehin ausreichend.",
+        "correct": false,
+        "feedback": "Falsch. Die 5-Punkt-Maske fixiert Kopf und Schultern – das ist korrekt. Aber die Zahnschiene hat eine eigenständige Funktion: Sie deprimiert die Zunge aus dem Strahlenfeld und definiert eine reproduzierbare Mundstellung. Ohne Schiene variiert die Zungenposition bei jeder Fraktion, das Zielvolumen verschiebt sich minimal, kritische Strukturen (Parotis, Myelon, Mundboden) erhalten mehr oder weniger Dosis als geplant. Das Prinzip der Reproduzierbarkeit ist verletzt."
+      },
+      {
+        "label": "Lagerung abbrechen. Zahnschiene von Station holen lassen, dann Neustart.",
+        "correct": true,
+        "feedback": "Richtig. Ohne alle patientenindividuellen Hilfsmittel darf die Lagerung nicht durchgeführt werden. Die Zahnschiene ist Bestandteil des Planungs-CTs und des Bestrahlungsplans – ohne sie ist die Reproduzierbarkeit nicht gewährleistet. Korrekte Handlungskette: (1) Lagerung höflich abbrechen und Situation erklären, (2) Zahnschiene über Station anfordern bzw. Patient kurz warten lassen, (3) vollständige Lagerung mit Schiene durchführen, (4) Abweichung und Wartezeit im Bestrahlungsprotokoll dokumentieren."
+      },
+      {
+        "label": "Lagerung durchführen und die fehlende Schiene als Kommentar im System vermerken.",
+        "correct": false,
+        "feedback": "Nicht ausreichend. Eine Dokumentation ändert nichts daran, dass die Bestrahlung ohne individuelles Hilfsmittel durchgeführt würde. Der Kommentar schützt nicht den Patienten vor einer fehlerhaften Dosisverteilung. Dokumentation ist notwendig, aber sie ersetzt nie die korrekte Vorbereitung. Das KO-Kriterium in der praktischen Prüfung lautet: Patientensicherheit geht vor Zeitdruck."
+      },
+      {
+        "label": "Die Fraktion für heute ausfallen lassen und beim Arzt nachfragen, ob die Schiene wirklich nötig ist.",
+        "correct": false,
+        "feedback": "Unnötig eskaliert. Es ist keine ärztliche Entscheidung erforderlich, ob eine laut Akte vorgeschriebene individuelle Lagerungshilfe verwendet werden soll – sie ist per Plan zwingend vorgeschrieben. Die MTR holt die Schiene, wartet maximal kurz und führt dann die Fraktion korrekt durch. Eine komplette Auslassung der Fraktion wäre nur bei medizinischen Kontraindikationen gerechtfertigt."
+      }
+    ],
+    "reinforcement": "Individuelle Hilfsmittel (Zahnschienen, Bissblöcke, Ohrpfropfen, Markierungsfolien) sind Bestandteil des Bestrahlungsplans. Fehlt auch nur eines → Lagerung abbrechen, Hilfsmittel beschaffen, Abweichung dokumentieren. Reproduzierbarkeit ist kein optionales Qualitätsmerkmal – sie ist Prüfungs-KO-Kriterium."
+  }
+}

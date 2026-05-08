@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mein Lernstand – MTR Strahlentherapie</title>
+<style>
+:root {
+  --primary: #1a4f7a; --primary-light: #2c6ea6; --primary-bg: #eef4fb;
+  --correct: #1e6e42; --correct-bg: #e8f5ee;
+  --warn: #7a5a00; --warn-bg: #fdf7e3;
+  --wrong: #8b1a1a; --wrong-bg: #fdf0f0;
+  --neutral: #4a5568; --border: #d1d9e0; --surface: #f8f9fa;
+  --radius: 8px; --shadow: 0 2px 10px rgba(0,0,0,.09);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{ font-family:var(--font); background:#f0f4f8; color:#1a1a2e; min-height:100vh; padding:28px 16px; }
+
+/* Layout */
+.page{ max-width:800px; margin:0 auto; }
+
+/* Print header (visible on print only) */
+.print-header{ display:none; }
+
+/* Back nav */
+.back-nav{ display:flex; align-items:center; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.back-link{ color:var(--primary); font-size:.88rem; font-weight:600; text-decoration:none; display:flex; align-items:center; gap:4px; }
+.back-link:hover{ text-decoration:underline; }
+.nav-sep{ color:var(--border); }
+
+/* Page title */
+.page-title{ font-size:1.6rem; font-weight:800; color:var(--primary); margin-bottom:4px; }
+.page-sub{ font-size:.9rem; color:var(--neutral); margin-bottom:24px; }
+
+/* Student block */
+.student-block{ background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:18px 22px; margin-bottom:24px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+.student-field{ display:flex; flex-direction:column; gap:4px; flex:1; min-width:160px; }
+.student-field label{ font-size:.75rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--neutral); }
+.student-field input{ border:1.5px solid var(--border); border-radius:6px; padding:7px 10px;
+  font-size:.92rem; font-family:var(--font); color:#1a1a2e; background:#fff; }
+.student-field input:focus{ outline:none; border-color:var(--primary); }
+.student-field .static-val{ font-size:.92rem; color:#1a1a2e; padding:7px 0; }
+
+/* Overall progress */
+.overall-card{ background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:20px 22px; margin-bottom:24px; }
+.overall-card h2{ font-size:.78rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.07em; color:var(--neutral); margin-bottom:14px; }
+.overall-bar-wrap{ margin-bottom:10px; }
+.overall-bar-outer{ height:10px; background:#e2e8f0; border-radius:5px; overflow:hidden; margin-bottom:6px; }
+.overall-bar-inner{ height:100%; background:var(--primary); border-radius:5px; transition:width .5s; }
+.overall-stats{ display:flex; justify-content:space-between; font-size:.82rem; color:var(--neutral); }
+.pillar-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.pillar-chip{ background:var(--primary-bg); border:1px solid #b8d0e8; border-radius:20px;
+  padding:3px 12px; font-size:.78rem; color:#2d4a6a; }
+
+/* Module cards */
+.section-label{ font-size:.78rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.07em; color:var(--neutral); margin-bottom:12px; margin-top:4px;
+  display:flex; align-items:center; gap:8px; }
+.section-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+.mod-cards{ display:flex; flex-direction:column; gap:14px; margin-bottom:28px; }
+.mod-card{ background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  border-left:4px solid var(--border); overflow:hidden; }
+.mod-card.status-done{ border-left-color:var(--correct); }
+.mod-card.status-started{ border-left-color:#f0b429; }
+.mod-card.status-none{ border-left-color:var(--border); opacity:.75; }
+
+.mod-card-top{ padding:16px 18px 12px; display:flex; align-items:flex-start; gap:14px; }
+.mod-icon{ font-size:1.3rem; flex-shrink:0; margin-top:2px; }
+.mod-info{ flex:1; }
+.mod-type{ font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em;
+  color:var(--primary); background:var(--primary-bg); padding:2px 8px; border-radius:4px;
+  display:inline-block; margin-bottom:5px; }
+.mod-type.case-type{ color:#5a3e00; background:#fdf7e3; }
+.mod-title{ font-size:1rem; font-weight:700; color:#1a1a2e; margin-bottom:3px; }
+.mod-sub{ font-size:.82rem; color:var(--neutral); }
+.mod-status-badge{ flex-shrink:0; font-size:.78rem; font-weight:700; padding:4px 12px;
+  border-radius:20px; background:var(--surface); color:var(--neutral); border:1px solid var(--border); }
+.mod-status-badge.done{ background:var(--correct-bg); color:var(--correct); border-color:var(--correct); }
+.mod-status-badge.started{ background:#fdf7e3; color:var(--warn); border-color:#e8c94a; }
+
+.mod-card-body{ padding:0 18px 16px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mod-metric{ background:var(--surface); border:1px solid var(--border); border-radius:6px;
+  padding:10px 14px; }
+.mod-metric-label{ font-size:.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--neutral); margin-bottom:6px; }
+.mod-metric-val{ font-size:1.1rem; font-weight:800; color:var(--primary); }
+.mod-metric-val.good{ color:var(--correct); }
+.mod-metric-val.mid{ color:var(--warn); }
+.mod-metric-val.low{ color:var(--wrong); }
+.score-bar-outer{ height:6px; background:#e2e8f0; border-radius:3px; margin-top:6px; overflow:hidden; }
+.score-bar-inner{ height:100%; border-radius:3px; }
+.score-bar-inner.good{ background:var(--correct); }
+.score-bar-inner.mid{ background:#f0b429; }
+.score-bar-inner.low{ background:var(--wrong); }
+.fb-stars{ font-size:1rem; color:#d1d9e0; letter-spacing:1px; }
+.fb-stars .on{ color:#f0b429; }
+.fb-comment{ font-size:.82rem; color:var(--neutral); margin-top:4px; font-style:italic;
+  line-height:1.4; }
+.mod-metric.empty{ opacity:.55; }
+
+/* Reflection note */
+.reflection-card{ background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:20px 22px; margin-bottom:24px; }
+.reflection-card h2{ font-size:.78rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.07em; color:var(--neutral); margin-bottom:14px; }
+.reflection-textarea{ width:100%; min-height:100px; padding:10px 12px;
+  border:1.5px solid var(--border); border-radius:6px; font-family:var(--font);
+  font-size:.92rem; color:#333; resize:vertical; line-height:1.6; }
+.reflection-textarea:focus{ outline:none; border-color:var(--primary); }
+
+/* Actions */
+.actions-bar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+.btn{ padding:10px 22px; border-radius:var(--radius); font-size:.92rem; font-weight:600;
+  border:none; cursor:pointer; transition:background .15s; }
+.btn-primary{ background:var(--primary); color:#fff; }
+.btn-primary:hover{ background:var(--primary-light); }
+.btn-secondary{ background:#fff; color:var(--primary); border:2px solid var(--border); }
+.btn-secondary:hover{ border-color:var(--primary); }
+.btn-reset{ background:#fff; color:var(--wrong); border:2px solid #fad0d0; font-size:.82rem;
+  padding:8px 16px; margin-left:auto; }
+.btn-reset:hover{ background:var(--wrong-bg); }
+
+/* Reset modal */
+.modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9000;
+  display:flex; align-items:center; justify-content:center; padding:16px; }
+.modal-overlay[hidden]{ display:none; }
+.modal-box{ background:#fff; border-radius:12px; padding:28px; max-width:420px; width:100%;
+  box-shadow:0 12px 40px rgba(0,0,0,.22); }
+.modal-title{ font-size:1.1rem; font-weight:700; color:var(--wrong); margin-bottom:10px; }
+.modal-text{ font-size:.9rem; color:#333; margin-bottom:20px; line-height:1.6; }
+.modal-actions{ display:flex; gap:10px; justify-content:flex-end; }
+.btn-confirm-reset{ background:var(--wrong); color:#fff; padding:9px 20px; border-radius:var(--radius);
+  border:none; font-size:.9rem; font-weight:700; cursor:pointer; }
+.btn-cancel{ background:var(--surface); color:var(--neutral); border:2px solid var(--border);
+  padding:9px 20px; border-radius:var(--radius); font-size:.9rem; font-weight:700; cursor:pointer; }
+
+/* Empty state */
+.empty-state{ text-align:center; padding:40px 20px; color:var(--neutral); }
+.empty-state .empty-icon{ font-size:3rem; margin-bottom:12px; }
+.empty-state p{ font-size:.95rem; margin-bottom:16px; }
+
+/* ── Print styles ─────────────────────────── */
+@media print {
+  body{ background:#fff; padding:0; font-size:10pt; }
+  .back-nav, .actions-bar, .btn-reset, .student-field input{ display:none !important; }
+  .print-header{ display:block; margin-bottom:20px; border-bottom:2px solid #1a4f7a; padding-bottom:10px; }
+  .print-header h1{ font-size:14pt; color:#1a4f7a; }
+  .print-header p{ font-size:9pt; color:#4a5568; }
+  .page{ max-width:100%; }
+  .mod-card, .overall-card, .reflection-card, .student-block{ box-shadow:none; border:1px solid #d1d9e0; }
+  .reflection-textarea{ border:1px solid #ccc; min-height:60px; }
+  .student-field input{ border:none; padding:0; }
+  .student-field .static-val{ display:block; }
+  @page{ margin:1.5cm; }
+}
+
+@media(max-width:560px){
+  .mod-card-body{ grid-template-columns:1fr; }
+  .student-block{ flex-direction:column; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Print-only header -->
+  <div class="print-header">
+    <h1>MTR Strahlentherapie – Lernstand-Übersicht</h1>
+    <p>Prüfungsvorbereitung 3. Lehrjahr · Staatliche Abschlussprüfung nach MTAPrV</p>
+  </div>
+
+  <!-- Back nav -->
+  <nav class="back-nav">
+    <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
+    <span class="nav-sep">|</span>
+    <span style="font-size:.82rem;color:var(--neutral);">MTR Fallmodule – Lernstand</span>
+  </nav>
+
+  <h1 class="page-title">Mein Lernstand</h1>
+  <p class="page-sub" id="summary-date"></p>
+
+  <!-- Student info -->
+  <div class="student-block">
+    <div class="student-field">
+      <label>Name (optional)</label>
+      <input type="text" id="student-name" placeholder="Dein Name…" autocomplete="name">
+    </div>
+    <div class="student-field">
+      <label>Lehrjahr / Kurs</label>
+      <input type="text" id="student-course" placeholder="z.B. 3. Lehrjahr 2025/26">
+    </div>
+    <div class="student-field">
+      <label>Erstellt am</label>
+      <span class="static-val" id="today-val"></span>
+    </div>
+  </div>
+
+  <!-- Overall progress -->
+  <div class="overall-card" id="overall-card">
+    <h2>Gesamtfortschritt</h2>
+    <div class="overall-bar-wrap">
+      <div class="overall-bar-outer">
+        <div class="overall-bar-inner" id="overall-bar" style="width:0%"></div>
+      </div>
+      <div class="overall-stats">
+        <span id="overall-text">Noch kein Modul abgeschlossen</span>
+        <span id="overall-pct" style="font-weight:700;">0%</span>
+      </div>
+    </div>
+    <div class="pillar-chips">
+      <span class="pillar-chip">1 · Präzision als Patientenschutz</span>
+      <span class="pillar-chip">2 · Technologische Souveränität</span>
+      <span class="pillar-chip">3 · Empathische Professionalität</span>
+      <span class="pillar-chip">4 · Prozessethik &amp; Strahlenschutz</span>
+      <span class="pillar-chip">5 · Reflexive Handlungskompetenz</span>
+    </div>
+  </div>
+
+  <!-- Module results -->
+  <div class="section-label">Modulergebnisse</div>
+  <div class="mod-cards" id="mod-cards"></div>
+
+  <!-- Reflection -->
+  <div class="reflection-card">
+    <h2>Persönliche Reflexion (optional)</h2>
+    <textarea class="reflection-textarea" id="reflection"
+      placeholder="Was habe ich in dieser Lerneinheit mitgenommen? Wo möchte ich noch vertiefen?"></textarea>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions-bar">
+    <button class="btn btn-primary" onclick="window.print()">Drucken / Als PDF speichern</button>
+    <button class="btn btn-secondary" onclick="location.href='index.html'">Zurück zur Übersicht</button>
+    <button class="btn btn-reset" id="btn-reset">Alle Daten zurücksetzen</button>
+  </div>
+
+</div><!-- .page -->
+
+<!-- Reset-Bestätigung -->
+<div class="modal-overlay" id="reset-modal" hidden>
+  <div class="modal-box">
+    <p class="modal-title">⚠ Alle Daten zurücksetzen?</p>
+    <p class="modal-text">Alle gespeicherten Ergebnisse, Scores und Feedback-Einträge werden unwiderruflich gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="reset-cancel">Abbrechen</button>
+      <button class="btn-confirm-reset" id="reset-confirm">Ja, alles löschen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Konfiguration ────────────────────────────────────────────────
+const MODULES = [
+  {
+    id:    'grundlagen-pruefungstraining-quiz',
+    scoreKey: 'mtr_rt_quiz_grundlagen-pruefungstraining-quiz',
+    fbKey: 'mtr_rt_feedback_grundlagen-pruefungstraining-quiz',
+    startKey: 'mtr_rt_started_0',
+    icon:  '📋',
+    type:  'Quiz · Prüfungstraining',
+    typeClass: '',
+    title: 'Grundlagen Strahlentherapie',
+    sub:   '45 Fragen · 3 Stufen · Zufällige Auswahl',
+    href:  'grundlagen-pruefungstraining.html',
+    pillars: [1, 2, 4],
+    maxLabel: '15 Fragen pro Durchlauf'
+  },
+  {
+    id:    'rektum-ca-case',
+    scoreKey: 'mtr_rt_case_rektum-ca-case',
+    fbKey: 'mtr_rt_feedback_rektum-ca-case',
+    startKey: 'mtr_rt_started_1',
+    icon:  '🏥',
+    type:  'Klinischer Fall',
+    typeClass: 'case-type',
+    title: 'Rektumkarzinom – Herr S., 64 J.',
+    sub:   'cT3 N1 M0 · Neoadjuvante RCT · 7 Stationen',
+    href:  'rektum-ca-case.html',
+    pillars: [1,2,3,4,5],
+    maxLabel: '7 Stationen'
+  },
+  {
+    id:    'oesophagus-ca-case',
+    scoreKey: 'mtr_rt_case_oesophagus-ca-case',
+    fbKey: 'mtr_rt_feedback_oesophagus-ca-case',
+    startKey: 'mtr_rt_started_2',
+    icon:  '🏥',
+    type:  'Klinischer Fall',
+    typeClass: 'case-type',
+    title: 'Ösophaguskarzinom – Herr M., 67 J.',
+    sub:   'cT3 N1 M0 · Definitive RCT · 7 Stationen',
+    href:  'oesophagus-ca-case.html',
+    pillars: [1,2,3,4,5],
+    maxLabel: '7 Stationen'
+  },
+  {
+    id:    'hno-tumor-case',
+    scoreKey: 'mtr_rt_case_hno-tumor-case',
+    fbKey: 'mtr_rt_feedback_hno-tumor-case',
+    startKey: 'mtr_rt_started_3',
+    icon:  '🏥',
+    type:  'Klinischer Fall',
+    typeClass: 'case-type',
+    title: 'HNO-Tumor – Frau B., 58 J.',
+    sub:   'Oropharynx cT3 N2b · HPV+ · 7 Stationen',
+    href:  'hno-tumor-case.html',
+    pillars: [1,2,3,4,5],
+    maxLabel: '7 Stationen'
+  }
+];
+
+const STORAGE_KEYS = [
+  'mtr_rt_summary_name',
+  'mtr_rt_summary_course',
+  'mtr_rt_summary_reflection'
+];
+
+// ── Hilfsfunktionen ──────────────────────────────────────────────
+function ls(key) {
+  try { return localStorage.getItem(key); } catch(e) { return null; }
+}
+function lsObj(key) {
+  try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, val); } catch(e) {}
+}
+
+function scoreClass(pct) {
+  return pct >= 80 ? 'good' : pct >= 57 ? 'mid' : 'low';
+}
+function scoreLabel(pct) {
+  return pct >= 86 ? 'Sehr sicher' : pct >= 71 ? 'Sicher' : pct >= 57 ? 'Gut vorbereitet' : pct >= 43 ? 'In Entwicklung' : 'Übungsbedarf';
+}
+function stars(n) {
+  var s = '';
+  for (var i = 1; i <= 5; i++) {
+    s += '<span class="' + (i <= n ? 'on' : '') + '">★</span>';
+  }
+  return s;
+}
+
+// ── Datum ────────────────────────────────────────────────────────
+var today = new Date().toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit',year:'numeric'});
+document.getElementById('summary-date').textContent = 'Stand: ' + today;
+document.getElementById('today-val').textContent = today;
+
+// ── Gespeicherte Felder laden ────────────────────────────────────
+document.getElementById('student-name').value   = ls('mtr_rt_summary_name') || '';
+document.getElementById('student-course').value = ls('mtr_rt_summary_course') || '';
+document.getElementById('reflection').value     = ls('mtr_rt_summary_reflection') || '';
+
+document.getElementById('student-name').addEventListener('input', function() {
+  lsSet('mtr_rt_summary_name', this.value);
+});
+document.getElementById('student-course').addEventListener('input', function() {
+  lsSet('mtr_rt_summary_course', this.value);
+});
+document.getElementById('reflection').addEventListener('input', function() {
+  lsSet('mtr_rt_summary_reflection', this.value);
+});
+
+// ── Module rendern ───────────────────────────────────────────────
+function render() {
+  var container = document.getElementById('mod-cards');
+  container.innerHTML = '';
+  var completed = 0;
+
+  MODULES.forEach(function(m) {
+    var scoreData = lsObj(m.scoreKey);
+    var fbData    = lsObj(m.fbKey);
+    var started   = !!ls(m.startKey);
+    var pct       = scoreData ? (scoreData.lastPct || 0) : null;
+    var isDone    = pct !== null;
+    var statusCls = isDone ? 'status-done' : started ? 'status-started' : 'status-none';
+    var statusLabel = isDone ? 'Abgeschlossen' : started ? 'Gestartet' : 'Nicht begonnen';
+    var statusBadgeCls = isDone ? 'done' : started ? 'started' : '';
+
+    if (isDone) completed++;
+
+    // Score-Metrik
+    var scoreHtml = '';
+    if (isDone) {
+      var cls = scoreClass(pct);
+      scoreHtml = '<div class="mod-metric">'
+        + '<div class="mod-metric-label">Ergebnis</div>'
+        + '<div class="mod-metric-val ' + cls + '">' + pct + '% &nbsp;<small style="font-size:.7rem;font-weight:600;">' + scoreLabel(pct) + '</small></div>'
+        + '<div class="score-bar-outer"><div class="score-bar-inner ' + cls + '" style="width:' + pct + '%"></div></div>'
+        + '</div>';
+    } else {
+      scoreHtml = '<div class="mod-metric empty">'
+        + '<div class="mod-metric-label">Ergebnis</div>'
+        + '<div class="mod-metric-val" style="color:var(--border);font-size:.9rem;">Noch nicht absolviert</div>'
+        + '</div>';
+    }
+
+    // Feedback-Metrik
+    var fbHtml = '';
+    if (fbData && fbData.rating) {
+      fbHtml = '<div class="mod-metric">'
+        + '<div class="mod-metric-label">Mein Feedback</div>'
+        + '<div class="fb-stars">' + stars(fbData.rating) + '</div>'
+        + (fbData.text ? '<div class="fb-comment">"' + fbData.text + '"</div>' : '')
+        + '</div>';
+    } else {
+      fbHtml = '<div class="mod-metric empty">'
+        + '<div class="mod-metric-label">Mein Feedback</div>'
+        + '<div style="font-size:.82rem;color:var(--neutral);margin-top:4px;">Kein Feedback abgegeben</div>'
+        + '</div>';
+    }
+
+    var pillarsStr = m.pillars.map(function(p){ return 'Säule ' + p; }).join(' · ');
+
+    var card = '<div class="mod-card ' + statusCls + '">'
+      + '<div class="mod-card-top">'
+      + '<span class="mod-icon">' + m.icon + '</span>'
+      + '<div class="mod-info">'
+      + '<span class="mod-type ' + m.typeClass + '">' + m.type + '</span>'
+      + '<h3 class="mod-title">' + m.title + '</h3>'
+      + '<p class="mod-sub">' + m.sub + ' · ' + pillarsStr + '</p>'
+      + '</div>'
+      + '<span class="mod-status-badge ' + statusBadgeCls + '">' + statusLabel + '</span>'
+      + '</div>'
+      + '<div class="mod-card-body">'
+      + scoreHtml
+      + fbHtml
+      + '</div>'
+      + '</div>';
+
+    container.innerHTML += card;
+  });
+
+  // Overall
+  var pctTotal = Math.round((completed / MODULES.length) * 100);
+  document.getElementById('overall-bar').style.width = pctTotal + '%';
+  document.getElementById('overall-pct').textContent = pctTotal + '%';
+  document.getElementById('overall-text').textContent =
+    completed === 0 ? 'Noch kein Modul abgeschlossen' :
+    completed === MODULES.length ? 'Alle ' + MODULES.length + ' Module abgeschlossen 🎉' :
+    completed + ' von ' + MODULES.length + ' Modulen abgeschlossen';
+}
+
+render();
+
+// ── Reset ────────────────────────────────────────────────────────
+var ALL_KEYS = [];
+MODULES.forEach(function(m) {
+  ALL_KEYS.push(m.scoreKey, m.fbKey, m.startKey);
+});
+ALL_KEYS = ALL_KEYS.concat(STORAGE_KEYS);
+// Also the index started-keys not in module list
+for (var i = 0; i < 4; i++) ALL_KEYS.push('mtr_rt_started_' + i);
+
+document.getElementById('btn-reset').addEventListener('click', function() {
+  document.getElementById('reset-modal').hidden = false;
+});
+document.getElementById('reset-cancel').addEventListener('click', function() {
+  document.getElementById('reset-modal').hidden = true;
+});
+document.getElementById('reset-confirm').addEventListener('click', function() {
+  ALL_KEYS.forEach(function(k) {
+    try { localStorage.removeItem(k); } catch(e) {}
+  });
+  document.getElementById('student-name').value = '';
+  document.getElementById('student-course').value = '';
+  document.getElementById('reflection').value = '';
+  document.getElementById('reset-modal').hidden = true;
+  render();
+});
+document.getElementById('reset-modal').addEventListener('click', function(e) {
+  if (e.target === this) this.hidden = true;
+});
+</script>
+</body>
+</html>

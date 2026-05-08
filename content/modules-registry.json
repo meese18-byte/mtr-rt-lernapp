@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "lastUpdated": "2026-04-18",
-  "schemaNote": "Neue Felder: kapitel, reihenfolge, pflichtgrad, voraussetzungen, phase. Alte Felder (category, order) bleiben temporär erhalten, bis die Rendering-Logik in app.js + renderers auf die neuen Felder migriert wurde. Siehe ARCHITECTURE.md §12 und CURRICULUM.md.",
+  "lastUpdated": "2026-04-27",
+  "schemaNote": "Neue Felder: kapitel, reihenfolge, pflichtgrad, voraussetzungen, phase.",
   "modules": [
     {
       "id": "01-aufbau-abteilung",
@@ -17,17 +17,106 @@
     },
     {
       "id": "prostata-planungs-ct-enddarm",
-      "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
+      "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm",
       "type": "case",
-      "category": "Becken – Prostata",
+      "category": "Becken Prostata",
       "order": 10,
       "difficulty": "fortgeschritten",
       "kapitel": 5,
       "reihenfolge": 3,
       "pflichtgrad": "pflicht",
-      "voraussetzungen": ["05-ablauf-planungsct", "05-lagerung-immobilisierung"],
-      "phase": "MVP",
-      "umbenennung_geplant": "05-enddarmvorbereitung-becken"
+      "phase": "MVP"
+    },
+    {
+      "id": "10-mamma-lernsequenz",
+      "title": "Mission Mamma: Von der Fallakte zum PLCT-Setting",
+      "type": "sequence",
+      "category": "Indikationen II",
+      "order": 10,
+      "difficulty": "fortgeschritten",
+      "kapitel": 10,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "phase": "P3",
+      "file": "content/lernsequenzen/10-mamma-lernsequenz.html",
+      "estimatedMinutes": 90,
+      "tags": ["mamma", "brustkrebs", "lernsequenz", "plct", "dibh", "lagerung", "praxisrotation"]
+    },
+    {
+      "id": "11-bronchial-ca-lernsequenz",
+      "title": "Fall Herr K.: Bronchial-Ca. PLCT, OAR und Atemmanagement",
+      "type": "sequence",
+      "category": "Indikationen II",
+      "order": 20,
+      "difficulty": "fortgeschritten",
+      "kapitel": 11,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": ["10-mamma-lernsequenz"],
+      "phase": "P3",
+      "file": "content/lernsequenzen/11-bronchial-ca-lernsequenz.html",
+      "estimatedMinutes": 70,
+      "tags": ["bronchial-ca", "nsclc", "lernsequenz", "plct", "4dct", "itv", "dibh", "lagerung", "oar", "atemmanagement"]
+    },
+    {
+      "id": "14-fallvorstellung-wbrt",
+      "title": "Fallvorstellung: Ganzhirnbestrahlung (WBRT)",
+      "type": "transfer",
+      "category": "Pruefungsvorbereitung Teil 3",
+      "difficulty": "pruefungsreife",
+      "kapitel": 14,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": [],
+      "phase": "P3"
+    },
+    {
+      "id": "14-fallvorstellung-mamma",
+      "title": "Fallvorstellung: Mammakarzinom links mit DIBH",
+      "type": "transfer",
+      "category": "Pruefungsvorbereitung Teil 3",
+      "difficulty": "pruefungsreife",
+      "kapitel": 14,
+      "reihenfolge": 2,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": [],
+      "phase": "P3"
+    },
+    {
+      "id": "14-plct-stoerfall-hno",
+      "title": "PLCT-Simulation: HNO-Tumor, fehlende Zahnschiene",
+      "type": "case",
+      "category": "Pruefungsvorbereitung Teil 3",
+      "difficulty": "pruefungsreife",
+      "kapitel": 14,
+      "reihenfolge": 3,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": [],
+      "phase": "P3"
+    },
+    {
+      "id": "14-plct-stoerfall-prostata",
+      "title": "PLCT-Simulation: Prostata-Ca, leere Blase",
+      "type": "case",
+      "category": "Pruefungsvorbereitung Teil 3",
+      "difficulty": "pruefungsreife",
+      "kapitel": 14,
+      "reihenfolge": 4,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": [],
+      "phase": "P3"
+    },
+    {
+      "id": "14-quiz-gesamtwissen",
+      "title": "Pruefungsquiz: Gesamtwissen PLCT und Fallvorstellung",
+      "type": "quiz",
+      "category": "Pruefungsvorbereitung Teil 3",
+      "difficulty": "pruefungsreife",
+      "kapitel": 14,
+      "reihenfolge": 5,
+      "pflichtgrad": "pflicht",
+      "voraussetzungen": [],
+      "phase": "P3"
     }
   ]
 }

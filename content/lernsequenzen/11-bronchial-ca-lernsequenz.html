@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fall Herr K. – Bronchial-Ca. Lernsequenz</title>
+<style>
+/* === MTR RT Lernapp – Design-System (passend zu app.css) === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: #f6f7f9;
+  color: #1f2933;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+a { color: #0e7490; text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* === Header === */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: #1f2933;
+  color: #fff;
+  padding: 0 1.25rem;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  border-bottom: 3px solid #0e7490;
+}
+.header-left { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.header-title { font-size: 0.9rem; font-weight: 600; color: #fff; letter-spacing: 0.02em; white-space: nowrap; }
+.header-sub { font-size: 0.78rem; color: #9aa5b1; margin-top: 1px; }
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+
+.tool-btn {
+  border: 1px solid #3e4c59;
+  background: #2d3748;
+  color: #cbd5e0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tool-btn:hover { background: #3e4c59; color: #fff; }
+.tool-btn.active { background: #0e7490; border-color: #0e7490; color: #fff; }
+
+.progress-wrap { display: flex; align-items: center; gap: 0.5rem; }
+.progress-label { font-size: 0.78rem; color: #9aa5b1; white-space: nowrap; }
+.progress-track { width: 120px; height: 6px; background: #3e4c59; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: #16a34a; transition: width 0.3s ease; }
+
+/* === Layout === */
+.layout { display: flex; min-height: calc(100vh - 58px); }
+
+/* === Sidebar === */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid #cbd2d9;
+  padding: 1rem 0;
+  position: sticky; top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-label {
+  padding: 0 1rem 0.5rem;
+  font-size: 0.72rem;
+  color: #7b8794;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.sidebar-note {
+  margin: 0 0.75rem 1rem;
+  padding: 0.75rem;
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #52606d;
+}
+.sidebar-note strong { color: #1f2933; }
+
+.mission-btn {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  width: 100%; border: none; background: none;
+  color: #52606d;
+  padding: 0.65rem 1rem;
+  text-align: left; cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+}
+.mission-btn:hover { background: #f0f4f8; color: #1f2933; }
+.mission-btn.active { background: #ecfeff; color: #0e7490; font-weight: 500; }
+.mission-btn.active::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: #0e7490;
+}
+.mission-btn.completed { color: #16a34a; }
+.mission-btn.practice { color: #b45309; }
+
+.m-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #e3e7eb;
+  border: 1px solid #cbd2d9;
+  font-size: 0.7rem; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+  color: #52606d;
+}
+.mission-btn.active .m-num { background: #0e7490; border-color: #0e7490; color: #fff; }
+.mission-btn.completed .m-num { background: #16a34a; border-color: #16a34a; color: #fff; }
+.mission-btn.practice .m-num { border-color: #f0a500; color: #b45309; background: #fffbeb; }
+.m-title { font-size: 0.85rem; font-weight: 600; }
+.m-meta { font-size: 0.75rem; color: #7b8794; margin-top: 1px; }
+
+/* === Main Content === */
+.main { flex: 1; max-width: 900px; padding: 1.75rem 1.75rem 4rem; }
+.mission-panel { display: none; }
+.mission-panel.active { display: block; }
+
+/* === Hero === */
+.hero {
+  background: linear-gradient(135deg, #ecfeff, #f0f9ff);
+  border: 1px solid #cbd2d9;
+  border-left: 4px solid #0e7490;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.hero h1 { font-size: 1.45rem; line-height: 1.25; margin-bottom: 0.5rem; color: #1f2933; }
+.hero p { color: #52606d; max-width: 760px; }
+.hero-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem; margin-top: 1rem;
+}
+.hero-stat {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+.hero-stat strong { display: block; font-size: 0.75rem; color: #0e7490; margin-bottom: 3px; font-weight: 700; }
+.hero-stat span { font-size: 0.82rem; color: #52606d; }
+
+/* === Mission Header === */
+.mission-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e3e7eb;
+  padding-bottom: 1.1rem;
+}
+.mission-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 700;
+  color: #0e7490;
+  background: #cffafe;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.mission-tag.practice { color: #92400e; background: #fef3c7; }
+.mission-title { font-size: 1.55rem; line-height: 1.2; margin-bottom: 0.4rem; color: #1f2933; }
+.mission-subtitle { color: #52606d; font-size: 0.95rem; max-width: 760px; }
+.meta-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.meta-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 999px; padding: 4px 10px;
+  background: #e3e7eb;
+  font-size: 0.78rem; color: #52606d;
+}
+
+/* === Grids === */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; }
+
+/* === Cards === */
+.card {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+}
+.card h3 { font-size: 1.05rem; margin-bottom: 0.6rem; color: #1f2933; }
+.card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; color: #0e7490; }
+.card p, .card li { color: #52606d; font-size: 0.9rem; }
+.card ul { padding-left: 1.1rem; }
+.card ul li { margin-bottom: 3px; }
+.card strong { color: #1f2933; }
+
+.case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.case-item {
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+.case-item-label { font-size: 0.72rem; color: #7b8794; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.case-item-value { font-size: 0.9rem; font-weight: 600; color: #1f2933; }
+
+/* === Callouts === */
+.callout {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border-left: 4px solid #0e7490;
+  background: #ecfeff;
+  margin-bottom: 0.875rem;
+  font-size: 0.9rem;
+  color: #1f2933;
+}
+.callout.orange { border-left-color: #f0a500; background: #fffbeb; }
+.callout.green { border-left-color: #16a34a; background: #f0fdf4; }
+.callout.red { border-left-color: #dc2626; background: #fef2f2; }
+.callout strong { color: #1f2933; }
+
+/* === Tasks === */
+.task {
+  background: #fff;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  padding: 1.1rem;
+  margin-bottom: 0.875rem;
+}
+.task.required-empty { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,.12); }
+.task h4 { font-size: 1rem; margin-bottom: 0.5rem; color: #1f2933; }
+.task p { color: #52606d; font-size: 0.9rem; margin-bottom: 0.5rem; }
+
+.label-line { display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; margin-bottom: 0.6rem; }
+.output-tag {
+  font-size: 0.72rem; font-weight: 600;
+  color: #0e7490;
+  background: #cffafe;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.output-tag.transfer { color: #6d28d9; background: #ede9fe; }
+.output-tag.reflex { color: #b45309; background: #fef3c7; }
+
+/* === Formfelder === */
+textarea, input[type="text"], select {
+  width: 100%;
+  background: #fff;
+  color: #1f2933;
+  border: 2px solid #cbd2d9;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s;
+  font-size: 0.9rem;
+}
+textarea:focus, input[type="text"]:focus, select:focus { border-color: #0e7490; }
+textarea { resize: vertical; min-height: 80px; }
+textarea.short { min-height: 56px; }
+
+/* === Tabellen === */
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.table th {
+  background: #f0f4f8; color: #52606d;
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.55rem 0.75rem; text-align: left;
+  border: 1px solid #e3e7eb;
+}
+.table td { padding: 0.6rem 0.75rem; border: 1px solid #e3e7eb; vertical-align: top; color: #1f2933; }
+.table tr:nth-child(even) td { background: #f6f7f9; }
+
+.checkbox-list { list-style: none; padding: 0; }
+.checkbox-list li { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid #e3e7eb; font-size: 0.9rem; }
+.checkbox-list li:last-child { border-bottom: none; }
+.checkbox-list input { margin-top: 2px; accent-color: #16a34a; }
+
+/* === Ressourcen === */
+.resource-list { display: grid; gap: 0.6rem; }
+.resource {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  background: #f6f7f9; border: 1px solid #e3e7eb;
+  border-radius: 6px; padding: 0.75rem;
+}
+.resource-icon {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #cffafe; border: 1px solid #a5f3fc;
+  color: #0e7490; font-size: 13px; flex-shrink: 0;
+}
+.resource h5 { font-size: 0.9rem; margin-bottom: 2px; color: #1f2933; }
+.resource p { font-size: 0.82rem; color: #52606d; margin-bottom: 4px; }
+.resource a { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: #0e7490; }
+.resource a::after { content: '\2197'; }
+
+/* === Wissen-Blöcke === */
+.wissen-block {
+  background: #f6f7f9;
+  border: 1px solid #e3e7eb;
+  border-left: 3px solid #0e7490;
+  border-radius: 6px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.wissen-block h5 {
+  font-size: 0.78rem; font-weight: 700;
+  color: #0e7490;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.wissen-block p, .wissen-block li { font-size: 0.88rem; color: #52606d; }
+.wissen-block ul { padding-left: 1rem; }
+.wissen-block ul li { margin-bottom: 3px; }
+.wissen-block strong { color: #1f2933; }
+
+/* === Dosis-Tabelle === */
+.dosis-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.6rem; }
+.dosis-table th {
+  background: #1f2933; color: #fff;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem; border: 1px solid #3e4c59; text-align: left;
+}
+.dosis-table td { padding: 0.55rem 0.75rem; border: 1px solid #e3e7eb; color: #52606d; vertical-align: top; }
+.dosis-table td strong { color: #1f2933; }
+.dosis-table tr:nth-child(even) td { background: #f6f7f9; }
+
+/* === Vergleichs-Tabelle === */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.6rem; }
+.compare-table th {
+  padding: 0.6rem 0.75rem; border: 1px solid #e3e7eb;
+  text-align: left; font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.compare-table th:first-child { background: #f0f4f8; color: #52606d; }
+.compare-table th.mamma { background: #fce7f3; color: #9d174d; }
+.compare-table th.bronchial { background: #cffafe; color: #164e63; }
+.compare-table td { padding: 0.55rem 0.75rem; border: 1px solid #e3e7eb; vertical-align: top; color: #52606d; font-size: 0.85rem; }
+.compare-table td:first-child { background: #f6f7f9; font-weight: 600; color: #1f2933; font-size: 0.82rem; }
+.compare-table td strong { color: #1f2933; }
+
+/* === Hilfsmittelboxen === */
+.support-box, .plus-box, .teacher-note, .self-check {
+  margin-top: 0.75rem; border-radius: 6px; padding: 0.875rem 1rem; font-size: 0.88rem;
+}
+.support-box { background: #fffbeb; border: 1px solid #fcd34d; }
+.plus-box { background: #f5f3ff; border: 1px solid #c4b5fd; color: #4c1d95; }
+.plus-box strong { color: #4c1d95; }
+.self-check { background: #f0f4f8; border: 1px solid #cbd2d9; color: #52606d; }
+.self-check strong { color: #1f2933; }
+.teacher-note { display: none; background: #fffbeb; border: 1px dashed #fcd34d; color: #78350f; }
+body.show-teacher .teacher-note { display: block; }
+.teacher-note strong { color: #92400e; }
+
+/* === Toggle-Akkordeon === */
+.toggle {
+  width: 100%; text-align: left;
+  border: 1px solid #cbd2d9; background: #f0f4f8; color: #1f2933;
+  padding: 0.55rem 0.75rem; border-radius: 6px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.88rem; font-weight: 600; transition: background 0.12s;
+}
+.toggle:hover { background: #e3e7eb; }
+.toggle span { color: #52606d; font-weight: 400; font-size: 0.82rem; }
+.toggle-content { display: none; margin-top: 0.6rem; font-size: 0.88rem; color: #52606d; }
+.toggle-content.open { display: block; }
+.toggle-content ul { padding-left: 1.1rem; }
+.toggle-content li { margin-bottom: 4px; }
+
+/* === Buttons === */
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.1rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; cursor: pointer; border-radius: 6px; padding: 0.6rem 1.1rem;
+  font-weight: 600; font-size: 0.9rem;
+  transition: background 0.15s, transform 0.1s; text-decoration: none;
+}
+.btn-primary { background: #0e7490; color: #fff; }
+.btn-primary:hover { background: #0c6276; transform: translateY(-1px); }
+.btn-secondary { background: #e3e7eb; color: #1f2933; border: 1px solid #cbd2d9; }
+.btn-secondary:hover { background: #cbd2d9; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+
+/* === Status-Nachrichten === */
+.inline-status { display: none; margin-top: 0.75rem; padding: 0.6rem 0.875rem; border-radius: 6px; font-size: 0.88rem; }
+.inline-status.show { display: block; }
+.inline-status.ok { background: #f0fdf4; border: 1px solid #16a34a; color: #15803d; }
+.inline-status.warn { background: #fef2f2; border: 1px solid #dc2626; color: #dc2626; }
+
+/* === Abschluss-Screen === */
+.complete-screen { text-align: center; padding: 3rem 1rem; }
+.complete-screen h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #0e7490; }
+.complete-screen p { color: #52606d; max-width: 680px; margin: 0 auto 1.25rem; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; max-width: 540px; margin: 0 auto 1.5rem; }
+.stat { background: #fff; border: 1px solid #cbd2d9; border-radius: 8px; padding: 1rem; }
+.stat strong { display: block; font-size: 1.8rem; color: #0e7490; font-weight: 700; }
+.stat span { font-size: 0.78rem; color: #52606d; }
+
+.footer-space { height: 1.5rem; }
+
+/* === Responsive === */
+@media (max-width: 960px) {
+  .sidebar { display: none; }
+  .main { max-width: none; padding: 1.25rem; }
+  .hero-grid, .grid-3, .stats { grid-template-columns: 1fr 1fr; }
+  .grid-2, .case-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .header { height: auto; padding: 0.75rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .hero-grid, .grid-3, .stats { grid-template-columns: 1fr; }
+  .mission-title { font-size: 1.25rem; }
+  .main { padding: 1rem; }
+  .header-actions { width: 100%; }
+}
+
+/* === Bilder & Medien === */
+.img-figure { margin: 0.8rem 0; }
+.img-figure img { border-radius: 8px; border: 1px solid #d9e2ec; width: 100%; }
+.img-figure figcaption { font-size: 0.78rem; color: #7b8794; margin-top: 5px; font-style: italic; }
+.img-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin: 0.8rem 0; }
+.img-grid .img-figure { margin: 0; }
+
+/* === YouTube-Suchhilfe === */
+.search-tip {
+  background: #fff8e1; border: 1px solid #f6ad55; border-left: 4px solid #dd6b20;
+  border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; margin: 0.4rem 0 0;
+}
+.search-tip strong { color: #c05621; display: block; margin-bottom: 4px; }
+.search-tip code {
+  background: #fff3cd; border: 1px solid #f6ad55; border-radius: 4px;
+  padding: 2px 6px; font-family: monospace; font-size: 0.85em; color: #7b341e;
+  user-select: all; cursor: text;
+}
+.search-tip ul { margin: 4px 0 0 1rem; padding: 0; }
+.search-tip ul li { margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div>
+      <div class="header-title">Fall Herr K. // Bronchial-Ca. Lernsequenz</div>
+      <div class="header-sub">2. Lehrjahr &middot; fachpraktischer Unterricht &middot; 12 SuS &middot; parallele 3er-Rotation am PLCT</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="tool-btn" id="teacherToggle" onclick="toggleTeacherMode()">Dozentenmodus</button>
+    <button class="tool-btn" onclick="exportReport()">Export / Drucken</button>
+    <div class="progress-wrap">
+      <span class="progress-label" id="progressLabel">0 / 8</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Missionen</div>
+    <div class="sidebar-note"><strong>Task 1 (Pflicht):</strong> Mission 2&ndash;4, ca. 35 Min.<br><strong>Task 2 (ab Rotation 2):</strong> Mission 5&ndash;6.<br><strong>Praxis:</strong> Mission 7 bei Aufruf &ouml;ffnen.</div>
+    <button class="mission-btn active" id="mb1" onclick="showMission(1)"><span class="m-num">1</span><span><div class="m-title">Start &amp; Ablauf</div><div class="m-meta">5 Min &middot; Orientierung</div></span></button>
+    <button class="mission-btn" id="mb2" onclick="showMission(2)"><span class="m-num">2</span><span><div class="m-title">Fallakte Herr K.</div><div class="m-meta">10&ndash;12 Min &middot; OAR + Staging</div></span></button>
+    <button class="mission-btn" id="mb3" onclick="showMission(3)"><span class="m-num">3</span><span><div class="m-title">Lagerung am PLCT</div><div class="m-meta">10&ndash;12 Min &middot; Hilfsmittel begr&uuml;nden</div></span></button>
+    <button class="mission-btn" id="mb4" onclick="showMission(4)"><span class="m-num">4</span><span><div class="m-title">Anatomie &amp; RT-Technik</div><div class="m-meta">12 Min &middot; Grundlagen &amp; Therapietechnik</div></span></button>
+    <button class="mission-btn" id="mb5" onclick="showMission(5)"><span class="m-num">5</span><span><div class="m-title">ITV-Konzept &amp; 4DCT</div><div class="m-meta">12 Min &middot; Atemmanagement Grundlage</div></span></button>
+    <button class="mission-btn" id="mb6" onclick="showMission(6)"><span class="m-num">6</span><span><div class="m-title">DIBH vs. 4DCT</div><div class="m-meta">12 Min &middot; Vergleich + Transfer</div></span></button>
+    <button class="mission-btn practice" id="mb7" onclick="showMission(7)"><span class="m-num">&#9873;</span><span><div class="m-title">Praxisstation</div><div class="m-meta">bei Aufruf &ouml;ffnen &middot; Beobachtung PLCT</div></span></button>
+    <button class="mission-btn" id="mb8" onclick="showMission(8)"><span class="m-num">8</span><span><div class="m-title">Abschluss &amp; Exit-Ticket</div><div class="m-meta">5 Min &middot; Lernzielsicherung</div></span></button>
+  </aside>
+  <main class="main">
+
+    <!-- M1: Start & Ablauf -->
+    <section class="mission-panel active" id="m1">
+      <div class="hero">
+        <h1>Fall Herr K. &ndash; Bronchial-Ca. vom Befund zum PLCT-Setting</h1>
+        <p>Diese App l&auml;uft parallel zur Praxisrotation am Planungs-CT. Du arbeitest selbstst&auml;ndig an Task 1 und Task 2, unterbrichst bei Bedarf f&uuml;r deine 3er-Rotation und steigst danach wieder ein. Deine Eingaben werden automatisch gespeichert &ndash; kein Datenverlust bei Wechsel zur Praxisstation.</p>
+        <div class="hero-grid">
+          <div class="hero-stat"><strong>Task 1 (Rotation 1)</strong><span>Fallbeispiel Herr K. &ndash; OAR, Staging, Lagerung, Anatomie &amp; RT-Technik</span></div>
+          <div class="hero-stat"><strong>Task 2 (ab Rotation 2)</strong><span>Atemmanagement &ndash; ITV, 4DCT, DIBH-Vergleich</span></div>
+          <div class="hero-stat"><strong>Praxisoutput</strong><span>Beobachtungsauftrag PLCT, Lagerungsbegr&uuml;ndung</span></div>
+          <div class="hero-stat"><strong>Aufgabentypen</strong><span>R &ndash; Reproduktion &middot; T &ndash; Transfer &middot; Re &ndash; Reflexion</span></div>
+        </div>
+      </div>
+      <div class="mission-header">
+        <div class="mission-tag">Mission 01</div>
+        <h2 class="mission-title">Start &amp; Ablauf</h2>
+        <p class="mission-subtitle">Orientierung, bevor es fachlich losgeht: Was ist Pflicht? Was kommt wann dran? Wann gehst du zur Praxisstation?</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 5 Min</div>
+          <div class="meta-pill">&#127919; Output: Arbeitsplan</div>
+          <div class="meta-pill">&#129517; Funktion: Verbindlichkeit</div>
+        </div>
+      </div>
+      <div class="callout"><strong>Rotationsregel:</strong> Mission 7 ist deine Praxisstation. Sobald deine Gruppe aufgerufen wird, springe dorthin. Alle anderen Missionen k&ouml;nnen unterbrochen und sp&auml;ter weiterf&uuml;hrt werden &ndash; alles wird automatisch gespeichert.</div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Was du heute k&ouml;nnen sollst</h3>
+          <ul>
+            <li>OAR-Hierarchie beim Bronchial-Ca. mit Dosisgrenzen benennen</li>
+            <li>TNM-Staging interpretieren und Therapieintention ableiten</li>
+            <li>Lagerungsentscheidung aus dem Befund begr&uuml;nden</li>
+            <li>ITV-Konzept und 4DCT als Atemmanagement-Standard einordnen</li>
+            <li>DIBH bei Bronchial-Ca. vs. Mamma-Ca. fachlich unterscheiden</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Aufgabentypen in dieser App</h3>
+          <ul>
+            <li><strong>R &ndash; Reproduktion:</strong> Fakten abrufen und benennen</li>
+            <li><strong>T &ndash; Transfer:</strong> Wissen auf den konkreten Fall anwenden</li>
+            <li><strong>Re &ndash; Reflexion:</strong> Begr&uuml;nden, abw&auml;gen, urteilen</li>
+            <li>Pflichtspur: Mission 2&ndash;4 (Task 1), Mission 5&ndash;6 (Task 2)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Einstiegsfrage: Was weisst du schon?</h4><span class="output-tag">Aktivierung</span></div>
+        <p>Du kennst DIBH vom Mamma-Ca.-Unterricht. Was ver&auml;ndert sich deiner Einsch&auml;tzung nach beim Bronchial-Ca.? Keine richtige oder falsche Antwort &ndash; nur Vorwissen aktivieren.</p>
+        <textarea id="m1_t1" data-label="Mission 1 &ndash; Vorwissen Atemmanagement" placeholder="Meine erste Einsch&auml;tzung: Beim Bronchial-Ca. ist ... anders als beim Mamma-Ca., weil ..."></textarea>
+        <div class="teacher-note"><strong>Dozentenhinweis:</strong> Nicht auswerten, sondern am Abschluss (Mission 8) mit der Exit-Ticket-Antwort vergleichen lassen. 1&ndash;2 m&uuml;ndliche Startantworten im Einstiegsplenum steigern die Motivation deutlich.</div>
+      </div>
+      <div class="task">
+        <div class="label-line"><h4>Einsatzregeln best&auml;tigen</h4><span class="output-tag">Verbindlichkeit</span></div>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="m1_c1" data-required="true" data-label="Mission 1 &ndash; Rotationsregel"><label for="m1_c1">Mission 7 ist meine Praxisstation &ndash; ich &ouml;ffne sie, sobald meine Gruppe aufgerufen wird.</label></li>
+          <li><input type="checkbox" id="m1_c2" data-required="true" data-label="Mission 1 &ndash; Task-Reihenfolge"><label for="m1_c2">Task 1 (Mission 2&ndash;4) bearbeite ich in Rotation 1. Task 2 (Mission 5&ndash;6) starte ich ab Rotation 2.</label></li>
+          <li><input type="checkbox" id="m1_c3" data-required="true" data-label="Mission 1 &ndash; Lernziel"><label for="m1_c3">Am Ende kann ich Lagerung und Atemmanagement beim Bronchial-Ca. begr&uuml;ndet erkl&auml;ren.</label></li>
+        </ul>
+      </div>
+      <div class="callout green"><strong>Praxisanker:</strong> Eine Unterbrechung durch die Rotation ist kein Fehler &ndash; sie ist Teil des Konzepts. Steig einfach weiter ein, wo du aufgeh&ouml;rt hast.</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="completeMission(1,2)">Mission als bearbeitet markieren &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Direkt zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status1"></div>
+    </section>
+
+    <!-- M2: Fallakte Herr K. -->
+    <section class="mission-panel" id="m2">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 02 &ndash; Task 1</div>
+        <h2 class="mission-title">Fallakte Herr K. &ndash; OAR &amp; Staging</h2>
+        <p class="mission-subtitle">Bevor du irgendeine Entscheidung am PLCT triffst, musst du den Fall verstehen. OAR-Hierarchie und TNM-Staging steuern alles: Feldgrenzen, Lagerung, Technikwahl.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 10&ndash;12 Min</div>
+          <div class="meta-pill">&#128203; Aufgaben 1+2 aus Task 1</div>
+          <div class="meta-pill">&#128309; R &ndash; Reproduktion</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Patientenakte Herr K.</h3>
+        <div class="case-grid">
+          <div class="case-item"><div class="case-item-label">Alter</div><div class="case-item-value">67 Jahre</div></div>
+          <div class="case-item"><div class="case-item-label">Diagnose</div><div class="case-item-value">NSCLC, Plattenepithel-Ca., re. Oberlappen</div></div>
+          <div class="case-item"><div class="case-item-label">Staging</div><div class="case-item-value">cT2b cN1 cM0</div></div>
+          <div class="case-item"><div class="case-item-label">Therapieintention</div><div class="case-item-value">kurativ-intendierte Radiochemotherapie</div></div>
+          <div class="case-item"><div class="case-item-label">Heute</div><div class="case-item-value">Planungs-CT (nativ); diagnostisches KM-CT aus Staging bereits vorliegend</div></div>
+          <div class="case-item"><div class="case-item-label">Besonderheit</div><div class="case-item-value">Raucher 40 py, m&auml;&szlig;iger AZ, kooperativ</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dosiskonzepte beim Bronchial-Ca. &ndash; Referenz</h3>
+        <table class="dosis-table">
+          <thead>
+            <tr><th>Konzept</th><th>Einzeldosis</th><th>Gesamtdosis</th><th>Besonderheit / Indikation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Definitiv-RCT (kurativ)</strong></td><td>2,0 Gy</td><td>60&ndash;66 Gy</td><td>30&ndash;33 Fx; simultan Chemo (z.B. Cisplatin/Etoposid)</td></tr>
+            <tr><td><strong>SBRT / SABR (peripher, operabel)</strong></td><td>15&ndash;18 Gy</td><td>45&ndash;54 Gy</td><td>3&ndash;5 Fx; nur bei Sta. I&ndash;II, guter LuFu; strenge OAR-Grenzen</td></tr>
+            <tr><td><strong>Palliativ (Symptomkontrolle)</strong></td><td>3&ndash;4 Gy</td><td>30&ndash;39 Gy</td><td>10&ndash;13 Fx; bei Stadium IV oder schlechtem AZ</td></tr>
+            <tr><td><strong>Prophylaktische SHB (SCLC)</strong></td><td>2,5 Gy</td><td>25 Gy</td><td>10 Fx; nur SCLC Limited Disease nach Ansprechen</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px;font-size:0.78rem;color:#7b8794">Risikoorgane (Priorit&auml;t): Lunge gesamt (V20), Herz (MHD), R&uuml;ckenmark (Dmax), &Ouml;sophagus, Plexus brachialis</p>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: OAR-Hierarchie Thorax</h5>
+        <ul>
+          <li><strong>Lunge (gesamt):</strong> V20 Gy &le; 30&ndash;35&nbsp;% &ndash; zu hoher Anteil bestrahlten Parenchyms &rarr; Strahlenpneumonitis (Sp&auml;tfolge)</li>
+          <li><strong>Herz:</strong> Mean Heart Dose (MHD) &le; 20&ndash;26 Gy &ndash; Langzeitrisiko kardiovaskul&auml;r; bei re. Tumor g&uuml;nstiger als links</li>
+          <li><strong>R&uuml;ckenmark (Myelon):</strong> Dmax &le; 45&ndash;50 Gy &ndash; &Uuml;berschreitung &rarr; Strahlenmyelopathie, irreversibel</li>
+          <li><strong>&Ouml;sophagus:</strong> Dmax &le; 60&ndash;70 Gy, D5ml &le; 50 Gy &ndash; akute Radiooesophagitis als h&auml;ufige Nebenwirkung</li>
+        </ul>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: NSCLC vs. SCLC &ndash; Therapierelevanz</h5>
+        <ul>
+          <li><strong>NSCLC</strong> (80&nbsp;%): Plattenepithel-Ca., Adeno-Ca., gro&szlig;zellig &rarr; kurativ bestrahlbar in Sta. I&ndash;III, RT &plusmn; Chemo</li>
+          <li><strong>SCLC</strong> (20&nbsp;%): sehr aggressiv, fr&uuml;h metastasierend &rarr; prophylaktische Sch&auml;delbestrahlung bei Limited Disease, kombinierte Systemtherapie</li>
+          <li>Herr K. hat NSCLC cT2b cN1 cM0 &rarr; Stadium II B &rarr; definitiver kurativer Ansatz m&ouml;glich</li>
+        </ul>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Vertiefung (optional)</h3>
+        <div class="resource"><div class="resource-icon">&#9654;</div><div><h5>Tumor Target Therapy &ndash; Bronchial-Ca. Grundlagen</h5><p>Zum Einstieg in Epidemiologie, Diagnostik und Therapielogik beim Bronchial-Ca.</p><a href="https://www.youtube.com/@tumortargettherapy3137" target="_blank" rel="noopener">Kanal &ouml;ffnen</a></div></div>
+        <div class="resource"><div class="resource-icon">&#8734;</div><div><h5>Leitlinie Lungenkarzinom (AWMF)</h5><p>Aktuelle S3-Leitlinie: Staging, Therapiealgorithmen, OAR-Grenzwerte.</p><a href="https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom/" target="_blank" rel="noopener">Leitlinie &ouml;ffnen</a></div></div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 1 (R): OAR-Hierarchie</h4><span class="output-tag">Reproduktion</span></div>
+        <p>Benenne die 3 kritischsten Risikoorgane beim Bronchial-Ca. mit ihren klinisch relevanten Dosisgrenzen und der jeweiligen Konsequenz bei &Uuml;berschreitung.</p>
+        <textarea id="m2_t1" data-required="true" data-label="Mission 2 &ndash; OAR + Dosisgrenzen" placeholder="1. [OAR-Name]: Dosisgrenze ... &ndash; bei &Uuml;berschreitung: ...&#10;2. [OAR-Name]: Dosisgrenze ... &ndash; bei &Uuml;berschreitung: ...&#10;3. [OAR-Name]: Dosisgrenze ... &ndash; bei &Uuml;berschreitung: ..."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m2_help1')">Support &ouml;ffnen <span>Leitfragen</span></button>
+          <div class="toggle-content" id="m2_help1">
+            <ul>
+              <li>Welches OAR liegt direkt hinter dem Tumor auf dem Weg zu Feldern aus posterior?</li>
+              <li>Welches OAR wird mit einem Volumenparameter (Vx) bewertet &ndash; nicht nur mit einem Dmax?</li>
+              <li>Welches OAR liegt mediastinal und spielt langfristig eine Rolle, auch wenn der Tumor rechtsseitig liegt?</li>
+            </ul>
+          </div>
+        </div>
+        <div class="self-check"><strong>Selbstcheck:</strong> Eine vollst&auml;ndige Antwort nennt OAR-Name, Grenzwert-Typ (Dmax oder Vx-Wert) und begr&uuml;ndet die klinische Konsequenz bei &Uuml;berschreitung.</div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 2 (R): TNM-Staging interpretieren</h4><span class="output-tag">Reproduktion</span></div>
+        <p>Was bedeutet <strong>cT2b cN1 cM0</strong> bei Herrn K.? Formuliere die Staging-Aussage in eigenen Worten und leite die Therapieintention daraus ab.</p>
+        <textarea id="m2_t2" data-required="true" data-label="Mission 2 &ndash; TNM-Interpretation" placeholder="cT2b bedeutet: ...&#10;cN1 bedeutet: ...&#10;cM0 bedeutet: ...&#10;Daraus folgt f&uuml;r die Therapie: ..."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m2_help2')">Support &ouml;ffnen <span>TNM-Kodierung Lunge</span></button>
+          <div class="toggle-content" id="m2_help2">
+            <ul>
+              <li><strong>T2b:</strong> Tumor 4&ndash;5 cm Durchmesser (T2a = 3&ndash;4 cm)</li>
+              <li><strong>N1:</strong> ipsilaterale peribronchiale oder hil&auml;re Lymphknoten befallen &ndash; noch kein Mediastinalbefall (N2)</li>
+              <li><strong>M0:</strong> keine Fernmetastasen nachgewiesen</li>
+              <li>Stadium IIB &rarr; definitiv-simultane Radiochemotherapie (RCT) m&ouml;glich</li>
+            </ul>
+          </div>
+        </div>
+        <div class="plus-box"><strong>Plus:</strong> Wann w&uuml;rde aus kurativ palliativ? Nenne zwei klinische Kriterien, die die Therapieintention kippen w&uuml;rden.</div>
+      </div>
+      <div class="card">
+        <h3>Lymphknotenstationen Lunge &ndash; IASLC-Karte</h3>
+        <figure class="img-figure">
+          <img src="../../media/images/eigene/Bronchial-Ca/Lungen%20Lymphknoten.png"
+               alt="IASLC Lymphknotenstationen Lunge mit Nummerierung 2R-14" loading="lazy">
+          <figcaption>IASLC-Lymphknotenlandkarte. Herr K. cN1 = Station 10R (ipsilateral hil&auml;r). Station 4R/7 = mediastinal (N2) &ndash; bei Herr K. nicht befallen.</figcaption>
+        </figure>
+        <p style="font-size:0.82rem;color:#52606d;margin-top:6px">&#128161; Finde Station 10R auf der Karte. Das ist Herrn K.s N1-Status. Was w&uuml;rde N2 bedeuten &ndash; welche Station w&auml;re dann befallen?</p>
+      </div>
+
+      <div class="callout green"><strong>Praxisanker:</strong> OAR-Hierarchie und Staging steuern direkt die Feldgrenzen am PLCT. Wer das Staging nicht kennt, beginnt blind.</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="completeMission(2,3)">Weiter zu Lagerung &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status2"></div>
+    </section>
+
+    <!-- M3: Lagerung am PLCT -->
+    <section class="mission-panel" id="m3">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 03 &ndash; Task 1</div>
+        <h2 class="mission-title">Lagerung am PLCT &ndash; Ableitung &amp; Begr&uuml;ndung</h2>
+        <p class="mission-subtitle">Eine PLCT-Lagerung ist keine Routine, sondern eine begr&uuml;ndete Entscheidung. Jedes Hilfsmittel hat eine Funktion. Hier leitest du f&uuml;r Herrn K. ab &ndash; nicht auswendig, sondern logisch.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 10&ndash;12 Min</div>
+          <div class="meta-pill">&#128203; Aufgabe 3 aus Task 1</div>
+          <div class="meta-pill">&#128995; T &ndash; Transfer</div>
+        </div>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: Standardlagerung Thorax-PLCT</h5>
+        <ul>
+          <li><strong>R&uuml;ckenlage (RL):</strong> reproduzierbar, stabil, keine Rotationsfreiheit n&ouml;tig; Organgeometrie gut definiert</li>
+          <li><strong>Arme hoch (Wingstep / Armhalter):</strong> Arme aus dem Strahlenfeld &rarr; Hautreaktion an Axilla vermieden, kein Feldeintrittspunkt durch Armweichteil; Wingstep = Armstütze speziell f&uuml;r Thoraxlagerung</li>
+          <li><strong>Knierolle:</strong> Lordose abflachen &rarr; R&uuml;ckenmuskulatur entspannt, Atemkomfort verbessert, Reproduzierbarkeit h&ouml;her</li>
+          <li><strong>Achsgerechte Lage:</strong> keine Rotation des Thorax &rarr; Feldgeometrie bei jeder Fraktion identisch</li>
+          <li><strong>Scan-Range:</strong> OK (Hals) bis UK (Nieren) &ndash; Ganzthorax + Oberbauch f&uuml;r vollst&auml;ndige OAR-Erfassung</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Lagerungshilfsmittel am PLCT &ndash; Thorax</h3>
+        <div class="img-grid">
+          <figure class="img-figure">
+            <img src="../../media/images/eigene/Bronchial-Ca/Wingstep.jpg"
+                 alt="WingSTEP Armhalter f&uuml;r Thoraxlagerung" loading="lazy">
+            <figcaption><strong>WingSTEP:</strong> Armhalter f&uuml;r reproduzierbare Thoraxlagerung &ndash; Arme frei &uuml;ber den Schultern</figcaption>
+          </figure>
+          <figure class="img-figure">
+            <img src="../../media/images/eigene/Bronchial-Ca/Kniestep.jpg"
+                 alt="Kniepolster Stufenlagerung A/B/C" loading="lazy">
+            <figcaption><strong>Knierolle (Kniestep):</strong> Lordose abflachen, Atemkomfort verbessern &ndash; Position A/B/C je nach K&ouml;rpergr&ouml;&szlig;e</figcaption>
+          </figure>
+          <figure class="img-figure">
+            <img src="../../media/images/eigene/Bronchial-Ca/Bluebag.jpg"
+                 alt="Patient gelagert am PLCT mit blauer Abdeckung" loading="lazy">
+            <figcaption><strong>Gesamtlagerung:</strong> Patient auf PLCT-Tisch &ndash; achsgerechte R&uuml;ckenlage, Arme hochgelagert</figcaption>
+          </figure>
+        </div>
+        <p style="font-size:0.82rem;color:#52606d;margin-top:4px">&#128161; Schau dir die Bilder an, bevor du Aufgabe 3 bearbeitest. Kannst du an jedem Hilfsmittel den klinischen Grund schon ablesen?</p>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 3 (T): Lagerung f&uuml;r Herrn K. ableiten</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Leite ab: Wie wird Herr K. am PLCT gelagert? Begr&uuml;nde <strong>jedes</strong> Hilfsmittel mit seiner klinischen Funktion. Denke an Bestrahlungsplanung und Reproduzierbarkeit &uuml;ber alle Fraktionen.</p>
+        <textarea id="m3_t1" data-required="true" data-label="Mission 3 &ndash; Lagerungsableitung" placeholder="Lagerungsform: ...&#10;&#10;Wingstep / Armhalter: Ich w&auml;hle das, weil ...&#10;&#10;Knierolle: Ich w&auml;hle das, weil ...&#10;&#10;Achsgerechte RL: Ich achte darauf, weil ...&#10;&#10;Scan-Range: Von ... bis ..., weil ..." style="min-height:160px"></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m3_help1')">Support &ouml;ffnen <span>Leitfragen zur Ableitung</span></button>
+          <div class="toggle-content" id="m3_help1">
+            <ul>
+              <li>Was passiert mit dem Eintrittspunkt des Strahls, wenn die Arme heruntenh&auml;ngen?</li>
+              <li>Warum ist Reproduzierbarkeit bei kurativem Konzept (30+ Fraktionen) so wichtig?</li>
+              <li>Welche OAR profitieren davon, wenn die Lendenlordose abgeflacht ist?</li>
+              <li>Braucht Herr K. DIBH f&uuml;r die Lagerung? Begr&uuml;nde deine Antwort.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="self-check"><strong>Selbstcheck:</strong> Jedes Hilfsmittel braucht einen klaren klinischen Grund. &bdquo;Weil es Standard ist&ldquo; ist keine ausreichende Begr&uuml;ndung.</div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Scanprotokoll vervollst&auml;ndigen</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Trage die Schritte des PLCT-Protokolls f&uuml;r Herrn K. ein:</p>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="m3_c1" data-label="M3 Protokoll &ndash; Schichtdicke"><label for="m3_c1">Schichtdicke: <strong>3 mm</strong> &ndash; weil feine anatomische Strukturen des Mediastinums &auml;rztlicherseits konturiert werden m&uuml;ssen</label></li>
+          <li><input type="checkbox" id="m3_c2" data-label="M3 Protokoll &ndash; Scan-Range"><label for="m3_c2">Scan-Range: <strong>Larynx bis Nieren</strong> &ndash; vollst&auml;ndige Thoraxerfassung inkl. aller OAR</label></li>
+          <li><input type="checkbox" id="m3_c3" data-label="M3 Protokoll &ndash; Atemanweisung"><label for="m3_c3">Atemanweisung standardisiert &ndash; ruhige normale Atmung (kein tiefer Atemzug), exakt reproduzierbar</label></li>
+          <li><input type="checkbox" id="m3_c4" data-label="M3 Protokoll &ndash; Referenzmarkierung"><label for="m3_c4">Referenzmarkierung und Setup-Karte dokumentieren vor dem Scan</label></li>
+          <li><input type="checkbox" id="m3_c5" data-label="M3 Protokoll &ndash; 4DCT"><label for="m3_c5">4DCT-Modul aktivieren: Atemkurve am RPM-/Spirometrie-System sichtbar, regelm&auml;&szlig;ige Atmung best&auml;tigt</label></li>
+        </ul>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Fehlerdemonstration &ndash; was passiert bei Thorax-Rotation?</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Am PLCT heute hat der vorherige Patient einen leicht nach links rotierten Thorax hinterlassen. Welche Konsequenzen h&auml;tte das f&uuml;r Planung und Fraktionen 2&ndash;30?</p>
+        <textarea id="m3_t2" class="short" data-label="Mission 3 &ndash; Rotationsfehler" placeholder="Eine Thorax-Rotation von auch nur wenigen Grad bedeutet f&uuml;r die Bestrahlung: ..."></textarea>
+        <div class="teacher-note"><strong>Dozentenhinweis:</strong> Diese Aufgabe direkt mit der Fehlerdemonstration am PLCT verzahnen: bewusst rotierten Thorax zeigen &rarr; SuS sollen die visuelle Beobachtung in die schriftliche Antwort &uuml;berf&uuml;hren. Der Bruch zwischen geplanter Isodose und tatsa&#776;chlicher Lage wird so greifbar.</div>
+      </div>
+      <div class="callout green"><strong>Praxisanker:</strong> Am PLCT begr&uuml;ndest du jeden Schritt laut &ndash; genau so, wie du es hier schriftlich ge&uuml;bt hast.</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="completeMission(3,4)">Weiter zu Anatomie &amp; Technik &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status3"></div>
+    </section>
+
+    <!-- M4: Anatomie & Strahlentherapietechnik -->
+    <section class="mission-panel" id="m4">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 04 &ndash; Task 1</div>
+        <h2 class="mission-title">Anatomie, Therapiem&ouml;glichkeiten &amp; RT-Technik</h2>
+        <p class="mission-subtitle">Bevor du die Technikwahl am PLCT verstehst, brauchst du das Fundament: Wo liegt der Tumor? Welche Strukturen sind gefährdet? Welche Bestrahlungstechniken gibt es &ndash; und warum?</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 12 Min</div>
+          <div class="meta-pill">&#128203; Aufgabe 4 aus Task 1</div>
+          <div class="meta-pill">&#128309; R + &#128995; T</div>
+        </div>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: Topographische Anatomie Thorax</h5>
+        <ul>
+          <li><strong>Lunge:</strong> re. Lunge = 3 Lappen (Ober-, Mittel-, Unterlappen), li. = 2 Lappen; Herr K.s Tumor liegt im <strong>re. Oberlappen</strong> &rarr; Nachbarstrukturen: Trachea, Carina, A. pulmonalis, re. Hauptbronchus</li>
+          <li><strong>Mediastinum:</strong> enth&auml;lt Herz, gro&szlig;e Gef&auml;&szlig;e (Aorta, V. cava), &Ouml;sophagus, Trachea, Lymphknoten-Stationen 4R/7/10R &ndash; alles potenzielle OAR oder N-Stationen</li>
+          <li><strong>Pleura:</strong> Tumor kann Pleura infiltrieren &rarr; Pleuritis, Pleurakarzinose &ndash; relevant f&uuml;r Staging (T3/T4) und Zielvolumendefinition</li>
+          <li><strong>Zwerchfell:</strong> Atemsynchrone Bewegung zieht Unterlappen-Tumore bis 30 mm nach kaudal &rarr; besonders relevant bei ITV/4DCT</li>
+          <li><strong>Plexus brachialis:</strong> oberer Thorax / Apex &rarr; bei apikalen Tumoren OAR-Constraint beachten (Dmax &le; 66 Gy)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Lungenanatomie &ndash; Topographie</h3>
+        <figure class="img-figure">
+          <img src="../../media/images/eigene/Bronchial-Ca/Lungen%20Anatomie.png"
+               alt="Anatomische Illustration der Lungen mit Beschriftung auf Deutsch" loading="lazy">
+          <figcaption>Anatomie der Lungen mit Gef&auml;&szlig;en, Bronchien und Herzstrukturen. Herr K.s Tumor: re. Oberlappen &ndash; in der N&auml;he von rechtem Hauptbronchus, A. pulmonalis re. und Mediastinum.</figcaption>
+        </figure>
+        <p style="font-size:0.82rem;color:#52606d;margin-top:6px">&#128161; Markiere gedanklich: Wo liegt der re. Oberlappen? Welche Strukturen sind in direkter Nachbarschaft? Das ist die Grundlage f&uuml;r Aufgabe 4a.</p>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: Therapiem&ouml;glichkeiten beim NSCLC</h5>
+        <ul>
+          <li><strong>Stad. I&ndash;II (operabel):</strong> Chirurgie (Lobektomie) Erstlinie; SBRT bei Inoperabilit&auml;t oder Ablehnung &rarr; 3&ndash;5 Fraktionen, hoch dosiert</li>
+          <li><strong>Stad. II&ndash;III (kurativ, inoperabel):</strong> simultane Radiochemotherapie (RCT) &rarr; Cisplatin/Etoposid + 60&ndash;66 Gy; bei Ansprechen ggf. Konsolidierung mit Durvalumab (Immuntherapie)</li>
+          <li><strong>Stad. IV (palliativ):</strong> Systemtherapie 1. Linie; RT zur Symptomkontrolle (Schmerz, Blutung, V.-cava-Syndrom), H&auml;moptoe; kurze Serien 5&ndash;10 Fx</li>
+          <li><strong>Herr K. (cT2b cN1 cM0, Stad. IIB):</strong> simultane kurativ-intendierte RCT; RT-Dosis 60&ndash;66 Gy in 2,0 Gy/Fx, simultan Chemotherapie</li>
+          <li><strong>SCLC Limited Disease:</strong> prophylaktische Sch&auml;delbestrahlung (PCI) 25 Gy / 10 Fx nach Ansprechen auf Systemtherapie</li>
+        </ul>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: Strahlentherapietechnik beim Bronchial-Ca.</h5>
+        <ul>
+          <li><strong>3D-konformale RT (3D-CRT):</strong> mehrere koplanare/nicht-koplanare Felder, Multileaf-Kollimator formt Feldgrenzen &rarr; bew&auml;hrt, auch bei schlechter Lungenfunktion einsetzbar</li>
+          <li><strong>IMRT / VMAT:</strong> Intensit&auml;tsmoduliertes Verfahren; bessere OAR-Schonung bei komplexen Zielvolumina (z.B. mediastinale LK-Stationen) &rarr; <strong>Standard bei kurativer Radiochemotherapie</strong></li>
+          <li><strong>SBRT / SABR:</strong> Stereotaxie mit hoch hypofraktionierter Dosis; nur bei kleinen Tumoren (T1&ndash;T2), peripherer Lage, mindestens 2 cm Abstand von Bronchien/Trachea (&bdquo;No-fly-Zone&ldquo;); strenge OAR-Constraints obligat</li>
+          <li><strong>Protonenstrahlung:</strong> physikalisch beste OAR-Schonung (Bragg-Peak); Indikation z.B. Re-Bestrahlung, komplexe Feldgeometrie &ndash; an den meisten Standorten nicht routinem&auml;&szlig;ig verf&uuml;gbar</li>
+          <li><strong>Warum VMAT f&uuml;r Herrn K.?</strong> Gro&szlig;es Zielvolumen (Tumor + N1-Region), mediastinale N&auml;he, V20-Constraint kritisch &rarr; VMAT erlaubt bessere Lungenparenchym-Schonung als 3D-CRT</li>
+        </ul>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Ressourcen &ndash; Grundlagen Bronchial-Ca. &amp; RT</h3>
+        <div class="resource">
+          <div class="resource-icon">&#9654;</div>
+          <div>
+            <h5>Amboss &ndash; Bronchialkarzinom (Grundlagen)</h5>
+            <p>Epidemiologie, Histologie, Staging, Therapiealgorithmus &ndash; kompakt und pr&uuml;fungsrelevant.</p>
+            <a href="https://www.amboss.com/de/wissen/bronchialkarzinom/" target="_blank" rel="noopener">Amboss &ouml;ffnen</a>
+          </div>
+        </div>
+        <div class="resource">
+          <div class="resource-icon">&#8734;</div>
+          <div>
+            <h5>AWMF S3-Leitlinie Lungenkarzinom</h5>
+            <p>Therapiealgorithmen, RT-Indikationen, Dosisvorgaben &ndash; ma&szlig;gebliche deutsche Leitlinie.</p>
+            <a href="https://www.leitlinienprogramm-onkologie.de/leitlinien/lungenkarzinom/" target="_blank" rel="noopener">Leitlinie &ouml;ffnen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 4a (R): Anatomische Lage einordnen</h4><span class="output-tag">Reproduktion</span></div>
+        <p>Herr K. hat einen Tumor im re. Oberlappen (cT2b cN1). Nenne 3 anatomische Nachbarstrukturen, die f&uuml;r die Feldplanung besonders relevant sind, und erkl&auml;re warum.</p>
+        <textarea id="m4_t1" data-required="true" data-label="Mission 4 &ndash; Anatomische Lage" placeholder="Struktur 1: ... &ndash; relevant, weil ...&#10;Struktur 2: ... &ndash; relevant, weil ...&#10;Struktur 3: ... &ndash; relevant, weil ..."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m4_help1')">Support &ouml;ffnen <span>Leitfragen</span></button>
+          <div class="toggle-content" id="m4_help1">
+            <ul>
+              <li>Was liegt medial vom re. Oberlappen? (Hinweis: Carina, Mediastinum)</li>
+              <li>Welche Struktur l&auml;uft posterior durch den Thorax &ndash; immer in der N&auml;he der Wirbels&auml;ule?</li>
+              <li>Woran erkennst du, dass N1-Befall die Feldgrenzen nach mediastinal erweitert?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 4b (T): Technikwahl begr&uuml;nden</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Warum ist VMAT beim kurativ-intendierten Bronchial-Ca. der Standard &ndash; und nicht 3D-CRT? Nenne 2 konkrete Vorteile am Beispiel von Herrn K.</p>
+        <textarea id="m4_t2" data-required="true" data-label="Mission 4 &ndash; Technikwahl VMAT" placeholder="Vorteil 1 von VMAT gegen&uuml;ber 3D-CRT f&uuml;r Herrn K.: ...&#10;&#10;Vorteil 2: ...&#10;&#10;3D-CRT w&auml;re trotzdem eine Option, wenn: ..."></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> VMAT = bessere Dosisverteilung im Zielvolumen bei gleichzeitig niedrigerer mittlerer Lungendosis (V20 &darr;). Bei Herrn K. kommt mediastinaler N1-Befall dazu &rarr; komplexes Zielvolumen &rarr; VMAT &uuml;berlegen.</div>
+      </div>
+
+      <div class="callout orange"><strong>Klinischer Hinweis:</strong> Das diagnostische KM-CT (Staging-CT) ist bereits vorliegend und wird als Fusionsdatensatz in die Planung einbezogen. Der PLCT selbst wird <strong>nativ</strong> durchgef&uuml;hrt &ndash; die Lagerungsgeometrie muss dem Bestrahlungssetting entsprechen, nicht dem Staging.</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="completeMission(4,5)">Weiter zu ITV &amp; 4DCT &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status4"></div>
+    </section>
+
+
+    <!-- M5: ITV-Konzept & 4DCT -->
+    <section class="mission-panel" id="m5">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 05 &ndash; Task 2</div>
+        <h2 class="mission-title">ITV-Konzept &amp; 4DCT &ndash; das prim&auml;re Atemmanagement</h2>
+        <p class="mission-subtitle">Der Thorax bewegt sich. Der Tumor bewegt sich. Wie erfasst man ein Zielvolumen, das st&auml;ndig in Bewegung ist? Das ITV-Konzept ist die Antwort &ndash; und 4DCT das Werkzeug.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 12 Min</div>
+          <div class="meta-pill">&#128203; Aufgaben 1+2 aus Task 2</div>
+          <div class="meta-pill">&#128309; R &ndash; Reproduktion</div>
+        </div>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Zuerst informieren &ndash; dann bearbeiten</h3>
+        <div class="resource">
+          <div class="resource-icon">&#9654;</div>
+          <div>
+            <h5>Tumor Target Therapy &ndash; 4DCT &amp; Atemmanagement Strahlentherapie</h5>
+            <p>Deutschsprachiger Kanal mit Fokus auf Strahlentherapie-Grundlagen. Suche auf dem Kanal nach <strong>&bdquo;4DCT&ldquo;</strong> oder <strong>&bdquo;Atemmanagement&ldquo;</strong> &ndash; erkl&auml;rt Phasensortierung, ITV-Bildung und klinischen Einsatz.</p>
+            <a href="https://www.youtube.com/@tumortargettherapy3137" target="_blank" rel="noopener">Zum Kanal &rarr; Suche: 4DCT</a>
+          </div>
+        </div>
+        <div class="resource">
+          <div class="resource-icon">&#8734;</div>
+          <div>
+            <h5>DEGRO / DGMP: Empfehlungen 4DCT</h5>
+            <p>Fachgesellschaftliche Leitlinien zur klinischen Anwendung des 4DCT in der Strahlentherapie.</p>
+            <a href="https://www.degro.org/leitlinien-empfehlungen/" target="_blank" rel="noopener">DEGRO &ouml;ffnen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: ITV-Konzept</h5>
+        <ul>
+          <li><strong>Problem:</strong> Lungentumore k&ouml;nnen sich atemabh&auml;ngig um 5&ndash;30 mm verschieben &ndash; je nach Lage und Atemtiefe</li>
+          <li><strong>ITV = Internal Target Volume:</strong> H&uuml;llvolumen aller Tumorgrenzen &uuml;ber alle Atemphasen &rarr; sicherer Einschluss jeder m&ouml;glichen Tumorposition</li>
+          <li><strong>Bildung:</strong> GTV aus Phase 0&nbsp;% + GTV aus Phase 50&nbsp;% + alle weiteren Phasen &rarr; Bool&#39;sches Oder &rarr; ITV</li>
+          <li><strong>Klinische Folge:</strong> ITV ist immer gr&ouml;&szlig;er als ein einzelnes GTV &rarr; mehr Lunge im Feld &rarr; V20-Constraint wird anspruchsvoller</li>
+        </ul>
+      </div>
+
+      <div class="wissen-block">
+        <h5>Kompaktwissen: 4DCT-Prinzip</h5>
+        <ul>
+          <li><strong>4D = 3D + Zeit:</strong> Atemkurve wird simultan zur CT-Aufnahme erfasst (Spirometer, RPM-System, Atemgurt)</li>
+          <li><strong>Rekonstruktion:</strong> CT-Datensatz wird in 10 Atemphasen (0&ndash;90&nbsp;%) sortiert &rarr; 10 Phasen-Datens&auml;tze entstehen</li>
+          <li><strong>Auswertung:</strong> GTV auf allen Phasen konturiert oder automatisch propagiert &rarr; ITV wird berechnet</li>
+          <li><strong>Vorteil:</strong> Kein pauschaler Sicherheitssaum auf Verdacht &ndash; Tumorbewegung ist exakt bekannt</li>
+          <li><strong>Voraussetzung:</strong> regelm&auml;&szlig;ige Atmung, Patientenkooperation, ausreichende Scan-Dauer (ca. 10&ndash;20 Sek/cm)</li>
+        </ul>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 1 (R): ITV-Konzept erkl&auml;ren</h4><span class="output-tag">Reproduktion</span></div>
+        <p>Erkl&auml;re das ITV-Konzept. Warum wird es beim Bronchial-Ca. ben&ouml;tigt? Was w&auml;re die Konsequenz, wenn kein ITV gebildet wird?</p>
+        <textarea id="m5_t1" data-required="true" data-label="Mission 5 &ndash; ITV-Konzept" placeholder="Das ITV-Konzept bedeutet: ...&#10;&#10;Beim Bronchial-Ca. wird es ben&ouml;tigt, weil: ...&#10;&#10;Ohne ITV m&uuml;sste man: ... oder es entstehe das Risiko, dass: ..."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m5_help1')">Support &ouml;ffnen <span>Leitfragen</span></button>
+          <div class="toggle-content" id="m5_help1">
+            <ul>
+              <li>Was passiert mit dem Tumor bei Einatmung vs. Ausatmung? In welche Richtung bewegt er sich?</li>
+              <li>Wenn ich nur in einer Atemphase plane, was passiert dann bei Fraktion 5, wenn der Patient anders atmet?</li>
+              <li>Was ist der Unterschied zwischen GTV, CTV und ITV?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 2 (R): DIBH-Prinzip kurz erkl&auml;ren</h4><span class="output-tag">Reproduktion</span></div>
+        <p>Erkl&auml;re das DIBH-Prinzip in 3 S&auml;tzen. F&uuml;r welche Indikation kennst du es haupts&auml;chlich aus dem Unterricht?</p>
+        <textarea id="m5_t2" data-required="true" data-label="Mission 5 &ndash; DIBH-Prinzip" placeholder="Satz 1: DIBH steht f&uuml;r ...&#10;Satz 2: Das Prinzip funktioniert so: ...&#10;Satz 3: Die wichtigste klinische Indikation aus dem Unterricht ist ..."></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> DIBH = tiefe Einatmung + Atemstopp + Bestrahlung in dieser Phase. H&auml;ufigste Indikation aus eurem Unterricht: linksseitiges Mamma-Ca. zum Herzschutz durch Abstand.</div>
+        <div class="plus-box"><strong>Plus:</strong> Welche technischen Komponenten braucht man am PLCT und am Linac, um DIBH durchzuf&uuml;hren? (Spirometrie, RPM, Gating-Software &hellip;)</div>
+      </div>
+
+      <div class="callout green"><strong>Praxisanker:</strong> Am PLCT heute wird 4DCT oder DIBH demonstriert. Die Atemkurve, die du siehst, erzeugt exakt dieses ITV &ndash; kannst du das nachvollziehen?</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="completeMission(5,6)">Weiter zu DIBH vs. 4DCT &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status5"></div>
+    </section>
+
+    <!-- M6: DIBH-Vergleich & Transfer -->
+    <section class="mission-panel" id="m6">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 06 &ndash; Task 2</div>
+        <h2 class="mission-title">DIBH vs. 4DCT &ndash; Vergleich &amp; Transfer</h2>
+        <p class="mission-subtitle">Beide Verfahren managen Atembewegung &ndash; aber mit unterschiedlichen Zielen und Indikationen. Der Vergleich macht den Unterschied sichtbar.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 12 Min</div>
+          <div class="meta-pill">&#128203; Aufgaben 3+4 aus Task 2</div>
+          <div class="meta-pill">&#128995; T / &#128993; Re</div>
+        </div>
+      </div>
+
+      <div class="resource-list card">
+        <h3>Zuerst informieren &ndash; dann vergleichen</h3>
+        <div class="resource">
+          <div class="resource-icon">&#9654;</div>
+          <div>
+            <h5>Tumor Target Therapy &ndash; DIBH Erkl&auml;rung (Strahlentherapie)</h5>
+            <p>Suche auf dem Kanal nach <strong>&bdquo;DIBH&ldquo;</strong> oder <strong>&bdquo;Atemgating&ldquo;</strong>. Die Videos erkl&auml;ren das Prinzip des Atemstopps, Herzschutz beim Mamma-Ca. und die technischen Voraussetzungen &ndash; direkte Grundlage f&uuml;r den Vergleich in dieser Mission.</p>
+            <a href="https://www.youtube.com/@tumortargettherapy3137" target="_blank" rel="noopener">Zum Kanal &rarr; Suche: DIBH</a>
+          </div>
+        </div>
+        <div class="resource">
+          <div class="resource-icon">&#9654;</div>
+          <div>
+            <h5>Tumor Target Therapy &ndash; Atemmanagement &amp; Lungentumoren</h5>
+            <p>Suche zus&auml;tzlich nach <strong>&bdquo;Lunge&ldquo;</strong> oder <strong>&bdquo;Bronchial&ldquo;</strong> auf dem Kanal. Zeigt wie DIBH und 4DCT f&uuml;r unterschiedliche Indikationen eingesetzt werden &ndash; ideal als Vorbereitung f&uuml;r Aufgabe 4 (Reflexion).</p>
+            <a href="https://www.youtube.com/@tumortargettherapy3137" target="_blank" rel="noopener">Zum Kanal &rarr; Suche: Lunge / Bronchial</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Vergleich: DIBH Mamma-Ca. vs. Bronchial-Ca.</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Merkmal</th>
+              <th class="mamma">DIBH &ndash; Mamma-Ca. (li.)</th>
+              <th class="bronchial">4DCT/ITV &ndash; Bronchial-Ca.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Prim&auml;res Ziel</td><td>Herz r&uuml;ckt weg &rarr; MHD &darr; (Herzschutz)</td><td>Tumorbewegung erfassen &rarr; sicheres ITV bilden</td></tr>
+            <tr><td>Problem das gel&ouml;st wird</td><td>Herzexposition bei linksseitigem Feld</td><td>Atemverschieblichkeit des Tumors (bis 30 mm)</td></tr>
+            <tr><td>Standardverfahren?</td><td>DIBH = <strong>Standard</strong> bei li. Mamma + Herzrisiko</td><td>4DCT/ITV = <strong>Standard</strong>; DIBH nur bei Selektion</td></tr>
+            <tr><td>Patientenanforderung</td><td>Atemstopp ca. 20 Sek reproduzierbar</td><td>Regelm&auml;&szlig;ige Atmung; Lungenfunktion oft eingeschr&auml;nkt bei BC</td></tr>
+            <tr><td>Sekund&auml;rer Nutzen</td><td>Lungenvolumen &uarr; &rarr; V20 g&uuml;nstiger</td><td>Alle Atemphasen bekannt &rarr; kein pauschaler Sicherheitssaum</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 3 (T): Vergleich in eigenen Worten</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Vergleiche DIBH bei Mamma-Ca. vs. Bronchial-Ca. Worin unterscheiden sich die Behandlungsziele? Was ist jeweils das prim&auml;re Problem, das gel&ouml;st werden soll?</p>
+        <textarea id="m6_t1" data-required="true" data-label="Mission 6 &ndash; DIBH Vergleich" placeholder="Beim Mamma-Ca. (li.) setzt man DIBH ein, weil: ...&#10;Das prim&auml;re Problem ist: ...&#10;&#10;Beim Bronchial-Ca. ist das anders: Das Hauptproblem ist: ...&#10;Deshalb ist 4DCT der Standard, weil: ..."></textarea>
+        <div class="self-check"><strong>Selbstcheck:</strong> Mamma = Herzschutz durch Abstand | Bronchial-Ca. = Tumorbewegung durch 4DCT erfassen &rarr; ITV. Beide nutzen Atemphysik &ndash; aber f&uuml;r unterschiedliche Schutzorgane und Ziele.</div>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Aufgabe 4 (Re): Warum ist DIBH beim re. Bronchial-Ca. nicht prim&auml;r indiziert?</h4><span class="output-tag reflex">Reflexion</span></div>
+        <p>Herr K. hat einen Tumor im <strong>rechten Oberlappen</strong>. Heute wurde trotzdem DIBH demonstriert. Erkl&auml;re: Warum ist DIBH bei ihm <strong>nicht</strong> das prim&auml;re Verfahren? Und wann w&uuml;rde man es trotzdem erw&auml;gen?</p>
+        <textarea id="m6_t2" data-required="true" data-label="Mission 6 &ndash; DIBH Reflexion" placeholder="DIBH ist beim rechtsseitigen Bronchial-Ca. nicht prim&auml;r indiziert, weil: ...&#10;&#10;Das prim&auml;re Verfahren ist 4DCT, weil: ...&#10;&#10;DIBH k&ouml;nnte trotzdem erwogen werden, wenn: ..."></textarea>
+        <div class="support-box">
+          <button class="toggle" onclick="toggleBox('m6_help2')">Support &ouml;ffnen <span>Leitfragen zur Reflexion</span></button>
+          <div class="toggle-content" id="m6_help2">
+            <ul>
+              <li>DIBH sch&uuml;tzt prim&auml;r das Herz durch Abstand. Liegt Herrn K.s Tumor nahe am Herzen?</li>
+              <li>Was passiert bei re. Lungen-Tumor mit der linken Herzseite &ndash; ist sie typischerweise im Hochdosisfeld?</li>
+              <li>Wann k&ouml;nnte DIBH trotzdem sinnvoll sein? Denke an: gro&szlig;e Atemverschieblichkeit, unzureichendes V20 trotz 4DCT, gute Patientenkooperation.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="teacher-note"><strong>Dozentenhinweis:</strong> Dies ist die didaktische Kernaufgabe der gesamten Einheit. Im Plenumgespr&auml;ch 3&ndash;4 Antworten vorlesen und gemeinsam bewerten. Abweichende Formulierungen zeigen, wo Kl&auml;rungsbedarf besteht. Starke Antworten erkennen: re. Tumor &rarr; Herz nicht im Hochdosisfeld &rarr; kein DIBH-Benefit &rarr; 4DCT l&ouml;st das eigentliche Problem (Bewegung).</div>
+      </div>
+
+      <div class="callout orange"><strong>Merksatz f&uuml;r die Pr&uuml;fung:</strong> DIBH und 4DCT sind keine Konkurrenten &ndash; sie l&ouml;sen unterschiedliche Probleme. DIBH = Herzschutz durch Abstand. 4DCT = Tumorbewegung erfassen. Beim re. Bronchial-Ca. ist das Herzproblem klein, das Bewegungsproblem gro&szlig; &rarr; 4DCT Standard.</div>
+      <div class="callout green"><strong>Task 2 abgeschlossen!</strong> Du hast Atemmanagement, ITV-Konzept und DIBH-Vergleich vollst&auml;ndig durchgearbeitet.</div>
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="completeMission(6,8)">Task 2 fertig &ndash; zum Abschluss &#8594;</button>
+        <button class="btn btn-secondary" onclick="showMission(7)">Zur Praxisstation</button>
+      </div>
+      <div class="inline-status" id="status6"></div>
+    </section>
+
+    <!-- M7: Praxisstation -->
+    <section class="mission-panel" id="m7">
+      <div class="mission-header">
+        <div class="mission-tag practice">Praxisstation</div>
+        <h2 class="mission-title">Praxisstation &ndash; Beobachtungsauftrag am PLCT</h2>
+        <p class="mission-subtitle">&Ouml;ffne diese Mission, wenn deine Gruppe aufgerufen wird. Hier findest du den strukturierten Beobachtungsauftrag f&uuml;r die Denklaut-Demo und die angeleitete &Uuml;bung.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9873; bei Aufruf &ouml;ffnen</div>
+          <div class="meta-pill">&#9878; Rollen: Einstellende / Beobachtende</div>
+        </div>
+      </div>
+
+      <div class="callout orange"><strong>Rollen in deiner Gruppe:</strong> 1&ndash;2 SuS stellen aktiv ein. 1&ndash;2 SuS beobachten strukturiert mit diesem Auftrag. Wechselt nach der H&auml;lfte wenn m&ouml;glich.</div>
+
+      <div class="card">
+        <h3>Ablaufschritte &ndash; Schritt f&uuml;r Schritt mitverfolgen</h3>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="p1" data-label="Praxis &ndash; Liege + Phantom"><label for="p1"><strong>Schritt 1:</strong> Liege und Phantom vorbereiten &ndash; Ausgangslage korrekt?</label></li>
+          <li><input type="checkbox" id="p2" data-label="Praxis &ndash; Wingstep"><label for="p2"><strong>Schritt 2:</strong> Wingstep anlegen und Armhalter einstellen &ndash; Arme frei &uuml;ber Schulter?</label></li>
+          <li><input type="checkbox" id="p3" data-label="Praxis &ndash; Knierolle"><label for="p3"><strong>Schritt 3:</strong> Knierolle positionieren &ndash; Lendenwirbels&auml;ule abgeflacht?</label></li>
+          <li><input type="checkbox" id="p4" data-label="Praxis &ndash; achsgerecht"><label for="p4"><strong>Schritt 4:</strong> Achsgerechte R&uuml;ckenlage pr&uuml;fen &ndash; kein Rotationsanteil sichtbar?</label></li>
+          <li><input type="checkbox" id="p5" data-label="Praxis &ndash; Referenzmarkierung"><label for="p5"><strong>Schritt 5:</strong> Referenzmarkierung und Setup-Karte dokumentieren</label></li>
+          <li><input type="checkbox" id="p6" data-label="Praxis &ndash; Scanprotokoll"><label for="p6"><strong>Schritt 6:</strong> Scanprotokoll &ndash; FOV, Schichtdicke 3 mm, Scan-Range Larynx bis Nieren</label></li>
+          <li><input type="checkbox" id="p7" data-label="Praxis &ndash; 4DCT-Demo"><label for="p7"><strong>Schritt 7:</strong> 4DCT-Demo &ndash; Atemkurve sichtbar? Phasenselektion erkl&auml;rt?</label></li>
+          <li><input type="checkbox" id="p8" data-label="Praxis &ndash; DIBH-Demo"><label for="p8"><strong>Schritt 8:</strong> DIBH-Demo &ndash; Atemtraining, Spirometrie, CT-Scan in DIBH; Einordnung: hier nicht Standard</label></li>
+        </ul>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Beobachtungsauftrag: Was hat mich &uuml;berrascht?</h4><span class="output-tag">Praxisnotiz</span></div>
+        <p>Notiere w&auml;hrend oder direkt nach der Rotation: Was war anders als erwartet? Welchen Schritt hattest du anders eingesch&auml;tzt?</p>
+        <textarea id="m7_t1" class="short" data-label="Mission 7 &ndash; Praxisbeobachtung" placeholder="&Uuml;berrascht hat mich: ...&#10;Anders als erwartet: ...&#10;Offene Frage f&uuml;r das Plenum: ..."></textarea>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Denklaut-Frage: Begr&uuml;ndung h&ouml;ren</h4><span class="output-tag transfer">Transfer</span></div>
+        <p>Der Dozent sagt jeden Schritt laut mit Begr&uuml;ndung. Schreibe die Begr&uuml;ndung f&uuml;r <strong>einen</strong> Schritt mit &ndash; den, der dir am wichtigsten erscheint.</p>
+        <textarea id="m7_t2" class="short" data-label="Mission 7 &ndash; Denklaut-Notiz" placeholder="Schritt: ... | Begr&uuml;ndung des Dozenten: ..."></textarea>
+      </div>
+
+      <div class="callout green"><strong>Praxisanker:</strong> Was du hier beobachtest, ist die praktische Antwort auf alles, was du in Mission 2&ndash;4 schriftlich abgeleitet hast.</div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="showMission(5)">Zur&uuml;ck zu Task 2</button>
+        <button class="btn btn-primary" onclick="completeMission(7,8)">Praxisstation als bearbeitet markieren</button>
+      </div>
+      <div class="inline-status" id="status7"></div>
+    </section>
+
+    <!-- M8: Abschluss & Exit-Ticket -->
+    <section class="mission-panel" id="m8">
+      <div class="mission-header">
+        <div class="mission-tag">Mission 08</div>
+        <h2 class="mission-title">Abschluss &amp; Exit-Ticket</h2>
+        <p class="mission-subtitle">Lernzielsicherung: Kannst du Lagerung und Atemmanagement beim Bronchial-Ca. jetzt begr&uuml;ndet erkl&auml;ren? Das Exit-Ticket gibt dir und dem Dozenten eine direkte R&uuml;ckmeldung.</p>
+        <div class="meta-row">
+          <div class="meta-pill">&#9200; 5 Min</div>
+          <div class="meta-pill">&#127919; Exit-Ticket</div>
+          <div class="meta-pill">&#128260; R&uuml;ckblick auf Startannahme</div>
+        </div>
+      </div>
+
+      <div class="callout"><strong>R&uuml;ckblick:</strong> In Mission 1 hast du notiert, was du dachtest, was sich beim Bronchial-Ca. im Vergleich zu DIBH/Mamma &auml;ndert. Hat sich deine Einsch&auml;tzung best&auml;tigt &ndash; oder hat dich der Unterricht &uuml;berrascht?</div>
+
+      <div class="task">
+        <div class="label-line"><h4>Exit-Ticket 1: Setup Bronchial-Ca. &ndash; 2 Merkss&auml;tze</h4><span class="output-tag">Lernzielsicherung</span></div>
+        <p>Formuliere 2 pr&auml;gnante Merkss&auml;tze zum PLCT-Setup beim Bronchial-Ca. f&uuml;r jemanden, der heute nicht dabei war.</p>
+        <textarea id="m8_t1" data-required="true" data-label="Mission 8 &ndash; Merksatz Setup" placeholder="Merksatz 1: Beim PLCT-Setup f&uuml;r Bronchial-Ca. gilt: ...&#10;&#10;Merksatz 2: ..."></textarea>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Exit-Ticket 2: Wann 4DCT, wann DIBH?</h4><span class="output-tag">Lernzielsicherung</span></div>
+        <p>Formuliere 1 klaren Satz: Wann ist 4DCT das prim&auml;re Verfahren beim Bronchial-Ca. &ndash; und wann w&uuml;rde man DIBH trotzdem erw&auml;gen?</p>
+        <textarea id="m8_t2" data-required="true" data-label="Mission 8 &ndash; 4DCT vs DIBH" class="short" placeholder="4DCT ist Standard beim Bronchial-Ca., weil ... DIBH wird erwogen, wenn ..."></textarea>
+      </div>
+
+      <div class="task">
+        <div class="label-line"><h4>Selbstreflexion: Wo stehst du?</h4><span class="output-tag">Reflexion</span></div>
+        <ul class="checkbox-list">
+          <li><input type="checkbox" id="m8_c1" data-label="M8 Reflexion &ndash; OAR"><label for="m8_c1">Ich kann OAR-Hierarchie beim Bronchial-Ca. mit Dosisgrenzen benennen.</label></li>
+          <li><input type="checkbox" id="m8_c2" data-label="M8 Reflexion &ndash; Lagerung"><label for="m8_c2">Ich kann die Lagerungsentscheidung f&uuml;r Herrn K. fachlich begr&uuml;nden.</label></li>
+          <li><input type="checkbox" id="m8_c3" data-label="M8 Reflexion &ndash; ITV"><label for="m8_c3">Ich kann das ITV-Konzept und den Unterschied zu DIBH erkl&auml;ren.</label></li>
+          <li><input type="checkbox" id="m8_c4" data-label="M8 Reflexion &ndash; DIBH re."><label for="m8_c4">Ich kann begr&uuml;nden, warum DIBH beim re. Bronchial-Ca. nicht Standard ist.</label></li>
+        </ul>
+      </div>
+
+      <div class="teacher-note"><strong>Dozentenhinweis:</strong> Exit-Tickets einsammeln oder 2&ndash;3 laut vorlesen lassen. Die Antwort auf &bdquo;Wann 4DCT, wann DIBH?&ldquo; ist das Kernergebnis dieser Einheit. Abweichende Formulierungen zeigen Kl&auml;rungsbedarf.</div>
+
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="completeMission(8,'complete')">Lernsequenz abschlie&szlig;en &#10003;</button>
+        <button class="tool-btn" onclick="exportReport()" style="padding:0.6rem 1.1rem">Export / Drucken</button>
+      </div>
+      <div class="inline-status" id="status8"></div>
+    </section>
+
+    <!-- Abschluss-Screen -->
+    <section class="mission-panel" id="m-complete">
+      <div class="complete-screen">
+        <h1>Bronchial-Ca. abgeschlossen</h1>
+        <p>Du hast Task 1 (Fallbeispiel Herr K.) und Task 2 (Atemmanagement) vollst&auml;ndig durchgearbeitet. Deine Antworten kannst du exportieren und ausdrucken.</p>
+        <div class="stats">
+          <div class="stat"><strong id="finalCompleted">8</strong><span>Missionen bearbeitet</span></div>
+          <div class="stat"><strong>2</strong><span>Tasks abgeschlossen</span></div>
+          <div class="stat"><strong>4+4</strong><span>Aufgaben bearbeitet</span></div>
+        </div>
+        <div class="btn-row" style="justify-content:center">
+          <button class="btn btn-primary" onclick="exportReport()">Export / Drucken</button>
+          <button class="btn btn-secondary" onclick="showMission(1)">Zur&uuml;ck zum Start</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+
+<script>
+const TOTAL_MISSIONS = 8;
+const STORAGE_KEY = 'mtr_rt_bronchial_ca_v1';
+let state = {completed: [], teacherMode: false, fields: {}};
+
+function defaultState(){ return {completed: [], teacherMode: false, fields: {}}; }
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ state = {...defaultState(), ...JSON.parse(raw)}; }
+  }catch(e){ state = defaultState(); }
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function applyTeacherMode(){
+  document.body.classList.toggle('show-teacher', !!state.teacherMode);
+  document.getElementById('teacherToggle').classList.toggle('active', !!state.teacherMode);
+}
+function toggleTeacherMode(){ state.teacherMode = !state.teacherMode; applyTeacherMode(); saveState(); }
+function showMission(n){
+  document.querySelectorAll('.mission-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mission-btn').forEach(b => b.classList.remove('active'));
+  const id = n === 'complete' ? 'm-complete' : 'm'+n;
+  const panel = document.getElementById(id);
+  if(panel) panel.classList.add('active');
+  const btn = document.getElementById('mb'+n);
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function updateProgress(){
+  const count = state.completed.length;
+  document.getElementById('progressLabel').textContent = count + ' / ' + TOTAL_MISSIONS;
+  document.getElementById('progressFill').style.width = ((count/TOTAL_MISSIONS)*100) + '%';
+  const final = document.getElementById('finalCompleted');
+  if(final) final.textContent = count;
+  for(let i=1;i<=TOTAL_MISSIONS;i++){
+    const btn = document.getElementById('mb'+i);
+    if(btn){ btn.classList.toggle('completed', state.completed.includes(i)); }
+  }
+}
+function setStatus(n, type, text){
+  const box = document.getElementById('status'+n);
+  if(!box) return;
+  box.className = 'inline-status show ' + type;
+  box.innerHTML = text;
+}
+function validateMission(n){
+  const panel = document.getElementById('m'+n);
+  if(!panel) return true;
+  let ok = true;
+  panel.querySelectorAll('.task').forEach(t => t.classList.remove('required-empty'));
+  const required = panel.querySelectorAll('[data-required="true"]');
+  required.forEach(el => {
+    let valid = true;
+    if(el.type === 'checkbox') valid = el.checked;
+    else valid = !!el.value && el.value.trim() !== '';
+    if(!valid){
+      ok = false;
+      const task = el.closest('.task');
+      if(task) task.classList.add('required-empty');
+    }
+  });
+  if(!ok) setStatus(n, 'warn', 'Es fehlen noch Pflichtfelder in dieser Mission. Leere Felder sind markiert.');
+  return ok;
+}
+function completeMission(n,next){
+  if(!validateMission(n)) return;
+  if(!state.completed.includes(n)) state.completed.push(n);
+  state.completed.sort(function(a,b){return a-b;});
+  saveState(); updateProgress();
+  setStatus(n, 'ok', 'Mission gespeichert. Du kannst sp\u00e4ter jederzeit zur\u00fcckkommen.');
+  if(next === 'complete') showMission('complete');
+  else if(typeof next === 'number') showMission(next);
+}
+function toggleBox(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+function bindAutosave(){
+  document.querySelectorAll('textarea,input[type="text"],select,input[type="checkbox"]').forEach(el => {
+    if(!el.id) return;
+    const val = state.fields[el.id];
+    if(typeof val !== 'undefined'){
+      if(el.type === 'checkbox') el.checked = !!val;
+      else el.value = val;
+    }
+    const eventName = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(eventName, function(){
+      state.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+      saveState();
+    });
+  });
+}
+function exportReport(){
+  const lines = [];
+  lines.push('Fall Herr K. \u2013 Bronchial-Ca. Lernprotokoll');
+  lines.push('--------------------------------------------');
+  lines.push('Abgeschlossene Missionen: ' + state.completed.length + ' / ' + TOTAL_MISSIONS);
+  lines.push('');
+  document.querySelectorAll('[data-label]').forEach(el => {
+    let value = '';
+    if(el.type === 'checkbox') value = el.checked ? 'Ja' : 'Nein';
+    else value = (el.value || '').trim();
+    if(value){
+      lines.push(el.dataset.label + ':');
+      lines.push(value);
+      lines.push('');
+    }
+  });
+  const content = lines.join('\n');
+  const win = window.open('', '_blank');
+  if(!win) return;
+  const escaped = content.replace(/[&<>"']/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+  win.document.write('<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">' +
+    '<title>Bronchial-Ca. \u2013 Lernprotokoll<\/title>' +
+    '<style>body{font-family:Arial,sans-serif;line-height:1.5;padding:32px;white-space:pre-wrap}' +
+    'button{margin-bottom:20px;padding:10px 14px}<\/style><\/head><body>' +
+    '<button onclick="window.print()">Drucken / als PDF sichern<\/button>' +
+    '<pre>' + escaped + '<\/pre><\/body><\/html>');
+  win.document.close();
+}
+function init(){
+  loadState();
+  bindAutosave();
+  applyTeacherMode();
+  updateProgress();
+}
+init();
+</script>
+</body>
+</html>

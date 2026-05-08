@@ -1,0 +1,289 @@
+{
+  "id": "14-quiz-gesamtwissen",
+  "type": "quiz",
+  "title": "Prüfungsquiz: Gesamtwissen PLCT & Fallvorstellung",
+  "category": "Prüfungsvorbereitung – Teil 3",
+  "difficulty": "pruefungsreife",
+  "kapitel": 14,
+  "reihenfolge": 5,
+  "pflichtgrad": "pflicht",
+  "phase": "P3",
+  "estimatedMinutes": 15,
+  "learningGoals": [
+    "Prüfungsrelevante Fakten zu Lagerung, Organvorbereitung und Technik sicher abrufen.",
+    "Typische Prüfungsfragen (A-Kriterien) richtig beantworten.",
+    "Wissenslücken vor dem Gesamtdurchlauf am PLCT identifizieren."
+  ],
+  "tags": [
+    "quiz",
+    "wiederholung",
+    "pruefung",
+    "lagerung",
+    "organvorbereitung",
+    "technik"
+  ],
+  "examRelevance": "MTAPrV Teil A + B – Wissenssicherung zu allen Kernthemen",
+  "relatedModules": [
+    "14-fallvorstellung-wbrt",
+    "14-fallvorstellung-mamma",
+    "14-plct-stoerfall-hno",
+    "14-plct-stoerfall-prostata"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "shuffle": true,
+    "passThreshold": 0.8,
+    "questions": [
+      {
+        "text": "Was ist die absolute Pflicht VOR jeder Lagerung am PLCT?",
+        "options": [
+          {
+            "label": "Patientenidentifikation (Name + Geburtsdatum) prüfen",
+            "correct": true,
+            "feedback": "Richtig. Die Identifikation ist KO-Kriterium: ohne Verifikation von Name und Geburtsdatum darf keine Bestrahlung beginnen. Fehler hier sind prüfungsrelevant und in der Realität ein Sicherheitsvorfall."
+          },
+          {
+            "label": "Den Bestrahlungsplan am Linac aufrufen",
+            "correct": false,
+            "feedback": "Nicht die erste Priorität. Den Plan aufzurufen ist notwendig, aber die Identifikation des Patienten kommt zwingend zuerst – vor allem anderen."
+          },
+          {
+            "label": "Das CBCT-Protokoll laden",
+            "correct": false,
+            "feedback": "Das CBCT-Protokoll wird vorbereitet, aber erst nach der Identifikation und Lagerung relevant. Die Identifikation ist immer der erste Schritt."
+          },
+          {
+            "label": "Den Patienten nach aktuellen Schmerzen fragen",
+            "correct": false,
+            "feedback": "Eine Schmerzanamnese ist wichtig (v.a. bei Änderungen der Lagerungstoleranz), aber sie ist nicht der absoluteErste Schritt. Die Identifikationsprüfung hat unbedingte Priorität."
+          }
+        ]
+      },
+      {
+        "text": "Darf die Tischhöhe nach dem 'Nullen' (Einstellung des Isozentrums) noch verändert werden?",
+        "options": [
+          {
+            "label": "Nein – niemals, da das Isozentrum sonst verfälscht wird",
+            "correct": true,
+            "feedback": "Richtig. Nach dem Nullen definiert die Tischhöhe die Position des Isozentrums in der Vertikalen. Jede Änderung der Tischhöhe danach verschiebt das Isozentrum relativ zum Patienten – das Zielvolumen liegt nicht mehr korrekt im Dosismaximum. KO-Kriterium in der Prüfung."
+          },
+          {
+            "label": "Ja, wenn der Patient Schmerzen hat",
+            "correct": false,
+            "feedback": "Falsch. Bei Schmerzen muss die Lagerung vor dem Nullen angepasst werden. Nach dem Nullen ist die Tischhöhe gesperrt. Schmerzen nach dem Nullen bedeuten: Lagerung komplett wiederholen (entnullen, neu lagern, neu nullen)."
+          },
+          {
+            "label": "Ja, um die Lagerung fein zu justieren",
+            "correct": false,
+            "feedback": "Nein. Feinjustierungen müssen vor dem Nullen abgeschlossen sein. Nach dem Nullen gilt: nur noch laterale Tischfahrten (ins Feld fahren), keine Höhenänderung."
+          },
+          {
+            "label": "Nur bei MRT-geführter Bestrahlung ist eine Änderung erlaubt",
+            "correct": false,
+            "feedback": "Auch bei MR-geführten Systemen gilt die Reproduzierbarkeitspflicht. Das Isozentrum ist definiert und darf nicht durch Tischhöhenänderung verfälscht werden."
+          }
+        ]
+      },
+      {
+        "text": "Welche Standardlagerung gilt beim Bronchialkarzinom (Mediastinum, Unterlappen)?",
+        "options": [
+          {
+            "label": "Rückenlage, Arme über dem Kopf (Wingstep), Knierolle",
+            "correct": true,
+            "feedback": "Richtig. Arme über dem Kopf (Wingstep) bringen die Oberarme aus dem Strahlenfeld und ermöglichen seitliche Felder auf den Thorax. Die Knierolle entlastet die LWS. Atemexkursionen müssen beachtet werden."
+          },
+          {
+            "label": "Bauchlage auf dem Bellyboard",
+            "correct": false,
+            "feedback": "Falsch. Das Bellyboard ist eine spezielle Lagerungshilfe für das Rektumkarzinom (Bauchlage, Dünndarmreposition). Bei Bronchial-Ca wird in Rückenlage gelagert."
+          },
+          {
+            "label": "Rückenlage, Arme am Körper, Kniestep",
+            "correct": false,
+            "feedback": "Falsch. Arme am Körper würden im Strahlenfeld liegen und die Einstrahlmöglichkeiten stark einschränken. Beim Thorax müssen die Arme konsequent in den Wingstep über den Kopf."
+          },
+          {
+            "label": "Rückenlage, 5-Punkt-Thermoplastmaske",
+            "correct": false,
+            "feedback": "Die 5-Punkt-Maske ist für HNO-Tumoren (Kopf-Hals-Region). Beim Bronchial-Ca wird keine Maske verwendet – hier zählen Reproduzierbarkeit durch Wingstep und Atemgating."
+          }
+        ]
+      },
+      {
+        "text": "Warum ist eine volle Harnblase bei der Prostata-Bestrahlung medizinisch notwendig?",
+        "options": [
+          {
+            "label": "Sie drängt den Dünndarm aus dem Strahlenfeld und stabilisiert die Prostatalage",
+            "correct": true,
+            "feedback": "Richtig. Der Dünndarm ist das dosislimitierende Risikoorgan im kleinen Becken (TD 5/5 ca. 45–50 Gy). Eine volle Blase 'schiebt' den Dünndarm nach kranial und dorsal aus dem Hochdosisbereich. Außerdem reproduziert eine volle Blase die Prostataposition zuverlässiger als eine leere."
+          },
+          {
+            "label": "Sie verbessert die Bildqualität des CBCT",
+            "correct": false,
+            "feedback": "Das ist ein Nebeneffekt, aber nicht die medizinische Hauptindikation. Die Blasenfüllung dient primär dem Organschutz (Dünndarm raus aus dem Feld) und der Reproduzierbarkeit der Prostatalage."
+          },
+          {
+            "label": "Sie erleichtert die Lagerung auf dem Prostep",
+            "correct": false,
+            "feedback": "Die Blasenfüllung hat keinen direkten Einfluss auf die Lagerungskomfortabilität. Der Prostep dient der Beckenstabilisierung – das ist unabhängig vom Blasenfüllungszustand."
+          },
+          {
+            "label": "Sie ist nur beim Planungs-CT relevant, nicht bei den täglichen Fraktionen",
+            "correct": false,
+            "feedback": "Falsch. Die Blasenvorbereitung (500 ml, 30 Min vorher) gilt für jede Fraktion, nicht nur für das Planungs-CT. Ziel ist reproduzierbare Organgeometrie an jedem Bestrahlungstag."
+          }
+        ]
+      },
+      {
+        "text": "Welche Technik wird beim linksseitigen Mammakarzinom zur Herzschonung eingesetzt?",
+        "options": [
+          {
+            "label": "DIBH – Deep Inspiration Breath Hold",
+            "correct": true,
+            "feedback": "Richtig. Bei tiefer Einatmung senkt sich das Zwerchfell, die Lunge füllt sich mit Luft, und das Herz verlagert sich nach kaudal-dorsal. Der Abstand zwischen Herz und Bestrahlungsfeld vergrößert sich – die Herzmitteldosis sinkt erheblich. Die Bestrahlung wird nur im Atemhalte-Plateau ausgelöst (Gating)."
+          },
+          {
+            "label": "VMAT ohne Atemgating",
+            "correct": false,
+            "feedback": "VMAT ist die Bestrahlungstechnik – aber ohne DIBH reicht sie allein nicht aus, um das Herz ausreichend zu schonen. VMAT und DIBH werden kombiniert eingesetzt."
+          },
+          {
+            "label": "SRS (Stereotaktische Radiochirurgie)",
+            "correct": false,
+            "feedback": "SRS ist eine hochpräzise Einzeit- oder Oligofraktionierungstechnik für kleine Läsionen (Hirn, Lunge, Leber). Sie ist nicht die Standardtechnik beim Mamma-Ca."
+          },
+          {
+            "label": "Tangentialfelder ohne Atemkorrektur",
+            "correct": false,
+            "feedback": "Tangentialfelder sind eine ältere 3D-CRT-Technik beim Mamma-Ca. Ohne Atemkorrektur ist die Herzschonung bei linksseitigem Tumor unzureichend. Der aktuelle Standard kombiniert VMAT mit DIBH."
+          }
+        ]
+      },
+      {
+        "text": "Standard-Fraktionierung bei der Ganzhirnbestrahlung (WBRT)?",
+        "options": [
+          {
+            "label": "10 × 3,0 Gy (Gesamtdosis 30,0 Gy)",
+            "correct": true,
+            "feedback": "Richtig. 10 × 3,0 Gy = 30,0 Gy ist das internationale Standardregime für die palliative WBRT. Die höhere Einzeldosis (3,0 Gy statt 2,0 Gy) erlaubt eine kürzere Behandlungsdauer (2 Wochen), was bei palliativen Patienten mit eingeschränktem Allgemeinzustand klinisch bedeutsam ist."
+          },
+          {
+            "label": "25 × 2,0 Gy (Gesamtdosis 50,0 Gy)",
+            "correct": false,
+            "feedback": "25 × 2,0 Gy = 50 Gy ist ein konventionell fraktioniertes Standardregime – aber nicht für die WBRT. Es findet Anwendung z.B. beim Mamma-Ca (adjuvant, konventionell) oder in kurativen Konzepten."
+          },
+          {
+            "label": "5 × 5,0 Gy (Gesamtdosis 25,0 Gy)",
+            "correct": false,
+            "feedback": "5 × 5,0 Gy = 25 Gy ist ein Kurzfraktionierungsschema, das z.B. beim Rektumkarzinom (neoadjuvant) oder als Oligofraktionierung bei Knochenmetastasen verwendet wird. Nicht der WBRT-Standard."
+          },
+          {
+            "label": "15 × 2,67 Gy (Gesamtdosis 40,0 Gy)",
+            "correct": false,
+            "feedback": "15 × 2,67 Gy = 40,05 Gy ist das hypofraktionierte Standardschema beim Mammakarzinom (START-B-Schema). Nicht für die WBRT."
+          }
+        ]
+      },
+      {
+        "text": "Welches ist das Hauptrisikoorgan (OAR) beim linksseitigen Mammakarzinom?",
+        "options": [
+          {
+            "label": "Herz (ipsilateral)",
+            "correct": true,
+            "feedback": "Richtig. Das Herz liegt links – bei linksseitigem Mamma-Ca liegt es in unmittelbarer Nähe des Zielvolumens. Eine erhöhte Herzmitteldosis (mean heart dose) ist mit langfristig erhöhtem Risiko für koronare Herzerkrankung, Herzinsuffizienz und kardialen Ereignissen assoziiert. Das begründet den Einsatz von DIBH."
+          },
+          {
+            "label": "Rückenmark (Myelon)",
+            "correct": false,
+            "feedback": "Das Myelon ist das kritische Risikoorgan bei HNO-Tumoren und beim Bronchialkarzinom (v.a. bei Mediastinum-Bestrahlung). Beim Mamma-Ca ist es nicht das führende OAR."
+          },
+          {
+            "label": "Augenlinsen beidseits",
+            "correct": false,
+            "feedback": "Die Augenlinsen sind das führende OAR bei der Ganzhirnbestrahlung (WBRT). Beim Mamma-Ca liegen sie weit außerhalb des Bestrahlungsfeldes."
+          },
+          {
+            "label": "Dünndarm",
+            "correct": false,
+            "feedback": "Der Dünndarm ist das kritische OAR im kleinen Becken – relevant bei Prostata-Ca, Rektum-Ca und gynäkologischen Tumoren. Beim Mamma-Ca liegt er außerhalb des Feldes."
+          }
+        ]
+      },
+      {
+        "text": "Ein Patient klagt während der Lagerung über starke Schmerzen in der Standardposition. Was ist korrekt?",
+        "options": [
+          {
+            "label": "Lagerung schmerzfrei anpassen und Abweichung vom Standard penibel dokumentieren",
+            "correct": true,
+            "feedback": "Richtig. Reproduzierbarkeit ist das Ziel – aber sie setzt voraus, dass der Patient die Position überhaupt halten kann. Ein Patient in Schmerzen wird sich während der Fraktion bewegen, was die Präzision stärker gefährdet als eine angepasste, aber stabile Lagerung. Korrekte Vorgehensweise: schmerzfreie Alternative suchen, Abweichung dokumentieren, ggf. Arzt informieren für Planrevision."
+          },
+          {
+            "label": "Standard einhalten – Reproduzierbarkeit hat Vorrang vor Patientenkomfort",
+            "correct": false,
+            "feedback": "Falsch. Ein Patient in starken Schmerzen ist keine reproduzierbare Lagerung. Schmerz führt unweigerlich zu Bewegung während der Bestrahlung. Der Standard gilt als Leitlinie, muss aber an die individuelle Patientensituation angepasst werden."
+          },
+          {
+            "label": "Bestrahlung für heute abbrechen und Arzt entscheiden lassen",
+            "correct": false,
+            "feedback": "Übertrieben. Bei Schmerzen durch Standardlagerung ist die erste Maßnahme eine angepasste Lagerung – das liegt im Kompetenzbereich der MTR. Erst wenn keine akzeptable Alternative gefunden wird oder es ein medizinisches Problem dahinter gibt, wird der Arzt hinzugezogen."
+          },
+          {
+            "label": "Schmerzmedikament aus dem Schrank geben und dann normal lagern",
+            "correct": false,
+            "feedback": "MTR dürfen keine Medikamente ausgeben – das ist ärztliche und pflegerische Aufgabe. Der korrekte Weg ist die direkte Lagerungsanpassung, nicht die Medikamentengabe."
+          }
+        ]
+      },
+      {
+        "text": "Welches Hilfsmittel ist obligat bei der Prostata-Bestrahlung zur Beckenstabilisierung?",
+        "options": [
+          {
+            "label": "Prostep oder Kniestep",
+            "correct": true,
+            "feedback": "Richtig. Prostep (Keilkissen unter dem Becken) oder Kniestep (Lagerungsschiene unter den Knien) stabilisieren das Becken in reproduzierbarer Position und verhindern Beckenkippung. Sie sind Standardlagerungshilfen beim Prostata-Ca und Teil des Planungs-CTs."
+          },
+          {
+            "label": "Breastboard",
+            "correct": false,
+            "feedback": "Das Breastboard ist die Lagerungsrampe für das Mammakarzinom. Bei der Prostata-Bestrahlung wird es nicht eingesetzt."
+          },
+          {
+            "label": "5-Punkt-Thermoplastmaske",
+            "correct": false,
+            "feedback": "Die 5-Punkt-Maske fixiert Kopf und Schultern bei HNO-Tumoren. Bei der Prostata-Bestrahlung (Becken) ist sie nicht relevant."
+          },
+          {
+            "label": "Bellyboard",
+            "correct": false,
+            "feedback": "Das Bellyboard ist eine Lagerungsplatte für die Bauchlage beim Rektumkarzinom. Bei der Prostata wird in Rückenlage gelagert – kein Bellyboard."
+          }
+        ]
+      },
+      {
+        "text": "Welches Risikoorgan muss bei der Ganzhirnbestrahlung (WBRT) besonders geschont werden?",
+        "options": [
+          {
+            "label": "Augenlinsen beidseits",
+            "correct": true,
+            "feedback": "Richtig. Die Augenlinsen sind extrem strahlenempfindlich (TD 5/5 ca. 10 Gy). Die WBRT gibt 30,0 Gy ans gesamte Neurocranium – ohne aktive Schonung würden die Linsen die Toleranzdosis erheblich überschreiten. VMAT mit 2 Halbbögen wird so kollimiert, dass die Linsen im Unterdosisbereich liegen (Strahlenkatarakt-Prophylaxe)."
+          },
+          {
+            "label": "Herz",
+            "correct": false,
+            "feedback": "Das Herz liegt weit unterhalb des Neurocraniums und ist bei der WBRT nicht im Bestrahlungsfeld. Das führende OAR bei der WBRT sind die Augenlinsen."
+          },
+          {
+            "label": "Parotiden (Ohrspeicheldrüsen)",
+            "correct": false,
+            "feedback": "Die Parotiden sind das führende OAR bei HNO-Tumoren (Xerostomie-Prophylaxe). Bei der WBRT können sie zwar mit bestrahlt werden, aber die Augenlinsen haben hier die höchste Priorität."
+          },
+          {
+            "label": "Dünndarm",
+            "correct": false,
+            "feedback": "Der Dünndarm liegt im Bauchraum und hat keinen Bezug zur Ganzhirnbestrahlung."
+          }
+        ]
+      }
+    ]
+  }
+}

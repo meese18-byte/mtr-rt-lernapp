@@ -17,3 +17,6 @@ ehthumbs.db
 # Eigene Arbeitsnotizen, die NICHT auf GitHub sollen
 /privat/
 *.privat.md
+
+# Klinik-interne Bilder – NICHT öffentlich auf GitHub Pages
+/media/images/klinik-intern/
