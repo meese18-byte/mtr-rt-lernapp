@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PLCT-Workflow-Trainer</title>
+<style>
+:root{
+  --bg:#0b1020;--panel:rgba(255,255,255,.08);--panel-strong:rgba(255,255,255,.13);
+  --line:rgba(255,255,255,.16);--text:#f7f8fb;--muted:#aeb7ca;
+  --accent:#56d7ff;--accent-2:#8a7dff;--good:#4ade80;--warn:#facc15;--bad:#fb7185;
+  --white:#ffffff;--radius:22px;--shadow:0 24px 80px rgba(0,0,0,.35);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;}
+body{margin:0;min-height:100vh;color:var(--text);
+  background:radial-gradient(circle at top left,rgba(86,215,255,.24),transparent 34%),
+  radial-gradient(circle at 80% 10%,rgba(138,125,255,.30),transparent 30%),
+  linear-gradient(145deg,#070a14 0%,#0b1020 44%,#111a35 100%);}
+button,input,select,textarea{font:inherit;}
+.app-shell{width:min(1180px,calc(100vw - 32px));margin:0 auto;padding:28px 0 40px;}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px;}
+.brand{display:flex;gap:14px;align-items:center;}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#06101c;
+  font-weight:900;box-shadow:0 12px 30px rgba(86,215,255,.25);}
+.brand h1{margin:0;font-size:clamp(1.35rem,3vw,2.15rem);letter-spacing:-.04em;line-height:1;}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:.95rem;}
+.mode-pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;
+  padding:10px 14px;color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--warn);box-shadow:0 0 20px var(--warn);}
+.hero{border:1px solid var(--line);border-radius:32px;
+  background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
+  box-shadow:var(--shadow);padding:clamp(22px,5vw,42px);overflow:hidden;position:relative;}
+.hero::after{content:"";position:absolute;inset:auto -100px -140px auto;width:360px;height:360px;
+  border-radius:50%;background:radial-gradient(circle,rgba(86,215,255,.15),transparent 68%);pointer-events:none;}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px;position:relative;z-index:1;}
+.kicker{color:var(--accent);font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  font-size:.78rem;margin-bottom:12px;}
+.hero h2{margin:0 0 14px;font-size:clamp(2rem,6vw,4.15rem);letter-spacing:-.07em;line-height:.98;}
+.hero p{color:var(--muted);font-size:1.05rem;line-height:1.6;margin:0;max-width:690px;}
+.action-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;}
+.btn{border:0;border-radius:999px;padding:12px 18px;cursor:pointer;color:#07111f;
+  background:var(--white);font-weight:800;transition:transform .18s,box-shadow .18s,opacity .18s;}
+.btn:hover{transform:translateY(-1px);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#b0f0ff);
+  box-shadow:0 14px 28px rgba(86,215,255,.20);}
+.btn.secondary{background:var(--panel-strong);color:var(--text);border:1px solid var(--line);}
+.btn.danger{background:rgba(251,113,133,.16);color:#fecdd3;border:1px solid rgba(251,113,133,.30);}
+.mini-board{min-height:280px;border:1px solid var(--line);border-radius:28px;
+  background:rgba(7,10,20,.42);padding:18px;display:grid;gap:12px;}
+.mini-card{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.07);padding:14px;}
+.mini-card strong{display:block;margin-bottom:6px;}
+.mini-card span{color:var(--muted);font-size:.9rem;line-height:1.45;}
+.section-title{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:32px 0 16px;}
+.section-title h3{margin:0;font-size:1.4rem;letter-spacing:-.03em;}
+.section-title p{margin:0;color:var(--muted);font-size:.95rem;}
+.indication-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.indication-card{text-align:left;border:1px solid var(--line);border-radius:24px;
+  background:var(--panel);color:var(--text);padding:18px;cursor:pointer;min-height:142px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .18s,border-color .18s,background .18s;}
+.indication-card:hover{transform:translateY(-2px);border-color:rgba(86,215,255,.6);
+  background:rgba(86,215,255,.10);}
+.indication-card.locked{opacity:.5;cursor:not-allowed;}
+.indication-card.locked:hover{transform:none;border-color:var(--line);background:var(--panel);}
+.indication-card h4{margin:0 0 12px;font-size:1.08rem;}
+.indication-card p{color:var(--muted);margin:0;line-height:1.4;font-size:.88rem;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.tag{border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--muted);
+  border-radius:999px;padding:5px 8px;font-size:.73rem;font-weight:700;}
+.tag.pilot{background:rgba(86,215,255,.15);border-color:rgba(86,215,255,.4);color:var(--accent);}
+.lock-badge{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--muted);
+  background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:3px 8px;}
+.sim-view{display:none;}
+.sim-view.active{display:block;}
+.home-view.hidden{display:none;}
+.simulation-layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start;}
+.side-panel,.task-panel{border:1px solid var(--line);border-radius:28px;
+  background:rgba(255,255,255,.08);box-shadow:var(--shadow);}
+.side-panel{padding:18px;position:sticky;top:18px;}
+.task-panel{padding:clamp(18px,4vw,30px);min-height:620px;}
+.case-card{border-radius:22px;background:linear-gradient(135deg,rgba(86,215,255,.12),rgba(138,125,255,.10));
+  padding:16px;border:1px solid rgba(86,215,255,.26);margin-bottom:16px;}
+.case-card h3{margin:0 0 8px;letter-spacing:-.03em;}
+.case-card p{color:var(--muted);margin:0;line-height:1.45;font-size:.92rem;}
+.progress-list{display:grid;gap:8px;}
+.progress-step{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;
+  padding:10px;border-radius:16px;color:var(--muted);border:1px solid transparent;}
+.progress-step.active{color:var(--text);background:rgba(86,215,255,.11);border-color:rgba(86,215,255,.3);}
+.progress-step.done .step-num{background:rgba(74,222,128,.18);color:#bbf7d0;border-color:rgba(74,222,128,.35);}
+.step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:.8rem;font-weight:900;}
+.task-header{display:flex;justify-content:space-between;gap:18px;align-items:start;margin-bottom:20px;}
+.task-header h2{margin:0 0 8px;font-size:clamp(1.55rem,4vw,2.4rem);letter-spacing:-.055em;}
+.task-header p{margin:0;color:var(--muted);line-height:1.55;max-width:750px;}
+.status-chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:9px 12px;
+  color:var(--muted);background:rgba(255,255,255,.06);font-weight:800;font-size:.84rem;}
+.task-body{display:grid;gap:16px;}
+.card-box{border:1px solid var(--line);background:rgba(7,10,20,.34);border-radius:22px;padding:18px;}
+.card-box h4{margin:0 0 10px;}
+.card-box p{margin:0;color:var(--muted);line-height:1.5;}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.workflow-compact{display:grid;gap:10px;}
+.workflow-row{display:grid;grid-template-columns:42px minmax(220px,1fr) 220px;gap:12px;
+  align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.06);
+  border-radius:16px;padding:12px;}
+.workflow-index{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;
+  background:rgba(86,215,255,.12);color:var(--accent);font-weight:900;border:1px solid rgba(86,215,255,.25);}
+.workflow-label strong{display:block;margin-bottom:2px;}
+.workflow-label span{color:var(--muted);font-size:.84rem;line-height:1.35;}
+.workflow-row.correct{border-color:rgba(74,222,128,.45);background:rgba(74,222,128,.06);}
+.workflow-row.wrong{border-color:rgba(251,113,133,.45);background:rgba(251,113,133,.06);}
+.phase-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.phase-summary div{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.05);padding:12px;}
+.phase-summary strong{display:block;color:var(--accent);margin-bottom:4px;}
+.phase-summary span{color:var(--muted);font-size:.84rem;line-height:1.4;}
+select,textarea,input[type="text"]{width:100%;border:1px solid var(--line);border-radius:14px;
+  background:rgba(255,255,255,.08);color:var(--text);padding:11px 12px;outline:none;}
+select option{color:#0b1020;}
+textarea{min-height:116px;resize:vertical;line-height:1.5;}
+.doc-grid,.aid-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.fake-doc{background:#f8fafc;color:#111827;border-radius:18px;padding:16px;min-height:210px;
+  box-shadow:inset 0 0 0 1px rgba(15,23,42,.12);}
+.fake-doc h4{margin:0 0 10px;color:#0f172a;font-size:.95rem;}
+.fake-doc .field{margin-bottom:10px;}
+.fake-doc .field-label{font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;}
+.fake-doc .field-val{color:#1e293b;font-size:.88rem;line-height:1.4;margin-top:2px;}
+.fake-doc .doc-badge{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;
+  padding:3px 8px;font-size:.7rem;font-weight:700;margin-bottom:10px;}
+.pilot-banner{border:1px solid rgba(86,215,255,.32);
+  background:linear-gradient(135deg,rgba(86,215,255,.13),rgba(138,125,255,.09));
+  border-radius:20px;padding:14px;color:var(--muted);line-height:1.5;}
+.pilot-banner strong{color:var(--text);}
+.doc-source-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.finding-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.finding-card{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.06);
+  padding:13px;cursor:pointer;transition:background .18s,border-color .18s,transform .18s;}
+.finding-card:hover{transform:translateY(-1px);border-color:rgba(86,215,255,.45);}
+.finding-card.selected{background:rgba(86,215,255,.13);border-color:rgba(86,215,255,.62);}
+.finding-card strong{display:block;margin-bottom:5px;}
+.finding-card span{color:var(--muted);font-size:.86rem;line-height:1.4;}
+.pdf-workspace{display:grid;grid-template-columns:minmax(360px,1.15fr) minmax(300px,.85fr);gap:14px;align-items:stretch;}
+.pdf-panel{border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  background:rgba(7,10,20,.42);min-height:640px;display:flex;flex-direction:column;}
+.pdf-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.06);
+  color:var(--muted);font-size:.88rem;line-height:1.35;}
+.pdf-toolbar strong{color:var(--text);}
+.pdf-frame{width:100%;flex:1;min-height:590px;border:0;background:#e5e7eb;}
+.pdf-fallback{padding:18px;color:var(--muted);line-height:1.5;font-size:.88rem;}
+.task-stack{display:grid;gap:12px;align-content:start;}
+.aid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.aid-card{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.06);
+  padding:12px;cursor:pointer;transition:border-color .18s,background .18s,transform .18s;}
+.aid-card:hover{transform:translateY(-1px);border-color:rgba(86,215,255,.45);}
+.aid-card.selected{background:rgba(86,215,255,.13);border-color:rgba(86,215,255,.62);}
+.aid-img{width:100%;height:72px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(86,215,255,.16),rgba(138,125,255,.16));
+  color:var(--accent);font-size:1.6rem;font-weight:900;border:1px solid var(--line);margin-bottom:8px;}
+.aid-img img{width:100%;height:100%;object-fit:cover;border-radius:12px;}
+.aid-card h4{margin:0 0 2px;font-size:.92rem;}
+.aid-card p{margin:0;color:var(--muted);font-size:.78rem;line-height:1.35;}
+.aid-check{width:18px;height:18px;border-radius:6px;border:1px solid var(--line);
+  display:grid;place-items:center;color:transparent;margin-top:6px;}
+.aid-card.selected .aid-check{background:var(--accent);color:#07111f;border-color:transparent;font-weight:900;}
+.konsole-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px;}
+.option-list{display:grid;gap:10px;}
+.option{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:16px;
+  padding:12px;display:flex;gap:10px;cursor:pointer;align-items:start;line-height:1.45;}
+.option input{margin-top:4px;flex-shrink:0;}
+.schema-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;}
+.body-schema{min-height:430px;border:1px solid var(--line);border-radius:24px;
+  background:radial-gradient(circle at center,rgba(86,215,255,.08),rgba(255,255,255,.04));
+  padding:18px;position:relative;overflow:hidden;}
+.body-svg{width:100%;height:390px;display:block;}
+.marker-panel{display:grid;gap:12px;}
+.range-row{display:grid;gap:8px;}
+input[type="range"]{width:100%;accent-color:var(--accent);}
+.schema-caption{margin-top:10px;color:var(--muted);font-size:.84rem;line-height:1.45;}
+.small-note{color:var(--muted);font-size:.85rem;line-height:1.45;}
+.control-row{display:flex;justify-content:space-between;gap:12px;margin-top:22px;
+  padding-top:18px;border-top:1px solid var(--line);}
+.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.traffic-card{border:1px solid var(--line);border-radius:20px;padding:16px;
+  background:rgba(255,255,255,.06);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;}
+.traffic-light{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  font-weight:900;color:#07111f;flex-shrink:0;}
+.green{background:var(--good);}
+.yellow{background:var(--warn);}
+.red{background:var(--bad);color:#fff;}
+.traffic-card h4{margin:0 0 5px;}
+.traffic-card p{margin:0;color:var(--muted);line-height:1.45;font-size:.92rem;}
+.summary-box{border:1px solid rgba(86,215,255,.28);
+  background:linear-gradient(135deg,rgba(86,215,255,.11),rgba(138,125,255,.08));
+  border-radius:24px;padding:18px;}
+.summary-box h3{margin:0 0 8px;}
+.summary-box p{margin:0;color:var(--muted);line-height:1.55;}
+.answer-review{display:grid;gap:10px;}
+.review-item{border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(7,10,20,.30);}
+.review-item strong{display:block;margin-bottom:5px;}
+.review-item span{color:var(--muted);font-size:.9rem;line-height:1.45;}
+.hidden{display:none!important;}
+@media(max-width:980px){
+  .hero-grid,.simulation-layout,.schema-grid{grid-template-columns:1fr;}
+  .side-panel{position:static;}
+  .indication-grid{grid-template-columns:repeat(2,1fr);}
+  .three-col,.doc-grid,.aid-grid,.report-grid,.phase-summary,.doc-source-grid,.finding-grid,.konsole-grid{grid-template-columns:1fr;}
+  .workflow-row{grid-template-columns:38px 1fr;}
+  .workflow-row select{grid-column:1/-1;}
+  .pdf-workspace{grid-template-columns:1fr;}
+}
+@media(max-width:560px){
+  .topbar{flex-direction:column;align-items:flex-start;}
+  .indication-grid{grid-template-columns:1fr;}
+  .task-header{flex-direction:column;}
+  .aid-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media print{
+  body{background:white;color:#111827;}
+  .topbar,.side-panel,.control-row,.home-view,.btn{display:none!important;}
+  .app-shell{width:100%;padding:0;}
+  .simulation-layout{display:block;}
+  .task-panel{box-shadow:none;border:none;background:white;}
+  .traffic-card,.summary-box,.review-item{border-color:#cbd5e1;background:white;}
+  .task-header p,.traffic-card p,.summary-box p,.review-item span{color:#334155;}
+}
+</style>
+</head>
+<body>
+<main class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">RT</div>
+      <div>
+        <h1>PLCT-Workflow-Trainer</h1>
+        <p>Prüfungsnahe Simulation für MTR-SuS im 3. Lehrjahr</p>
+      </div>
+    </div>
+    <div class="mode-pill"><span class="dot"></span> Prüfungsmodus: Feedback erst am Ende</div>
+  </header>
+
+  <section id="homeView" class="home-view">
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">Trocken-Training am Planungs-CT</div>
+          <h2>Handlung sicher durchspielen.</h2>
+          <p>Wähle eine Indikation. Du durchläufst Workflow-Zuordnung, Dokumentenanalyse, Raumvorbereitung, Patientenvorbereitung, Lagerung, CT-Scan und Nachbearbeitung. Feedback erst im Abschlussbericht.</p>
+          <div class="action-row">
+            <button class="btn primary" onclick="startRandomCase()">Zufallsfall starten</button>
+            <button class="btn secondary" onclick="scrollToIndications()">Indikation wählen</button>
+          </div>
+        </div>
+        <div class="mini-board" aria-label="Ablauf-Vorschau">
+          <div class="mini-card"><strong>1. Workflow</strong><span>Vorbereitung, Durchführung und Nachbearbeitung korrekt zuordnen.</span></div>
+          <div class="mini-card"><strong>2. Handlung</strong><span>Dokumente, Konsole, Lagerungshilfen, Lagerung, Scanbereich.</span></div>
+          <div class="mini-card"><strong>3. Bericht</strong><span>Ampelprofil, Erwartungshorizont und Denkanstoß am Ende.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-title" id="indicationsTitle">
+      <div>
+        <h3>Indikation wählen</h3>
+        <p>Prostata-Ca. ist als Pilotfall vollständig ausgebaut. Weitere Indikationen folgen.</p>
+      </div>
+    </div>
+    <div class="indication-grid" id="indicationGrid"></div>
+  </section>
+
+  <section id="simView" class="sim-view">
+    <div class="simulation-layout">
+      <aside class="side-panel">
+        <div class="case-card">
+          <h3 id="caseTitle">Fall</h3>
+          <p id="caseText">Fallbeschreibung</p>
+        </div>
+        <div class="progress-list" id="progressList"></div>
+      </aside>
+      <article class="task-panel">
+        <div class="task-header">
+          <div>
+            <h2 id="taskTitle">Aufgabe</h2>
+            <p id="taskIntro">Beschreibung</p>
+          </div>
+          <div class="status-chip" id="statusChip">Schritt 1 / 8</div>
+        </div>
+        <div class="task-body" id="taskBody"></div>
+        <div class="control-row">
+          <button class="btn secondary" id="backBtn" onclick="prevStep()">Zurück</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+            <button class="btn danger" onclick="returnHome()">Verlassen</button>
+            <button class="btn primary" id="nextBtn" onclick="nextStep()">Weiter</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<script>
+// ============================================================
+// INDIKATIONSDATEN
+// ============================================================
+const IND = {
+  hirn:{
+    title:"Hirntumor",tags:["Schädel","Maske","Ref.-Punkte"],schema:"skull",unlocked:true,
+    pdfDoc:"../media/documents/Fall_GanzhirnbisC2_01.pdf",
+    special:"Zahnprothesen, Hörgeräte, Ohrringe und alle Metallgegenstände im Schädelbereich vor Lagerung entfernen.",
+    undress:"Nichts muss ausgezogen werden. Ggf. Oberteil für Schultermarkierung öffnen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    aidSets:[["mask","neck","knee"]],
+    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
+    scanPrograms:["Schädel 3 mm"],scanDefault:"Schädel 3 mm",
+    scanStart:{val:5,min:0,max:15,label:"2 QF über Kalotte"},
+    scanEnd:{val:30,min:20,max:40,label:"HWK 2"},
+    refV:"Halber Patientendurchmesser (AP-Achse)",
+    refL:"Höhe Orbitaoberrand / Augenbrauenlinie",
+    refLat:"Körpermitte / Sagittalebene des Schädels",
+    startPt:"2 Querfinger oberhalb der Kalotte",
+    doc:{
+      diagnose:"Glioblastom WHO-Grad IV, rechts temporal",
+      anamnese:"Kopfschmerzen, Wesensveränderung. Keine Blase/Enddarm-Besonderheiten.",
+      region:"Schädel",scan:"Schädel 3 mm, Kalotte bis HWK 2",
+      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle",
+      besonderheit:"Alle Metallgegenstände und Prothesen im Schädelbereich entfernen."
+    }
+  },
+  hno:{
+    title:"HNO-Tumor",tags:["Kopf-Hals","Zahnschiene","Maske"],schema:"neck",unlocked:true,
+    pdfDoc:"../media/documents/Fall_HNO_03.pdf",
+    special:"Prothesen und Metall entfernen. Zahnschienen gesondert abfragen.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:true,
+    aidSets:[["mask","neck","knee"]],
+    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
+    scanPrograms:["Hals 3 mm"],scanDefault:"Hals 3 mm",
+    scanStart:{val:5,min:0,max:12,label:"Kalotte (oberer Schädelrand)"},
+    scanEnd:{val:68,min:58,max:78,label:"BWK 6 / Bifurkation"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Höhe Mandibula / Schultermarker",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"Kalotte (oberer Schädelrand)",
+    doc:{
+      diagnose:"Plattenepithelkarzinom Oropharynx links, cT2N1M0",
+      anamnese:"Schluckbeschwerden, Halslymphknoten palpabel. Keine Blase/Enddarm.",
+      region:"Kopf-Hals",scan:"Hals 3 mm, Kalotte bis BWK 6 / Bifurkation",
+      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle, ggf. Schultermarker",
+      besonderheit:"Zahnschiene vorhanden? Prothesen/Metall entfernen."
+    }
+  },
+  oesprox:{
+    title:"Ösophagus-Ca. proximal",tags:["proximal","Maske","BWK6"],schema:"neck",
+    special:"Metall und Prothesen im Kopf-Hals-Bereich entfernen.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    aidSets:[["mask","neck","knee"]],
+    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
+    scanPrograms:["Hals 3 mm"],scanDefault:"Hals 3 mm",
+    scanStart:{val:5,min:0,max:12,label:"Kalotte"},
+    scanEnd:{val:68,min:58,max:78,label:"BWK 6 / Bifurkation"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Schultermarker / Klavikula-Referenz",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"Kalotte (oberer Schädelrand)",
+    doc:{
+      diagnose:"Ösophagus-Ca. zervikal/proximal, cT3N1M0",
+      anamnese:"Dysphagie, Gewichtsverlust. Keine Blase/Enddarm.",
+      region:"Kopf-Hals / oberer Thorax",scan:"Hals 3 mm, Kalotte bis BWK 6",
+      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle",
+      besonderheit:"Metall/Prothesen im HWS-Bereich entfernen."
+    }
+  },
+  oesdist:{
+    title:"Ösophagus-Ca. distal",tags:["distal","Thorax","Abdomen"],schema:"thorax",unlocked:true,
+    pdfDoc:"../media/documents/Fall_Oesophagus_distal_AEG_01.pdf",
+    special:"Armposition: Arme über Kopf mit WingSTEP. Kein Metall im Thoraxbereich.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    aidSets:[["wing","neck","kniestep"]],
+    aidForbidden:["mask","prostep","bluebag","belly"],
+    scanPrograms:["Thorax 3 mm","Abdomen 3 mm"],scanDefault:"Thorax 3 mm",
+    scanStart:{val:5,min:0,max:15,label:"Occiput / Hinterkopf"},
+    scanEnd:{val:78,min:68,max:88,label:"Acetabulum"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Sternum / Brustbeinreferenz",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"Occiput / Hinterkopf",
+    doc:{
+      diagnose:"Ösophagus-Ca. distal AEG Typ I, cT3N2M0",
+      anamnese:"Dysphagie, Reflux. Keine Blase/Enddarm-Vorbereitung.",
+      region:"Thorax / Abdomen",scan:"Thorax 3 mm, Occiput bis Acetabulum",
+      lagerung:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale, KneeSTEP",
+      besonderheit:"Arme über Kopf reproduzierbar mit WingSTEP fixieren."
+    }
+  },
+  mamma:{
+    title:"Mamma-Ca.",tags:["WingSTEP","Narbe","Thorax"],schema:"thorax",unlocked:true,
+    pdfDoc:"../media/documents/Fall_Mamma_03.pdf",
+    special:"Narbe mit Draht markieren (Narbenmarkierung vor CT). Arme über Kopf mit WingSTEP.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    aidSets:[["wing","neck","kniestep"]],
+    aidForbidden:["mask","prostep","bluebag","belly"],
+    scanPrograms:["Thorax 3 mm"],scanDefault:"Thorax 3 mm",
+    scanStart:{val:5,min:0,max:15,label:"Occiput / HWK-Basis"},
+    scanEnd:{val:72,min:62,max:80,label:"LWK 1"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Sternum / Sternale Referenz",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"Occiput / Hinterkopf",
+    doc:{
+      diagnose:"Mammakarzinom links, pT2N1M0, ER+/PR+/HER2−",
+      anamnese:"Z. n. BET links. Keine Blase/Enddarm-Besonderheiten.",
+      region:"Thorax",scan:"Thorax 3 mm, Occiput bis LWK 1",
+      lagerung:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale, KneeSTEP, Narbe drahtmarkiert",
+      besonderheit:"Narbenmarkierung mit Draht vor Lagerung vornehmen."
+    }
+  },
+  bronchial:{
+    title:"Bronchial-Ca.",tags:["Thorax","Dyspnoe","WingSTEP"],schema:"thorax",unlocked:true,
+    pdfDoc:"../media/documents/Fall_BC_01.pdf",
+    special:"Lagerungstoleranz prüfen (Dyspnoe möglich). Arme über Kopf wenn toleriert.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    aidSets:[["wing","neck","kniestep"],["neck","kniestep"]],
+    aidForbidden:["mask","prostep","bluebag","belly"],
+    scanPrograms:["Thorax 3 mm"],scanDefault:"Thorax 3 mm",
+    scanStart:{val:5,min:0,max:15,label:"Occiput / Hinterkopf"},
+    scanEnd:{val:72,min:62,max:80,label:"LWK 1"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Sternum / Sternale Referenz",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"Occiput / Hinterkopf",
+    doc:{
+      diagnose:"NSCLC links, cT3N2M0, Plattenepithelkarzinom",
+      anamnese:"Dyspnoe bei Belastung, Husten. Keine Blase/Enddarm.",
+      region:"Thorax",scan:"Thorax 3 mm, Occiput bis LWK 1",
+      lagerung:"Rückenlage, Arme über Kopf (WingSTEP wenn toleriert), Nackenschale, KneeSTEP",
+      besonderheit:"Lagerungstoleranz Arme über Kopf prüfen; ggf. Arme am Körper."
+    }
+  },
+  prostata:{
+    title:"Prostata-Ca.",tags:["Pilot","Becken","Blase"],schema:"pelvis",pilot:true,unlocked:true,
+    pdfDoc:"../media/documents/Fall_PCA_02.pdf",
+    special:"Volle Blase und entleerter Enddarm. Unterkörper frei, Schuhe ausziehen.",
+    undress:"Unterkörper frei machen, Schuhe ausziehen.",
+    bladder:true,rectum:true,zahnschiene:false,
+    aidSets:[["head","kniestep","prostep"],["head","bluebag"]],
+    aidForbidden:["mask","wing","belly"],
+    scanPrograms:["Becken 3 mm","Rektum BL 3 mm"],scanDefault:"Becken 3 mm",
+    scanStart:{val:12,min:5,max:20,label:"LWK 3"},
+    scanEnd:{val:72,min:62,max:80,label:"oberes/mittleres Femurdrittel"},
+    refV:"Halber Patientendurchmesser (AP-Achse)",
+    refL:"Reproduzierbare longitudinale Beckenmitte",
+    refLat:"Körpermitte / Sagittalebene, beidseits lateral",
+    startPt:"LWK 3 (Ausbildungsstandard)",
+    doc:null
+  },
+  rektum:{
+    title:"Rektum-Ca.",tags:["Becken","BellySTEP","Rektum"],schema:"pelvis",unlocked:true,
+    pdfDoc:"../media/documents/Fall_Rektum_BL_02.pdf",
+    special:"Volle Blase und entleerter Enddarm. Bauchlage mit BellySTEP oder Rückenlage.",
+    undress:"Unterkörper frei machen, Schuhe ausziehen.",
+    bladder:true,rectum:true,zahnschiene:false,
+    aidSets:[["belly"],["head","kniestep","prostep"]],
+    aidForbidden:["mask","wing","bluebag"],
+    scanPrograms:["Rektum BL 3 mm","Becken 3 mm"],scanDefault:"Rektum BL 3 mm",
+    scanStart:{val:12,min:5,max:20,label:"LWK 3"},
+    scanEnd:{val:72,min:62,max:80,label:"oberes/mittleres Femurdrittel"},
+    refV:"Halber Patientendurchmesser",
+    refL:"Longitudinale Beckenmitte",
+    refLat:"Körpermitte / Sagittalebene",
+    startPt:"LWK 3",
+    doc:{
+      diagnose:"Rektumkarzinom, cT3N1M0, mittleres Rektumdrittel",
+      anamnese:"Blut im Stuhl, Tenesmen. Volle Blase, Enddarm entleert.",
+      region:"Becken",scan:"Rektum BL 3 mm, LWK 3 bis mittleres Femurdrittel",
+      lagerung:"Bauchlage mit BellySTEP ODER Rückenlage + KneeSTEP/ProSTEP + Kopfschale",
+      besonderheit:"Volle Blase, Enddarm entleert; Lagerungstoleranz Bauchlage prüfen."
+    }
+  }
+};
+
+// ============================================================
+// LAGERUNGSHILFEN
+// ============================================================
+const AIDS = [
+  {id:"mask",   name:"Maskenhalterung", desc:"Indiv. Thermoplastmaske, Kopf/Hals",    abbr:"M",  col:"#8a7dff"},
+  {id:"neck",   name:"Nackenschale",    desc:"Kopfposition, Größen A/B/C",             abbr:"NS", col:"#56d7ff"},
+  {id:"knee",   name:"Knierolle",       desc:"Knieunterstützung Rückenlage",           abbr:"KR", col:"#4ade80"},
+  {id:"wing",   name:"WingSTEP",        desc:"Armhalterung, Arme über Kopf",           abbr:"WS", col:"#facc15"},
+  {id:"prostep",name:"ProSTEP",         desc:"Reproduzierbare Fußfixierung",           abbr:"PS", col:"#fb7185"},
+  {id:"kniestep",name:"KneeSTEP",       desc:"Kniekeil, Becken/Bein, A/B/C",          abbr:"KS", col:"#38bdf8"},
+  {id:"head",   name:"Kopfschale",      desc:"Kopfposition Rückenlage",               abbr:"KO", col:"#a78bfa"},
+  {id:"bluebag",name:"Bluebag",         desc:"Individ. Vakuummatratze Becken",         abbr:"BB", col:"#3b82f6"},
+  {id:"belly",  name:"BellySTEP",       desc:"Bauchlagerungsboard, Abdomenaussparung", abbr:"BS", col:"#1d4ed8"}
+];
+// Bildpfade – wenn vorhanden werden Fotos geladen, sonst SVG-Icon
+const AID_IMG = {
+  mask:"../media/aids/mask.jpg",
+  neck:"../media/aids/nackenschale.jpg",      // → Nackenschalen.jpg umbenennen zu nackenschale.jpg
+  knee:"../media/aids/Knierolle.png",         // hochgeladen als Knierolle.png
+  wing:"../media/aids/wingstep.jpg",
+  prostep:"../media/aids/prostep.jpg",
+  kniestep:"../media/aids/kniestep.jpg",
+  head:"../media/aids/Kopfschale.jpg",        // hochgeladen als Kopfschale.jpg
+  bluebag:"../media/aids/bluebag.jpg",
+  belly:"../media/aids/bellystep.jpg"
+};
+
+// ============================================================
+// WORKFLOW-ITEMS (14 Schritte, korrekte Zuordnung hinterlegt)
+// ============================================================
+const WORKFLOW_ITEMS = [
+  {label:"Dokumente analysieren",                       hint:"STT-Verordnung + CT-Anforderung auf prüfungsrelevante Infos prüfen.",phase:"Vorbereitung"},
+  {label:"Konsole prüfen",                              hint:"Röhre auf Betriebstemperatur (5 %), korrekter Patient angewählt.",   phase:"Vorbereitung"},
+  {label:"Behandlungsraum vorbereiten",                 hint:"Indikationsbezogene Lagerungshilfen bereitstellen und aufbauen.",    phase:"Vorbereitung"},
+  {label:"Patientenidentität feststellen",              hint:"Aktive Identifikation mit mindestens zwei Merkmalen.",               phase:"Durchführung"},
+  {label:"Patient entkleiden / Störfaktoren entfernen", hint:"Region freimachen, Metall, Prothesen und Besonderheiten prüfen.",    phase:"Durchführung"},
+  {label:"Patient lagern und achsgerecht ausrichten",   hint:"Lagerungshilfen anpassen, dann Patient in Achse bringen.",          phase:"Durchführung"},
+  {label:"Referenzpunkt markieren",                     hint:"Reproduzierbare Ref.-Punkte am Patienten oder Lagerungshilfe.",     phase:"Durchführung"},
+  {label:'Tisch auf „Null“ setzen',           hint:"Tischkoordinaten vor Scanbeginn korrekt zurücksetzen.",             phase:"Durchführung"},
+  {label:"Startpunkt setzen",                           hint:"Anatomischen Startpunkt passend zur Indikation festlegen.",         phase:"Durchführung"},
+  {label:"CT fahren",                                   hint:"Scan gemäß Programm und definiertem Bereich durchführen.",          phase:"Durchführung"},
+  {label:"Lagerungsfoto anfertigen",                    hint:"Reproduzierbare Lagerung für Planung und Linac dokumentieren.",     phase:"Durchführung"},
+  {label:"CT-Bilder auf Vollständigkeit prüfen",        hint:"Vollständigkeit, Achse, Umfang + indikationsspez. Füllung.",       phase:"Nachbearbeitung"},
+  {label:"Lagerung und Tischposition dokumentieren",    hint:"Lagerungshilfen, Positionen und Abweichungen erfassen.",            phase:"Nachbearbeitung"},
+  {label:"Individuelle Lagerungshilfen beschriften",    hint:"Maske, Bluebag etc. mit Patientendaten + Parametern kennzeichnen.", phase:"Nachbearbeitung"}
+];
+
+const PROSTATA_FINDINGS = [
+  ["approval","Genehmigung/Formalia","Verordnung und CT-Anforderung ärztlich freigegeben?"],
+  ["identity","Patientenidentifikation","Patientendaten, Geburtsdatum und Fall-ID sicher finden."],
+  ["diagnosis","Diagnose/Indikation","Primärdiagnose und Behandlungsindikation lokalisieren."],
+  ["risk","Tumorbiologie/Stadium","Stadium als Kontext – nicht für eigenmächtige Lagerungsentscheidungen."],
+  ["symptoms","Aktuelle Beschwerden","Beschwerden, die Lagerungstoleranz beeinflussen könnten."],
+  ["status","Belastbarkeit","Mobilität, AZ, Körperbau und Lagerbarkeit ableiten."],
+  ["course","Vorbehandlung","Vorbestrahlung, Operationen, Studienkontext prüfen."],
+  ["target","Zielvolumen/Dosierung","Zielvolumen, Dosierung und Fraktionierung einordnen."],
+  ["systemic","Begleittherapie","Systemtherapie als Kontext, nicht mit Lagerungsvorgabe verwechseln."],
+  ["appointment","Terminlogik","Planungs-CT-Termin und organisatorische Angaben prüfen."],
+  ["region","CT-Region","Angeforderte CT-Region erkennen und Scanprogramm ableiten."],
+  ["positioning","Lagerungsvorgabe","Lagerungsangaben und Vorbereitungsbedingungen herausfiltern."],
+  ["plausibility","Plausibilität/Rücksprache","Indikation, Scanregion und Lagerungsvorgabe abgleichen."],
+  ["control","Kontrollauftrag","Kontrollpunkte nach CT: Scout, Umfang, Ref.-Markierung, Blasen-/Rektumfüllung."],
+  ["notRelevant","Ablenkende Angaben","Nicht relevante Checkboxen bewusst ignorieren."]
+];
+
+const STEPS = ["Workflow-Zuordnung","Dokumentenanalyse","Raum vorbereiten",
+  "Patientenvorbereitung","Lagerung & Referenzpunkte","CT-Scan definieren",
+  "Nachbearbeitung","Kompetenzbericht"];
+
+// ============================================================
+// STATE
+// ============================================================
+function defaultAnswers(){
+  return {
+    workflow:{},
+    documents:"",documentFindings:[],
+    consolePercent:"",consolePatient:false,
+    aids:[],
+    patientIdentity:"",patientPrep:"",
+    positioningOrder:"",refPoints:"",
+    scanProgram:"",scanStart:12,scanEnd:72,
+    aftercare:[]
+  };
+}
+const state={indication:null,step:0,answers:defaultAnswers()};
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  const grid=document.getElementById("indicationGrid");
+  const order=["prostata","hirn","hno","oesprox","oesdist","mamma","bronchial","rektum"];
+  grid.innerHTML=order.map(id=>{
+    const d=IND[id];
+    const locked=!d.unlocked;
+    return `<button class="indication-card${locked?" locked":""}" 
+      onclick="${locked?"showLocked()":"startCase('"+id+"')"}" 
+      aria-disabled="${locked}">
+      <div>
+        <h4>${d.title}</h4>
+        <p>${d.special.split(".")[0]}.</p>
+      </div>
+      <div class="tag-row">
+        ${d.tags.map(t=>`<span class="tag${t==="Pilot"?" pilot":""}">${t}</span>`).join("")}
+        ${locked?'<span class="lock-badge">folgt</span>':""}
+      </div>
+    </button>`;
+  }).join("");
+}
+function showLocked(){alert("Diese Indikation befindet sich im Aufbau und wird in Kürze freigeschaltet.");}
+function scrollToIndications(){document.getElementById("indicationsTitle").scrollIntoView({behavior:"smooth"});}
+function startRandomCase(){
+  const unlocked=Object.keys(IND).filter(id=>IND[id].unlocked);
+  startCase(unlocked[Math.floor(Math.random()*unlocked.length)]);
+}
+function startCase(id){
+  state.indication=IND[id];
+  state.indId=id;
+  state.step=0;
+  state.answers=defaultAnswers();
+  state.answers.scanStart=IND[id].scanStart.val;
+  state.answers.scanEnd=IND[id].scanEnd.val;
+  document.getElementById("homeView").classList.add("hidden");
+  document.getElementById("simView").classList.add("active");
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function returnHome(){
+  document.getElementById("homeView").classList.remove("hidden");
+  document.getElementById("simView").classList.remove("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ============================================================
+// RENDER-DISPATCHER
+// ============================================================
+function render(){
+  const ind=state.indication;
+  document.getElementById("caseTitle").textContent=ind.title;
+  document.getElementById("caseText").textContent=ind.pilot
+    ?"Pilotfall FALL-PCA-02: Martin Weber. Prostata-Ca., Planungs-CT Becken. Fokus: Dokumentenanalyse, Blasen-/Rektumvorbereitung, Beckenlagerung, Scanbereich."
+    :`Prüfungsnaher Trockenfall: ${ind.title}. ${ind.special}`;
+  document.getElementById("statusChip").textContent=`Schritt ${state.step+1} / ${STEPS.length}`;
+  document.getElementById("backBtn").disabled=state.step===0;
+  document.getElementById("nextBtn").textContent=state.step===STEPS.length-1?"Bericht drucken":"Weiter";
+  document.getElementById("progressList").innerHTML=STEPS.map((label,i)=>`
+    <div class="progress-step ${i===state.step?"active":""} ${i<state.step?"done":""}">
+      <div class="step-num">${i<state.step?"✓":i+1}</div><div>${label}</div>
+    </div>`).join("");
+  const renderers=[renderWorkflow,renderDocuments,renderConsoleAndAids,renderPatientPrep,
+    renderPositioning,renderScan,renderAftercare,renderReport];
+  const data=renderers[state.step]();
+  document.getElementById("taskTitle").textContent=data.title;
+  document.getElementById("taskIntro").textContent=data.intro;
+  document.getElementById("taskBody").innerHTML=data.body;
+  bindStepEvents();
+}
+
+// ============================================================
+// SCHRITT 1: WORKFLOW-ZUORDNUNG
+// ============================================================
+function renderWorkflow(){
+  const letters="ABCDEFGHIJKLN".split("");
+  return{
+    title:"Workflow-Zuordnung",
+    intro:"Ordne jeden Arbeitsschritt genau einmal einer Phase zu. Die Reihenfolge innerhalb einer Phase muss nicht angegeben werden – nur die korrekte Zuordnung zählt.",
+    body:`<div class="card-box">
+      <div class="phase-summary">
+        <div><strong>Vorbereitung</strong><span>Alles, was vor Patientenkontakt bereitstehen muss.</span></div>
+        <div><strong>Durchführung</strong><span>Patientenkontakt, Lagerung, Referenzpunkte und CT-Scan.</span></div>
+        <div><strong>Nachbearbeitung</strong><span>Kontrolle, Dokumentation und Beschriftung.</span></div>
+      </div>
+      <div class="workflow-compact">
+        ${WORKFLOW_ITEMS.map((item,i)=>`
+          <div class="workflow-row" id="wrow-${i}">
+            <div class="workflow-index">${letters[i]}</div>
+            <div class="workflow-label"><strong>${item.label}</strong><span>${item.hint}</span></div>
+            <select data-workflow="${item.label}" aria-label="Phase für ${item.label}">
+              <option value="">Phase wählen</option>
+              <option>Vorbereitung</option>
+              <option>Durchführung</option>
+              <option>Nachbearbeitung</option>
+            </select>
+          </div>`).join("")}
+      </div>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 2: DOKUMENTENANALYSE
+// ============================================================
+function renderDocuments(){
+  const ind=state.indication;
+  // PDF-Anzeige (alle Indikationen mit pdfDoc)
+  if(ind.pdfDoc){
+    const isProstata=ind.pilot;
+    const findingSection=isProstata?`
+      <div class="card-box">
+        <h4>Welche Kategorien hast du im Dokument sicher identifiziert?</h4>
+        <p class="small-note">Nur auswählen, was du aktiv gefunden hast – nicht raten.</p>
+        <div class="finding-grid">
+          ${PROSTATA_FINDINGS.map(([id,title,desc])=>`
+            <div class="finding-card ${state.answers.documentFindings.includes(id)?"selected":""}" data-finding="${id}">
+              <strong>${title}</strong><span>${desc}</span>
+            </div>`).join("")}
+        </div>
+      </div>`:"";
+    return{
+      title:`Dokumentenanalyse: ${ind.title}`,
+      intro:"Arbeite mit dem Originaldokument. Filtere prüfungsrelevante Informationen heraus und halte sie in deiner Notiz fest.",
+      body:`<div class="pilot-banner"><strong>Originaldokument:</strong> STT-Verordnung, CT-Anforderung und CT-Dokumentation. Suche aktiv – nicht raten.</div>
+      <div class="pdf-workspace">
+        <div class="pdf-panel">
+          <div class="pdf-toolbar">
+            <span><strong>Originaldokument</strong><br>STT-Verordnung · CT-Anforderung · CT-Dokumentation</span>
+          </div>
+          <iframe class="pdf-frame" src="${ind.pdfDoc}#toolbar=1&navpanes=0" title="Falldokument ${ind.title}"></iframe>
+          <div class="pdf-fallback">PDF lädt nur auf GitHub Pages, nicht lokal via file://. Lokal: <code>python -m http.server 8000</code> im Projektordner starten.</div>
+        </div>
+        <div class="task-stack">
+          <div class="card-box">
+            <h4>Arbeitsauftrag</h4>
+            <p>Lies das Originaldokument. Entscheide, welche Informationen für Vorbereitung, Patientengespräch, Lagerung, Scanbereich und Nachkontrolle relevant sind.</p>
+          </div>
+          ${findingSection}
+          <div class="card-box">
+            <h4>Deine Kurznotiz für die praktische Handlung</h4>
+            <textarea data-text="documents" placeholder="Identität – Indikation – Lagerung – Patientenvorbereitung – Scanbereich/Kontrolle. Min. 10 Zeichen.">${state.answers.documents}</textarea>
+          </div>
+        </div>
+      </div>`
+    };
+  }
+  // Fake-Dokument (Fallback für Indikationen ohne PDF)
+  const d=ind.doc;
+  return{
+    title:"Dokumentenanalyse",
+    intro:"Filtere prüfungsrelevante Informationen aus STT-Verordnung und CT-Anforderung. Deine Notiz wird im Abschlussbericht mit dem Erwartungshorizont verglichen.",
+    body:`<div class="doc-grid">
+      <div class="fake-doc">
+        <span class="doc-badge">STT-Verordnung</span>
+        <div class="field"><div class="field-label">Diagnose</div><div class="field-val">${d.diagnose}</div></div>
+        <div class="field"><div class="field-label">Aktuelle Beschwerden / Anamnese</div><div class="field-val">${d.anamnese}</div></div>
+        <div class="field"><div class="field-label">Indikationsregion</div><div class="field-val">${d.region}</div></div>
+        <div class="field"><div class="field-label">Besonderheiten</div><div class="field-val">${d.besonderheit}</div></div>
+      </div>
+      <div class="fake-doc">
+        <span class="doc-badge">CT-Anforderung</span>
+        <div class="field"><div class="field-label">Angeforderte Untersuchung</div><div class="field-val">Planungs-CT</div></div>
+        <div class="field"><div class="field-label">CT-Region / Scanprogramm</div><div class="field-val">${d.scan}</div></div>
+        <div class="field"><div class="field-label">Lagerungsvorgabe</div><div class="field-val">${d.lagerung}</div></div>
+        <div class="field"><div class="field-label">Vorbereitung Patient</div><div class="field-val">${d.besonderheit}</div></div>
+      </div>
+    </div>
+    <div class="card-box">
+      <h4>Deine Notiz: Was ist für diese Handlung prüfungsrelevant?</h4>
+      <textarea data-text="documents" placeholder="Diagnose, Region, Lagerung, Besonderheiten, Scanbereich – in eigenen Worten. Min. 10 Zeichen.">${state.answers.documents}</textarea>
+      <p class="small-note">Kein Sofortfeedback – Abgleich mit Erwartungshorizont am Ende.</p>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 3: KONSOLE + LAGERUNGSHILFEN
+// ============================================================
+function renderConsoleAndAids(){
+  const ind=state.indication;
+  const prostataHint=ind.pilot
+    ?`<div class="pilot-banner"><strong>Prostata-Pilot:</strong> Rückenlage mit ProSTEP/KneeSTEP + Kopfschale oder Bluebag + Kopfschale. Wähle bewusst, nicht maximal. Alles vor Patientenkontakt erledigen: Konsole, Röhre, Lagerungshilfen bereit, ordentlicher Raum.</div>`
+    :`<div class="card-box"><p class="small-note">Indikationsspezifische Auswahl: ${ind.special}</p></div>`;
+  const aidCards=AIDS.map(a=>{
+    const sel=state.answers.aids.includes(a.id);
+    return`<div class="aid-card ${sel?"selected":""}" data-aid="${a.id}">
+      <div class="aid-img" style="--aid-col:${a.col}">
+        <img src="${AID_IMG[a.id]}" alt="${a.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:${a.col}">${a.abbr}</span>
+      </div>
+      <h4>${a.name}</h4>
+      <p>${a.desc}</p>
+      <div class="aid-check">✓</div>
+    </div>`;
+  }).join("");
+  return{
+    title:"Raum vorbereiten",
+    intro:"Prüfe zuerst Konsole und Röhre, wähle dann die Lagerungshilfen für diese Indikation.",
+    body:`${prostataHint}
+    <div class="card-box">
+      <h4>Konsole: Röhre und Patientenauswahl</h4>
+      <p class="small-note" style="margin-bottom:12px">Bei wieviel Prozent muss die Röhre aufgewärmt sein, bevor mit dem CT begonnen werden darf?</p>
+      <div class="option-list" style="max-width:480px">
+        ${["5","20","25","50"].map(v=>`
+          <label class="option">
+            <input type="radio" name="console" value="${v}" ${state.answers.consolePercent===v?"checked":""}> 
+            <span>${v} %</span>
+          </label>`).join("")}
+      </div>
+      <label class="option" style="margin-top:12px;max-width:480px">
+        <input type="checkbox" id="consolePatient" ${state.answers.consolePatient?"checked":""}> 
+        <span>Korrekter Patient an der Konsole angewählt und Datensatz geprüft.</span>
+      </label>
+    </div>
+    <div class="card-box">
+      <h4>Lagerungshilfen auswählen</h4>
+      <p class="small-note" style="margin-bottom:12px">Wähle alle Lagerungshilfen, die du für diese Indikation vorbereiten würdest.</p>
+      <div class="aid-grid">${aidCards}</div>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 4: PATIENTENVORBEREITUNG
+// ============================================================
+function renderPatientPrep(){
+  const ind=state.indication;
+  const isProstate=ind.pilot;
+  const introText=isProstate
+    ?"Triff die erste sicherheitsrelevante Entscheidung. Für den Prostata-Piloten sind Identität, Intimsphäre, Unterkörper frei, Schuhe aus sowie Blasen-/Rektumvorbereitung entscheidend."
+    :`Triff die erste sicherheitsrelevante Entscheidung und beachte indikationsspezifische Besonderheiten.`;
+  const prepPlaceholder=isProstate
+    ?"Prostata-Pilot: Ablauf erklären, CT, Markierungen, Blasenfüllung, Enddarm, Entkleiden, Intimsphäre, Beschwerden. Min. 10 Zeichen."
+    :`Indikationsspezifisch: ${ind.special} Min. 10 Zeichen.`;
+  return{
+    title:"Patientenvorbereitung",
+    intro:introText,
+    body:`<div class="card-box">
+      <h4>Was ist die erste prüfungsrelevante Handlung beim Empfang des Patienten?</h4>
+      <div class="option-list">
+        ${[
+          ["befinden","Fragen, wie es dem Patienten geht."],
+          ["karte","Nach der Versichertenkarte fragen."],
+          ["identity","Aktive Identitätsprüfung mit mindestens zwei Merkmalen und Abgleich mit dem angewählten Patientenfall."],
+          ["pain","Direkt fragen, ob der Patient Schmerzen hat."]
+        ].map(([v,l])=>`
+          <label class="option">
+            <input type="radio" name="identity" value="${v}" ${state.answers.patientIdentity===v?"checked":""}> 
+            <span>${l}</span>
+          </label>`).join("")}
+      </div>
+    </div>
+    <div class="card-box">
+      <h4>Was muss vor dem Entkleiden und Lagern beachtet werden?</h4>
+      <textarea data-text="patientPrep" placeholder="${prepPlaceholder}">${state.answers.patientPrep}</textarea>
+      <p class="small-note">Kein Sofortfeedback – Erwartungshorizont erscheint am Ende.</p>
+    </div>`
+  };
+}
+
+// ============================================================
+// SVG BODY-SCHEMAS (Schritt 5)
+// ============================================================
+function bodySchema(type){
+  if(type==="skull") return`
+    <svg class="body-svg" viewBox="0 0 300 390" role="img" aria-label="Schematische Schädellagerung mit Maske und Referenzpunkten">
+      <defs>
+        <linearGradient id="skullG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".28"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".18"/></linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Rumpf / Tisch -->
+      <rect x="80" y="200" width="140" height="170" rx="18" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.10)"/>
+      <!-- Hals -->
+      <rect x="118" y="158" width="64" height="48" rx="14" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)"/>
+      <!-- Schädel -->
+      <ellipse cx="150" cy="110" rx="68" ry="80" fill="url(#skullG)" stroke="rgba(255,255,255,.40)" stroke-width="1.8"/>
+      <!-- Gesicht-Linie -->
+      <ellipse cx="150" cy="148" rx="42" ry="22" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.22)"/>
+      <!-- Maske -->
+      <rect x="95" y="72" width="110" height="100" rx="28" fill="none" stroke="rgba(138,125,255,.70)" stroke-width="2.5" stroke-dasharray="7 4"/>
+      <text x="206" y="120" fill="rgba(138,125,255,.9)" font-size="11">Maske</text>
+      <!-- Sagittalebene -->
+      <line x1="150" y1="20" x2="150" y2="380" stroke="rgba(86,215,255,.45)" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="156" y="38" fill="rgba(86,215,255,.85)" font-size="11">Sagittalebene</text>
+      <!-- Augenbrauenlinie / Longitudinale Ref. -->
+      <line x1="40" x2="260" y1="148" y2="148" stroke="rgba(250,204,21,.75)" stroke-width="2" stroke-dasharray="8 5"/>
+      <text x="42" y="142" fill="rgba(250,204,21,.95)" font-size="11">Longitudinale Ref.: Orbitaoberrand</text>
+      <!-- Ref.-Punkte -->
+      <circle cx="82" cy="148" r="7" fill="#facc15" filter="url(#glow)"/>
+      <circle cx="150" cy="148" r="7" fill="#56d7ff" filter="url(#glow)"/>
+      <circle cx="218" cy="148" r="7" fill="#facc15" filter="url(#glow)"/>
+      <text x="42" y="168" fill="rgba(255,255,255,.72)" font-size="10">lat.</text>
+      <text x="135" y="168" fill="rgba(255,255,255,.72)" font-size="10">AP/vert.</text>
+      <text x="222" y="168" fill="rgba(255,255,255,.72)" font-size="10">lat.</text>
+      <!-- Nackenschale -->
+      <ellipse cx="150" cy="215" rx="48" ry="16" fill="rgba(86,215,255,.13)" stroke="rgba(86,215,255,.35)"/>
+      <text x="150" y="220" text-anchor="middle" fill="rgba(255,255,255,.70)" font-size="11">Nackenschale</text>
+      <!-- Knierolle -->
+      <ellipse cx="150" cy="330" rx="38" ry="14" fill="rgba(74,222,128,.13)" stroke="rgba(74,222,128,.35)"/>
+      <text x="150" y="334" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="10">Knierolle</text>
+    </svg>`;
+
+  if(type==="neck") return`
+    <svg class="body-svg" viewBox="0 0 300 390" role="img" aria-label="Schematische Kopf-Hals-Lagerung mit Maske">
+      <defs>
+        <linearGradient id="neckG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".25"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".18"/></linearGradient>
+        <filter id="glow2"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Rumpf -->
+      <rect x="80" y="220" width="140" height="160" rx="18" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.10)"/>
+      <!-- Schultern -->
+      <ellipse cx="100" cy="225" rx="26" ry="18" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)"/>
+      <ellipse cx="200" cy="225" rx="26" ry="18" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)"/>
+      <!-- Hals -->
+      <rect x="120" y="165" width="60" height="62" rx="14" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.20)"/>
+      <!-- Schädel -->
+      <ellipse cx="150" cy="108" rx="64" ry="75" fill="url(#neckG)" stroke="rgba(255,255,255,.40)" stroke-width="1.8"/>
+      <!-- Maske -->
+      <rect x="90" y="60" width="120" height="168" rx="26" fill="none" stroke="rgba(138,125,255,.65)" stroke-width="2.5" stroke-dasharray="7 4"/>
+      <text x="214" y="142" fill="rgba(138,125,255,.85)" font-size="11">Maske</text>
+      <!-- Sagittalebene -->
+      <line x1="150" y1="18" x2="150" y2="380" stroke="rgba(86,215,255,.40)" stroke-width="2" stroke-dasharray="6 6"/>
+      <!-- Schultermarker -->
+      <line x1="40" x2="260" y1="225" y2="225" stroke="rgba(250,204,21,.70)" stroke-width="2" stroke-dasharray="8 5"/>
+      <text x="42" y="218" fill="rgba(250,204,21,.90)" font-size="11">Schultermarker / Longitudinale Ref.</text>
+      <circle cx="80" cy="225" r="7" fill="#facc15" filter="url(#glow2)"/>
+      <circle cx="150" cy="225" r="7" fill="#56d7ff" filter="url(#glow2)"/>
+      <circle cx="220" cy="225" r="7" fill="#facc15" filter="url(#glow2)"/>
+      <text x="42" y="244" fill="rgba(255,255,255,.68)" font-size="10">lat.</text>
+      <text x="136" y="244" fill="rgba(255,255,255,.68)" font-size="10">AP/vert.</text>
+      <text x="224" y="244" fill="rgba(255,255,255,.68)" font-size="10">lat.</text>
+      <!-- Nackenschale -->
+      <ellipse cx="150" cy="240" rx="48" ry="14" fill="rgba(86,215,255,.12)" stroke="rgba(86,215,255,.30)"/>
+      <text x="150" y="244" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="10">Nackenschale</text>
+    </svg>`;
+
+  if(type==="thorax") return`
+    <svg class="body-svg" viewBox="0 0 300 390" role="img" aria-label="Schematische Thoraxlagerung mit WingSTEP">
+      <defs>
+        <linearGradient id="thorG" x1="0" x2="1"><stop stop-color="#facc15" stop-opacity=".22"/><stop offset="1" stop-color="#56d7ff" stop-opacity=".16"/></linearGradient>
+        <filter id="glow3"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Rumpf -->
+      <rect x="88" y="130" width="124" height="240" rx="24" fill="url(#thorG)" stroke="rgba(255,255,255,.35)" stroke-width="1.8"/>
+      <!-- Hals -->
+      <rect x="124" y="88" width="52" height="46" rx="12" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.22)"/>
+      <!-- Kopf -->
+      <ellipse cx="150" cy="58" rx="42" ry="50" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.28)"/>
+      <!-- Arme über Kopf -->
+      <path d="M88 155 C60 120, 46 80, 54 30" stroke="rgba(250,204,21,.55)" stroke-width="20" stroke-linecap="round" fill="none"/>
+      <path d="M212 155 C240 120, 254 80, 246 30" stroke="rgba(250,204,21,.55)" stroke-width="20" stroke-linecap="round" fill="none"/>
+      <!-- WingSTEP -->
+      <rect x="38" y="130" width="50" height="28" rx="10" fill="rgba(250,204,21,.18)" stroke="rgba(250,204,21,.45)"/>
+      <rect x="212" y="130" width="50" height="28" rx="10" fill="rgba(250,204,21,.18)" stroke="rgba(250,204,21,.45)"/>
+      <text x="30" y="154" fill="rgba(250,204,21,.85)" font-size="10">WingSTEP</text>
+      <!-- Sagittalebene -->
+      <line x1="150" y1="18" x2="150" y2="380" stroke="rgba(86,215,255,.40)" stroke-width="2" stroke-dasharray="6 6"/>
+      <!-- Sternale Referenzlinie -->
+      <line x1="40" x2="260" y1="200" y2="200" stroke="rgba(86,215,255,.65)" stroke-width="2" stroke-dasharray="8 5"/>
+      <text x="42" y="193" fill="rgba(86,215,255,.90)" font-size="11">Sternale Ref. / Brustbein</text>
+      <circle cx="88" cy="200" r="7" fill="#56d7ff" filter="url(#glow3)"/>
+      <circle cx="150" cy="200" r="7" fill="#facc15" filter="url(#glow3)"/>
+      <circle cx="212" cy="200" r="7" fill="#56d7ff" filter="url(#glow3)"/>
+      <text x="42" y="218" fill="rgba(255,255,255,.68)" font-size="10">lat.</text>
+      <text x="136" y="218" fill="rgba(255,255,255,.68)" font-size="10">AP/vert.</text>
+      <text x="216" y="218" fill="rgba(255,255,255,.68)" font-size="10">lat.</text>
+      <!-- KneeSTEP -->
+      <rect x="112" y="320" width="76" height="26" rx="10" fill="rgba(56,189,248,.16)" stroke="rgba(56,189,248,.40)"/>
+      <text x="150" y="337" text-anchor="middle" fill="rgba(255,255,255,.70)" font-size="10">KneeSTEP</text>
+    </svg>`;
+
+  // pelvis (default – Prostata/Rektum)
+  return`
+    <svg class="body-svg" viewBox="0 0 300 430" role="img" aria-label="Schematische Beckenlagerung mit Referenzpunkten">
+      <defs>
+        <linearGradient id="pelvisG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".32"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".22"/></linearGradient>
+        <filter id="glow4"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect x="64" y="38" width="172" height="336" rx="42" fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.12)"/>
+      <line x1="150" y1="30" x2="150" y2="386" stroke="rgba(86,215,255,.45)" stroke-width="2" stroke-dasharray="7 7"/>
+      <text x="158" y="50" fill="rgba(86,215,255,.9)" font-size="12">Körpermitte / Sagittalebene</text>
+      <ellipse cx="150" cy="114" rx="58" ry="36" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.20)"/>
+      <path d="M95 165 C92 122,126 104,148 153 C170 104,208 123,205 166 C203 210,177 238,150 244 C122 238,98 210,95 165Z" fill="url(#pelvisG)" stroke="rgba(255,255,255,.45)" stroke-width="1.8"/>
+      <circle cx="150" cy="170" r="18" fill="rgba(74,222,128,.13)" stroke="rgba(74,222,128,.55)"/>
+      <text x="150" y="174" text-anchor="middle" fill="rgba(220,252,231,.95)" font-size="11">Blase</text>
+      <ellipse cx="150" cy="214" rx="16" ry="24" fill="rgba(251,113,133,.11)" stroke="rgba(251,113,133,.55)"/>
+      <text x="150" y="219" text-anchor="middle" fill="rgba(254,205,211,.95)" font-size="10">Rektum</text>
+      <line x1="46" x2="254" y1="190" y2="190" stroke="rgba(250,204,21,.75)" stroke-width="2" stroke-dasharray="8 6"/>
+      <text x="56" y="183" fill="rgba(250,204,21,.95)" font-size="12">Longitudinale Markierungsebene</text>
+      <circle cx="86" cy="190" r="7" fill="#facc15" filter="url(#glow4)"/>
+      <circle cx="150" cy="190" r="7" fill="#56d7ff" filter="url(#glow4)"/>
+      <circle cx="214" cy="190" r="7" fill="#facc15" filter="url(#glow4)"/>
+      <text x="42" y="210" fill="rgba(255,255,255,.78)" font-size="11">lat.</text>
+      <text x="135" y="210" fill="rgba(255,255,255,.78)" font-size="11">AP/vert.</text>
+      <text x="219" y="210" fill="rgba(255,255,255,.78)" font-size="11">lat.</text>
+      <rect x="102" y="265" width="96" height="34" rx="14" fill="rgba(138,125,255,.18)" stroke="rgba(255,255,255,.30)"/>
+      <text x="150" y="286" text-anchor="middle" fill="rgba(255,255,255,.82)" font-size="12">KneeSTEP</text>
+      <path d="M118 242 C118 294,106 332,88 382" stroke="rgba(255,255,255,.42)" stroke-width="18" stroke-linecap="round"/>
+      <path d="M182 242 C182 294,194 332,212 382" stroke="rgba(255,255,255,.42)" stroke-width="18" stroke-linecap="round"/>
+      <rect x="78" y="374" width="144" height="24" rx="10" fill="rgba(86,215,255,.13)" stroke="rgba(255,255,255,.25)"/>
+      <text x="150" y="391" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="11">ProSTEP / Fußfix</text>
+    </svg>`;
+}
+
+// ============================================================
+// SCHRITT 5: LAGERUNG & REFERENZPUNKTE
+// ============================================================
+function renderPositioning(){
+  const ind=state.indication;
+  const schema=bodySchema(ind.schema);
+  const caption=ind.schema==="pelvis"
+    ?"Referenzpunkte sind keine starren SOP, sondern reproduzierbare, dokumentierbare Orientierung. Stahl-/Bleikugeln müssen im CT prüfbar sein."
+    :"Referenzpunkte müssen reproduzierbar, dokumentierbar und im CT kontrollierbar sein. Indikationsspezifische Anatomie als Orientierung nutzen.";
+  return{
+    title:"Lagerung & Referenzpunkte",
+    intro:ind.schema==="pelvis"
+      ?"Lege eine sinnvolle Lagerungsreihenfolge fest und beschreibe die Referenzpunkte für die Beckenlagerung."
+      :"Lege eine sinnvolle Lagerungsreihenfolge fest und beschreibe die Referenzpunkte für diese Indikation.",
+    body:`<div class="schema-grid">
+      <div class="card-box">
+        <h4>Welche Reihenfolge beim Lagern ist sinnvoll?</h4>
+        <div class="option-list">
+          ${[
+            ["axis-aids-ref","Patient achsgerecht ausrichten → Lagerungshilfen anpassen → Referenzpunkt markieren"],
+            ["aids-ref","Lagerungshilfen anpassen → Referenzpunkt markieren"],
+            ["ref-axis-aids","Referenzpunkt markieren → Patient ausrichten → Lagerungshilfen anpassen"],
+            ["aids-axis-ref","Lagerungshilfen an Patienten anpassen → Patient achsgerecht ausrichten → Referenzpunkt markieren"]
+          ].map(([v,l])=>`
+            <label class="option">
+              <input type="radio" name="order" value="${v}" ${state.answers.positioningOrder===v?"checked":""}> 
+              <span>${l}</span>
+            </label>`).join("")}
+        </div>
+      </div>
+      <div class="body-schema">${schema}
+        <div class="schema-caption">${caption}</div>
+      </div>
+    </div>
+    <div class="card-box">
+      <h4>Referenzpunkte beschreiben</h4>
+      <p class="small-note" style="margin-bottom:8px">Orientierung: vertikal / longitudinal / lateral</p>
+      <textarea data-text="refPoints" placeholder="Vertikal: … | Longitudinal: … | Lateral: … Min. 10 Zeichen.">${state.answers.refPoints}</textarea>
+    </div>`
+  };
+}
+
+// ============================================================
+// SVG SCOUT-SCHEMAS (Schritt 6)
+// ============================================================
+function scoutSVG(type, sv, ev){
+  const sy=40+sv*3.3, ey=40+ev*3.3;
+  function startMarker(){return`
+    <line x1="26" x2="284" y1="${sy}" y2="${sy}" stroke="#4ade80" stroke-width="4"/>
+    <rect x="28" y="${sy-18}" width="54" height="18" rx="7" fill="rgba(74,222,128,.18)" stroke="rgba(74,222,128,.45)"/>
+    <text x="36" y="${sy-5}" fill="#bbf7d0" font-size="11">Start</text>`;}
+  function endMarker(){return`
+    <line x1="26" x2="284" y1="${ey}" y2="${ey}" stroke="#fb7185" stroke-width="4"/>
+    <rect x="28" y="${ey+3}" width="48" height="18" rx="7" fill="rgba(251,113,133,.18)" stroke="rgba(251,113,133,.45)"/>
+    <text x="36" y="${ey+16}" fill="#fecdd3" font-size="11">Ende</text>`;}
+
+  if(type==="skull") return`
+    <svg class="body-svg" viewBox="0 0 310 430" role="img" aria-label="Schädel-Scout">
+      <defs><linearGradient id="skG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".18"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".12"/></linearGradient></defs>
+      <!-- Körpersilhouette -->
+      <ellipse cx="155" cy="100" rx="70" ry="82" fill="url(#skG)" stroke="rgba(255,255,255,.38)" stroke-width="1.6"/>
+      <rect x="120" y="178" width="70" height="50" rx="16" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+      <rect x="100" y="220" width="110" height="200" rx="22" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.10)"/>
+      <!-- Mittelline -->
+      <line x1="155" y1="18" x2="155" y2="410" stroke="rgba(255,255,255,.15)" stroke-dasharray="5 6"/>
+      <!-- Landmarks -->
+      <line x1="36" x2="272" y1="50" y2="50" stroke="rgba(255,255,255,.20)" stroke-dasharray="4 5"/>
+      <text x="38" y="44" fill="rgba(255,255,255,.70)" font-size="11">Kalotte (oberer Schädelrand)</text>
+      <line x1="36" x2="272" y1="185" y2="185" stroke="rgba(255,255,255,.22)" stroke-dasharray="4 5"/>
+      <text x="38" y="179" fill="rgba(255,255,255,.72)" font-size="11">HWK 2</text>
+      <!-- Sollbereich -->
+      <rect x="34" y="50" width="242" height="135" fill="rgba(74,222,128,.055)" stroke="rgba(74,222,128,.22)" stroke-width="1.4" rx="8"/>
+      ${startMarker()}${endMarker()}
+    </svg>`;
+
+  if(type==="neck") return`
+    <svg class="body-svg" viewBox="0 0 310 430" role="img" aria-label="Hals-Scout">
+      <defs><linearGradient id="nkG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".18"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".12"/></linearGradient></defs>
+      <ellipse cx="155" cy="82" rx="62" ry="72" fill="url(#nkG)" stroke="rgba(255,255,255,.36)" stroke-width="1.6"/>
+      <rect x="122" y="150" width="66" height="55" rx="14" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+      <rect x="96" y="195" width="118" height="220" rx="24" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.10)"/>
+      <ellipse cx="118" cy="205" rx="28" ry="20" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.16)"/>
+      <ellipse cx="192" cy="205" rx="28" ry="20" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.16)"/>
+      <line x1="155" y1="18" x2="155" y2="410" stroke="rgba(255,255,255,.14)" stroke-dasharray="5 6"/>
+      <line x1="36" x2="272" y1="50" y2="50" stroke="rgba(255,255,255,.20)" stroke-dasharray="4 5"/>
+      <text x="38" y="44" fill="rgba(255,255,255,.70)" font-size="11">Kalotte</text>
+      <line x1="36" x2="272" y1="270" y2="270" stroke="rgba(255,255,255,.22)" stroke-dasharray="4 5"/>
+      <text x="38" y="264" fill="rgba(255,255,255,.72)" font-size="11">BWK 6 / Bifurkation</text>
+      <rect x="34" y="50" width="242" height="220" fill="rgba(74,222,128,.055)" stroke="rgba(74,222,128,.22)" stroke-width="1.4" rx="8"/>
+      ${startMarker()}${endMarker()}
+    </svg>`;
+
+  if(type==="thorax") return`
+    <svg class="body-svg" viewBox="0 0 310 430" role="img" aria-label="Thorax-Scout">
+      <defs><linearGradient id="thG" x1="0" x2="1"><stop stop-color="#facc15" stop-opacity=".18"/><stop offset="1" stop-color="#56d7ff" stop-opacity=".12"/></linearGradient></defs>
+      <ellipse cx="155" cy="60" rx="44" ry="50" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.24)"/>
+      <rect x="118" y="106" width="74" height="42" rx="12" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.18)"/>
+      <rect x="86" y="138" width="138" height="260" rx="26" fill="url(#thG)" stroke="rgba(255,255,255,.30)" stroke-width="1.6"/>
+      <!-- Arme über Kopf -->
+      <path d="M86 155 C62 118,50 70,58 24" stroke="rgba(250,204,21,.40)" stroke-width="16" stroke-linecap="round" fill="none"/>
+      <path d="M224 155 C248 118,260 70,252 24" stroke="rgba(250,204,21,.40)" stroke-width="16" stroke-linecap="round" fill="none"/>
+      <line x1="155" y1="18" x2="155" y2="410" stroke="rgba(255,255,255,.14)" stroke-dasharray="5 6"/>
+      <line x1="36" x2="272" y1="50" y2="50" stroke="rgba(255,255,255,.20)" stroke-dasharray="4 5"/>
+      <text x="38" y="44" fill="rgba(255,255,255,.70)" font-size="11">Occiput / Hinterkopf</text>
+      <line x1="36" x2="272" y1="278" y2="278" stroke="rgba(255,255,255,.22)" stroke-dasharray="4 5"/>
+      <text x="38" y="272" fill="rgba(255,255,255,.72)" font-size="11">LWK 1</text>
+      <rect x="34" y="50" width="242" height="228" fill="rgba(74,222,128,.055)" stroke="rgba(74,222,128,.22)" stroke-width="1.4" rx="8"/>
+      ${startMarker()}${endMarker()}
+    </svg>`;
+
+  // pelvis scout (default)
+  return`
+    <svg class="body-svg" viewBox="0 0 310 430" role="img" aria-label="Becken-Scout">
+      <defs><linearGradient id="plG" x1="0" x2="1"><stop stop-color="#56d7ff" stop-opacity=".20"/><stop offset="1" stop-color="#8a7dff" stop-opacity=".16"/></linearGradient></defs>
+      <rect x="94" y="20" width="122" height="382" rx="44" fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.13)"/>
+      <line x1="155" y1="20" x2="155" y2="402" stroke="rgba(255,255,255,.18)" stroke-dasharray="6 7"/>
+      <path d="M130 24 C147 58,147 92,132 126" stroke="rgba(255,255,255,.35)" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <path d="M180 24 C163 58,163 92,178 126" stroke="rgba(255,255,255,.35)" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <path d="M100 146 C103 104,135 90,155 136 C176 90,207 104,210 146 C213 196,181 230,155 236 C129 230,97 196,100 146Z" fill="url(#plG)" stroke="rgba(255,255,255,.44)" stroke-width="1.8"/>
+      <circle cx="124" cy="210" r="22" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.24)"/>
+      <circle cx="186" cy="210" r="22" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.24)"/>
+      <path d="M122 238 C120 286,105 336,85 400" stroke="rgba(255,255,255,.38)" stroke-width="18" stroke-linecap="round"/>
+      <path d="M188 238 C190 286,205 336,225 400" stroke="rgba(255,255,255,.38)" stroke-width="18" stroke-linecap="round"/>
+      <line x1="36" x2="272" y1="72" y2="72" stroke="rgba(255,255,255,.22)" stroke-dasharray="4 5"/>
+      <text x="38" y="66" fill="rgba(255,255,255,.72)" font-size="11">LWK 3 / Startorientierung</text>
+      <line x1="36" x2="272" y1="332" y2="332" stroke="rgba(255,255,255,.22)" stroke-dasharray="4 5"/>
+      <text x="38" y="326" fill="rgba(255,255,255,.72)" font-size="11">oberes/mittleres Femurdrittel</text>
+      <rect x="34" y="72" width="242" height="260" fill="rgba(74,222,128,.055)" stroke="rgba(74,222,128,.22)" stroke-width="1.4" rx="10"/>
+      ${startMarker()}${endMarker()}
+    </svg>`;
+}
+
+// ============================================================
+// SCHRITT 6: CT-SCAN
+// ============================================================
+function renderScan(){
+  const ind=state.indication;
+  const sv=state.answers.scanStart, ev=state.answers.scanEnd;
+  return{
+    title:"CT-Scan definieren",
+    intro:ind.schema==="pelvis"
+      ?`Becken-Pilot: Scanprogramm wählen und Start-/Endmarker setzen. Ausbildungsstandard: ${ind.scanStart.label} bis ${ind.scanEnd.label}.`
+      :`Scanprogramm wählen und Start-/Endmarker setzen. Ausbildungsstandard: ${ind.scanStart.label} bis ${ind.scanEnd.label}.`,
+    body:`<div class="schema-grid">
+      <div class="body-schema">${scoutSVG(ind.schema,sv,ev)}
+        <div class="schema-caption">Die grüne Zone zeigt den Ausbildungsstandard. Abweichungen müssen fachlich begründbar sein.</div>
+      </div>
+      <div class="marker-panel">
+        <div class="card-box">
+          <h4>Scanprogramm</h4>
+          <select data-scan-program>
+            <option value="">Bitte wählen</option>
+            ${["Schädel 3 mm","Hals 3 mm","Thorax 3 mm","Abdomen 3 mm","Becken 3 mm","Rektum BL 3 mm"]
+              .map(p=>`<option ${state.answers.scanProgram===p?"selected":""}>${p}</option>`).join("")}
+          </select>
+          <p class="small-note" style="margin-top:8px">Für diese Indikation empfohlen: <strong>${ind.scanPrograms.join(" oder ")}</strong></p>
+        </div>
+        <div class="card-box range-row">
+          <h4>Start-/Endmarker</h4>
+          <label>Startmarker (${ind.scanStart.label})
+            <input data-range="scanStart" type="range" min="0" max="100" value="${sv}">
+          </label>
+          <label>Endmarker (${ind.scanEnd.label})
+            <input data-range="scanEnd" type="range" min="0" max="100" value="${ev}">
+          </label>
+          <div style="display:grid;gap:6px;margin-top:8px">
+            <span class="small-note"><strong>Topo zuerst:</strong> Topogramm/Scout etwas größer fahren, dann Bereich definieren.</span>
+            <span class="small-note"><strong>Start:</strong> ${ind.scanStart.label}</span>
+            <span class="small-note"><strong>Ende:</strong> ${ind.scanEnd.label}</span>
+            <span class="small-note"><strong>Kontrolle:</strong> Patientenumfang vollständig?${ind.bladder?" Blasen-/Rektumfüllung prüfen.":""}</span>
+          </div>
+        </div>
+      </div>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 7: NACHBEARBEITUNG
+// ============================================================
+function renderAftercare(){
+  const ind=state.indication;
+  const items=[
+    "CT-Bilder auf Vollständigkeit prüfen",
+    "Patientenumfang vollständig abgebildet",
+    "Achsgerechte Lagerung prüfen",
+    ind.bladder?"Blasen-/Rektumfüllung prüfen und dokumentieren":null,
+    "Ref.-Markierung / Bleikugeln im CT-Schnitt prüfen",
+    "Lagerungsfoto anfertigen",
+    "Lagerungshilfen desinfizieren und aufräumen",
+    "Lagerung und Tischposition dokumentieren",
+    "Position/Indexierung der Lagerungshilfen dokumentieren",
+    "Abweichungen vom Standard mit Begründung dokumentieren",
+    "Individuelle Lagerungshilfen beschriften"
+  ].filter(Boolean);
+  return{
+    title:"Nachbearbeitung",
+    intro:"Wähle alle Punkte aus, die du nach dem CT-Scan prüfst oder dokumentierst. Auswertung erfolgt im Abschlussbericht.",
+    body:`<div class="card-box"><div class="option-list">
+      ${items.map(item=>`
+        <label class="option">
+          <input type="checkbox" value="${item}" data-aftercare ${state.answers.aftercare.includes(item)?"checked":""}> 
+          <span>${item}</span>
+        </label>`).join("")}
+    </div></div>`
+  };
+}
+
+// ============================================================
+// EVALUATIONS-FUNKTIONEN
+// ============================================================
+function evalWorkflow(){
+  let correct=0;
+  WORKFLOW_ITEMS.forEach(item=>{
+    if(state.answers.workflow[item.label]===item.phase) correct++;
+  });
+  if(correct>=12) return "green";
+  if(correct>=9)  return "yellow";
+  return "red";
+}
+function evalWorkflowText(){
+  let correct=0;
+  WORKFLOW_ITEMS.forEach(item=>{if(state.answers.workflow[item.label]===item.phase) correct++;});
+  return `${correct} von ${WORKFLOW_ITEMS.length} Schritten korrekt zugeordnet. Korrekte Verteilung: 3 Vorbereitung / 8 Durchführung / 3 Nachbearbeitung.`;
+}
+function evalConsole(){
+  const pct=state.answers.consolePercent==="5";
+  const pat=state.answers.consolePatient;
+  if(pct&&pat) return "green";
+  if(pct||pat)  return "yellow";
+  return "red";
+}
+function evalConsoleText(){
+  const pct=state.answers.consolePercent==="5";
+  const pat=state.answers.consolePatient;
+  if(pct&&pat) return "Röhre korrekt auf 5 % und Patient angewählt – Konsole vollständig geprüft.";
+  if(!pct&&pat) return `Röhre: ${state.answers.consolePercent||"nicht beantwortet"} – korrekt wären 5 %. Patientenauswahl korrekt.`;
+  if(pct&&!pat) return "Röhre korrekt (5 %). Patientenauswahl an der Konsole nicht bestätigt.";
+  return "Konsole nicht vollständig geprüft: Röhre und Patientenauswahl prüfen.";
+}
+function evalAids(){
+  const id=state.indId;
+  const ind=IND[id];
+  const sel=state.answers.aids;
+  if(sel.length===0) return "red";
+  const hasForbidden=sel.some(a=>ind.aidForbidden.includes(a));
+  if(hasForbidden) return "red";
+  for(const set of ind.aidSets){
+    const allPresent=set.every(a=>sel.includes(a));
+    const noExtra=sel.every(a=>set.includes(a));
+    if(allPresent&&noExtra) return "green";
+    if(allPresent) return "yellow";
+  }
+  for(const set of ind.aidSets){
+    if(set.some(a=>sel.includes(a))) return "yellow";
+  }
+  return "red";
+}
+function evalAidsText(){
+  const id=state.indId;
+  const ind=IND[id];
+  const sel=state.answers.aids;
+  const hasForbidden=sel.some(a=>ind.aidForbidden.includes(a));
+  const color=evalAids();
+  const setNames=ind.aidSets.map(set=>set.map(a=>AIDS.find(x=>x.id===a).name).join(" + ")).join(" ODER ");
+  if(color==="green") return `Lagerungshilfen passen zur Indikation. Erwartet: ${setNames}.`;
+  if(hasForbidden){
+    const forb=sel.filter(a=>ind.aidForbidden.includes(a)).map(a=>AIDS.find(x=>x.id===a).name).join(", ");
+    return `Nicht geeignete Auswahl: ${forb}. Erwartet: ${setNames}.`;
+  }
+  if(color==="yellow") return `Richtung erkennbar, aber Kombination unvollständig. Erwartet: ${setNames}.`;
+  return `Lagerungshilfen passen nicht zur Indikation. Erwartet: ${setNames}.`;
+}
+function evalScan(){
+  const ind=IND[state.indId];
+  const prog=state.answers.scanProgram;
+  if(!prog) return "red";
+  const progOk=ind.scanPrograms.includes(prog);
+  const sv=state.answers.scanStart, ev=state.answers.scanEnd;
+  const startOk=sv>=ind.scanStart.min&&sv<=ind.scanStart.max;
+  const endOk=ev>=ind.scanEnd.min&&ev<=ind.scanEnd.max;
+  if(progOk&&startOk&&endOk) return "green";
+  if(progOk) return "yellow";
+  return "yellow";
+}
+function evalScanText(){
+  const ind=IND[state.indId];
+  const prog=state.answers.scanProgram;
+  const color=evalScan();
+  if(!prog) return "Kein Scanprogramm gewählt – CT wäre nicht vorbereitet.";
+  const progOk=ind.scanPrograms.includes(prog);
+  const sv=state.answers.scanStart, ev=state.answers.scanEnd;
+  const startOk=sv>=ind.scanStart.min&&sv<=ind.scanStart.max;
+  const endOk=ev>=ind.scanEnd.min&&ev<=ind.scanEnd.max;
+  if(color==="green") return `Scanprogramm und Marker korrekt: ${prog}, ${ind.scanStart.label} bis ${ind.scanEnd.label}.`;
+  if(!progOk) return `Programm "${prog}" passt nicht. Erwartet: ${ind.scanPrograms.join(" oder ")}.`;
+  let msg=`Programm "${prog}" korrekt.`;
+  if(!startOk) msg+=` Startmarker prüfen – erwartet nahe ${ind.scanStart.label}.`;
+  if(!endOk)   msg+=` Endmarker prüfen – erwartet nahe ${ind.scanEnd.label}.`;
+  return msg;
+}
+function evalAftercare(){
+  const ind=IND[state.indId];
+  const required=["CT-Bilder auf Vollständigkeit prüfen","Achsgerechte Lagerung prüfen",
+    "Lagerung und Tischposition dokumentieren","Lagerungsfoto anfertigen"];
+  const requiredBladder=ind.bladder?"Blasen-/Rektumfüllung prüfen und dokumentieren":null;
+  const allRequired=requiredBladder?[...required,requiredBladder]:required;
+  const found=allRequired.filter(i=>state.answers.aftercare.includes(i)).length;
+  if(found>=allRequired.length) return "green";
+  if(found>=2) return "yellow";
+  return "red";
+}
+function evalAftercareText(){
+  const ind=IND[state.indId];
+  const color=evalAftercare();
+  if(color==="green") return "Alle wesentlichen Nachbearbeitungspunkte erfasst.";
+  if(color==="yellow") return `Teilweise vorhanden. Prüfe besonders: CT-Vollständigkeit, Achse, Lagerungsfoto und Dokumentation${ind.bladder?", Blasen-/Rektumfüllung":""}.`;
+  return `Nachbearbeitung unvollständig. Mindestens erforderlich: CT-Vollständigkeit, Achse, Lagerungsfoto, Dokumentation${ind.bladder?", Blasen-/Rektumfüllung":""}.`;
+}
+function evalDocs(){
+  if(state.indication.pilot){
+    const req=["approval","identity","diagnosis","symptoms","status","course","target","region","positioning","plausibility","control"];
+    const found=req.filter(id=>state.answers.documentFindings.includes(id)).length;
+    const distractor=state.answers.documentFindings.includes("notRelevant");
+    if(found>=7&&!distractor&&state.answers.documents.length>=10) return "green";
+    if(found>=5&&state.answers.documents.length>=10) return "yellow";
+    return "red";
+  }
+  if(state.answers.documents.length>=20) return "yellow";
+  if(state.answers.documents.length>=10) return "yellow";
+  return "red";
+}
+function evalDocsText(){
+  const color=evalDocs();
+  if(state.indication.pilot){
+    if(color==="green") return "Zentrale Fallinformationen priorisiert: Identität, Indikation, Zielvolumen, Lagerung, Blasen-/Rektumthema und Kontrollauftrag.";
+    if(color==="yellow") return "Mehrere relevante Infos erkannt. Prüfe: Zielvolumen, Beckenregion, Blasenfüllung und Kontrollauftrag.";
+    return "Dokumentenanalyse nicht prüfungsreif – zentrale Fallinformationen fehlen oder wurden nicht priorisiert.";
+  }
+  if(color==="yellow") return "Eigene Notiz vorhanden. Im Abschlussbericht mit Erwartungshorizont vergleichen.";
+  return "Keine ausreichende Notiz – prüfungsrelevante Informationen nicht sichtbar herausgearbeitet.";
+}
+
+// ============================================================
+// SCHRITT 8: KOMPETENZBERICHT
+// ============================================================
+function renderReport(){
+  const ind=state.indication;
+  const id=state.indId;
+  const expected=IND[id];
+  const docExpected=ind.pilot
+    ?"Martin Weber aktiv identifizieren; Prostata-Ca. C61, Prostata + Samenblasen, Beckenregion, Nykturie/Dysurie, Blasenfüllung, Lagerungsvorgabe und Kontrollauftrag erkennen."
+    :`${expected.doc.diagnose} – Region: ${expected.doc.region} – Scan: ${expected.doc.scan} – Besonderheit: ${expected.doc.besonderheit}`;
+  const aidNames=expected.aidSets.map(s=>s.map(a=>AIDS.find(x=>x.id===a).name).join(" + ")).join(" ODER ");
+  const impulse=ind.pilot
+    ?"Was wäre die praktische Konsequenz, wenn Blasen-/Rektumfüllung nicht kontrolliert oder die Beckenlagerung nicht reproduzierbar dokumentiert wird?"
+    :`Was wäre die praktische Konsequenz, wenn bei ${ind.title} ${expected.special.split(".")[0].toLowerCase()}?`;
+  return{
+    title:"Kompetenzbericht",
+    intro:"Dieser Bericht ist als Lernbericht gedacht: prüfungsnah, aber lernförderlich. Über Browserfunktion drucken oder als PDF speichern.",
+    body:`<div class="summary-box">
+      <h3>Ergebnis: ${ind.title}</h3>
+      <p>Du hast den PLCT-Workflow vollständig durchlaufen. Die Ampeln zeigen keinen Notenwert, sondern Wiederholungsbedarf.</p>
+    </div>
+    <div class="report-grid">
+      ${traffic("Workflow-Zuordnung",evalWorkflow(),evalWorkflowText())}
+      ${traffic("Dokumentenanalyse",evalDocs(),evalDocsText())}
+      ${traffic("Konsole",evalConsole(),evalConsoleText())}
+      ${traffic("Arbeitsplatzvorbereitung",evalAids(),evalAidsText())}
+      ${traffic("Patientensicherheit",state.answers.patientIdentity==="identity"?"green":"red",
+        state.answers.patientIdentity==="identity"
+          ?"Aktive Identitätsprüfung korrekt priorisiert."
+          :"Identitätsprüfung nicht korrekt priorisiert – sicherheits- und prüfungsrelevant.")}
+      ${traffic("Lagerungsreihenfolge",state.answers.positioningOrder==="aids-axis-ref"?"green":"yellow",
+        state.answers.positioningOrder==="aids-axis-ref"
+          ?"Reihenfolge prüfungsnah plausibel: Lagerungshilfen → achsgerecht → Referenzpunkt."
+          :"Reihenfolge prüfen: Lagerungshilfen anpassen → achsgerecht ausrichten → Referenzpunkt markieren.")}
+      ${traffic("CT-Scan-Kompetenz",evalScan(),evalScanText())}
+      ${traffic("Dokumentation & Nachbearbeitung",evalAftercare(),evalAftercareText())}
+    </div>
+    <div class="card-box">
+      <h4>Denkanstoß</h4><p>${impulse}</p>
+    </div>
+    <div class="card-box answer-review">
+      <h4>Eigene Antworten und Erwartungshorizont</h4>
+      ${review("Dokumentenanalyse",state.answers.documents||"Keine Eingabe",docExpected)}
+      ${ind.pilot?review("Ausgewählte Dokumentenbefunde",
+        state.answers.documentFindings.length?state.answers.documentFindings.join(", "):"keine",
+        "Handlungsrelevante Befunde priorisieren, ablenkende Angaben bewusst ignorieren."):""}
+      ${review("Patientenvorbereitung",state.answers.patientPrep||"Keine Eingabe",
+        `${expected.undress} ${expected.bladder?"Volle Blase und entleerter Enddarm abfragen.":""} ${expected.special}`)}
+      ${review("Lagerungsreihenfolge",state.answers.positioningOrder||"keine",
+        "Lagerungshilfen anpassen → Patient achsgerecht ausrichten → Referenzpunkt markieren")}
+      ${review("Referenzpunkte",state.answers.refPoints||"Keine Eingabe",
+        `Vertikal: ${expected.refV} | Longitudinal: ${expected.refL} | Lateral: ${expected.refLat}`)}
+      ${review("Scanbereich",`${state.answers.scanProgram||"kein"} | Start ${state.answers.scanStart} | Ende ${state.answers.scanEnd}`,
+        `${expected.scanDefault}: ${expected.scanStart.label} bis ${expected.scanEnd.label}`)}
+    </div>`
+  };
+}
+
+function traffic(title,color,text){
+  const label=color==="green"?"✓":color==="yellow"?"!":"×";
+  return`<div class="traffic-card"><div class="traffic-light ${color}">${label}</div><div><h4>${title}</h4><p>${text}</p></div></div>`;
+}
+function review(title,own,expected){
+  return`<div class="review-item"><strong>${title}</strong><span><b>Deine Antwort:</b> ${esc(own)}<br><b>Erwartungshorizont:</b> ${esc(expected)}</span></div>`;
+}
+function esc(s){return String(s).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+
+// ============================================================
+// EVENT-BINDING
+// ============================================================
+function bindStepEvents(){
+  document.querySelectorAll("[data-workflow]").forEach(sel=>{
+    sel.value=state.answers.workflow[sel.dataset.workflow]||"";
+    sel.addEventListener("change",e=>{state.answers.workflow[e.target.dataset.workflow]=e.target.value;});
+  });
+  document.querySelectorAll("[data-text]").forEach(el=>{
+    el.addEventListener("input",e=>{state.answers[e.target.dataset.text]=e.target.value;});
+  });
+  document.querySelectorAll("[data-aid]").forEach(card=>{
+    card.addEventListener("click",()=>{
+      const id=card.dataset.aid;
+      state.answers.aids=state.answers.aids.includes(id)
+        ?state.answers.aids.filter(x=>x!==id):[...state.answers.aids,id];
+      render();
+    });
+  });
+  document.querySelectorAll("[data-finding]").forEach(card=>{
+    card.addEventListener("click",()=>{
+      const id=card.dataset.finding;
+      state.answers.documentFindings=state.answers.documentFindings.includes(id)
+        ?state.answers.documentFindings.filter(x=>x!==id)
+        :[...state.answers.documentFindings,id];
+      render();
+    });
+  });
+  document.querySelectorAll("input[name='identity']").forEach(r=>r.addEventListener("change",e=>{state.answers.patientIdentity=e.target.value;}));
+  document.querySelectorAll("input[name='order']").forEach(r=>r.addEventListener("change",e=>{state.answers.positioningOrder=e.target.value;}));
+  document.querySelectorAll("input[name='console']").forEach(r=>r.addEventListener("change",e=>{state.answers.consolePercent=e.target.value;}));
+  const cp=document.getElementById("consolePatient");
+  if(cp) cp.addEventListener("change",e=>{state.answers.consolePatient=e.target.checked;});
+  const sp=document.querySelector("[data-scan-program]");
+  if(sp) sp.addEventListener("change",e=>{state.answers.scanProgram=e.target.value;});
+  document.querySelectorAll("[data-range]").forEach(range=>{
+    range.addEventListener("input",e=>{
+      state.answers[e.target.dataset.range]=Number(e.target.value);
+      render();
+    });
+  });
+  document.querySelectorAll("[data-aftercare]").forEach(chk=>{
+    chk.addEventListener("change",e=>{
+      const v=e.target.value;
+      state.answers.aftercare=e.target.checked
+        ?[...state.answers.aftercare,v]
+        :state.answers.aftercare.filter(x=>x!==v);
+    });
+  });
+}
+
+function nextStep(){
+  if(state.step===STEPS.length-1){window.print();return;}
+  state.step=Math.min(STEPS.length-1,state.step+1);
+  render();window.scrollTo({top:0,behavior:"smooth"});
+}
+function prevStep(){
+  state.step=Math.max(0,state.step-1);
+  render();window.scrollTo({top:0,behavior:"smooth"});
+}
+
+init();
+</script>
+</body>
+</html>
