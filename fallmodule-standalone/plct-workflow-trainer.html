@@ -71,6 +71,9 @@ button,input,select,textarea{font:inherit;}
 .tag{border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--muted);
   border-radius:999px;padding:5px 8px;font-size:.73rem;font-weight:700;}
 .tag.pilot{background:rgba(86,215,255,.15);border-color:rgba(86,215,255,.4);color:var(--accent);}
+.tag.complete{background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:var(--good);}
+.tag.in-progress{background:rgba(250,204,21,.12);border-color:rgba(250,204,21,.35);color:var(--warn);}
+.tag.locked-tag{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--muted);}
 .lock-badge{display:inline-block;margin-top:8px;font-size:.72rem;color:var(--muted);
   background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;padding:3px 8px;}
 .sim-view{display:none;}
@@ -216,6 +219,12 @@ input[type="range"]{width:100%;accent-color:var(--accent);}
 .red{background:var(--bad);color:#fff;}
 .traffic-card h4{margin:0 0 5px;}
 .traffic-card p{margin:0;color:var(--muted);line-height:1.45;font-size:.92rem;}
+.severity-tag{display:inline-block;margin-top:6px;padding:3px 8px;border-radius:999px;
+  font-size:.72rem;font-weight:700;letter-spacing:.03em;}
+.sev-ok{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.30);color:#bbf7d0;}
+.sev-minor{background:rgba(250,204,21,.10);border:1px solid rgba(250,204,21,.30);color:#fef08a;}
+.sev-major{background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.30);color:#fecdd3;}
+.sev-ko{background:rgba(251,113,133,.22);border:1px solid rgba(251,113,133,.50);color:#fff;}
 .summary-box{border:1px solid rgba(86,215,255,.28);
   background:linear-gradient(135deg,rgba(86,215,255,.11),rgba(138,125,255,.08));
   border-radius:24px;padding:18px;}
@@ -226,12 +235,18 @@ input[type="range"]{width:100%;accent-color:var(--accent);}
 .review-item strong{display:block;margin-bottom:5px;}
 .review-item span{color:var(--muted);font-size:.9rem;line-height:1.45;}
 .hidden{display:none!important;}
+.validation-hint{border:1px solid rgba(250,204,21,.35);background:rgba(250,204,21,.10);
+  border-radius:16px;padding:14px;color:var(--warn);font-size:.92rem;line-height:1.5;margin-top:12px;}
+.checklist,.mistake-list{margin:8px 0 0;padding-left:20px;color:var(--muted);line-height:1.55;font-size:.9rem;}
+.checklist li,.mistake-list li{margin-bottom:5px;}
+.mistake-list strong{color:var(--text);display:inline;}
 @media(max-width:980px){
   .hero-grid,.simulation-layout,.schema-grid{grid-template-columns:1fr;}
   .side-panel{position:static;}
   .indication-grid{grid-template-columns:repeat(2,1fr);}
   .three-col,.doc-grid,.report-grid,.phase-summary,.doc-source-grid,.finding-grid,.konsole-grid{grid-template-columns:1fr;}
   .aid-grid{grid-template-columns:repeat(2,1fr);}
+  .dual-viewer{grid-template-columns:1fr;}
   .workflow-row{grid-template-columns:38px 1fr;}
   .workflow-row select{grid-column:1/-1;}
   .pdf-workspace{grid-template-columns:1fr;}
@@ -274,7 +289,7 @@ input[type="range"]{width:100%;accent-color:var(--accent);}
           <h2>Handlung sicher durchspielen.</h2>
           <p>Wähle eine Indikation. Du durchläufst Workflow-Zuordnung, Dokumentenanalyse, Raumvorbereitung, Patientenvorbereitung, Lagerung, CT-Scan und Nachbearbeitung. Feedback erst im Abschlussbericht.</p>
           <div class="action-row">
-            <button class="btn primary" onclick="startRandomCase()">Zufallsfall starten</button>
+            <button class="btn primary" onclick="startRandomCase()">Zufallsfall aus vollständigen Prüfungsfällen starten</button>
             <button class="btn secondary" onclick="scrollToIndications()">Indikation wählen</button>
           </div>
         </div>
@@ -288,7 +303,7 @@ input[type="range"]{width:100%;accent-color:var(--accent);}
     <div class="section-title" id="indicationsTitle">
       <div>
         <h3>Indikation wählen</h3>
-        <p>Prostata-Ca. ist als Pilotfall vollständig ausgebaut. Weitere Indikationen folgen.</p>
+        <p>Die vollständig ausgearbeiteten Prüfungsfälle sind aktuell Prostata-Ca., Mamma-Ca., Bronchial-Ca., Rektum-Ca., HNO-Tumor, Hirntumor und Ösophagus-Ca. distal. Weitere Fälle werden schrittweise auf vollständige Prüfungstiefe ausgebaut.</p>
       </div>
     </div>
     <div class="indication-grid" id="indicationGrid"></div>
@@ -328,191 +343,1042 @@ input[type="range"]{width:100%;accent-color:var(--accent);}
   </section>
 </main>
 <script>
+
 // ============================================================
-// INDIKATIONSDATEN
+// CASES – Standardisierte Fallstruktur
+// TODO spätere Lernapp-Version: in content/modules/*.json auslagern.
+// Complete-Fälle: Prostata-Ca., Mamma-Ca., Bronchial-Ca., Rektum-Ca., HNO-Tumor, Hirntumor, Ösophagus-Ca. distal. Weitere Fälle werden schrittweise ausgebaut.
 // ============================================================
-const IND = {
-  hirn:{
-    title:"Hirntumor",tags:["Schädel","Maske","Ref.-Punkte"],schema:"skull",unlocked:true,
-    pdfDoc:"../media/documents/Fall_GanzhirnbisC2_01.pdf",
-    special:"Zahnprothesen, Hörgeräte, Ohrringe und alle Metallgegenstände im Schädelbereich vor Lagerung entfernen.",
-    undress:"Nichts muss ausgezogen werden. Ggf. Oberteil für Schultermarkierung öffnen.",
-    bladder:false,rectum:false,zahnschiene:false,
-    aidSets:[["mask","neck","knee"]],
-    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
-    scanPrograms:["Schädel 3 mm"],scanDefault:"Schädel 3 mm",
-    scanStart:{val:5,min:0,max:15,label:"2 QF über Kalotte"},
-    scanEnd:{val:30,min:20,max:40,label:"HWK 2"},
-    refV:"Halber Patientendurchmesser (AP-Achse)",
-    refL:"Höhe Orbitaoberrand / Augenbrauenlinie",
-    refLat:"Körpermitte / Sagittalebene des Schädels",
-    startPt:"2 Querfinger oberhalb der Kalotte",
-    doc:{
-      diagnose:"Glioblastom WHO-Grad IV, rechts temporal",
-      anamnese:"Kopfschmerzen, Wesensveränderung. Keine Blase/Enddarm-Besonderheiten.",
-      region:"Schädel",scan:"Schädel 3 mm, Kalotte bis HWK 2",
-      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle",
-      besonderheit:"Alle Metallgegenstände und Prothesen im Schädelbereich entfernen."
-    }
-  },
-  hno:{
-    title:"HNO-Tumor",tags:["Kopf-Hals","Zahnschiene","Maske"],schema:"neck",unlocked:true,
-    pdfDoc:"../media/documents/Fall_HNO_03.pdf",
-    special:"Prothesen und Metall entfernen. Zahnschienen gesondert abfragen.",
-    undress:"Oberkörper frei machen.",
-    bladder:false,rectum:false,zahnschiene:true,
-    aidSets:[["mask","neck","knee"]],
-    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
-    scanPrograms:["Hals 3 mm"],scanDefault:"Hals 3 mm",
-    scanStart:{val:5,min:0,max:12,label:"Kalotte (oberer Schädelrand)"},
-    scanEnd:{val:68,min:58,max:78,label:"BWK 6 / Bifurkation"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Höhe Mandibula / Schultermarker",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"Kalotte (oberer Schädelrand)",
-    doc:{
-      diagnose:"Plattenepithelkarzinom Oropharynx links, cT2N1M0",
-      anamnese:"Schluckbeschwerden, Halslymphknoten palpabel. Keine Blase/Enddarm.",
-      region:"Kopf-Hals",scan:"Hals 3 mm, Kalotte bis BWK 6 / Bifurkation",
-      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle, ggf. Schultermarker",
-      besonderheit:"Zahnschiene vorhanden? Prothesen/Metall entfernen."
-    }
-  },
-  oesprox:{
-    title:"Ösophagus-Ca. proximal",tags:["proximal","Maske","BWK6"],schema:"neck",
-    special:"Metall und Prothesen im Kopf-Hals-Bereich entfernen.",
-    undress:"Oberkörper frei machen.",
-    bladder:false,rectum:false,zahnschiene:false,
-    aidSets:[["mask","neck","knee"]],
-    aidForbidden:["wing","prostep","kniestep","bluebag","belly"],
-    scanPrograms:["Hals 3 mm"],scanDefault:"Hals 3 mm",
-    scanStart:{val:5,min:0,max:12,label:"Kalotte"},
-    scanEnd:{val:68,min:58,max:78,label:"BWK 6 / Bifurkation"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Schultermarker / Klavikula-Referenz",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"Kalotte (oberer Schädelrand)",
-    doc:{
-      diagnose:"Ösophagus-Ca. zervikal/proximal, cT3N1M0",
-      anamnese:"Dysphagie, Gewichtsverlust. Keine Blase/Enddarm.",
-      region:"Kopf-Hals / oberer Thorax",scan:"Hals 3 mm, Kalotte bis BWK 6",
-      lagerung:"Rückenlage, Maske, Nackenschale, Knierolle",
-      besonderheit:"Metall/Prothesen im HWS-Bereich entfernen."
-    }
-  },
-  oesdist:{
-    title:"Ösophagus-Ca. distal",tags:["distal","Thorax","Abdomen"],schema:"thorax",unlocked:true,
-    pdfDoc:"../media/documents/Fall_Oesophagus_distal_AEG_01.pdf",
-    special:"Armposition: Arme über Kopf mit WingSTEP. Kein Metall im Thoraxbereich.",
-    undress:"Oberkörper frei machen.",
-    bladder:false,rectum:false,zahnschiene:false,
-    aidSets:[["wing","neck","kniestep"]],
-    aidForbidden:["mask","prostep","bluebag","belly"],
-    scanPrograms:["Thorax 3 mm","Abdomen 3 mm"],scanDefault:"Thorax 3 mm",
-    scanStart:{val:5,min:0,max:15,label:"Occiput / Hinterkopf"},
-    scanEnd:{val:78,min:68,max:88,label:"Acetabulum"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Sternum / Brustbeinreferenz",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"Occiput / Hinterkopf",
-    doc:{
-      diagnose:"Ösophagus-Ca. distal AEG Typ I, cT3N2M0",
-      anamnese:"Dysphagie, Reflux. Keine Blase/Enddarm-Vorbereitung.",
-      region:"Thorax / Abdomen",scan:"Thorax 3 mm, Occiput bis Acetabulum",
-      lagerung:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale, KneeSTEP",
-      besonderheit:"Arme über Kopf reproduzierbar mit WingSTEP fixieren."
-    }
-  },
-  mamma:{
-    title:"Mamma-Ca.",tags:["WingSTEP","Narbe","Thorax"],schema:"thorax",unlocked:true,
-    pdfDoc:"../media/documents/Fall_Mamma_03.pdf",
-    special:"Narbe mit Draht markieren (Narbenmarkierung vor CT). Arme über Kopf mit WingSTEP.",
-    undress:"Oberkörper frei machen.",
-    bladder:false,rectum:false,zahnschiene:false,
-    aidSets:[["wing","neck","kniestep"]],
-    aidForbidden:["mask","prostep","bluebag","belly"],
-    scanPrograms:["Thorax 3 mm"],scanDefault:"Thorax 3 mm",
-    scanStart:{val:5,min:0,max:15,label:"Occiput / HWK-Basis"},
-    scanEnd:{val:72,min:62,max:80,label:"LWK 1"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Sternum / Sternale Referenz",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"Occiput / Hinterkopf",
-    doc:{
-      diagnose:"Mammakarzinom links, pT2N1M0, ER+/PR+/HER2−",
-      anamnese:"Z. n. BET links. Keine Blase/Enddarm-Besonderheiten.",
-      region:"Thorax",scan:"Thorax 3 mm, Occiput bis LWK 1",
-      lagerung:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale, KneeSTEP, Narbe drahtmarkiert",
-      besonderheit:"Narbenmarkierung mit Draht vor Lagerung vornehmen."
-    }
-  },
-  bronchial:{
-    title:"Bronchial-Ca.",tags:["Thorax","Dyspnoe","WingSTEP"],schema:"thorax",unlocked:true,
-    pdfDoc:"../media/documents/Fall_BC_01.pdf",
-    special:"Lagerungstoleranz prüfen (Dyspnoe möglich). Arme über Kopf wenn toleriert.",
-    undress:"Oberkörper frei machen.",
-    bladder:false,rectum:false,zahnschiene:false,
-    aidSets:[["wing","neck","kniestep"],["neck","kniestep"]],
-    aidForbidden:["mask","prostep","bluebag","belly"],
-    scanPrograms:["Thorax 3 mm"],scanDefault:"Thorax 3 mm",
-    scanStart:{val:5,min:0,max:15,label:"Occiput / Hinterkopf"},
-    scanEnd:{val:72,min:62,max:80,label:"LWK 1"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Sternum / Sternale Referenz",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"Occiput / Hinterkopf",
-    doc:{
-      diagnose:"NSCLC links, cT3N2M0, Plattenepithelkarzinom",
-      anamnese:"Dyspnoe bei Belastung, Husten. Keine Blase/Enddarm.",
-      region:"Thorax",scan:"Thorax 3 mm, Occiput bis LWK 1",
-      lagerung:"Rückenlage, Arme über Kopf (WingSTEP wenn toleriert), Nackenschale, KneeSTEP",
-      besonderheit:"Lagerungstoleranz Arme über Kopf prüfen; ggf. Arme am Körper."
-    }
-  },
+const CASES = {
   prostata:{
-    title:"Prostata-Ca.",tags:["Pilot","Becken","Blase"],schema:"pelvis",pilot:true,unlocked:true,
+    title:"Prostata-Ca.",
+    status:"complete",
+    schema:"pelvis",
+    tags:["Becken","Blase","Referenzfall"],
     pdfDoc:"../media/documents/Fall_PCA_02.pdf",
     special:"Volle Blase und entleerter Enddarm. Unterkörper frei, Schuhe ausziehen.",
     undress:"Unterkörper frei machen, Schuhe ausziehen.",
     bladder:true,rectum:true,zahnschiene:false,
-    aidSets:[["head","kniestep","prostep"],["head","bluebag"]],
-    aidForbidden:["mask","wing","belly"],
-    scanPrograms:["Becken 3 mm","Rektum BL 3 mm"],scanDefault:"Becken 3 mm",
-    scanStart:{val:12,min:5,max:20,label:"LWK 3"},
-    scanEnd:{val:72,min:62,max:80,label:"oberes/mittleres Femurdrittel"},
-    refV:"Halber Patientendurchmesser (AP-Achse)",
-    refL:"Reproduzierbare longitudinale Beckenmitte",
-    refLat:"Körpermitte / Sagittalebene, beidseits lateral",
-    startPt:"LWK 3 (Ausbildungsstandard)",
-    doc:null
+    // Punkt 3: Dokumentenbefunde standardisiert
+    documentFindings:[
+      {id:"approval",title:"Genehmigung/Formalia",desc:"Verordnung und CT-Anforderung ärztlich freigegeben?",required:true,severityIfMissing:"major"},
+      {id:"identity",title:"Patientenidentifikation",desc:"Patientendaten, Geburtsdatum und Fall-ID sicher finden.",required:true,severityIfMissing:"ko"},
+      {id:"diagnosis",title:"Diagnose/Indikation",desc:"Primärdiagnose und Behandlungsindikation lokalisieren.",required:true,severityIfMissing:"major"},
+      {id:"risk",title:"Tumorbiologie/Stadium",desc:"Stadium als Kontext – nicht für eigenmächtige Lagerungsentscheidungen.",required:false,severityIfMissing:"minor"},
+      {id:"symptoms",title:"Aktuelle Beschwerden",desc:"Beschwerden, die Lagerungstoleranz beeinflussen könnten.",required:true,severityIfMissing:"major"},
+      {id:"status",title:"Belastbarkeit",desc:"Mobilität, AZ, Körperbau und Lagerbarkeit ableiten.",required:true,severityIfMissing:"major"},
+      {id:"course",title:"Vorbehandlung",desc:"Vorbestrahlung, Operationen, Studienkontext prüfen.",required:true,severityIfMissing:"minor"},
+      {id:"target",title:"Zielvolumen/Dosierung",desc:"Zielvolumen, Dosierung und Fraktionierung einordnen.",required:true,severityIfMissing:"major"},
+      {id:"systemic",title:"Begleittherapie",desc:"Systemtherapie als Kontext, nicht mit Lagerungsvorgabe verwechseln.",required:false,severityIfMissing:"minor"},
+      {id:"appointment",title:"Terminlogik",desc:"Planungs-CT-Termin und organisatorische Angaben prüfen.",required:false,severityIfMissing:"minor"},
+      {id:"region",title:"CT-Region",desc:"Angeforderte CT-Region erkennen und Scanprogramm ableiten.",required:true,severityIfMissing:"major"},
+      {id:"positioning",title:"Lagerungsvorgabe",desc:"Lagerungsangaben und Vorbereitungsbedingungen herausfiltern.",required:true,severityIfMissing:"major"},
+      {id:"plausibility",title:"Plausibilität/Rücksprache",desc:"Indikation, Scanregion und Lagerungsvorgabe abgleichen.",required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag",desc:"Kontrollpunkte nach CT: Scout, Umfang, Ref.-Markierung, Blasen-/Rektumfüllung.",required:true,severityIfMissing:"major"},
+      {id:"notRelevant",title:"Ablenkende Angaben",desc:"Nicht relevante Checkboxen bewusst ignorieren.",required:false,severityIfMissing:"minor"}
+    ],
+    // Punkt 6: Patientenvorbereitung standardisiert
+    patientPreparation:{
+      general:["Aktive Identitätsprüfung (min. 2 Merkmale)","Ablauf kurz erklären","Intimsphäre wahren","Beschwerden / Lagerungstoleranz prüfen"],
+      specific:["Unterkörper frei machen","Schuhe ausziehen","Volle Blase abfragen","Entleerter Enddarm abfragen","Metall/Schmuck im Beckenbereich entfernen"]
+    },
+    // Punkt 5: Lagerungsvarianten standardisiert
+    positioning:{
+      variantHint:"Mehrere hausintern etablierte Lagerungsvarianten sind möglich. Prüfungsrelevant ist, dass die gewählte Variante reproduzierbar aufgebaut, begründet und dokumentiert wird.",
+      allowedAidVariants:[
+        {id:"A",label:"Kopfschale + KneeSTEP + ProSTEP",aids:["head","kniestep","prostep"],requiresJustification:false},
+        {id:"B",label:"Kopfschale + Bluebag",aids:["head","bluebag"],requiresJustification:false}
+      ],
+      forbiddenAids:["mask","wing","belly"]
+    },
+    // Punkt 7: Referenzpunkte standardisiert
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse)",
+      longitudinal:"Reproduzierbare longitudinale Beckenmitte",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt, falls im lokalen Workflow vorgesehen",
+      note:"Die konkrete Referenzpunktlage kann hausstandardabhängig sein. Prüfungsrelevant ist, dass die Punkte reproduzierbar, anatomisch plausibel und dokumentierbar gesetzt werden."
+    },
+    // Punkt 8: Scan standardisiert
+    scan:{
+      programs:["Becken 3 mm","Rektum BL 3 mm"],
+      defaultProgram:"Becken 3 mm",
+      start:{label:"LWK 3",val:12,min:5,max:20},
+      end:{label:"oberes/mittleres Femurdrittel",val:72,min:62,max:80},
+      minFov:90,
+      controlPoints:["Patientenumfang vollständig","Blasenfüllung prüfen","Rektumfüllung prüfen","Ref.-Markierung sichtbar"]
+    },
+    // Punkt 9: Nachbearbeitung standardisiert
+    aftercare:{
+      required:["CT-Bilder auf Vollständigkeit prüfen","Achsgerechte Lagerung prüfen","Lagerung und Tischposition dokumentieren","Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"],
+      indicationSpecific:["Blasen-/Rektumfüllung prüfen und dokumentieren"]
+    },
+    // Punkt 10: Erwartungshorizonte standardisiert
+    expectedSummary:{
+      document:"Martin Weber aktiv identifizieren; Prostata-Ca. C61, Prostata + Samenblasen, Beckenregion, Nykturie/Dysurie, Blasenfüllung, Lagerungsvorgabe und Kontrollauftrag erkennen.",
+      patientPrep:"Identitätsprüfung, Ablauf erklären, Unterkörper frei, Schuhe aus, Intimsphäre, volle Blase, entleerter Enddarm, Beschwerden, Metall entfernen.",
+      positioning:"Rückenlage mit Kopfschale + KneeSTEP/ProSTEP ODER Kopfschale + Bluebag. Achsgerecht, reproduzierbar.",
+      scan:"Becken 3 mm: LWK 3 bis oberes/mittleres Femurdrittel.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto, Blasen-/Rektumfüllung, Dokumentation."
+    },
+    // Punkt 11: Typische Fehler
+    typicalMistakes:[
+      {id:"no-id",title:"Identitätsprüfung vergessen",consequence:"Verwechslungsgefahr, KO-Kriterium in Prüfung.",severity:"ko"},
+      {id:"no-bladder",title:"Blasenfüllung nicht abgefragt",consequence:"Planungs-CT mit falscher Organposition, Planabweichung.",severity:"major"},
+      {id:"wrong-aids",title:"Maske statt Beckenlagerung",consequence:"Falsche Indikationszuordnung, kompletter Neuanfang.",severity:"major"},
+      {id:"no-foto",title:"Kein Lagerungsfoto",consequence:"Reproduzierbarkeit am Linac nicht gesichert.",severity:"minor"}
+    ],
+    caseText:"Prüfungsfall FALL-PCA-02: Martin Weber. Prostata-Ca., Planungs-CT Becken. Fokus: Dokumentenanalyse, Blasen-/Rektumvorbereitung, Beckenlagerung, Scanbereich.",
+    impulse:"Was wäre die praktische Konsequenz, wenn Blasen-/Rektumfüllung nicht kontrolliert oder die Beckenlagerung nicht reproduzierbar dokumentiert wird?"
   },
+
+  hirn:{
+    title:"Hirntumor",
+    status:"complete",
+    schema:"skull",
+    tags:["Schädel","Ganzhirn","Maske","Glioblastom"],
+    pdfDoc:"../media/documents/Fall_GanzhirnbisC2_01.pdf",
+    special:"Zahnprothesen, Hörgeräte, Ohrringe, Piercings, Haarnadeln, Haarspangen und alle Metallgegenstände im Schädelbereich vor Lagerung entfernen. Perücken / Haarteile und dicke Haargummis beachten. Neurologischen Zustand aktiv beobachten.",
+    undress:"Nichts muss vollständig ausgezogen werden. Ggf. Oberteil im Schulterbereich öffnen, wenn Schultermarkierung oder Maskenrand betroffen ist.",
+    bladder:false,rectum:false,zahnschiene:false,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientenname, Geburtsdatum und Fall-ID aus Verordnung und CT-Anforderung sicher lokalisiert und abgeglichen. Identität ist KO-Kriterium in der Prüfung.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnose",title:"Diagnose / Indikation",
+       desc:"Tumor-Entität, Lokalisation im Schädel und Stadium aus Dokument entnehmen. Glioblastom, Meningeom, Metastase, Medulloblastom oder Ganzhirn-Bestrahlung? Entscheidet über Scanbereich und Besonderheiten der Lagerung.",
+       required:true,severityIfMissing:"major"},
+      {id:"treatmentRegion",title:"Behandlungsregion Schädel / Ganzhirn",
+       desc:"Behandlungsregion aus Dokument ableiten: fokale Schädelbestrahlung, Ganzhirn bis Kalottenbasis, Ganzhirn bis C2 oder andere Ausdehnung? Entscheidet über Scanendpunkt und ggf. Schulterfreiheit.",
+       required:true,severityIfMissing:"major"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region und Scanprogramm (Schädel 3 mm) aus CT-Anforderung sicher ableiten. Scanbereich: ausreichend kranial über Kalotte bis HWK 2 / C2 – hausstandardabhängig.",
+       required:true,severityIfMissing:"major"},
+      {id:"mask",title:"Maskenhinweis / Maskentyp",
+       desc:"Ist eine individuelle Thermoplastmaske für diesen Patienten bereits gefertigt? Maskentyp (Schädelmaske) und ggf. Maskennummer aus Dokument entnehmen. Maske ist zentrales Reproduzierbarkeitselement – fehlende Maske erfordert sofortige Rücksprache.",
+       required:true,severityIfMissing:"major"},
+      {id:"neckShell",title:"Nackenschale / Kopfposition",
+       desc:"Nackenschale vorhanden und korrekte Größe (A/B/C) aus Dokument oder Lagerungsprotokoll entnehmen. Falsche Nackenschalengröße beeinträchtigt Kopfposition und Maskensitz und damit die Reproduzierbarkeit.",
+       required:true,severityIfMissing:"major"},
+      {id:"metalProthesen",title:"Metall / Zahnersatz / Hörgeräte / Schmuck / Haarnadeln / Piercings",
+       desc:"Hinweise auf Prothesen, Zahnersatz, Hörgeräte, Ohrringe, Piercings, Haarnadeln, Haarspangen oder metallische Implantate im Schädelbereich? Aus Dokument entnehmen und aktiv beim Patienten abfragen. Metall im Scanbereich erzeugt CT-Artefakte im Zielvolumen.",
+       required:true,severityIfMissing:"major"},
+      {id:"neuroStatus",title:"Neurologischer Zustand / Kortison als Kontext",
+       desc:"Hinweise auf aktuelle neurologische Einschränkungen, Kortison-Medikation oder allgemeinen AZ aus Dokument entnehmen. Kein direkter Einfluss auf Lagerungsvorgabe, aber relevant für Einschätzung der Lagerbarkeit und Rücksprache-Bedarf.",
+       required:false,severityIfMissing:"minor"},
+      {id:"tolerance",title:"Lagerungstoleranz / Schwindel / Übelkeit / neurologische Einschränkungen",
+       desc:"Hinweise auf Schwindel, Übelkeit, Kopfschmerzen, Verwirrtheit oder eingeschränkte Lagerungstoleranz aus Dokument entnehmen. Entscheidet über Rücksprachebedarf vor Maskenanlage und CT-Durchführung.",
+       required:true,severityIfMissing:"minor"},
+      {id:"shoulder",title:"Schulterbereich / Maskenrand bei Ganzhirn bis C2",
+       desc:"Bei Ganzhirn-Bestrahlung bis C2: Schulterbereich ausreichend frei? Maskenrand und Schulterposition aus Dokument oder Lagerungsstandard entnehmen. Schulterposition muss reproduzierbar dokumentiert werden.",
+       required:true,severityIfMissing:"major"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Behandlungsregion, Scanbereich, Maskenhinweis und Schulterposition stimmig? Widersprüche oder fehlende Angaben erkennen und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Schädel vollständig erfasst, Kalotte nicht abgeschnitten, HWK 2 / C2 vollständig erreicht, keine Metallartefakte durch Prothesen / Schmuck, Ref.-Markierungen sichtbar, Maske und Kopfposition nachvollziehbar.",
+       required:true,severityIfMissing:"major"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Maske, Dauer – insbesondere auf Engegefühl unter der Maske und Wichtigkeit des Stillhaltens hinweisen",
+        "Kommunikation unter der Maske erklären: Handzeichen oder Sprechmöglichkeit bei Beschwerden vereinbaren",
+        "Neurologischen Zustand aktiv beobachten: Schwindel, Übelkeit, Verwirrtheit, Schmerzen, Gangstörung – vor und nach CT"
+      ],
+      specific:[
+        "Zahnersatz, Prothesen, Hörgeräte, Ohrringe, Piercings, Haarnadeln, Haarspangen, Schmuck und alle Metallteile im Schädelbereich aktiv abfragen und entfernen lassen",
+        "Perücken, Haarteile und dicke Haargummis / Haarspangen beachten – können Maskensitz beeinflussen",
+        "Schulterbereich ggf. frei machen, wenn Maskenrand oder Schultermarkierung betroffen ist",
+        "Lagerungstoleranz in Rückenlage und unter Maske aktiv prüfen: Schwindel, Engegefühl, Angst?",
+        "Bei nicht tolerierter Maske, akuter neurologischer Verschlechterung oder unklarer Lagerbarkeit: sofortige Rücksprache mit Arzt, Dokumentation der Abweichung"
+      ]
+    },
+    positioning:{
+      variantHint:"Standardlagerung Hirntumor / Ganzhirn: Rückenlage mit individuell gefertigter Thermoplastmaske (Schädelmaske), Nackenschale (Größe A/B/C nach Kopfgröße und -form) und Knierolle. Kopf gerade und achsgerecht lagern – keine Rotation, keine Inklination. Maske ist das zentrale Reproduzierbarkeitselement und muss vor CT auf korrekten Sitz geprüft werden. Schulterposition dokumentieren, insbesondere bei Ganzhirn bis C2.",
+      allowedAidVariants:[
+        {id:"A",label:"Maske + Nackenschale + Knierolle (Schädel-Standard)",aids:["mask","neck","knee"],requiresJustification:false}
+      ],
+      forbiddenAids:["wing","prostep","kniestep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Schädelmitte / Körpermitte",
+      longitudinal:"Orbitaoberrand / Augenbrauenlinie oder hausstandardabhängige Schädelreferenz – reproduzierbar dokumentieren. Bezugspunkt an Maske oder Patient je nach lokalem Workflow.",
+      lateral:"Sagittalebene des Schädels, beidseits lateral an Maske oder Patient – Körpermitte und Kopfrotation prüfen",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt an Nackenschale oder dorsal am Hals / Maskenbezug, falls im lokalen Workflow vorgesehen",
+      note:"Reproduzierbarkeit, Maskensitz, Kopfrotation und vollständige Dokumentation sind prüfungsrelevant. Ref.-Punkte können an Maske oder direkt am Patienten gesetzt werden – je nach Hausstandard. Kopfrotation und Inklination vor Referenzpunkt-Setzung aktiv korrigieren."
+    },
+    scan:{
+      programs:["Schädel 3 mm"],
+      defaultProgram:"Schädel 3 mm",
+      start:{label:"2 QF über Kalotte (ausreichend kranial)",val:5,min:0,max:15},
+      end:{label:"HWK 2 / C2",val:30,min:20,max:40},
+      minFov:80,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Schädel vollständig abgebildet – Kalotte nicht abgeschnitten",
+        "HWK 2 / C2 vollständig erreicht",
+        "Keine relevanten Metallartefakte durch Zahnersatz / Hörgeräte / Schmuck",
+        "Ref.-Markierungen sichtbar",
+        "Maske und Kopfposition im CT nachvollziehbar",
+        "Zielvolumen nicht abgeschnitten"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung und Kopfrotation prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Maskensitz im CT und auf Lagerungsfoto prüfen und dokumentieren",
+        "Nackenschale / Kopfposition dokumentieren (Größe, Lage)",
+        "Schulterposition dokumentieren, insbesondere bei Ganzhirn bis C2",
+        "Kontrolle auf Metallartefakte durch übersehene Prothesen / Schmuck / Haarnadeln",
+        "Patientenzustand nach CT aktiv prüfen: Schwindel, Übelkeit, neurologische Auffälligkeiten – besonders bei eingeschränkten Patienten",
+        "Tischposition dokumentieren"
+      ]
+    },
+    expectedSummary:{
+      document:"Patienten aktiv identifizieren; Glioblastom WHO-Grad IV, Lokalisation und Behandlungsregion (Ganzhirn bis C2) benennen, Scanprogramm Schädel 3 mm, ausreichend kranial über Kalotte bis HWK 2, Maskenhinweis und Nackenschalengröße, Metall / Prothesen / Hörgeräte / Schmuck / Haarnadeln entfernen, Schulterposition dokumentieren, Lagerungstoleranz aktiv prüfen. Kontrollauftrag: Schädel vollständig, Kalotte nicht abgeschnitten, HWK 2 vollständig erreicht, kein Artefakt, Ref.-Markierungen sichtbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf und Maske erklären (Engegefühl, Stillhalten, Kommunikationsweg), Metall / Prothesen / Hörgeräte / Schmuck / Haarnadeln / Piercings / Perücken aktiv abfragen und entfernen, Schulterbereich frei wenn nötig, Lagerungstoleranz und neurologischen Zustand aktiv prüfen. Bei Masken-Intoleranz oder neurologischer Verschlechterung: Rücksprache und Dokumentation.",
+      positioning:"Rückenlage, individuelle Thermoplastmaske (Schädelmaske), Nackenschale (Größe A/B/C), Knierolle. Kopf gerade und achsgerecht – keine Rotation. Maskensitz prüfen vor CT. Schulterposition dokumentieren. Lagerungsfoto anfertigen.",
+      scan:"Schädel 3 mm: 2 QF über Kalotte bis HWK 2 / C2. Kontrolle: Schädel vollständig, Kalotte nicht abgeschnitten, HWK 2 vollständig, keine Metallartefakte, Ref.-Markierungen sichtbar, Maske und Kopfposition nachvollziehbar.",
+      aftercare:"CT-Vollständigkeit, Achse und Kopfrotation prüfen, Lagerungsfoto, Maskensitz dokumentiert, Nackenschale dokumentiert, Schulterposition dokumentiert, Metallartefakt-Kontrolle, Patientenzustand nach CT geprüft, Tischposition dokumentiert."
+    },
+    typicalMistakes:[
+      {id:"metal-left",title:"Metall / Prothesen / Schmuck / Hörgeräte nicht vollständig entfernt",
+       consequence:"Metallartefakte im CT überlagern das Zielvolumen im Schädel. Planungsrelevante Strukturen nicht sicher beurteilbar; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"mask-fit",title:"Maskensitz vor CT nicht geprüft",
+       consequence:"Fehlsitzende Maske führt zu Lagerungsabweichung im Planungs-CT. Reproduzierbarkeit am Linac nicht gewährleistet; Lagerungskorrektur oder CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"neck-shell-wrong",title:"Nackenschalengröße unpassend gewählt",
+       consequence:"Kopfposition und Maskensitz werden beeinflusst; Reproduzierbarkeit eingeschränkt. Neuanpassung der Nackenschale und ggf. erneutes CT notwendig.",
+       severity:"major"},
+      {id:"head-rotation",title:"Kopfrotation / schiefe Lagerung nicht korrigiert",
+       consequence:"Asymmetrische Dosisverteilung und Planungsabweichung. Schädel im CT nicht achsgerecht – Isozentrum-Lage und Feldplanung beeinträchtigt.",
+       severity:"major"},
+      {id:"scan-too-short",title:"Scanbereich zu kurz – Kalotte abgeschnitten oder HWK 2 nicht erreicht",
+       consequence:"Schädel oder Ganzhirn-Zielregion nicht vollständig im Datensatz enthalten. Planungsvolumen nicht beurteilbar; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"mask-intolerance-no-consult",title:"Patient toleriert Maske nicht – keine Rücksprache eingeleitet",
+       consequence:"CT unter nicht reproduzierbaren Lagerungsbedingungen durchgeführt. Planungsdaten nicht für Strahlentherapie verwendbar; Rücksprache mit Arzt und erneute Planung erforderlich.",
+       severity:"major"},
+      {id:"neuro-not-checked",title:"Neurologischer Zustand / Lagerungstoleranz nicht aktiv geprüft",
+       consequence:"Dekompensation (Schwindel, Übelkeit, Sturz) während oder nach CT möglich. Patientensicherheit gefährdet; ggf. Abbruch und Rücksprache erforderlich.",
+       severity:"major"},
+      {id:"photo-incomplete",title:"Lagerungsfoto unvollständig – Maskensitz oder Schulterposition nicht erkennbar",
+       consequence:"Lagerung am Linac nicht vollständig nachvollziehbar. Reproduzierbarkeit insbesondere bei Ganzhirn bis C2 eingeschränkt.",
+       severity:"minor"}
+    ],
+    caseText:"Prüfungsfall FALL-GB-01: Andreas Bergmann. Glioblastom WHO-Grad IV, rechts temporal, Ganzhirn-Bestrahlung bis C2. Planungs-CT Schädel. Fokus: Maskenanlage und -sitz, Nackenschalengröße, Metall / Hörgeräte / Prothesen vollständig entfernen, Kopfrotation korrigieren, Scanbereich vollständig (Kalotte bis HWK 2).",
+    impulse:"Welche klinischen Konsequenzen entstehen, wenn die Kopfrotation nicht korrigiert wird oder die Nackenschale nicht zur Körpergröße des Patienten passt – und warum ist der Maskensitz beim Planungs-CT prüfungsrelevant?"
+  },
+
+  hno:{
+    title:"HNO-Tumor",
+    status:"complete",
+    schema:"neck",
+    tags:["Kopf-Hals","Zahnschiene","Maske","Oropharynx"],
+    pdfDoc:"../media/documents/Fall_HNO_03.pdf",
+    special:"Zahnschiene / Bissregistrierung gesondert abfragen. Prothesen, Zahnersatz, Hörgeräte, Schmuck und Metall im Kopf-Hals-Bereich entfernen. Maskensitz und Schulterposition dokumentieren.",
+    undress:"Oberkörper frei machen, soweit für Schultermarkierung und Maskensitz erforderlich.",
+    bladder:false,rectum:false,zahnschiene:true,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientenname, Geburtsdatum und Fall-ID aus Verordnung und CT-Anforderung sicher lokalisiert und abgeglichen. Identität ist KO-Kriterium in der Prüfung.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnose",title:"Diagnose / Indikation",
+       desc:"Tumor-Entität, Primärlokalisation und Stadium aus Dokument entnehmen. Plattenepithelkarzinom Oropharynx / Hypopharynx / Larynx / Mundhöhle oder andere HNO-Entität? Angabe entscheidet über Scanbereich und Besonderheiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"tumorRegion",title:"Tumorregion Kopf-Hals (Lokalisation)",
+       desc:"Genaue anatomische Lokalisation aus Dokument ableiten: Oropharynx, Hypopharynx, Larynx, Mundhöhle, Nasopharynx, Parotis oder andere. Entscheidet über Referenzpunktlage, Scanbereich und ggf. Zahnschienen-Relevanz.",
+       required:true,severityIfMissing:"major"},
+      {id:"laterality",title:"Seitenbezug / Lymphabflussgebiet",
+       desc:"Seitenangabe (links, rechts, bilateral) und Lymphabflussgebiet aus Dokument entnehmen. Prüfungsrelevant für Feldplanung und Verifikation der Zielregion im CT.",
+       required:true,severityIfMissing:"major"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region und Scanprogramm (Hals 3 mm) aus CT-Anforderung sicher ableiten. Scanbereich: Kalotte bis BWK 6 / Bifurkation – hausstandardabhängig.",
+       required:true,severityIfMissing:"major"},
+      {id:"mask",title:"Maskenhinweis / Maskentyp",
+       desc:"Ist eine individuelle Thermoplastmaske für diesen Patienten bereits gefertigt? Maskentyp (Kopf-Hals-Maske) und ggf. Maskennummer aus Dokument entnehmen. Maske ist zentrales Lagerungselement – fehlende Maske erfordert Rücksprache.",
+       required:true,severityIfMissing:"major"},
+      {id:"zahnschiene",title:"Zahnschiene / Bissregistrierung",
+       desc:"Ist im Fall eine Zahnschiene oder Bissregistrierung angeordnet? Wenn ja: vorhanden, mitgebracht, korrekt eingesetzt und dokumentiert? Eine Zahnschiene kann Mundbodenposition und Dosisverteilung beeinflussen.",
+       required:true,severityIfMissing:"major"},
+      {id:"metalProthesen",title:"Prothesen / Zahnersatz / Hörgeräte / Schmuck / Metall",
+       desc:"Hinweise auf Prothesen, Zahnersatz, Hörgeräte, Schmuck oder metallische Implantate im Kopf-Hals-Bereich? Aus Dokument entnehmen und aktiv beim Patienten abfragen. Metall im Scanbereich führt zu CT-Artefakten im Zielvolumen.",
+       required:true,severityIfMissing:"major"},
+      {id:"shoulderPos",title:"Schulterposition / Schultermarker",
+       desc:"Schulterposition und Schultermarker aus Dokument entnehmen, falls vorgegeben. Schulterposition beeinflusst Reproduzierbarkeit der Lagerung und muss dokumentiert werden.",
+       required:true,severityIfMissing:"major"},
+      {id:"tolerance",title:"Lagerungstoleranz / Schluckbeschwerden / Dyspnoe / Schmerzen",
+       desc:"Hinweise auf eingeschränkte Lagerungstoleranz: Dyspnoe, Schluckbeschwerden, Schmerzen, Angst- oder Engegefühl in Rückenlage oder unter Maske? Entscheidet über Rücksprachebedarf vor Maskenanlage.",
+       required:true,severityIfMissing:"minor"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Scanregion, Maskenhinweis, Zahnschiene und Schulterposition stimmig? Widersprüche oder fehlende Angaben erkennen und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Kopf-Hals-Region vollständig erfasst, Patientenumfang vollständig, keine Metallartefakte durch Prothesen/Schmuck, Ref.-Markierungen sichtbar, Maske und Schulterposition im CT nachvollziehbar.",
+       required:true,severityIfMissing:"major"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Maske, Dauer, Wichtigkeit der korrekten Position",
+        "Intimsphäre wahren: Vorhang / Sichtschutz, Oberkörper nur so lange wie nötig entblößt",
+        "Beschwerden, Schluckbeschwerden, Luftnot, Schmerzen und Angst- oder Engegefühl aktiv erfragen"
+      ],
+      specific:[
+        "Oberkörper frei machen, soweit für Schultermarkierung und Maskensitz erforderlich",
+        "Zahnersatz, Prothesen, Hörgeräte, Schmuck und sämtliche Metallteile im Kopf-Hals-Bereich aktiv abfragen und entfernen lassen",
+        "Zahnschiene / Bissregistrierung aktiv abfragen: vorhanden, mitgebracht und korrekt eingesetzt?",
+        "Lagerungstoleranz in Rückenlage und unter Maske aktiv prüfen: Dyspnoe, Engegefühl, Angst?",
+        "Schluckbeschwerden und Schmerzen im Halsbereich aktiv ansprechen – ggf. Position anpassen",
+        "Schulterposition nach Hausstandard einnehmen lassen; Schultermarker ggf. anlegen",
+        "Bei nicht tolerierter Maske, fehlender Zahnschiene oder unklaren Lagerungsvorgaben: sofortige Rücksprache mit Arzt, Dokumentation der Abweichung"
+      ]
+    },
+    positioning:{
+      variantHint:"Standardlagerung HNO-Tumor: Rückenlage mit individuell gefertigter Thermoplastmaske, Nackenschale (Größe A/B/C nach Körperbau) und Knierolle. Schulterposition nach lokalem Ausbildungsstandard dokumentieren. Die Maske ist das zentrale Reproduzierbarkeitselement – Sitz vor CT prüfen und im Lagerungsfoto dokumentieren.",
+      allowedAidVariants:[
+        {id:"A",label:"Maske + Nackenschale + Knierolle (HNO-Standard)",aids:["mask","neck","knee"],requiresJustification:false}
+      ],
+      forbiddenAids:["wing","prostep","kniestep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Körpermitte Kopf-Hals-Region",
+      longitudinal:"Mandibula / Klavikula / Schultermarker – hausstandardabhängig, reproduzierbar dokumentieren. Ref.-Punkt so wählen, dass er im CT und am Linac reproduzierbar nachzuvollziehen ist.",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral am Hals oder an der Maske – hausstandardabhängig",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt an Nackenschale oder dorsal am Hals – Maskensitz und Nackenschalenposition bei Dokumentation beachten",
+      note:"Reproduzierbarkeit, Maskensitz, Schulterposition und vollständige Dokumentation sind prüfungsrelevant. Ref.-Punkte können an Maske oder direkt am Patienten gesetzt werden – je nach Hausstandard. Prüfungsrelevant: Punkte reproduzierbar, anatomisch plausibel und dokumentierbar."
+    },
+    scan:{
+      programs:["Hals 3 mm"],
+      defaultProgram:"Hals 3 mm",
+      start:{label:"Kalotte (oberer Schädelrand)",val:5,min:0,max:12},
+      end:{label:"BWK 6 / Bifurkation",val:68,min:58,max:78},
+      minFov:80,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Gesamte Kopf-Hals-Region vollständig abgebildet",
+        "Schulterregion ausreichend erfasst (Lymphabflussgebiet)",
+        "Keine relevanten Metallartefakte durch Prothesen / Schmuck",
+        "Ref.-Markierungen sichtbar",
+        "Maske und Schulterposition im CT nachvollziehbar",
+        "Zielregion nicht abgeschnitten"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Maskensitz im CT und auf Lagerungsfoto prüfen und dokumentieren",
+        "Schulterposition dokumentieren",
+        "Zahnschiene / Mundstück dokumentieren (vorhanden, korrekt eingesetzt, CT-Bedingung)",
+        "Kontrolle auf Metallartefakte durch übersehene Prothesen oder Schmuck",
+        "Abweichungen von Standardlagerung (z. B. nicht tolerierte Maske) mit Rücksprache und Begründung dokumentieren",
+        "Tischposition dokumentieren"
+      ]
+    },
+    expectedSummary:{
+      document:"Patienten aktiv identifizieren; Plattenepithelkarzinom Oropharynx links, cT2N1M0 – Tumorlokalisation und Seitenbezug benennen, Lymphabflussgebiet links, Scanbereich Kopf-Hals (Hals 3 mm, Kalotte bis BWK 6), Maskenhinweis, Zahnschiene angeordnet abfragen, Prothesen/Metall entfernen, Schulterposition, Lagerungstoleranz aktiv prüfen. Kontrollauftrag: Kopf-Hals vollständig, kein Artefakt, Ref.-Markierungen sichtbar, Maske nachvollziehbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf erklären, Intimsphäre, Oberkörper frei machen, Zahnersatz/Prothesen/Hörgeräte/Schmuck/Metall entfernen, Zahnschiene aktiv abfragen und anlegen lassen, Lagerungstoleranz in Maske und Rückenlage prüfen, Schluckbeschwerden / Dyspnoe / Schmerzen / Angst erfragen, Schulterposition nach Standard einnehmen. Bei Intoleranz oder fehlender Zahnschiene: Rücksprache und Dokumentation.",
+      positioning:"Rückenlage, individuelle Thermoplastmaske, Nackenschale (Größe nach Körperbau), Knierolle. Schulterposition nach lokalem Standard dokumentieren. Maskensitz prüfen vor CT. Lagerungsfoto anfertigen.",
+      scan:"Hals 3 mm: Kalotte bis BWK 6 / Bifurkation. Kontrolle: Kopf-Hals vollständig, Schulterregion ausreichend, keine Metallartefakte, Ref.-Markierungen sichtbar, Maske nachvollziehbar.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto, Maskensitz dokumentiert, Schulterposition dokumentiert, Zahnschiene dokumentiert, Metallartefakt-Kontrolle, Abweichungen begründet und rückgesprochen, Tischposition dokumentiert."
+    },
+    typicalMistakes:[
+      {id:"zahnschiene-forgotten",title:"Zahnschiene nicht abgefragt oder nicht angelegt",
+       consequence:"Mundbodenposition und Dosisverteilung weichen vom Planungszustand ab; Isodosenverlauf im Mundboden und Oropharynx nicht reproduzierbar. CT-Wiederholung mit Zahnschiene notwendig.",
+       severity:"major"},
+      {id:"metal-left",title:"Prothesen / Metall nicht vollständig entfernt",
+       consequence:"Metallartefakte im CT überlagern das Zielvolumen und angrenzende Risikoorgane. Planungsrelevante Strukturen nicht sicher beurteilbar; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"mask-not-checked",title:"Maskensitz vor CT nicht geprüft",
+       consequence:"Fehlsitzende Maske führt zu Lagerungsabweichung im Planungs-CT. Reproduzierbarkeit am Linac nicht gewährleistet; Lagerungskorrektur oder CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"shoulder-not-documented",title:"Schulterposition nicht dokumentiert",
+       consequence:"Schulterposition bei Therapiebeginn nicht reproduzierbar einstellbar; Abweichungen zwischen Planungs-CT und Behandlungsposition möglich. Nachrekonstruktion aufwändig.",
+       severity:"major"},
+      {id:"scan-too-short",title:"Scanbereich zu kurz – Schulterregion oder Kalotte fehlt",
+       consequence:"Lymphabflussgebiet oder Primärtumor nicht vollständig im Datensatz enthalten. Planungsvolumen nicht vollständig beurteilbar; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"mask-intolerance-no-consult",title:"Patient toleriert Maske nicht – keine Rücksprache eingeleitet",
+       consequence:"CT unter nicht reproduzierbaren Lagerungsbedingungen durchgeführt. Planungsdaten nicht für Strahlentherapie verwendbar; Rücksprache mit Arzt und erneute Planung erforderlich.",
+       severity:"major"},
+      {id:"photo-incomplete",title:"Lagerungsfoto unvollständig oder Maske nicht sichtbar",
+       consequence:"Lagerung am Linac nicht vollständig nachvollziehbar. Reproduzierbarkeit gefährdet, insbesondere bei Maskensitz und Schulterposition.",
+       severity:"minor"},
+      {id:"zahnschiene-not-documented",title:"Zahnschiene / Mundstück nicht im CT-Protokoll dokumentiert",
+       consequence:"Beim nächsten CT (z. B. Re-Planung) oder am Linac unklar, ob Zahnschiene zur Planungsbedingung gehört. Therapiefehler durch fehlende Zahnschiene bei Folge-CTs möglich.",
+       severity:"major"}
+    ],
+    caseText:"Prüfungsfall FALL-HNO-03: Michael Schneider. Plattenepithelkarzinom Oropharynx links, cT2N1M0, definitive Radiochemotherapie. Planungs-CT Kopf-Hals. Fokus: Maskenanlage und -sitz, Zahnschiene aktiv abfragen, Prothesen/Metall vollständig entfernen, Schulterposition dokumentieren, Scanbereich vollständig.",
+    impulse:"Welche klinischen Konsequenzen entstehen, wenn die Zahnschiene nicht angelegt oder die Schulterposition nicht dokumentiert wird – und warum ist der Maskensitz beim Planungs-CT prüfungsrelevant?"
+  },
+
+  oesprox:{
+    title:"Ösophagus-Ca. proximal",
+    status:"locked",
+    schema:"neck",
+    tags:["proximal","Maske","BWK6"],
+    pdfDoc:"",
+    special:"Metall und Prothesen im Kopf-Hals-Bereich entfernen. Fallstruktur vorbereitet, Inhalt folgt.",
+    undress:"Oberkörper frei machen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",desc:"Patientendaten, Geburtsdatum und Fall-ID sicher lokalisiert.",required:true,severityIfMissing:"ko"},
+      {id:"diagnose",title:"Diagnose / Indikation",desc:"Primärdiagnose und Behandlungsregion sicher lokalisiert.",required:true,severityIfMissing:"major"},
+      {id:"region",title:"Scanregion / Programm",desc:"Welches CT-Programm und welche Region ist angefordert?",required:true,severityIfMissing:"major"},
+      {id:"lagerung",title:"Lagerung / Hilfsmittel",desc:"Welche Lagerungsvorgabe und Hilfsmittel gibt das Dokument vor?",required:true,severityIfMissing:"major"},
+      {id:"prep",title:"Vorbereitung / Besonderheiten",desc:"Metallentfernung und Prothesen im Kopf-Hals-Bereich.",required:true,severityIfMissing:"major"},
+      {id:"tolerance",title:"Patientenzustand / Lagerungstoleranz",desc:"Beschwerden, AZ oder Einschränkungen.",required:true,severityIfMissing:"minor"},
+      {id:"plausibility",title:"Plausibilitätsprüfung / Rücksprachebedarf",desc:"Indikation, Scanregion und Lagerungsvorgabe stimmig?",required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",desc:"Kontrollpunkte: Scout, Umfang, Ref.-Markierung.",required:true,severityIfMissing:"major"}
+    ],
+    patientPreparation:{
+      general:["Aktive Identitätsprüfung (min. 2 Merkmale)","Ablauf kurz erklären","Beschwerden / Lagerungstoleranz prüfen"],
+      specific:["Oberkörper frei machen","Metall/Prothesen im Kopf-Hals-Bereich entfernen"]
+    },
+    positioning:{
+      variantHint:"Fallstruktur für proximalen Ösophagus vorbereitet; konkrete Lagerung wird noch validiert.",
+      allowedAidVariants:[
+        {id:"A",label:"Maske + Nackenschale + Knierolle",aids:["mask","neck","knee"],requiresJustification:false}
+      ],
+      forbiddenAids:["wing","prostep","kniestep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser",
+      longitudinal:"Schultermarker / Klavikula-Referenz",
+      lateral:"Körpermitte / Sagittalebene",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt",
+      note:"Die konkrete Referenzpunktlage kann hausstandardabhängig sein. Prüfungsrelevant ist, dass die Punkte reproduzierbar, anatomisch plausibel und dokumentierbar gesetzt werden."
+    },
+    scan:{
+      programs:["Hals 3 mm"],defaultProgram:"Hals 3 mm",
+      start:{label:"Kalotte",val:5,min:0,max:12},
+      end:{label:"BWK 6 / Bifurkation",val:68,min:58,max:78},
+      minFov:80,
+      controlPoints:["Patientenumfang vollständig","Ref.-Markierung sichtbar"]
+    },
+    aftercare:{
+      required:["CT-Bilder auf Vollständigkeit prüfen","Achsgerechte Lagerung prüfen","Lagerung und Tischposition dokumentieren","Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"],
+      indicationSpecific:[]
+    },
+    expectedSummary:{
+      document:"Fallstruktur proximaler Ösophagus vorbereitet; fachliche Validierung folgt.",
+      patientPrep:"Identitätsprüfung, Oberkörper frei, Metall/Prothesen entfernen.",
+      positioning:"Rückenlage, Maske, Nackenschale, Knierolle – fachliche Validierung folgt.",
+      scan:"Hals 3 mm: Kalotte bis BWK 6 / Bifurkation.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto, Dokumentation."
+    },
+    typicalMistakes:[
+      {id:"metal-left",title:"Metall/Prothesen nicht entfernt",consequence:"Artefakte im Kopf-Hals-/oberen Thoraxbereich.",severity:"major"}
+    ],
+    caseText:"",impulse:""
+  },
+
+  oesdist:{
+    title:"Ösophagus-Ca. distal",
+    status:"complete",
+    schema:"thorax",
+    tags:["distal","AEG","Thorax","Abdomen","WingSTEP"],
+    pdfDoc:"../media/documents/Fall_Oesophagus_distal_AEG_01.pdf",
+    special:"Armposition: Arme über Kopf mit WingSTEP (Standard). Armhebung aktiv testen. Kein Metall / Schmuck im Thorax-/Abdomenbereich. Port / Ernährungssonde / PEG / Stent als Kontext aus Dokument entnehmen und Rücksprache klären.",
+    undress:"Oberkörper vollständig frei machen. Schmuck und Metall im Thorax-/Abdomenbereich entfernen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientenname, Geburtsdatum und Fall-ID aus Verordnung und CT-Anforderung sicher lokalisiert und abgeglichen. Identität ist KO-Kriterium in der Prüfung.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnose",title:"Diagnose / Indikation",
+       desc:"Tumor-Entität, Lokalisation und Stadium aus Dokument entnehmen. Ösophagus-Ca. distal, AEG Typ I oder II, Adenokarzinom oder Plattenepithelkarzinom? Angabe entscheidet über Scanbereich und Besonderheiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"tumorRegion",title:"Tumorregion distaler Ösophagus / AEG / Thorax-Abdomen-Bezug",
+       desc:"Genaue Tumorlokalisation aus Dokument ableiten: distaler Ösophagus, gastroösophagealer Übergang (AEG-Region), Magen-Anteile betroffen? Entscheidet über notwendigen Scanendpunkt und ob AEG-Region / Magenanteil vollständig erfasst ist.",
+       required:true,severityIfMissing:"major"},
+      {id:"scanBereich",title:"Scanbereich Occiput bis Acetabulum",
+       desc:"Scanbereich aus CT-Anforderung ableiten: Occiput / Hinterkopf bis Acetabulum nach lokalem Ausbildungsstandard. Langer Scanbereich sicherstellen – Thorax und Oberbauch müssen vollständig enthalten sein.",
+       required:true,severityIfMissing:"major"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region und Scanprogramm (Thorax 3 mm oder Abdomen 3 mm nach lokalem Standard) aus CT-Anforderung sicher ableiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"armPos",title:"Armposition / WingSTEP",
+       desc:"Ist WingSTEP (Arme über Kopf) als Lagerungsstandard angeordnet oder aus dem Hausstandard ableitbar? WingSTEP reduziert Armartefakte im Thorax-/Abdomenscan. Armhebung aktiv aus Dokument entnehmen und beim Patienten testen.",
+       required:true,severityIfMissing:"major"},
+      {id:"tolerance",title:"Lagerungstoleranz / Armhebung / Dyspnoe / Schmerzen",
+       desc:"Hinweise auf eingeschränkte Lagerungstoleranz aus Dokument entnehmen: Dyspnoe, Schmerzen, Schulterbeschwerden, Bewegungseinschränkungen? Entscheidet über Rücksprachebedarf zur Armposition.",
+       required:true,severityIfMissing:"minor"},
+      {id:"schluck",title:"Schluckbeschwerden / Dysphagie / Belastbarkeit",
+       desc:"Hinweise auf Dysphagie, Schluckbeschwerden oder stark eingeschränkten AZ aus Dokument entnehmen. Typisches Symptom bei distalem Ösophagus-Ca. – kann Lagerungsfähigkeit einschränken und Rücksprachebedarf begründen.",
+       required:true,severityIfMissing:"minor"},
+      {id:"metal",title:"Metall / Schmuck / störende Gegenstände im Thorax-/Abdomenbereich",
+       desc:"Hinweise auf Metall, Schmuck oder störende Gegenstände im Thorax-/Abdomenbereich? Aus Dokument entnehmen und aktiv beim Patienten abfragen. Metall im Scanbereich erzeugt Artefakte und beeinträchtigt Planungsqualität.",
+       required:true,severityIfMissing:"major"},
+      {id:"fremdkoerper",title:"Port / Ernährungssonde / PEG / Stent",
+       desc:"Hinweise auf Port, Ernährungssonde, PEG oder Ösophagusstent aus Dokument entnehmen. Als Kontext relevant für Artefaktbeurteilung und ggf. Rücksprache – kein direkter Einfluss auf Lagerungsvorgabe, aber prüfungsrelevante Beobachtung.",
+       required:false,severityIfMissing:"minor"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Tumorlokalisation, Scanbereich (Occiput bis Acetabulum), Armposition und Besonderheiten (Port, Sonde, Stent) stimmig? Widersprüche oder fehlende Angaben erkennen und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Thorax und Oberbauch vollständig, distaler Ösophagus / AEG-Region nicht abgeschnitten, Acetabulum vollständig erreicht, Patientenumfang vollständig, keine relevanten Artefakte, Ref.-Markierungen sichtbar, Armposition nachvollziehbar.",
+       required:true,severityIfMissing:"major"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Armposition, langer Scanbereich, Wichtigkeit der korrekten Armhaltung",
+        "Intimsphäre wahren: Vorhang / Sichtschutz, Oberkörper nur so lange wie nötig entblößt",
+        "Beschwerden, Dyspnoe, Schluckbeschwerden, Schmerzen und Lagerungstoleranz aktiv erfragen"
+      ],
+      specific:[
+        "Oberkörper vollständig frei machen",
+        "Schmuck, Metall und störende Gegenstände im Thorax-/Abdomenbereich aktiv abfragen und entfernen lassen",
+        "Armhebung aktiv testen: Arme über Kopf in WingSTEP-Position – Schmerzen, Schulterbeschwerden oder Dyspnoe in dieser Haltung?",
+        "Dysphagie und Schluckbeschwerden aktiv ansprechen – Belastbarkeit und Lagerungsfähigkeit einschätzen",
+        "Port / Ernährungssonde / PEG / Stent aktiv abfragen, falls im Dokument genannt oder sichtbar",
+        "Bei nicht tolerierter Armhebung oder unklaren Fremdkörpern: sofortige Rücksprache mit Arzt, Dokumentation der Abweichung"
+      ]
+    },
+    positioning:{
+      variantHint:"Standardlagerung distaler Ösophagus / AEG: Rückenlage, Arme über Kopf mit WingSTEP, Nackenschale (Größe nach Körperbau) und KneeSTEP. WingSTEP ist prüfungsrelevanter Standard – reduziert Armartefakte im langen Thorax-/Abdomenscan. Alternative Arme am Körper nur bei ärztlicher Anordnung oder eindeutiger Intoleranz und dann mit Begründung dokumentieren.",
+      allowedAidVariants:[
+        {id:"A",label:"WingSTEP + Nackenschale + KneeSTEP (Standard)",aids:["wing","neck","kniestep"],requiresJustification:false},
+        {id:"B",label:"Arme am Körper + Nackenschale + KneeSTEP (bei Intoleranz / Anordnung)",aids:["neck","kniestep"],requiresJustification:true}
+      ],
+      forbiddenAids:["mask","prostep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Körpermitte Thorax / Sternum-Abdomen-Achse",
+      longitudinal:"Sternale oder epigastrische Referenz nach Hausstandard – reproduzierbar dokumentieren. Bei langem Scanbereich besonders auf konsistente Referenzpunktlage achten.",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral am Thorax oder Abdomen",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt, falls im lokalen Workflow vorgesehen",
+      note:"Reproduzierbarkeit, langer Scanbereich (Occiput bis Acetabulum) und vollständige Dokumentation der Armposition sind prüfungsrelevant. Ref.-Punkte müssen bei diesem Scanbereich anatomisch plausibel und nachvollziehbar dokumentiert sein."
+    },
+    scan:{
+      programs:["Thorax 3 mm","Abdomen 3 mm"],
+      defaultProgram:"Thorax 3 mm",
+      start:{label:"Occiput / Hinterkopf (lokaler Ausbildungsstandard)",val:5,min:0,max:15},
+      end:{label:"Acetabulum (lokaler Ausbildungsstandard)",val:78,min:68,max:88},
+      minFov:90,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Thorax und Oberbauch vollständig abgebildet",
+        "Distaler Ösophagus / AEG-Region nicht abgeschnitten",
+        "Magen / Zwerchfellregion ausreichend erfasst",
+        "Acetabulum vollständig erreicht",
+        "Ref.-Markierungen sichtbar",
+        "Armposition im CT nachvollziehbar",
+        "Keine relevanten Artefakte durch Metall / Port / Sonde"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Armposition (WingSTEP oder Alternative) dokumentieren",
+        "Scanbereich bis Acetabulum kontrollieren – kein Abschneiden kaudal",
+        "Distalen Ösophagus / AEG-Region und Thorax-Abdomen-Übergang auf Vollständigkeit prüfen",
+        "Fremdkörper / Artefakte durch Port, Sonde, Stent oder übersehenes Metall kontrollieren",
+        "Abweichungen von Standardlagerung (z. B. Arme am Körper) mit Rücksprache und Begründung dokumentieren",
+        "Tischposition dokumentieren"
+      ]
+    },
+    expectedSummary:{
+      document:"Patienten aktiv identifizieren; Ösophagus-Ca. distal AEG Typ I, cT3N2M0 – Tumorlokalisation distaler Ösophagus / AEG-Region benennen, Scanprogramm Thorax 3 mm, Occiput bis Acetabulum nach lokalem Standard, WingSTEP (Arme über Kopf) als Standard-Armposition, Metall / Schmuck entfernen, Armhebung aktiv testen, Dysphagie / Belastbarkeit aktiv erfragen, Port / Sonde / Stent aus Dokument entnehmen. Kontrollauftrag: Thorax vollständig, distaler Ösophagus / AEG nicht abgeschnitten, Acetabulum erreicht, kein Artefakt, Ref.-Markierungen sichtbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf und Armposition erklären, Intimsphäre, Oberkörper frei, Schmuck / Metall entfernen, Armhebung aktiv testen (WingSTEP-Position), Dysphagie und Schluckbeschwerden ansprechen, Port / Sonde / Stent aktiv abfragen. Bei Intoleranz oder unklaren Fremdkörpern: Rücksprache und Dokumentation.",
+      positioning:"Rückenlage, Arme über Kopf mit WingSTEP, Nackenschale (Größe nach Körperbau), KneeSTEP. Armhebung sicherstellen. Lagerungsfoto anfertigen.",
+      scan:"Thorax 3 mm (oder Abdomen 3 mm nach lokalem Standard): Occiput bis Acetabulum. Kontrolle: Thorax vollständig, distaler Ösophagus / AEG nicht abgeschnitten, Magen ausreichend erfasst, Acetabulum erreicht, keine Artefakte, Ref.-Markierungen sichtbar.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto, Armposition dokumentiert, Scanbereich bis Acetabulum kontrolliert, Thorax-Abdomen-Übergang geprüft, Artefakt-Kontrolle (Port/Metall), Abweichungen begründet dokumentiert, Tischposition dokumentiert."
+    },
+    typicalMistakes:[
+      {id:"arm-tolerance-not-tested",title:"Armhebung nicht aktiv getestet",
+       consequence:"Patient toleriert WingSTEP-Position nicht während des Scans – Bewegungsartefakte oder Abbruch. Scan unter nicht reproduzierbaren Bedingungen; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"arms-down-no-justification",title:"Arme am Körper ohne Rücksprache / Begründung",
+       consequence:"Standard-Armposition (WingSTEP) nicht eingehalten ohne dokumentierte Begründung. Planungsabweichung und nicht reproduzierbare Lagerung; Rücksprache und Dokumentation fehlen.",
+       severity:"major"},
+      {id:"metal-left",title:"Metall / Schmuck nicht entfernt",
+       consequence:"Artefakte im langen Thorax-/Abdomenscan überlagern Zielregion und angrenzende Strukturen. Planungsqualität beeinträchtigt; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"scan-too-short-caudal",title:"Scanbereich zu kurz – Acetabulum nicht vollständig erreicht",
+       consequence:"Beckenboden / Acetabulum nicht im Datensatz enthalten. Planungsvolumen unvollständig beurteilbar; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"aeg-not-complete",title:"Distaler Ösophagus / AEG-Region abgeschnitten",
+       consequence:"Primärtumor nicht vollständig im CT enthalten. Zielvolumendefinition nicht möglich; CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"port-sonde-not-noted",title:"Port / Ernährungssonde / Stent nicht beachtet",
+       consequence:"Artefakte durch Fremdkörper im CT nicht erwartet und nicht dokumentiert. Planungsbeurteilung erschwert; nachträgliche Klärung mit Arzt notwendig.",
+       severity:"minor"},
+      {id:"photo-incomplete",title:"Lagerungsfoto unvollständig – Armposition nicht erkennbar",
+       consequence:"Armposition (WingSTEP oder Alternative) am Linac nicht reproduzierbar nachstellbar. Planungsabweichung bei Therapiebeginn möglich.",
+       severity:"minor"},
+      {id:"thorax-abdomen-overlap-missing",title:"Thorax-Abdomen-Übergang / Zwerchfellregion unvollständig erfasst",
+       consequence:"AEG-Region und Zwerchfelldurchtritt nicht vollständig im CT enthalten. Zielvolumendefinition eingeschränkt; CT-Nachbearbeitung oder Wiederholung erforderlich.",
+       severity:"major"}
+    ],
+    caseText:"Prüfungsfall FALL-OD-01: Wolfgang Hartmann. Ösophagus-Adenokarzinom distal AEG Typ I, cT3N2M0, neoadjuvante Radiochemotherapie. Planungs-CT Thorax/Abdomen. Fokus: Armhebung WingSTEP aktiv testen, Metall entfernen, Scanbereich Occiput bis Acetabulum vollständig, AEG-Region nicht abschneiden, Port aus Dokument entnehmen.",
+    impulse:"Welche klinischen Konsequenzen entstehen, wenn die Armhebung nicht aktiv getestet wird oder der Scanbereich die AEG-Region nicht vollständig erfasst – und warum ist die Dokumentation der Armposition planungsrelevant?"
+  },
+
+  mamma:{
+    title:"Mamma-Ca.",
+    status:"complete",
+    schema:"thorax",
+    tags:["WingSTEP","Narbe","Thorax"],
+    pdfDoc:"../media/documents/Fall_Mamma_03.pdf",
+    special:"Narbe mit Draht markieren (Narbenmarkierung vor CT). Arme über Kopf mit WingSTEP. Seitenrichtigkeit vor CT-Freigabe zwingend prüfen.",
+    undress:"Oberkörper frei machen (BH, Oberteil). Schmuck und Metall im Thoraxbereich entfernen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientendaten (Name, Geburtsdatum), Fall-ID und behandelnde Institution sicher lokalisiert und abgeglichen.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnosis",title:"Diagnose / Seite / OP-Status",
+       desc:"Primärdiagnose Mammakarzinom mit betroffener Seite (links/rechts), Histologie, Stadium und OP-Modus (BET oder Mastektomie) identifizieren.",
+       required:true,severityIfMissing:"major"},
+      {id:"side",title:"Seitenrichtigkeit / Tumorseite",
+       desc:"Tumorseite explizit aus Verordnung und CT-Anforderung entnehmen, mit Fall-ID und Aufkleber abgleichen – Seitenverwechslung ist KO-Kriterium.",
+       required:true,severityIfMissing:"ko"},
+      {id:"target",title:"Behandlungsregion / Zielvolumen",
+       desc:"Welche Strukturen werden bestrahlt? Brust allein, Brust + axillärer Lymphabfluss, ggf. Boost-Planung? Aus Verordnung ableiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"scarMarking",title:"Narbenmarkierung / Drahtmarkierung",
+       desc:"Ist die Markierung der Operationsnarbe mit Draht (Metallmarkierung) explizit angeordnet? Zeitpunkt: vor Lagerung und vor CT. Narbenmarkierung ist ein prüfungsrelevanter Kernpunkt und beeinflusst Boost-/Planungsbezug.",
+       required:true,severityIfMissing:"major"},
+      {id:"armPosition",title:"Armposition / WingSTEP-Vorgabe",
+       desc:"Armhebung beidseitig über Kopf mit WingSTEP angeordnet? Lagerungsvorgabe aus CT-Anforderung sicher entnehmen.",
+       required:true,severityIfMissing:"major"},
+      {id:"armTolerance",title:"Schultertoleranz / Bewegungseinschränkung",
+       desc:"Hinweise auf Schulterprobleme, Schmerzen oder Einschränkungen (z. B. nach Axilladissektion, Lymphödem)? Lagerungstoleranz ableiten – beeinflusst direkt Lagerungsentscheidung.",
+       required:true,severityIfMissing:"major"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region (Thorax) und Scanprogramm (Thorax 3 mm, Occiput/HWK-Basis bis LWK 1) aus CT-Anforderung sicher ableiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"aids",title:"Lagerungsvorgabe / Hilfsmittel",
+       desc:"WingSTEP, Nackenschale, KneeSTEP – aus Dokument entnehmen und mit indikationsspezifischem Standard abgleichen.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Thorax vollständig, Narbenmarkierung (Draht) im CT-Bild sichtbar, Arme vollständig im FOV, Ref.-Markierungen sichtbar.",
+       required:true,severityIfMissing:"major"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Seite, Scanbereich und Lagerungsvorgabe stimmig? Widersprüche oder Unklarheiten erkennen (z. B. fehlende Narbenmarkierungsanordnung) und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"course",title:"Vorbehandlung / OP-Status / Begleittherapie",
+       desc:"BET vs. Mastektomie als Kontext für Narbenlokalisation; Systemtherapie (antihormonell, Chemo) als Kontext – nicht mit Lagerungsvorgabe verwechseln.",
+       required:false,severityIfMissing:"minor"},
+      {id:"notRelevant",title:"Ablenkende Angaben",
+       desc:"Nicht relevante Checkboxen (z. B. allgemeine Anamnese ohne Lagerungsrelevanz) bewusst ignorieren – Fokus auf handlungsrelevante Befunde.",
+       required:false,severityIfMissing:"minor"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Dauer, Narbenmarkierung, Wichtigkeit der Armhaltung",
+        "Intimsphäre wahren: Vorhang / Sichtschutz, nur so lange wie nötig entkleidet",
+        "Beschwerden, Schulterbeweglichkeit und Lagerungstoleranz aktiv erfragen"
+      ],
+      specific:[
+        "Oberkörper frei machen: BH und Oberteil ablegen",
+        "Schmuck und Metall im Thoraxbereich entfernen (Halskette, Piercings, BH-Bügel)",
+        "Seitenrichtigkeit aktiv kommunizieren und mit Patientin abgleichen (links/rechts)",
+        "Operationsnarbe lokalisieren und mit Draht (Metallmarkierung) markieren – vor Lagerung, vor CT-Start",
+        "Armhebung beidseitig über Kopf aktiv prüfen: Toleranz, Schmerzen, Bewegungsausmaß der Schulter",
+        "Bei Schultereinschränkung: Rücksprache mit Arzt vor Lagerung, Dokumentation und ggf. Lagerungsanpassung"
+      ]
+    },
+    positioning:{
+      variantHint:"Standardlagerung Mamma: Rückenlage, Arme über Kopf in WingSTEP, Nackenschale (Größe wählen), KneeSTEP. Seitenrichtigkeit und Sichtbarkeit der Narbenmarkierung zwingend vor CT-Freigabe prüfen. Reproduzierbare Lagerung dokumentieren.",
+      allowedAidVariants:[
+        {id:"A",label:"WingSTEP + Nackenschale + KneeSTEP (Standard)",aids:["wing","neck","kniestep"],requiresJustification:false}
+      ],
+      forbiddenAids:["mask","prostep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Körpermitte sternal",
+      longitudinal:"Sternale Referenz (Brustbeinmitte) oder Schultermarker – hausstandardabhängig, reproduzierbar dokumentieren",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral am Thorax – Narbenmarkierung auf korrekter Seite prüfen",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt, sofern im lokalen Workflow vorgesehen",
+      note:"Die konkrete Referenzpunktlage ist hausstandardabhängig. Prüfungsrelevant: Punkte reproduzierbar, anatomisch plausibel und dokumentierbar. Seitenrichtigkeit bei lateralen Markierungen zwingend prüfen."
+    },
+    scan:{
+      programs:["Thorax 3 mm"],
+      defaultProgram:"Thorax 3 mm",
+      start:{label:"Occiput / HWK-Basis",val:5,min:0,max:15},
+      end:{label:"LWK 1",val:72,min:62,max:80},
+      minFov:100,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Gesamter Thorax inkl. Brust vollständig abgebildet",
+        "Narbenmarkierung (Draht) im CT-Bild sichtbar",
+        "Ref.-Markierungen sichtbar",
+        "Arme vollständig im FOV abgebildet (kein Armabschnitt)",
+        "Scanbereich nicht zu kurz – LWK 1 als Untergrenze prüfen"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Narbenmarkierung (Drahtmarkierung) im CT-Bild sichtbar und lokalisierbar – Boost-Konturierung prüfen",
+        "Seitenrichtigkeit in CT-Bildern und Dokumentation abgleichen",
+        "Ref.-Markierungen im CT-Bild kontrollieren",
+        "Lagerungsfoto: Narbenmarkierung und Armposition erkennbar"
+      ]
+    },
+    expectedSummary:{
+      document:"Patientin aktiv identifizieren; Mammakarzinom (Seite zwingend!), Diagnose/Stadium/OP-Status, Behandlungsregion Thorax, Narbenmarkierung mit Draht angeordnet, Armhebung über Kopf (WingSTEP), Schultertoleranz, Seitenrichtigkeit, Kontrollauftrag: Narbenmarkierung und Arme im CT sichtbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf erklären, Intimsphäre wahren, Oberkörper frei, Schmuck/Metall entfernen, Seitenrichtigkeit aktiv kommunizieren, Narbe mit Draht markieren (vor Lagerung), Armhebung und Schultertoleranz aktiv prüfen.",
+      positioning:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale (Größe), KneeSTEP. Narbenmarkierung sichtbar, Seitenrichtigkeit geprüft und kommuniziert, achsgerechte und reproduzierbare Lagerung.",
+      scan:"Thorax 3 mm: Occiput/HWK-Basis bis LWK 1. Kontrolle: Thorax vollständig, Narbenmarkierung (Draht) im CT sichtbar, Arme vollständig im FOV, FOV ausreichend, Ref.-Markierungen sichtbar.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto (Narbe und Arme erkennbar), Narbenmarkierung im CT dokumentiert, Seitenrichtigkeit abgeglichen, Ref.-Markierungen geprüft, Tischposition dokumentiert."
+    },
+    typicalMistakes:[
+      {id:"side-mix",title:"Seitenverwechslung",
+       consequence:"Falsche Seite markiert oder bestrahlt – höchste Patientengefährdung, in der Prüfung KO-Kriterium. Prävention: Seitenangabe aktiv aus Dokument entnehmen und mit Patientin abgleichen.",
+       severity:"ko"},
+      {id:"no-scar",title:"Narbenmarkierung vergessen",
+       consequence:"Operationsnarbe im CT nicht identifizierbar; Boost-Konturierung und Bestrahlungsplanung nicht möglich oder verfälscht. Neutermin erforderlich.",
+       severity:"major"},
+      {id:"arm-tolerance",title:"Schultertoleranz nicht aktiv geprüft",
+       consequence:"Patientin bricht Lagerung ab oder hält Armposition nicht durch – CT muss abgebrochen oder wiederholt werden. Zeitverlust, zusätzliche Strahlenbelastung.",
+       severity:"major"},
+      {id:"jewelry",title:"Schmuck / Metall im Thoraxbereich nicht entfernt",
+       consequence:"Metallartefakte im CT-Bild, Dosisberechnung verfälscht, Contouring erschwert. Neutermin möglich.",
+       severity:"major"},
+      {id:"scan-short",title:"Scanbereich zu kurz (LWK 1 nicht erreicht)",
+       consequence:"Zielvolumen kaudal abgeschnitten; Bestrahlungsplanung nicht vollständig möglich, CT muss wiederholt werden.",
+       severity:"major"},
+      {id:"foto-incomplete",title:"Lagerungsfoto unvollständig oder Narbe nicht erkennbar",
+       consequence:"Reproduzierbarkeit am Linac nicht gesichert; Narbenlokalisation und Armposition für tägliches Setup unklar.",
+       severity:"minor"},
+      {id:"intimacy",title:"Intimsphäre nicht ausreichend gewahrt",
+       consequence:"Unnötige Exposition der Patientin; Vertrauensverlust und ethische Pflichtverletzung – in Prüfung angemerkt.",
+       severity:"minor"}
+    ],
+    caseText:"Prüfungsfall FALL-MCA-03: Anna Müller. Mammakarzinom links, pT2N1M0, nach brusterhaltender Operation. Planungs-CT Thorax. Fokus: Dokumentenanalyse mit Seitenprüfung, Narbenmarkierung mit Draht, WingSTEP-Lagerung, Schultertoleranz, Scanbereich.",
+    impulse:"Was wäre die praktische Konsequenz, wenn die Seitenrichtigkeit nicht aktiv geprüft wird oder die Narbenmarkierung vergessen wird – und was ist der Unterschied in der klinischen Auswirkung dieser beiden Fehler?"
+  },
+
+  bronchial:{
+    title:"Bronchial-Ca.",
+    status:"complete",
+    schema:"thorax",
+    tags:["Thorax","Dyspnoe","WingSTEP"],
+    pdfDoc:"../media/documents/Fall_BC_01.pdf",
+    special:"Dyspnoe und Lagerungstoleranz aktiv abfragen. Standard: Arme über Kopf (WingSTEP). Alternative nur mit Begründung, Rücksprache und Dokumentation.",
+    undress:"Oberkörper frei machen. Schmuck und Metall im Thoraxbereich entfernen.",
+    bladder:false,rectum:false,zahnschiene:false,
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientendaten (Name, Geburtsdatum), Fall-ID und behandelnde Institution sicher lokalisiert und abgeglichen.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnosis",title:"Diagnose / Indikation / Histologie",
+       desc:"Primärdiagnose Bronchialkarzinom (NSCLC oder SCLC), Histologie, Stadium und Tumorlokalisation im Thorax (z. B. Hilus links, Oberlappen) identifizieren.",
+       required:true,severityIfMissing:"major"},
+      {id:"tumorRegion",title:"Tumorregion / Thoraxbezug",
+       desc:"Genaue Lage des Tumors im Thorax ableiten (Hilus, Lunge, Mediastinum, Apex). Bestimmt Scanbereich und Lagerungsrelevanz.",
+       required:true,severityIfMissing:"major"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region (Thorax) und Scanprogramm (Thorax 3 mm, Occiput/Hinterkopf bis LWK 1) aus CT-Anforderung sicher ableiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"dyspnoe",title:"Dyspnoe / Lagerungstoleranz",
+       desc:"Hinweise auf Dyspnoe (in Ruhe oder Belastung), Sauerstoffbedarf oder stark eingeschränkte Belastbarkeit erkennen – entscheidet direkt über Armposition und Lagerungsplanung.",
+       required:true,severityIfMissing:"major"},
+      {id:"armPosition",title:"Armposition / Lagerungsvorgabe",
+       desc:"Armhebung über Kopf (WingSTEP) angeordnet oder eingeschränkt? Lagerungsvorgabe aus CT-Anforderung entnehmen; Alternativlagerung bei dokumentierter Intoleranz.",
+       required:true,severityIfMissing:"major"},
+      {id:"painCough",title:"Schmerzen / Husten / Belastbarkeit",
+       desc:"Thoraxschmerzen, Hustenanfall oder stark reduzierter AZ als mögliche Lagerungshindernisse erkennen. Husten kann Scanqualität beeinträchtigen.",
+       required:true,severityIfMissing:"major"},
+      {id:"aids",title:"Lagerungshilfen aus Dokument",
+       desc:"WingSTEP, Nackenschale, KneeSTEP aus Dokument entnehmen und mit indikationsspezifischem Standard abgleichen; Alternativlagerung erkennen falls angegeben.",
+       required:true,severityIfMissing:"major"},
+      {id:"metal",title:"Metall / störende Gegenstände im Thoraxbereich",
+       desc:"Schmuck, Piercings, Herzschrittmacher, Port-a-Cath o. Ä. im Thorax-/Schulterbereich erkennen und auf Artefaktrelevanz prüfen.",
+       required:true,severityIfMissing:"major"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Scanregion, Dyspnoe-Status und Lagerungsvorgabe stimmig? Widersprüche erkennen (z. B. Arme über Kopf bei dokumentierter schwerer Dyspnoe) und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Thorax vollständig, Zielvolumen nicht abgeschnitten, Arme und Lagerung im FOV, Ref.-Markierungen sichtbar.",
+       required:true,severityIfMissing:"major"},
+      {id:"o2",title:"Sauerstoffbedarf / besondere Einschränkungen",
+       desc:"O2-Pflichtigkeit, Rollstuhlpflicht oder stark reduzierter AZ als Kontext für Lagerungsplanung und Patientensicherheit – nicht mit Lagerungsvorgabe verwechseln.",
+       required:false,severityIfMissing:"minor"},
+      {id:"notRelevant",title:"Ablenkende Angaben",
+       desc:"Nicht relevante Angaben (z. B. allgemeine Anamnese, Nebendiagnosen ohne Lagerungsrelevanz) bewusst identifizieren und ausblenden.",
+       required:false,severityIfMissing:"minor"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Dauer, Armposition, ggf. Atemanweisungen – Besonderheit Dyspnoe ansprechen",
+        "Intimsphäre wahren: Vorhang / Sichtschutz, nur so lange wie nötig entkleidet",
+        "Dyspnoe, Husten, Thoraxschmerzen und allgemeine Belastbarkeit aktiv erfragen"
+      ],
+      specific:[
+        "Oberkörper frei machen",
+        "Schmuck und Metall im Thorax- und Schulterbereich entfernen (Kette, Piercings)",
+        "Dyspnoe in Ruhe und bei Belastung aktiv abfragen – entscheidet über Armposition",
+        "Armhebung beidseitig aktiv prüfen: Toleranz, Schmerzen, Atemverschlechterung bei gehobenen Armen",
+        "Bei Dyspnoe oder Armhebungsintoleranz: Rücksprache mit Arzt vor Lagerung, Dokumentation der Abweichung",
+        "Ggf. Sauerstoffzufuhr während CT klären und sicherstellen"
+      ]
+    },
+    positioning:{
+      variantHint:"Standardlagerung Bronchial-Ca.: Rückenlage, Arme über Kopf (WingSTEP), Nackenschale (Größe wählen), KneeSTEP. Bei begründeter Dyspnoe oder nachgewiesener Armhebungsintoleranz: Alternativlagerung Arme am Körper – ausschließlich mit ärztlicher Rücksprache, schriftlicher Dokumentation und Begründung. Die Abweichung beeinflusst die Dosisplanung und muss im Planungssystem kenntlich sein.",
+      allowedAidVariants:[
+        {id:"A",label:"WingSTEP + Nackenschale + KneeSTEP (Standard)",aids:["wing","neck","kniestep"],requiresJustification:false},
+        {id:"B",label:"Nackenschale + KneeSTEP (Arme am Körper – nur bei begründeter Intoleranz)",aids:["neck","kniestep"],requiresJustification:true}
+      ],
+      forbiddenAids:["mask","prostep","bluebag","belly"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Körpermitte sternal",
+      longitudinal:"Sternale Referenz (Brustbeinmitte) oder Schultermarker – hausstandardabhängig, reproduzierbar dokumentieren",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral am Thorax",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt, sofern im lokalen Workflow vorgesehen",
+      note:"Die konkrete Referenzpunktlage ist hausstandardabhängig. Prüfungsrelevant: Punkte reproduzierbar, anatomisch plausibel und dokumentierbar. Bei Alternativlagerung (Arme am Körper) Referenzpunkte entsprechend anpassen und dokumentieren."
+    },
+    scan:{
+      programs:["Thorax 3 mm"],
+      defaultProgram:"Thorax 3 mm",
+      start:{label:"Occiput / Hinterkopf (lokaler Ausbildungsstandard)",val:5,min:0,max:15},
+      end:{label:"LWK 1 (lokaler Ausbildungsstandard)",val:72,min:62,max:80},
+      minFov:100,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Gesamter Thorax vollständig abgebildet",
+        "Tumorregion / Zielvolumen nicht abgeschnitten",
+        "Ref.-Markierungen sichtbar",
+        "Arme und Lagerung vollständig im FOV abgebildet",
+        "Scanbereich nicht zu kurz – LWK 1 als Untergrenze prüfen"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Lagerungsabweichung (Arme am Körper) mit Begründung und Rücksprache dokumentieren, falls Standardlagerung nicht möglich war",
+        "Ref.-Markierungen im CT-Bild kontrollieren",
+        "Lagerungsfoto: Armposition erkennbar – Abweichung vom Standard klar dokumentiert",
+        "Patientenzustand nach CT prüfen (Dyspnoe, Erschöpfung)"
+      ]
+    },
+    expectedSummary:{
+      document:"Patient aktiv identifizieren; Bronchialkarzinom (NSCLC/SCLC), Diagnose/Stadium/Thoraxlokalisation, Behandlungsregion Thorax, Dyspnoe-/Belastungsstatus aus Dokument entnehmen, Lagerungsvorgabe (Arme über Kopf wenn toleriert), Kontrollauftrag: Thorax vollständig, Zielvolumen nicht abgeschnitten, Arme im FOV, Ref.-Markierungen sichtbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf erklären, Intimsphäre, Oberkörper frei, Metall entfernen, Dyspnoe aktiv abfragen, Armhebung aktiv prüfen. Bei Intoleranz: Rücksprache und Lagerungsanpassung mit Dokumentation.",
+      positioning:"Rückenlage, Arme über Kopf (WingSTEP), Nackenschale, KneeSTEP. Bei begründeter Intoleranz: Arme am Körper nur mit ärztlicher Rücksprache, Begründung und Dokumentation. Abweichung planungsrelevant.",
+      scan:"Thorax 3 mm nach lokalem Ausbildungsstandard: Occiput / Hinterkopf bis LWK 1. Kontrolle: Thorax vollständig, Zielvolumen nicht abgeschnitten, Arme im FOV, FOV ausreichend, Ref.-Markierungen sichtbar.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto (Armposition erkennbar), Lagerungsabweichung dokumentiert und begründet, Ref.-Markierungen geprüft, Tischposition dokumentiert, Patientenzustand nach CT beachtet."
+    },
+    typicalMistakes:[
+      {id:"dyspnoe-not-asked",title:"Dyspnoe nicht aktiv abgefragt",
+       consequence:"Patient hält Lagerung nicht durch; CT-Abbruch oder Notfallsituation im Scanner. Häufigste vermeidbare Situation bei Bronchial-Ca.",
+       severity:"major"},
+      {id:"arm-not-tested",title:"Armhebung nicht aktiv geprüft",
+       consequence:"Patient toleriert Arme-über-Kopf-Lagerung nicht; CT muss abgebrochen oder mit Alternativlagerung wiederholt werden – ohne Dokumentation und Rücksprache.",
+       severity:"major"},
+      {id:"arms-down-no-doc",title:"Arme am Körper ohne Begründung und Rücksprache",
+       consequence:"Veränderte Patientengeometrie und planungsrelevante Abweichung; mögliche Auswirkungen auf Dosisverteilung, Konturierung, Patientenumfang und Reproduzierbarkeit. Ohne Rücksprache und Dokumentation klarer Prüfungsfehler.",
+       severity:"major"},
+      {id:"wrong-aids",title:"Falsche Lagerungshilfen gewählt",
+       consequence:"Indikationsfremde Hilfsmittel (z. B. Maske, BellySTEP); Lagerung nicht reproduzierbar oder planbar.",
+       severity:"major"},
+      {id:"scan-short",title:"Scanbereich zu kurz (LWK 1 nicht erreicht)",
+       consequence:"Zielvolumen kaudal oder kranial abgeschnitten; CT-Wiederholung mit erneuter Strahlenbelastung notwendig.",
+       severity:"major"},
+      {id:"thorax-incomplete",title:"Thorax nicht vollständig abgebildet",
+       consequence:"Planungsrelevante Strukturen (z. B. Hilus, Mediastinum, Zwerchfell) fehlen; Bestrahlungsplanung nicht durchführbar.",
+       severity:"major"},
+      {id:"foto-arm-missing",title:"Lagerungsfoto fehlt oder Armposition nicht erkennbar",
+       consequence:"Reproduzierbarkeit am Linac nicht gesichert; tägliches Setup ohne Referenz – besonders kritisch bei Alternativlagerung.",
+       severity:"minor"}
+    ],
+    caseText:"Prüfungsfall FALL-BC-01: Klaus Fischer. Bronchialkarzinom links (NSCLC, cT3N2M0). Planungs-CT Thorax. Fokus: Dokumentenanalyse, Dyspnoe-Management, Armhebungsprüfung, Lagerungsentscheidung WingSTEP vs. Alternativlagerung, Scanbereich.",
+    impulse:"Was verändert sich in der Bestrahlungsplanung, wenn ein Patient mit Bronchialkarzinom die Arme-über-Kopf-Lagerung nicht toleriert – und welche Pflichten entstehen daraus für dich als MTR bei Vorbereitung, Lagerung und Dokumentation?"
+  },
+
   rektum:{
-    title:"Rektum-Ca.",tags:["Becken","BellySTEP","Rektum"],schema:"pelvis",unlocked:true,
+    title:"Rektum-Ca.",
+    status:"complete",
+    schema:"pelvis",
+    tags:["Becken","BellySTEP","Rektum"],
     pdfDoc:"../media/documents/Fall_Rektum_BL_02.pdf",
-    special:"Volle Blase und entleerter Enddarm. Bauchlage mit BellySTEP oder Rückenlage.",
+    special:"Volle Blase und entleerter Enddarm vor CT sicherstellen. Lagerungsvariante patientengerecht wählen: Bauchlage (BellySTEP) oder Rückenlage (Kopfschale + KneeSTEP + ProSTEP).",
     undress:"Unterkörper frei machen, Schuhe ausziehen.",
     bladder:true,rectum:true,zahnschiene:false,
-    aidSets:[["belly"],["head","kniestep","prostep"]],
-    aidForbidden:["mask","wing","bluebag"],
-    scanPrograms:["Rektum BL 3 mm","Becken 3 mm"],scanDefault:"Rektum BL 3 mm",
-    scanStart:{val:12,min:5,max:20,label:"LWK 3"},
-    scanEnd:{val:72,min:62,max:80,label:"oberes/mittleres Femurdrittel"},
-    refV:"Halber Patientendurchmesser",
-    refL:"Longitudinale Beckenmitte",
-    refLat:"Körpermitte / Sagittalebene",
-    startPt:"LWK 3",
-    doc:{
-      diagnose:"Rektumkarzinom, cT3N1M0, mittleres Rektumdrittel",
-      anamnese:"Blut im Stuhl, Tenesmen. Volle Blase, Enddarm entleert.",
-      region:"Becken",scan:"Rektum BL 3 mm, LWK 3 bis mittleres Femurdrittel",
-      lagerung:"Bauchlage mit BellySTEP ODER Rückenlage + KneeSTEP/ProSTEP + Kopfschale",
-      besonderheit:"Volle Blase, Enddarm entleert; Lagerungstoleranz Bauchlage prüfen."
-    }
+    documentFindings:[
+      {id:"identity",title:"Identität / Fallbezug",
+       desc:"Patientendaten (Name, Geburtsdatum), Fall-ID und behandelnde Institution sicher lokalisiert und abgeglichen.",
+       required:true,severityIfMissing:"ko"},
+      {id:"diagnosis",title:"Diagnose / Indikation",
+       desc:"Primärdiagnose Rektumkarzinom, Histologie und Behandlungsindikation (kurativ, neoadjuvant, adjuvant) identifizieren.",
+       required:true,severityIfMissing:"major"},
+      {id:"tumorRegion",title:"Tumorregion / Beckenbezug",
+       desc:"Lage des Tumors im Rektum (unteres/mittleres/oberes Drittel, Abstand zur Anokutanlinie) und Bezug zur Beckenregion ableiten – relevant für Scanbereich und Lagerungswahl.",
+       required:true,severityIfMissing:"major"},
+      {id:"stadium",title:"TNM-Stadium / Therapieintention",
+       desc:"Stadium als Kontext für Therapieintention einordnen – nicht für eigenmächtige Lagerungsentscheidungen. Neoadjuvant vs. adjuvant hat Einfluss auf Planungsziel.",
+       required:false,severityIfMissing:"minor"},
+      {id:"region",title:"CT-Region / Scanprogramm",
+       desc:"Angeforderte CT-Region (Becken) und Scanprogramm (Rektum BL 3 mm oder Becken 3 mm) aus CT-Anforderung sicher ableiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"bladder",title:"Blasenfüllung",
+       desc:"Volle Blase ausdrücklich angeordnet? Aus Verordnung/CT-Anforderung entnehmen. Blasenfüllung ist ein prüfungsrelevanter Kernpunkt und beeinflusst Organposition und Planungsqualität.",
+       required:true,severityIfMissing:"major"},
+      {id:"rectumPrep",title:"Enddarmentleerung",
+       desc:"Entleerter Enddarm ausdrücklich angeordnet? Aus Dokument entnehmen. Rektumfüllung beeinflusst Tumorposition und Dosisverteilung direkt.",
+       required:true,severityIfMissing:"major"},
+      {id:"posVariant",title:"Lagerungsvariante Bauchlage / Rückenlage",
+       desc:"Ist eine bestimmte Lagerungsvariante (Bauchlage BellySTEP oder Rückenlage) angeordnet oder patientenabhängig zu wählen? Aus Dokument entnehmen und Entscheidungsgrundlage identifizieren.",
+       required:true,severityIfMissing:"major"},
+      {id:"aids",title:"Lagerungshilfen aus Dokument",
+       desc:"BellySTEP (Bauchlage) oder Kopfschale + KneeSTEP + ProSTEP (Rückenlage) aus Dokument entnehmen; mit indikationsspezifischem Standard abgleichen.",
+       required:true,severityIfMissing:"major"},
+      {id:"bellyTolerance",title:"Lagerungstoleranz Bauchlage / Besonderheiten",
+       desc:"Hinweise auf Bauchlage-Intoleranz: Schmerzen, Stoma, Drainagen, Adipositas, Bewegungseinschränkungen? Entscheidet Lagerungsvariante und ggf. Rücksprache.",
+       required:true,severityIfMissing:"major"},
+      {id:"plausibility",title:"Plausibilität / Rücksprachebedarf",
+       desc:"Indikation, Scanregion, Blasen-/Rektumvorbereitung und Lagerungsvariante stimmig? Widersprüche erkennen und Rücksprache einleiten.",
+       required:true,severityIfMissing:"major"},
+      {id:"control",title:"Kontrollauftrag nach CT",
+       desc:"Kontrollpunkte nach CT: Becken vollständig, Blasenfüllung sichtbar/plausibel, Rektumfüllung plausibel, Zielregion nicht abgeschnitten, Ref.-Markierungen sichtbar.",
+       required:true,severityIfMissing:"major"}
+    ],
+    patientPreparation:{
+      general:[
+        "Aktive Identitätsprüfung mit mindestens zwei Merkmalen (Name + Geburtsdatum) und Abgleich mit Konsolendatensatz",
+        "Ablauf kurz erklären: Lagerung, Dauer, Wichtigkeit der Blasenfüllung und Enddarmentleerung",
+        "Intimsphäre wahren: Vorhang / Sichtschutz, nur so lange wie nötig entkleidet",
+        "Beschwerden, Schmerzen und Bewegungseinschränkungen aktiv erfragen"
+      ],
+      specific:[
+        "Unterkörper frei machen",
+        "Schuhe ausziehen",
+        "Volle Blase aktiv abfragen und ggf. Anleitung zur ausreichenden Blasenfüllung geben",
+        "Entleerung des Enddarms aktiv abfragen",
+        "Lagerungstoleranz Bauchlage aktiv prüfen: Schmerzen, Stoma, Drainagen, Bewegungseinschränkungen",
+        "Stoma / Drainagen / Katheter beachten und Lagerung entsprechend anpassen",
+        "Bei nicht erfüllter Vorbereitung oder Lagerungsintoleranz: Rücksprache mit Arzt, Dokumentation der Abweichung"
+      ]
+    },
+    positioning:{
+      variantHint:"Bauchlage mit BellySTEP oder Rückenlage mit Kopfschale + KneeSTEP + ProSTEP sind hausintern etablierte Varianten. Die Auswahl richtet sich nach ärztlicher Vorgabe, Hausstandard, Anatomie, Patiententoleranz, Reproduzierbarkeit und Markierbarkeit. Prüfungsrelevant ist, dass die gewählte Variante reproduzierbar aufgebaut, patientengerecht begründet und vollständig dokumentiert wird.",
+      allowedAidVariants:[
+        {id:"A",label:"BellySTEP (Bauchlage – hausintern etablierte Variante)",aids:["belly"],requiresJustification:true},
+        {id:"B",label:"Kopfschale + KneeSTEP + ProSTEP (Rückenlage – hausintern etablierte Variante)",aids:["head","kniestep","prostep"],requiresJustification:true}
+      ],
+      forbiddenAids:["mask","wing","bluebag"]
+    },
+    referencePoints:{
+      vertical:"Halber Patientendurchmesser (AP-Achse), Körpermitte Beckenmitte",
+      longitudinal:"SIAS / Trochanter-Ebene oder Beckenmitte – hausstandardabhängig, reproduzierbar dokumentieren. Bei Bauchlage besonders auf reproduzierbare Markierbarkeit achten.",
+      lateral:"Körpermitte / Sagittalebene, beidseits lateral am Becken",
+      dorsal:"Reproduzierbarer dorsaler Referenzpunkt – bei Bauchlage besonders relevant, da Zugang erschwert",
+      note:"Die konkrete Referenzpunktlage ist hausstandardabhängig. Prüfungsrelevant: Punkte reproduzierbar, anatomisch plausibel und dokumentierbar. Bei Lagerungsvariante Bauchlage Markierbarkeit und Zugänglichkeit der Referenzpunkte sicherstellen."
+    },
+    scan:{
+      programs:["Rektum BL 3 mm","Becken 3 mm"],
+      defaultProgram:"Rektum BL 3 mm",
+      start:{label:"LWK 3",val:12,min:5,max:20},
+      end:{label:"oberes/mittleres Femurdrittel",val:72,min:62,max:80},
+      minFov:90,
+      controlPoints:[
+        "Patientenumfang vollständig erfasst",
+        "Gesamtes Becken vollständig abgebildet",
+        "Zielregion / Rektum nicht abgeschnitten",
+        "Blasenfüllung sichtbar und plausibel",
+        "Rektumfüllung / Enddarmentleerung plausibel",
+        "Ref.-Markierungen sichtbar",
+        "Lagerungsvariante im CT nachvollziehbar"
+      ]
+    },
+    aftercare:{
+      required:[
+        "CT-Bilder auf Vollständigkeit prüfen",
+        "Achsgerechte Lagerung prüfen",
+        "Lagerung und Tischposition dokumentieren",
+        "Lagerungsfoto auf Vollständigkeit und Verwertbarkeit prüfen"
+      ],
+      indicationSpecific:[
+        "Blasenfüllung im CT prüfen und dokumentieren",
+        "Rektumfüllung / Enddarmentleerung im CT prüfen und dokumentieren",
+        "Lagerungsvariante (Bauchlage/Rückenlage) mit Begründung dokumentieren",
+        "Abweichungen von Standardvorbereitung (z. B. nicht volle Blase) mit Rücksprache und Begründung dokumentieren"
+      ]
+    },
+    expectedSummary:{
+      document:"Patienten aktiv identifizieren; Rektumkarzinom, Diagnose/Stadium/Tumorlokalisation im Becken, Behandlungsregion Becken, volle Blase und entleerter Enddarm angeordnet, Lagerungsvariante (Bauchlage BellySTEP oder Rückenlage) erkennen, Kontrollauftrag: Becken vollständig, Blasen-/Rektumfüllung plausibel, Zielregion nicht abgeschnitten, Ref.-Markierungen sichtbar.",
+      patientPrep:"Identitätsprüfung (min. 2 Merkmale), Ablauf erklären, Intimsphäre, Unterkörper frei, Schuhe aus, volle Blase aktiv abfragen, Enddarmentleerung abfragen, Bauchlage-Toleranz aktiv prüfen, Stoma/Drainagen beachten. Bei Intoleranz oder nicht erfüllter Vorbereitung: Rücksprache und Dokumentation.",
+      positioning:"Bauchlage mit BellySTEP ODER Rückenlage + Kopfschale + KneeSTEP + ProSTEP – beide hausintern etablierte Varianten. Auswahl nach ärztlicher Vorgabe, Hausstandard, Anatomie, Patiententoleranz, Reproduzierbarkeit und Markierbarkeit. Entscheidung begründen, reproduzierbar aufbauen und vollständig dokumentieren.",
+      scan:"Rektum BL 3 mm (oder Becken 3 mm nach lokalem Standard): LWK 3 bis oberes/mittleres Femurdrittel. Kontrolle: Becken vollständig, Blasen-/Rektumfüllung plausibel, Zielregion nicht abgeschnitten, Ref.-Markierungen sichtbar, Lagerungsvariante nachvollziehbar.",
+      aftercare:"CT-Vollständigkeit, Achse, Lagerungsfoto, Blasenfüllung dokumentiert, Rektumfüllung dokumentiert, Lagerungsvariante mit Begründung dokumentiert, Abweichungen begründet und rückgesprochen, Tischposition dokumentiert."
+    },
+    typicalMistakes:[
+      {id:"no-bladder",title:"Blasenfüllung nicht abgefragt oder nicht sichergestellt",
+       consequence:"Planungs-CT mit veränderter Organfüllung; Beckenorgane und Zielregion können lageverändert sein. Dadurch entstehen Planungsabweichungen. Häufigster Fehler bei Beckenindikationen.",
+       severity:"major"},
+      {id:"no-rectum-prep",title:"Enddarmentleerung nicht abgefragt",
+       consequence:"Gefülltes Rektum im CT verändert Tumorposition und Dosisverteilung; Bestrahlungsplanung systematisch verfälscht.",
+       severity:"major"},
+      {id:"belly-not-tested",title:"Bauchlage-Toleranz nicht aktiv geprüft",
+       consequence:"Patient toleriert Bauchlage nicht; CT-Abbruch oder Lagerungswechsel ohne Dokumentation. Zeitverlust, Wiederholung mit erneuter Strahlenbelastung.",
+       severity:"major"},
+      {id:"variant-no-doc",title:"Lagerungsvariante gewählt ohne Begründung und Dokumentation",
+       consequence:"Planungsrelevante Lagerungsentscheidung undokumentiert; Reproduzierbarkeit am Linac nicht gesichert. In Prüfung Abzug, da Entscheidungsprozess nicht nachvollziehbar.",
+       severity:"major"},
+      {id:"belly-wrong-setup",title:"BellySTEP falsch vorbereitet",
+       consequence:"Abdomenaussparung nicht korrekt positioniert; Druckstellen, eingeschränkte Reproduzierbarkeit, Patient toleriert Lagerung nicht durch.",
+       severity:"major"},
+      {id:"scan-short",title:"Scanbereich zu kurz (Femur nicht erreicht)",
+       consequence:"Zielvolumen kaudal abgeschnitten; Bestrahlungsplanung nicht vollständig möglich, CT-Wiederholung notwendig.",
+       severity:"major"},
+      {id:"filling-not-checked",title:"Blasen-/Rektumfüllung nach CT nicht kontrolliert und dokumentiert",
+       consequence:"Planungsrelevante Füllungsbedingung nicht verifiziert; unklar ob CT unter korrekten Bedingungen entstanden. Nachbearbeitungsfehler mit Planungskonsequenz.",
+       severity:"major"}
+    ],
+    caseText:"Prüfungsfall FALL-RKT-02: Thomas Bauer. Rektumkarzinom unteres Drittel, cT3N1M0, neoadjuvante Radiochemotherapie. Planungs-CT Becken. Fokus: Blasen-/Rektumvorbereitung, Lagerungsentscheidung Bauchlage vs. Rückenlage, Dokumentation der Lagerungswahl, Scanbereich.",
+    impulse:"Welche klinischen Konsequenzen entstehen, wenn die Blasenfüllung nicht kontrolliert wird oder die gewählte Lagerungsvariante nicht dokumentiert wird – und warum ist die Unterscheidung zwischen Bauchlage und Rückenlage planungsrelevant?"
   }
 };
 
+// Dynamische Felder für Fälle ohne eigenen caseText/impulse
+function getCaseText(id){
+  const c=CASES[id];
+  if(c.caseText) return c.caseText;
+  return `Prüfungsnaher Trockenfall: ${c.title}. ${c.special}`;
+}
+function getImpulse(id){
+  const c=CASES[id];
+  if(c.impulse) return c.impulse;
+  return `Was wäre die praktische Konsequenz, wenn bei ${c.title} ${c.special.split(".")[0].toLowerCase()}?`;
+}
+
 // ============================================================
 // LAGERUNGSHILFEN
+// TODO spätere Lernapp-Version: in content/modules/*.json auslagern.
 // ============================================================
 const AIDS = [
   {id:"mask",   name:"Maskenhalterung", desc:"Indiv. Thermoplastmaske, Kopf/Hals",    abbr:"M",  col:"#8a7dff"},
@@ -525,55 +1391,37 @@ const AIDS = [
   {id:"bluebag",name:"Bluebag",         desc:"Individ. Vakuummatratze Becken",         abbr:"BB", col:"#3b82f6"},
   {id:"belly",  name:"BellySTEP",       desc:"Bauchlagerungsboard, Abdomenaussparung", abbr:"BS", col:"#1d4ed8"}
 ];
-// Bildpfade – wenn vorhanden werden Fotos geladen, sonst SVG-Icon
 const AID_IMG = {
-  mask:"../media/aids/Standardnetzmaske.jpg", // tatsächlicher Dateiname
+  mask:"../media/aids/mask.jpg",
   neck:"../media/aids/nackenschale.jpg",
   knee:"../media/aids/Knierolle.png",
-  wing:"../media/aids/Wingstep.jpg",          // Groß-W
-  prostep:"../media/aids/Kniestep_Prostep.jpg", // bitte Datei so umbenennen (Leerzeichen/+ entfernen)
-  kniestep:"../media/aids/Kniestep.jpg",      // Groß-K
-  head:"../media/aids/kopfschale.jpg",        // klein-k
-  bluebag:"../media/aids/Bluebag.jpg",        // Groß-B
-  belly:"../media/aids/BEllyboard.jpg"        // tatsächlicher Dateiname
+  wing:"../media/aids/wingstep.jpg",
+  prostep:"../media/aids/Kniestep_Prostep.jpg",
+  kniestep:"../media/aids/kniestep.jpg",
+  head:"../media/aids/kopfschale.jpg",
+  bluebag:"../media/aids/bluebag.jpg",
+  belly:"../media/aids/bellystep.jpg"
 };
 
 // ============================================================
-// WORKFLOW-ITEMS (14 Schritte, korrekte Zuordnung hinterlegt)
+// WORKFLOW-ITEMS
+// TODO spätere Lernapp-Version: in content/modules/*.json auslagern.
 // ============================================================
 const WORKFLOW_ITEMS = [
   {label:"Dokumente analysieren",                       hint:"STT-Verordnung + CT-Anforderung auf prüfungsrelevante Infos prüfen.",phase:"Vorbereitung"},
-  {label:"Konsole prüfen",                              hint:"Röhre auf Betriebstemperatur (5 %), korrekter Patient angewählt.",   phase:"Vorbereitung"},
+  {label:"Konsole prüfen",                              hint:"Röhre auf Betriebstemperatur (lokaler Ausbildungsstandard: 5 %), korrekter Patient angewählt.",   phase:"Vorbereitung"},
   {label:"Behandlungsraum vorbereiten",                 hint:"Indikationsbezogene Lagerungshilfen bereitstellen und aufbauen.",    phase:"Vorbereitung"},
   {label:"Patientenidentität feststellen",              hint:"Aktive Identifikation mit mindestens zwei Merkmalen.",               phase:"Durchführung"},
   {label:"Patient entkleiden / Störfaktoren entfernen", hint:"Region freimachen, Metall, Prothesen und Besonderheiten prüfen.",    phase:"Durchführung"},
   {label:"Patient lagern und achsgerecht ausrichten",   hint:"Lagerungshilfen anpassen, dann Patient in Achse bringen.",          phase:"Durchführung"},
   {label:"Referenzpunkt markieren",                     hint:"Reproduzierbare Ref.-Punkte am Patienten oder Lagerungshilfe.",     phase:"Durchführung"},
-  {label:'Tisch auf „Null“ setzen',           hint:"Tischkoordinaten vor Scanbeginn korrekt zurücksetzen.",             phase:"Durchführung"},
+  {label:"Tisch auf definierten Ausgangswert setzen",   hint:"Tischkoordinaten vor Scanbeginn zurücksetzen (lokaler Workflow).",   phase:"Durchführung"},
   {label:"Startpunkt setzen",                           hint:"Anatomischen Startpunkt passend zur Indikation festlegen.",         phase:"Durchführung"},
   {label:"CT fahren",                                   hint:"Scan gemäß Programm und definiertem Bereich durchführen.",          phase:"Durchführung"},
-  {label:"Lagerungsfoto anfertigen",                    hint:"Reproduzierbare Lagerung für Planung und Linac dokumentieren.",     phase:"Durchführung"},
+  {label:"Lagerungsfoto nach finaler Lagerung anfertigen",hint:"Reproduzierbare Lagerung für Planung und Linac dokumentieren.",   phase:"Durchführung"},
   {label:"CT-Bilder auf Vollständigkeit prüfen",        hint:"Vollständigkeit, Achse, Umfang + indikationsspez. Füllung.",       phase:"Nachbearbeitung"},
   {label:"Lagerung und Tischposition dokumentieren",    hint:"Lagerungshilfen, Positionen und Abweichungen erfassen.",            phase:"Nachbearbeitung"},
   {label:"Individuelle Lagerungshilfen beschriften",    hint:"Maske, Bluebag etc. mit Patientendaten + Parametern kennzeichnen.", phase:"Nachbearbeitung"}
-];
-
-const PROSTATA_FINDINGS = [
-  ["approval","Genehmigung/Formalia","Verordnung und CT-Anforderung ärztlich freigegeben?"],
-  ["identity","Patientenidentifikation","Patientendaten, Geburtsdatum und Fall-ID sicher finden."],
-  ["diagnosis","Diagnose/Indikation","Primärdiagnose und Behandlungsindikation lokalisieren."],
-  ["risk","Tumorbiologie/Stadium","Stadium als Kontext – nicht für eigenmächtige Lagerungsentscheidungen."],
-  ["symptoms","Aktuelle Beschwerden","Beschwerden, die Lagerungstoleranz beeinflussen könnten."],
-  ["status","Belastbarkeit","Mobilität, AZ, Körperbau und Lagerbarkeit ableiten."],
-  ["course","Vorbehandlung","Vorbestrahlung, Operationen, Studienkontext prüfen."],
-  ["target","Zielvolumen/Dosierung","Zielvolumen, Dosierung und Fraktionierung einordnen."],
-  ["systemic","Begleittherapie","Systemtherapie als Kontext, nicht mit Lagerungsvorgabe verwechseln."],
-  ["appointment","Terminlogik","Planungs-CT-Termin und organisatorische Angaben prüfen."],
-  ["region","CT-Region","Angeforderte CT-Region erkennen und Scanprogramm ableiten."],
-  ["positioning","Lagerungsvorgabe","Lagerungsangaben und Vorbereitungsbedingungen herausfiltern."],
-  ["plausibility","Plausibilität/Rücksprache","Indikation, Scanregion und Lagerungsvorgabe abgleichen."],
-  ["control","Kontrollauftrag","Kontrollpunkte nach CT: Scout, Umfang, Ref.-Markierung, Blasen-/Rektumfüllung."],
-  ["notRelevant","Ablenkende Angaben","Nicht relevante Checkboxen bewusst ignorieren."]
 ];
 
 const STEPS = ["Workflow-Zuordnung","Dokumentenanalyse","Raum vorbereiten",
@@ -583,317 +1431,15 @@ const STEPS = ["Workflow-Zuordnung","Dokumentenanalyse","Raum vorbereiten",
 const STEP_FOCUS = [
   ["Schritt 1 – Worauf achten",["Welche Schritte gehören wohin: Vorbereitung, Durchführung oder Nachbearbeitung?","Die Reihenfolge innerhalb der Phasen – nicht nur die Zuordnung.","Typische Fallen: Dokumentencheck, Identitätsfeststellung."]],
   ["Schritt 2 – Worauf achten",["Diagnose, Indikationsregion, Scanbereich aktiv suchen – nicht passiv lesen.","Welche Lagerung und Vorbereitung schreibt das Dokument vor?","Was ist prüfungsrelevant, was ist Hintergrundinformation?"]],
-  ["Schritt 3 – Worauf achten",["Konsole prüfen: Röhre auf Betriebstemperatur (5 %)? Patient im System?","Welche Lagerungshilfen sind für diese Indikation korrekt?","Auswahl bewusst treffen – nicht einfach alles nehmen."]],
+  ["Schritt 3 – Worauf achten",["Konsole prüfen: Röhre auf Betriebstemperatur? Patient im System?","Welche Lagerungshilfen sind für diese Indikation korrekt?","Auswahl bewusst treffen – nicht einfach alles nehmen."]],
   ["Schritt 4 – Worauf achten",["Identität sicher feststellen: Name, Geburtsdatum, Fall-ID.","Aufklärung: Was muss der Patient wissen und tun?","Besonderheiten aus dem Dokument ansprechen (Metall, Prothesen, Füllung)."]],
-  ["Schritt 5 – Worauf achten",["Alle drei Referenzpunkte korrekt setzen: ventral, lateral x2, dorsal.","Lagerungshilfen wie vorgegeben – keine eigenmächtigen Änderungen.","Reproduzierbarkeit sicherstellen."]],
+  ["Schritt 5 – Worauf achten",["Referenzpunkte in AP- und Seitenansicht nachvollziehbar setzen: ventral/AP, lateral beidseits und dorsal, sofern im lokalen Workflow vorgesehen.","Entscheidend sind Reproduzierbarkeit, anatomische Plausibilität und Dokumentierbarkeit – nicht ein starres universelles Schema.","Lagerungsvariante bewusst wählen und bei patientenabhängigen Abweichungen begründen."]],
   ["Schritt 6 – Worauf achten",["Richtiges Scanprogramm wählen – welches steht im Dokument?","Startpunkt anatomisch korrekt definieren.","Endpunkt vollständig – kein Zielvolumen abschneiden."]],
   ["Schritt 7 – Worauf achten",["Bildserie vollständig? Keine Artefakte, kein abgeschnittenes ZV.","Lagerungsdaten und Tischposition dokumentiert?","Lagerungshilfen beschriftet (Patient, Datum, Parameter)?"]],
   ["Kompetenzbericht",["Kompetenzprofil ehrlich einschätzen – nicht beschönigen.","Abweichungen zwischen Planung und Ausführung reflektieren.","Verbesserungsmaßnahmen konkret benennen."]]
 ];
 
-// Universelle Dokument-Finding-Kategorien (alle Indikationen)
-const UNIVERSAL_FINDINGS = [
-  ["diagnose","Diagnose / Indikation","Primärdiagnose und Behandlungsregion sicher lokalisiert."],
-  ["region","Scanregion / Programm","Welches CT-Programm und welche Region ist angefordert?"],
-  ["lagerung","Lagerung / Hilfsmittel","Welche Lagerungsvorgabe und Hilfsmittel gibt das Dokument vor?"],
-  ["prep","Vorbereitung / Besonderheiten","Besonderheiten: Metallentfernung, Blasenfüllung, Zahnschiene etc."]
-];
 
-// ============================================================
-// STATE
-// ============================================================
-function defaultAnswers(){
-  return {
-    workflow:{},
-    documents:"",documentFindings:[],
-    consolePercent:"",consolePatient:false,
-    aids:[],
-    patientIdentity:"",patientPrep:"",
-    positioningOrder:"",refPoints:"",
-    scanProgram:"",scanStart:12,scanEnd:72,
-    aftercare:[],
-    refDots:{vx:140,vy:195,llx:44,lly:195,lrx:236,lry:195,vx_s:206,vy_s:190,dx:68,dy:190},
-    scanLines:{top:100,bottom:300,fov:110}
-  };
-}
-const state={indication:null,step:0,answers:defaultAnswers()};
-
-// ============================================================
-// INIT
-// ============================================================
-function init(){
-  const grid=document.getElementById("indicationGrid");
-  const order=["prostata","hirn","hno","oesprox","oesdist","mamma","bronchial","rektum"];
-  grid.innerHTML=order.map(id=>{
-    const d=IND[id];
-    const locked=!d.unlocked;
-    return `<button class="indication-card${locked?" locked":""}" 
-      onclick="${locked?"showLocked()":"startCase('"+id+"')"}" 
-      aria-disabled="${locked}">
-      <div>
-        <h4>${d.title}</h4>
-        <p>${d.special.split(".")[0]}.</p>
-      </div>
-      <div class="tag-row">
-        ${d.tags.map(t=>`<span class="tag${t==="Pilot"?" pilot":""}">${t}</span>`).join("")}
-        ${locked?'<span class="lock-badge">folgt</span>':""}
-      </div>
-    </button>`;
-  }).join("");
-}
-function showLocked(){alert("Diese Indikation befindet sich im Aufbau und wird in Kürze freigeschaltet.");}
-function scrollToIndications(){document.getElementById("indicationsTitle").scrollIntoView({behavior:"smooth"});}
-function toggleSidebar(){
-  const layout=document.querySelector(".simulation-layout");
-  const icon=document.getElementById("toggleIcon");
-  const collapsed=layout.classList.toggle("sidebar-collapsed");
-  icon.textContent=collapsed?"▶":"◀";
-}
-function startRandomCase(){
-  const unlocked=Object.keys(IND).filter(id=>IND[id].unlocked);
-  startCase(unlocked[Math.floor(Math.random()*unlocked.length)]);
-}
-function startCase(id){
-  state.indication=IND[id];
-  state.indId=id;
-  state.step=0;
-  state.answers=defaultAnswers();
-  state.answers.scanStart=IND[id].scanStart.val;
-  state.answers.scanEnd=IND[id].scanEnd.val;
-  {const _bp=BODY_PATHS[IND[id].schema]||BODY_PATHS.pelvis;
-   state.answers.refDots=Object.assign({},_bp.refFront,_bp.refSide);
-   const _sv=state.answers.scanStart,_ev=state.answers.scanEnd;
-   state.answers.scanLines={top:Math.round(40+_sv*3.0),bottom:Math.round(40+_ev*3.0),fov:108};}
-  document.getElementById("homeView").classList.add("hidden");
-  document.getElementById("simView").classList.add("active");
-  render();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function returnHome(){
-  document.getElementById("homeView").classList.remove("hidden");
-  document.getElementById("simView").classList.remove("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-// ============================================================
-// RENDER-DISPATCHER
-// ============================================================
-function render(){
-  const ind=state.indication;
-  document.getElementById("caseTitle").textContent=ind.title;
-  document.getElementById("caseText").textContent=ind.pilot
-    ?"Pilotfall FALL-PCA-02: Martin Weber. Prostata-Ca., Planungs-CT Becken. Fokus: Dokumentenanalyse, Blasen-/Rektumvorbereitung, Beckenlagerung, Scanbereich."
-    :`Prüfungsnaher Trockenfall: ${ind.title}. ${ind.special}`;
-  document.getElementById("statusChip").textContent=`Schritt ${state.step+1} / ${STEPS.length}`;
-  document.getElementById("backBtn").disabled=state.step===0;
-  document.getElementById("nextBtn").textContent=state.step===STEPS.length-1?"Bericht drucken":"Weiter";
-  document.getElementById("progressList").innerHTML=STEPS.map((label,i)=>`
-    <div class="progress-step ${i===state.step?"active":""} ${i<state.step?"done":""}">
-      <div class="step-num">${i<state.step?"✓":i+1}</div><div>${label}</div>
-    </div>`).join("")
-    +`<div class="focus-box"><strong>${STEP_FOCUS[state.step][0]}</strong><ul>${STEP_FOCUS[state.step][1].map(f=>`<li>${f}</li>`).join("")}</ul></div>`;
-  const renderers=[renderWorkflow,renderDocuments,renderConsoleAndAids,renderPatientPrep,
-    renderPositioning,renderScan,renderAftercare,renderReport];
-  const data=renderers[state.step]();
-  document.getElementById("taskTitle").textContent=data.title;
-  document.getElementById("taskIntro").textContent=data.intro;
-  document.getElementById("taskBody").innerHTML=data.body;
-  bindStepEvents();
-}
-
-// ============================================================
-// SCHRITT 1: WORKFLOW-ZUORDNUNG
-// ============================================================
-function renderWorkflow(){
-  const letters="ABCDEFGHIJKLN".split("");
-  return{
-    title:"Workflow-Zuordnung",
-    intro:"Ordne jeden Arbeitsschritt genau einmal einer Phase zu. Die Reihenfolge innerhalb einer Phase muss nicht angegeben werden – nur die korrekte Zuordnung zählt.",
-    body:`<div class="card-box">
-      <div class="phase-summary">
-        <div><strong>Vorbereitung</strong><span>Alles, was vor Patientenkontakt bereitstehen muss.</span></div>
-        <div><strong>Durchführung</strong><span>Patientenkontakt, Lagerung, Referenzpunkte und CT-Scan.</span></div>
-        <div><strong>Nachbearbeitung</strong><span>Kontrolle, Dokumentation und Beschriftung.</span></div>
-      </div>
-      <div class="workflow-compact">
-        ${WORKFLOW_ITEMS.map((item,i)=>`
-          <div class="workflow-row" id="wrow-${i}">
-            <div class="workflow-index">${letters[i]}</div>
-            <div class="workflow-label"><strong>${item.label}</strong><span>${item.hint}</span></div>
-            <select data-workflow="${item.label}" aria-label="Phase für ${item.label}">
-              <option value="">Phase wählen</option>
-              <option>Vorbereitung</option>
-              <option>Durchführung</option>
-              <option>Nachbearbeitung</option>
-            </select>
-          </div>`).join("")}
-      </div>
-    </div>`
-  };
-}
-
-// ============================================================
-// SCHRITT 2: DOKUMENTENANALYSE
-// ============================================================
-function renderDocuments(){
-  const ind=state.indication;
-  // PDF-Anzeige (alle Indikationen mit pdfDoc)
-  if(ind.pdfDoc){
-    const findings=ind.pilot?PROSTATA_FINDINGS:UNIVERSAL_FINDINGS;
-    const findingSection=`
-      <div class="card-box">
-        <h4>Was hast du im Dokument sicher identifiziert?</h4>
-        <p class="small-note">Nur auswählen, was du aktiv gefunden hast – nicht raten.</p>
-        <div class="finding-grid">
-          ${findings.map(([id,title,desc])=>`
-            <div class="finding-card ${state.answers.documentFindings.includes(id)?"selected":""}" data-finding="${id}">
-              <strong>${title}</strong><span>${desc}</span>
-            </div>`).join("")}
-        </div>
-      </div>`;
-    return{
-      title:`Dokumentenanalyse: ${ind.title}`,
-      intro:"Arbeite mit dem Originaldokument. Filtere prüfungsrelevante Informationen heraus und halte sie in deiner Notiz fest.",
-      body:`<div class="pilot-banner"><strong>Originaldokument:</strong> STT-Verordnung, CT-Anforderung und CT-Dokumentation. Suche aktiv – nicht raten.</div>
-      <div class="pdf-workspace">
-        <div class="pdf-panel">
-          <div class="pdf-toolbar">
-            <span><strong>Originaldokument</strong><br>STT-Verordnung · CT-Anforderung · CT-Dokumentation</span>
-          </div>
-          <iframe class="pdf-frame" src="${ind.pdfDoc}#toolbar=1&navpanes=0" title="Falldokument ${ind.title}"></iframe>
-          <div class="pdf-fallback">PDF lädt nur auf GitHub Pages, nicht lokal via file://. Lokal: <code>python -m http.server 8000</code> im Projektordner starten.</div>
-        </div>
-        <div class="task-stack">
-          <div class="card-box">
-            <h4>Arbeitsauftrag</h4>
-            <p>Lies das Originaldokument. Entscheide, welche Informationen für Vorbereitung, Patientengespräch, Lagerung, Scanbereich und Nachkontrolle relevant sind.</p>
-          </div>
-          ${findingSection}
-          <div class="card-box">
-            <h4>Deine Kurznotiz für die praktische Handlung</h4>
-            <textarea data-text="documents" placeholder="Identität – Indikation – Lagerung – Patientenvorbereitung – Scanbereich/Kontrolle. Min. 10 Zeichen.">${state.answers.documents}</textarea>
-          </div>
-        </div>
-      </div>`
-    };
-  }
-  // Fake-Dokument (Fallback für Indikationen ohne PDF)
-  const d=ind.doc;
-  return{
-    title:"Dokumentenanalyse",
-    intro:"Filtere prüfungsrelevante Informationen aus STT-Verordnung und CT-Anforderung. Deine Notiz wird im Abschlussbericht mit dem Erwartungshorizont verglichen.",
-    body:`<div class="doc-grid">
-      <div class="fake-doc">
-        <span class="doc-badge">STT-Verordnung</span>
-        <div class="field"><div class="field-label">Diagnose</div><div class="field-val">${d.diagnose}</div></div>
-        <div class="field"><div class="field-label">Aktuelle Beschwerden / Anamnese</div><div class="field-val">${d.anamnese}</div></div>
-        <div class="field"><div class="field-label">Indikationsregion</div><div class="field-val">${d.region}</div></div>
-        <div class="field"><div class="field-label">Besonderheiten</div><div class="field-val">${d.besonderheit}</div></div>
-      </div>
-      <div class="fake-doc">
-        <span class="doc-badge">CT-Anforderung</span>
-        <div class="field"><div class="field-label">Angeforderte Untersuchung</div><div class="field-val">Planungs-CT</div></div>
-        <div class="field"><div class="field-label">CT-Region / Scanprogramm</div><div class="field-val">${d.scan}</div></div>
-        <div class="field"><div class="field-label">Lagerungsvorgabe</div><div class="field-val">${d.lagerung}</div></div>
-        <div class="field"><div class="field-label">Vorbereitung Patient</div><div class="field-val">${d.besonderheit}</div></div>
-      </div>
-    </div>
-    <div class="card-box">
-      <h4>Deine Notiz: Was ist für diese Handlung prüfungsrelevant?</h4>
-      <textarea data-text="documents" placeholder="Diagnose, Region, Lagerung, Besonderheiten, Scanbereich – in eigenen Worten. Min. 10 Zeichen.">${state.answers.documents}</textarea>
-      <p class="small-note">Kein Sofortfeedback – Abgleich mit Erwartungshorizont am Ende.</p>
-    </div>`
-  };
-}
-
-// ============================================================
-// SCHRITT 3: KONSOLE + LAGERUNGSHILFEN
-// ============================================================
-function renderConsoleAndAids(){
-  const ind=state.indication;
-  const prostataHint=ind.pilot
-    ?`<div class="pilot-banner"><strong>Prostata-Pilot:</strong> Rückenlage mit ProSTEP/KneeSTEP + Kopfschale oder Bluebag + Kopfschale. Wähle bewusst, nicht maximal. Alles vor Patientenkontakt erledigen: Konsole, Röhre, Lagerungshilfen bereit, ordentlicher Raum.</div>`
-    :`<div class="card-box"><p class="small-note">Indikationsspezifische Auswahl: ${ind.special}</p></div>`;
-  const aidCards=AIDS.map(a=>{
-    const sel=state.answers.aids.includes(a.id);
-    return`<div class="aid-card ${sel?"selected":""}" data-aid="${a.id}">
-      <div class="aid-img" style="--aid-col:${a.col}">
-        <img src="${AID_IMG[a.id]}" alt="${a.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:${a.col}">${a.abbr}</span>
-      </div>
-      <h4>${a.name}</h4>
-      <p>${a.desc}</p>
-      <div class="aid-check">✓</div>
-    </div>`;
-  }).join("");
-  return{
-    title:"Raum vorbereiten",
-    intro:"Prüfe zuerst Konsole und Röhre, wähle dann die Lagerungshilfen für diese Indikation.",
-    body:`${prostataHint}
-    <div class="card-box">
-      <h4>Konsole: Röhre und Patientenauswahl</h4>
-      <p class="small-note" style="margin-bottom:12px">Bei wieviel Prozent muss die Röhre aufgewärmt sein, bevor mit dem CT begonnen werden darf?</p>
-      <div class="option-list" style="max-width:480px">
-        ${["5","20","25","50"].map(v=>`
-          <label class="option">
-            <input type="radio" name="console" value="${v}" ${state.answers.consolePercent===v?"checked":""}> 
-            <span>${v} %</span>
-          </label>`).join("")}
-      </div>
-      <label class="option" style="margin-top:12px;max-width:480px">
-        <input type="checkbox" id="consolePatient" ${state.answers.consolePatient?"checked":""}> 
-        <span>Korrekter Patient an der Konsole angewählt und Datensatz geprüft.</span>
-      </label>
-    </div>
-    <div class="card-box">
-      <h4>Lagerungshilfen auswählen</h4>
-      <p class="small-note" style="margin-bottom:12px">Wähle alle Lagerungshilfen, die du für diese Indikation vorbereiten würdest.</p>
-      <div class="aid-grid">${aidCards}</div>
-    </div>`
-  };
-}
-
-// ============================================================
-// SCHRITT 4: PATIENTENVORBEREITUNG
-// ============================================================
-function renderPatientPrep(){
-  const ind=state.indication;
-  const isProstate=ind.pilot;
-  const introText=isProstate
-    ?"Triff die erste sicherheitsrelevante Entscheidung. Für den Prostata-Piloten sind Identität, Intimsphäre, Unterkörper frei, Schuhe aus sowie Blasen-/Rektumvorbereitung entscheidend."
-    :`Triff die erste sicherheitsrelevante Entscheidung und beachte indikationsspezifische Besonderheiten.`;
-  const prepPlaceholder=isProstate
-    ?"Prostata-Pilot: Ablauf erklären, CT, Markierungen, Blasenfüllung, Enddarm, Entkleiden, Intimsphäre, Beschwerden. Min. 10 Zeichen."
-    :`Indikationsspezifisch: ${ind.special} Min. 10 Zeichen.`;
-  return{
-    title:"Patientenvorbereitung",
-    intro:introText,
-    body:`<div class="card-box">
-      <h4>Was ist die erste prüfungsrelevante Handlung beim Empfang des Patienten?</h4>
-      <div class="option-list">
-        ${[
-          ["befinden","Fragen, wie es dem Patienten geht."],
-          ["karte","Nach der Versichertenkarte fragen."],
-          ["identity","Aktive Identitätsprüfung mit mindestens zwei Merkmalen und Abgleich mit dem angewählten Patientenfall."],
-          ["pain","Direkt fragen, ob der Patient Schmerzen hat."]
-        ].map(([v,l])=>`
-          <label class="option">
-            <input type="radio" name="identity" value="${v}" ${state.answers.patientIdentity===v?"checked":""}> 
-            <span>${l}</span>
-          </label>`).join("")}
-      </div>
-    </div>
-    <div class="card-box">
-      <h4>Was muss vor dem Entkleiden und Lagern beachtet werden?</h4>
-      <textarea data-text="patientPrep" placeholder="${prepPlaceholder}">${state.answers.patientPrep}</textarea>
-      <p class="small-note">Kein Sofortfeedback – Erwartungshorizont erscheint am Ende.</p>
-    </div>`
-  };
-}
-
-// ============================================================
-// BODY_PATHS + ANATOMISCHE SVG-SCHEMAS (Schritt 5 & 6)
-// ============================================================
 const BODY_PATHS = {
   skull:{
     frontSVG:`
@@ -1232,13 +1778,332 @@ function buildScoutSVG(type, view, sl){
 }
 
 // ============================================================
-// SCHRITT 5: LAGERUNG & REFERENZPUNKTE (Dual-Panel)
+// STATE
+// ============================================================
+function defaultAnswers(){
+  return {
+    workflow:{},
+    documents:"",documentFindings:[],
+    consolePercent:"",consolePatient:false,
+    aids:[],aidJustification:"",
+    patientIdentity:"",patientPrep:"",
+    positioningOrder:"",refPoints:"",
+    scanProgram:"",scanStart:12,scanEnd:72,
+    aftercare:[],
+    refDots:{vx:140,vy:195,llx:44,lly:195,lrx:236,lry:195,vx_s:206,vy_s:190,dx:68,dy:190},
+    scanLines:{top:100,bottom:300,fov:110},
+    refDotsTouched:false,
+    scanLinesTouched:false,
+    irrelevantNotes:""
+  };
+}
+const state={caseId:null,step:0,answers:defaultAnswers()};
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  const grid=document.getElementById("indicationGrid");
+  const order=["prostata","hirn","hno","oesprox","oesdist","mamma","bronchial","rektum"];
+  grid.innerHTML=order.map(id=>{
+    const c=CASES[id];
+    const locked=c.status==="locked";
+    const statusLabel=c.status==="complete"?"Prüfungsfall vollständig"
+      :c.status==="in-progress"?"In Bearbeitung":"Folgt";
+    const statusClass=c.status==="complete"?"complete":c.status==="in-progress"?"in-progress":"locked-tag";
+    return `<button class="indication-card${locked?" locked":""}" 
+      onclick="${locked?"showLocked()":"startCase('"+id+"')"}" 
+      aria-disabled="${locked}">
+      <div>
+        <h4>${c.title}</h4>
+        <p>${c.special.split(".")[0]}.</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag ${statusClass}">${statusLabel}</span>
+        ${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}
+        ${locked?'<span class="lock-badge">folgt</span>':""}
+      </div>
+    </button>`;
+  }).join("");
+}
+function showLocked(){alert("Diese Indikation befindet sich im Aufbau und wird in Kürze freigeschaltet.");}
+function scrollToIndications(){document.getElementById("indicationsTitle").scrollIntoView({behavior:"smooth"});}
+function toggleSidebar(){
+  const layout=document.querySelector(".simulation-layout");
+  const icon=document.getElementById("toggleIcon");
+  const collapsed=layout.classList.toggle("sidebar-collapsed");
+  icon.textContent=collapsed?"▶":"◀";
+}
+function startRandomCase(){
+  const completeCases=Object.keys(CASES).filter(id=>CASES[id].status==="complete");
+  startCase(completeCases[Math.floor(Math.random()*completeCases.length)]);
+}
+function startCase(id){
+  const c=CASES[id];
+  state.caseId=id;
+  state.step=0;
+  state.answers=defaultAnswers();
+  state.answers.scanStart=c.scan.start.val;
+  state.answers.scanEnd=c.scan.end.val;
+  {const _bp=BODY_PATHS[c.schema]||BODY_PATHS.pelvis;
+   state.answers.refDots=Object.assign({},_bp.refFront,_bp.refSide);
+   const _sv=state.answers.scanStart,_ev=state.answers.scanEnd;
+   state.answers.scanLines={top:Math.round(40+_sv*3.0),bottom:Math.round(40+_ev*3.0),fov:108};}
+  document.getElementById("homeView").classList.add("hidden");
+  document.getElementById("simView").classList.add("active");
+  window.addEventListener("beforeunload",beforeUnloadWarn);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function hasAnyInput(){
+  const a=state.answers;
+  return Object.keys(a.workflow).length>0 ||
+    a.documents.length>0 ||
+    a.documentFindings.length>0 ||
+    a.consolePercent!=="" ||
+    a.consolePatient ||
+    a.aids.length>0 ||
+    a.aidJustification.length>0 ||
+    a.patientIdentity!=="" ||
+    a.patientPrep.length>0 ||
+    a.positioningOrder!=="" ||
+    a.refPoints.length>0 ||
+    a.refDotsTouched ||
+    a.scanProgram!=="" ||
+    a.scanLinesTouched ||
+    a.aftercare.length>0 ||
+    a.irrelevantNotes.length>0;
+}
+function beforeUnloadWarn(e){
+  if(!hasAnyInput()) return;
+  e.preventDefault();
+  e.returnValue="";
+}
+function returnHome(){
+  window.removeEventListener("beforeunload",beforeUnloadWarn);
+  document.getElementById("homeView").classList.remove("hidden");
+  document.getElementById("simView").classList.remove("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ============================================================
+// RENDER-DISPATCHER
+// ============================================================
+function render(){
+  const c=CASES[state.caseId];
+  document.getElementById("caseTitle").textContent=c.title;
+  document.getElementById("caseText").textContent=getCaseText(state.caseId);
+  document.getElementById("statusChip").textContent=`Schritt ${state.step+1} / ${STEPS.length}`;
+  document.getElementById("backBtn").disabled=state.step===0;
+  document.getElementById("nextBtn").textContent=state.step===STEPS.length-1?"Bericht drucken":"Weiter";
+  document.getElementById("progressList").innerHTML=STEPS.map((label,i)=>`
+    <div class="progress-step ${i===state.step?"active":""} ${i<state.step?"done":""}">
+      <div class="step-num">${i<state.step?"✓":i+1}</div><div>${label}</div>
+    </div>`).join("")
+    +`<div class="focus-box"><strong>${STEP_FOCUS[state.step][0]}</strong><ul>${STEP_FOCUS[state.step][1].map(f=>`<li>${f}</li>`).join("")}</ul></div>`;
+  const renderers=[renderWorkflow,renderDocuments,renderConsoleAndAids,renderPatientPrep,
+    renderPositioning,renderScan,renderAftercare,renderReport];
+  const data=renderers[state.step]();
+  document.getElementById("taskTitle").textContent=data.title;
+  document.getElementById("taskIntro").textContent=data.intro;
+  document.getElementById("taskBody").innerHTML=data.body;
+  bindStepEvents();
+}
+
+// ============================================================
+// SCHRITT 1: WORKFLOW-ZUORDNUNG
+// ============================================================
+function renderWorkflow(){
+  return{
+    title:"Workflow-Zuordnung",
+    intro:"Ordne jeden Arbeitsschritt genau einmal einer Phase zu. Die Reihenfolge innerhalb einer Phase muss nicht angegeben werden – nur die korrekte Zuordnung zählt.",
+    body:`<div class="card-box">
+      <div class="phase-summary">
+        <div><strong>Vorbereitung</strong><span>Alles, was vor Patientenkontakt bereitstehen muss.</span></div>
+        <div><strong>Durchführung</strong><span>Patientenkontakt, Lagerung, Referenzpunkte und CT-Scan.</span></div>
+        <div><strong>Nachbearbeitung</strong><span>Kontrolle, Dokumentation und Beschriftung.</span></div>
+      </div>
+      <div class="workflow-compact">
+        ${WORKFLOW_ITEMS.map((item,i)=>`
+          <div class="workflow-row" id="wrow-${i}">
+            <div class="workflow-index">${i+1}</div>
+            <div class="workflow-label"><strong>${item.label}</strong><span>${item.hint}</span></div>
+            <select data-workflow="${item.label}" aria-label="Phase für ${item.label}">
+              <option value="">Phase wählen</option>
+              <option>Vorbereitung</option>
+              <option>Durchführung</option>
+              <option>Nachbearbeitung</option>
+            </select>
+          </div>`).join("")}
+      </div>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 2: DOKUMENTENANALYSE (einheitlich für alle Fälle)
+// ============================================================
+function renderDocuments(){
+  const c=CASES[state.caseId];
+  const findings=c.documentFindings;
+  const statusHint=c.status==="in-progress"?`<div class="pilot-banner" style="border-color:rgba(250,204,21,.32);background:linear-gradient(135deg,rgba(250,204,21,.10),rgba(250,204,21,.05));">
+    <strong>Hinweis:</strong> Dieser Fall ist strukturell vorbereitet, aber fachlich noch nicht vollständig validiert. Für vollständige Prüfungstiefe nutze einen bereits vollständig ausgearbeiteten Prüfungsfall.</div>`:"";
+
+  if(c.pdfDoc){
+    // notRelevant nicht als bewertbare Befundkarte anzeigen – separate Reflexionsfrage stattdessen
+    const scoredFindings=findings.filter(f=>f.id!=="notRelevant");
+    const findingSection=`
+      <div class="card-box">
+        <h4>Was hast du im Dokument sicher identifiziert?</h4>
+        <p class="small-note">Nur auswählen, was du aktiv gefunden hast – nicht raten.</p>
+        <div class="finding-grid">
+          ${scoredFindings.map(f=>`
+            <div class="finding-card ${state.answers.documentFindings.includes(f.id)?"selected":""}" data-finding="${f.id}">
+              <strong>${f.title}</strong><span>${f.desc}</span>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="card-box">
+        <h4>Reflexionsfrage: Nicht handlungsleitende Angaben</h4>
+        <p class="small-note">Welche Angaben im Dokument sind für die unmittelbare praktische Handlung am PLCT <em>nicht</em> handlungsleitend? Begründe kurz. – Kein Sofortfeedback, erscheint im Kompetenzbericht.</p>
+        <textarea data-text="irrelevantNotes" placeholder="z. B. Begleittherapie, allgemeine Anamnese, nicht lagerungsrelevante Nebendiagnosen …" style="min-height:72px">${state.answers.irrelevantNotes}</textarea>
+      </div>`;
+    return{
+      title:`Dokumentenanalyse: ${c.title}`,
+      intro:"Arbeite mit dem Originaldokument. Filtere prüfungsrelevante Informationen heraus und halte sie in deiner Notiz fest.",
+      body:`${statusHint}
+      <div class="pilot-banner"><strong>Originaldokument:</strong> STT-Verordnung, CT-Anforderung und CT-Dokumentation. Suche aktiv – nicht raten.</div>
+      <div class="pdf-workspace">
+        <div class="pdf-panel">
+          <div class="pdf-toolbar">
+            <span><strong>Originaldokument</strong><br>STT-Verordnung · CT-Anforderung · CT-Dokumentation</span>
+          </div>
+          <iframe class="pdf-frame" src="${c.pdfDoc}#toolbar=1&navpanes=0" title="Falldokument ${c.title}"></iframe>
+          <div class="pdf-fallback">PDF lädt nur auf GitHub Pages, nicht lokal via file://. Lokal: <code>python -m http.server 8000</code> im Projektordner starten.</div>
+        </div>
+        <div class="task-stack">
+          <div class="card-box">
+            <h4>Arbeitsauftrag</h4>
+            <p>Lies das Originaldokument. Entscheide, welche Informationen für Vorbereitung, Patientengespräch, Lagerung, Scanbereich und Nachkontrolle relevant sind.</p>
+          </div>
+          ${findingSection}
+          <div class="card-box">
+            <h4>Deine Kurznotiz für die praktische Handlung</h4>
+            <textarea data-text="documents" placeholder="Identität – Indikation – Lagerung – Patientenvorbereitung – Scanbereich/Kontrolle. Min. 10 Zeichen.">${state.answers.documents}</textarea>
+          </div>
+        </div>
+      </div>`
+    };
+  }
+  // Fallback: kein PDF → expectedSummary als Fake-Doc
+  const es=c.expectedSummary;
+  return{
+    title:"Dokumentenanalyse",
+    intro:"Filtere prüfungsrelevante Informationen aus den vorliegenden Dokumenten.",
+    body:`${statusHint}
+    <div class="card-box">
+      <p class="small-note">Kein Originaldokument hinterlegt. Erwartungshorizont: ${es.document}</p>
+      <h4>Deine Notiz: Was ist für diese Handlung prüfungsrelevant?</h4>
+      <textarea data-text="documents" placeholder="Diagnose, Region, Lagerung, Besonderheiten, Scanbereich – in eigenen Worten.">${state.answers.documents}</textarea>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 3: KONSOLE + LAGERUNGSHILFEN
+// ============================================================
+function renderConsoleAndAids(){
+  const c=CASES[state.caseId];
+  const variantHint=c.positioning.variantHint
+    ?`<div class="pilot-banner"><strong>Lagerungshinweis:</strong> ${c.positioning.variantHint}</div>`:"";
+  const selectedVariant=getSelectedAidVariant(true);
+  const needsJustification=selectedVariant?.requiresJustification;
+  const aidCards=AIDS.map(a=>{
+    const sel=state.answers.aids.includes(a.id);
+    return`<div class="aid-card ${sel?"selected":""}" data-aid="${a.id}">
+      <div class="aid-img" style="--aid-col:${a.col}">
+        <img src="${AID_IMG[a.id]}" alt="${a.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:${a.col}">${a.abbr}</span>
+      </div>
+      <h4>${a.name}</h4>
+      <p>${a.desc}</p>
+      <div class="aid-check">✓</div>
+    </div>`;
+  }).join("");
+  const justificationBox=needsJustification?`
+    <div class="card-box">
+      <h4>Begründung der gewählten Lagerungsvariante</h4>
+      <p class="small-note" style="margin-bottom:8px">Diese Variante ist patientenabhängig plausibel, muss aber begründet, ggf. rückgesprochen und dokumentiert werden.</p>
+      <textarea data-text="aidJustification" placeholder="Warum ist diese Lagerungsvariante hier vertretbar? Z. B. Dyspnoe, Schmerzen, Bewegungseinschränkung, Toleranz, Rücksprache/Dokumentation. Min. 10 Zeichen.">${state.answers.aidJustification}</textarea>
+    </div>`:"";
+  return{
+    title:"Raum vorbereiten",
+    intro:"Prüfe zuerst Konsole und Röhre, wähle dann die Lagerungshilfen für diese Indikation.",
+    body:`${variantHint}
+    <div class="card-box">
+      <h4>Konsole: Röhre und Patientenauswahl</h4>
+      <p class="small-note" style="margin-bottom:12px">Bei wieviel Prozent muss die Röhre aufgewärmt sein, bevor mit dem CT begonnen werden darf? (Lokaler Ausbildungsstandard)</p>
+      <div class="option-list" style="max-width:480px">
+        ${["5","20","25","50"].map(v=>`
+          <label class="option">
+            <input type="radio" name="console" value="${v}" ${state.answers.consolePercent===v?"checked":""}> 
+            <span>${v} %</span>
+          </label>`).join("")}
+      </div>
+      <label class="option" style="margin-top:12px;max-width:480px">
+        <input type="checkbox" id="consolePatient" ${state.answers.consolePatient?"checked":""}> 
+        <span>Korrekter Patient an der Konsole angewählt und Datensatz geprüft.</span>
+      </label>
+    </div>
+    <div class="card-box">
+      <h4>Lagerungshilfen auswählen</h4>
+      <p class="small-note" style="margin-bottom:12px">Wähle alle Lagerungshilfen, die du für diese Indikation vorbereiten würdest.</p>
+      <div class="aid-grid">${aidCards}</div>
+    </div>
+    ${justificationBox}`
+  };
+}
+
+// ============================================================
+// SCHRITT 4: PATIENTENVORBEREITUNG
+// ============================================================
+function renderPatientPrep(){
+  const c=CASES[state.caseId];
+  const prepPlaceholder=`${c.special} Min. 10 Zeichen.`;
+  return{
+    title:"Patientenvorbereitung",
+    intro:"Triff die erste sicherheitsrelevante Entscheidung und beachte indikationsspezifische Besonderheiten.",
+    body:`<div class="card-box">
+      <h4>Was ist die erste prüfungsrelevante Handlung beim Empfang des Patienten?</h4>
+      <div class="option-list">
+        ${[
+          ["befinden","Fragen, wie es dem Patienten geht."],
+          ["karte","Nach der Versichertenkarte fragen."],
+          ["identity","Aktive Identitätsprüfung mit mindestens zwei Merkmalen und Abgleich mit dem angewählten Patientenfall."],
+          ["pain","Direkt fragen, ob der Patient Schmerzen hat."]
+        ].map(([v,l])=>`
+          <label class="option">
+            <input type="radio" name="identity" value="${v}" ${state.answers.patientIdentity===v?"checked":""}> 
+            <span>${l}</span>
+          </label>`).join("")}
+      </div>
+    </div>
+    <div class="card-box">
+      <h4>Was muss vor dem Entkleiden und Lagern beachtet werden?</h4>
+      <textarea data-text="patientPrep" placeholder="${prepPlaceholder}">${state.answers.patientPrep}</textarea>
+      <p class="small-note">Kein Sofortfeedback – Erwartungshorizont erscheint am Ende.</p>
+    </div>`
+  };
+}
+
+// ============================================================
+// SCHRITT 5: LAGERUNG & REFERENZPUNKTE
 // ============================================================
 function renderPositioning(){
-  const ind=state.indication;
+  const c=CASES[state.caseId];
   const rd=state.answers.refDots;
-  const frontSVG=buildAnatSVG(ind.schema,'front',rd);
-  const sideSVG=buildAnatSVG(ind.schema,'side',rd);
+  const frontSVG=buildAnatSVG(c.schema,'front',rd);
+  const sideSVG=buildAnatSVG(c.schema,'side',rd);
   return{
     title:"Lagerung & Referenzpunkte",
     intro:"Schiebe die farbigen Punkte auf die anatomisch korrekten Referenzpositionen. Blau (V) = Körpermitte/AP, Gelb (LL/LR) = laterale Hautmarkierungen, Orange (D) = dorsal.",
@@ -1278,16 +2143,16 @@ function renderPositioning(){
 }
 
 // ============================================================
-// SCHRITT 6: CT-SCAN (Dual-Panel Scout)
+// SCHRITT 6: CT-SCAN
 // ============================================================
 function renderScan(){
-  const ind=state.indication;
+  const c=CASES[state.caseId];
   const sl=state.answers.scanLines;
-  const frontSVG=buildScoutSVG(ind.schema,'front',sl);
-  const sideSVG=buildScoutSVG(ind.schema,'side',sl);
+  const frontSVG=buildScoutSVG(c.schema,'front',sl);
+  const sideSVG=buildScoutSVG(c.schema,'side',sl);
   return{
     title:"CT-Scan definieren",
-    intro:`Scout: Start- (grün) und Endlinie (rot) verschieben. FOV-Grenzen (gelb) im AP-Scout symmetrisch anpassen. Standard: ${ind.scanStart.label} bis ${ind.scanEnd.label}.`,
+    intro:`Scout: Start- (grün) und Endlinie (rot) verschieben. FOV-Grenzen (gelb) im AP-Scout symmetrisch anpassen. Standard: ${c.scan.start.label} bis ${c.scan.end.label}.`,
     body:`<div class="dual-viewer">
       <div class="viewer-panel">
         <div class="viewer-label">AP-Scout (Frontal)</div>
@@ -1307,12 +2172,12 @@ function renderScan(){
         ${["Schädel 3 mm","Hals 3 mm","Thorax 3 mm","Abdomen 3 mm","Becken 3 mm","Rektum BL 3 mm"]
           .map(p=>`<option ${state.answers.scanProgram===p?"selected":""}>${p}</option>`).join("")}
       </select>
-      <p class="small-note" style="margin-top:8px">Empfohlen für diese Indikation: <strong>${ind.scanPrograms.join(" oder ")}</strong></p>
+      <p class="small-note" style="margin-top:8px">Empfohlen für diese Indikation: <strong>${c.scan.programs.join(" oder ")}</strong></p>
       <div style="display:grid;gap:6px;margin-top:10px">
         <span class="small-note"><strong>Topo zuerst:</strong> Scout etwas größer fahren, dann Bereich definieren.</span>
-        <span class="small-note"><strong>Standard-Start:</strong> ${ind.scanStart.label}</span>
-        <span class="small-note"><strong>Standard-Ende:</strong> ${ind.scanEnd.label}</span>
-        <span class="small-note"><strong>Kontrolle:</strong> Patientenumfang vollständig?${ind.bladder?" Blasen-/Rektumfüllung prüfen.":""}</span>
+        <span class="small-note"><strong>Standard-Start:</strong> ${c.scan.start.label}</span>
+        <span class="small-note"><strong>Standard-Ende:</strong> ${c.scan.end.label}</span>
+        <span class="small-note"><strong>Kontrolle:</strong> ${c.scan.controlPoints.join(", ")}.</span>
       </div>
     </div>`
   };
@@ -1322,25 +2187,21 @@ function renderScan(){
 // SCHRITT 7: NACHBEARBEITUNG
 // ============================================================
 function renderAftercare(){
-  const ind=state.indication;
-  const items=[
-    "CT-Bilder auf Vollständigkeit prüfen",
-    "Patientenumfang vollständig abgebildet",
-    "Achsgerechte Lagerung prüfen",
-    ind.bladder?"Blasen-/Rektumfüllung prüfen und dokumentieren":null,
+  const c=CASES[state.caseId];
+  const items=[...c.aftercare.required,...c.aftercare.indicationSpecific,
     "Ref.-Markierung / Bleikugeln im CT-Schnitt prüfen",
-    "Lagerungsfoto anfertigen",
     "Lagerungshilfen desinfizieren und aufräumen",
-    "Lagerung und Tischposition dokumentieren",
     "Position/Indexierung der Lagerungshilfen dokumentieren",
     "Abweichungen vom Standard mit Begründung dokumentieren",
     "Individuelle Lagerungshilfen beschriften"
-  ].filter(Boolean);
+  ];
+  // Deduplicate
+  const unique=[...new Set(items)];
   return{
     title:"Nachbearbeitung",
     intro:"Wähle alle Punkte aus, die du nach dem CT-Scan prüfst oder dokumentierst. Auswertung erfolgt im Abschlussbericht.",
     body:`<div class="card-box"><div class="option-list">
-      ${items.map(item=>`
+      ${unique.map(item=>`
         <label class="option">
           <input type="checkbox" value="${item}" data-aftercare ${state.answers.aftercare.includes(item)?"checked":""}> 
           <span>${item}</span>
@@ -1350,7 +2211,7 @@ function renderAftercare(){
 }
 
 // ============================================================
-// EVALUATIONS-FUNKTIONEN
+// EVALUATIONS-FUNKTIONEN (einheitlich, kein pilot-Branching)
 // ============================================================
 function evalWorkflow(){
   let correct=0;
@@ -1376,180 +2237,322 @@ function evalConsole(){
 function evalConsoleText(){
   const pct=state.answers.consolePercent==="5";
   const pat=state.answers.consolePatient;
-  if(pct&&pat) return "Röhre korrekt auf 5 % und Patient angewählt – Konsole vollständig geprüft.";
-  if(!pct&&pat) return `Röhre: ${state.answers.consolePercent||"nicht beantwortet"} – korrekt wären 5 %. Patientenauswahl korrekt.`;
+  if(pct&&pat) return "Röhre korrekt auf 5 % (lokaler Ausbildungsstandard) und Patient angewählt – Konsole vollständig geprüft.";
+  if(!pct&&pat) return `Röhre: ${state.answers.consolePercent||"nicht beantwortet"} – lokaler Standard: 5 %. Patientenauswahl korrekt.`;
   if(pct&&!pat) return "Röhre korrekt (5 %). Patientenauswahl an der Konsole nicht bestätigt.";
   return "Konsole nicht vollständig geprüft: Röhre und Patientenauswahl prüfen.";
 }
+
+// Punkt 4: Einheitliche evalDocs
+function getMissingRequiredFindings(){
+  const c=CASES[state.caseId];
+  return c.documentFindings.filter(f => f.required && !state.answers.documentFindings.includes(f.id));
+}
+function severityText(sev){
+  if(sev==="ko") return "sicherheitskritisch / KO-nah";
+  if(sev==="major") return "deutlicher Prüfungsfehler";
+  return "relevant, aber korrigierbar";
+}
+function evalDocs(){
+  const c=CASES[state.caseId];
+  const findings=c.documentFindings;
+  const required=findings.filter(f=>f.required);
+  const missing=getMissingRequiredFindings();
+  const missingKo=missing.filter(f=>f.severityIfMissing==="ko");
+  const missingMajor=missing.filter(f=>f.severityIfMissing==="major");
+  const textLen=state.answers.documents.trim().length;
+  const foundRequired=required.length-missing.length;
+
+  if(textLen<10) return "red";
+  if(missingKo.length>0) return "red";
+  if(missingMajor.length>=3) return "red";
+  if(missingMajor.length>=1) return "yellow";
+  if(foundRequired>=Math.ceil(required.length*0.85)) return "green";
+  if(foundRequired>=Math.ceil(required.length*0.6)) return "yellow";
+  return "red";
+}
+function evalDocsText(){
+  const c=CASES[state.caseId];
+  const color=evalDocs();
+  const missing=getMissingRequiredFindings();
+  const missingKo=missing.filter(f=>f.severityIfMissing==="ko");
+  const foundCount=state.answers.documentFindings.length;
+  const statusNote=c.status==="in-progress"?" Fall noch in Bearbeitung – fachliche Validierung eingeschränkt.":"";
+  const missingNames=missing.slice(0,4).map(f=>`${f.title} (${severityText(f.severityIfMissing)})`).join(", ");
+
+  if(state.answers.documents.trim().length<10){
+    return `Dokumentenanalyse unzureichend: Es fehlt eine handlungsbezogene Kurznotiz.${statusNote}`;
+  }
+  if(missingKo.length>0){
+    return `Sicherheitskritischer Kernbefund fehlt: ${missingKo.map(f=>f.title).join(", ")}. Dieser Befund ist sicherheitskritisch / KO-nah.${statusNote}`;
+  }
+  if(color==="green") return `Zentrale Fallinformationen priorisiert. ${foundCount} Befunde markiert, keine KO- oder Major-Kernbefunde fehlen.${statusNote}`;
+  if(color==="yellow") return `Mehrere relevante Befunde erkannt, aber wichtige Kernbefunde fehlen: ${missingNames || "nicht alle Kernbefunde vollständig"}.${statusNote}`;
+  return `Dokumentenanalyse unzureichend – zentrale Informationen nicht priorisiert. Fehlend: ${missingNames || "mehrere Kernbefunde"}.${statusNote}`;
+}
+
+// Punkt 5: Einheitliche evalAids über positioning-Struktur
+function getSelectedAidVariant(exactOnly=true){
+  const c=CASES[state.caseId];
+  const sel=state.answers.aids;
+  const sortedSel=[...sel].sort().join("|");
+  for(const v of c.positioning.allowedAidVariants){
+    const sortedVariant=[...v.aids].sort().join("|");
+    const allPresent=v.aids.every(a=>sel.includes(a));
+    const noExtra=sel.every(a=>v.aids.includes(a));
+    if(exactOnly && sortedSel===sortedVariant) return v;
+    if(!exactOnly && allPresent && noExtra) return v;
+  }
+  return null;
+}
 function evalAids(){
-  const id=state.indId;
-  const ind=IND[id];
+  const c=CASES[state.caseId];
+  const pos=c.positioning;
   const sel=state.answers.aids;
   if(sel.length===0) return "red";
-  const hasForbidden=sel.some(a=>ind.aidForbidden.includes(a));
+  const hasForbidden=sel.some(a=>pos.forbiddenAids.includes(a));
   if(hasForbidden) return "red";
-  for(const set of ind.aidSets){
-    const allPresent=set.every(a=>sel.includes(a));
-    const noExtra=sel.every(a=>set.includes(a));
-    if(allPresent&&noExtra) return "green";
+  const selectedVariant=getSelectedAidVariant(true);
+  if(selectedVariant){
+    if(selectedVariant.requiresJustification && state.answers.aidJustification.trim().length<10) return "yellow";
+    return "green";
+  }
+  for(const v of pos.allowedAidVariants){
+    const allPresent=v.aids.every(a=>sel.includes(a));
     if(allPresent) return "yellow";
   }
-  for(const set of ind.aidSets){
-    if(set.some(a=>sel.includes(a))) return "yellow";
+  for(const v of pos.allowedAidVariants){
+    if(v.aids.some(a=>sel.includes(a))) return "yellow";
   }
   return "red";
 }
 function evalAidsText(){
-  const id=state.indId;
-  const ind=IND[id];
+  const c=CASES[state.caseId];
+  const pos=c.positioning;
   const sel=state.answers.aids;
-  const hasForbidden=sel.some(a=>ind.aidForbidden.includes(a));
+  const hasForbidden=sel.some(a=>pos.forbiddenAids.includes(a));
   const color=evalAids();
-  const setNames=ind.aidSets.map(set=>set.map(a=>AIDS.find(x=>x.id===a).name).join(" + ")).join(" ODER ");
-  if(color==="green") return `Lagerungshilfen passen zur Indikation. Erwartet: ${setNames}.`;
+  const setNames=pos.allowedAidVariants.map(v=>v.label).join(" ODER ");
+  const selectedVariant=getSelectedAidVariant(true);
+  if(selectedVariant){
+    if(selectedVariant.requiresJustification && state.answers.aidJustification.trim().length<10){
+      return `Die Lagerungsvariante „${selectedVariant.label}“ ist plausibel, erfordert aber eine kurze Begründung sowie ggf. Rücksprache und Dokumentation.`;
+    }
+    if(selectedVariant.requiresJustification){
+      return `Die Lagerungsvariante „${selectedVariant.label}“ ist patientenabhängig plausibel. Begründung/Rücksprache/Dokumentation wurden berücksichtigt: ${esc(state.answers.aidJustification.trim())}`;
+    }
+    const multiVariant=pos.allowedAidVariants.length>1;
+    return multiVariant
+      ?`Die gewählte Lagerungsvariante „${selectedVariant.label}“ ist hausintern plausibel. Entscheidend sind Reproduzierbarkeit, Begründung bei Abweichungen, Patiententoleranz und Dokumentation.`
+      :`Lagerungshilfen korrekt: ${setNames}.`;
+  }
   if(hasForbidden){
-    const forb=sel.filter(a=>ind.aidForbidden.includes(a)).map(a=>AIDS.find(x=>x.id===a).name).join(", ");
+    const forb=sel.filter(a=>pos.forbiddenAids.includes(a)).map(a=>AIDS.find(x=>x.id===a).name).join(", ");
     return `Nicht geeignete Auswahl: ${forb}. Erwartet: ${setNames}.`;
   }
-  if(color==="yellow") return `Richtung erkennbar, aber Kombination unvollständig. Erwartet: ${setNames}.`;
+  if(color==="yellow") return `Richtung erkennbar, aber Kombination unvollständig oder mit zusätzlichen Hilfsmitteln. Erwartet: ${setNames}.`;
   return `Lagerungshilfen passen nicht zur Indikation. Erwartet: ${setNames}.`;
 }
+
+// Punkt 8: Einheitliche evalScan mit minFov
 function evalScan(){
-  const ind=IND[state.indId];
+  const c=CASES[state.caseId];
   const prog=state.answers.scanProgram;
   if(!prog) return "red";
-  const progOk=ind.scanPrograms.includes(prog);
+  if(!c.scan.programs.includes(prog)) return "red";
   const sv=state.answers.scanStart, ev=state.answers.scanEnd;
-  const startOk=sv>=ind.scanStart.min&&sv<=ind.scanStart.max;
-  const endOk=ev>=ind.scanEnd.min&&ev<=ind.scanEnd.max;
-  if(progOk&&startOk&&endOk) return "green";
-  if(progOk) return "yellow";
+  const startOk=sv>=c.scan.start.min&&sv<=c.scan.start.max;
+  const endOk=ev>=c.scan.end.min&&ev<=c.scan.end.max;
+  const fovOk=state.answers.scanLines.fov>=c.scan.minFov;
+  if(startOk&&endOk&&fovOk) return "green";
   return "yellow";
 }
 function evalScanText(){
-  const ind=IND[state.indId];
+  const c=CASES[state.caseId];
   const prog=state.answers.scanProgram;
-  const color=evalScan();
   if(!prog) return "Kein Scanprogramm gewählt – CT wäre nicht vorbereitet.";
-  const progOk=ind.scanPrograms.includes(prog);
+  if(!c.scan.programs.includes(prog)) return `Programm "${prog}" passt nicht zur angeforderten Region. Erwartet: ${c.scan.programs.join(" oder ")}. Falsches Scanprogramm ist ein deutlicher Prüfungsfehler.`;
   const sv=state.answers.scanStart, ev=state.answers.scanEnd;
-  const startOk=sv>=ind.scanStart.min&&sv<=ind.scanStart.max;
-  const endOk=ev>=ind.scanEnd.min&&ev<=ind.scanEnd.max;
-  if(color==="green") return `Scanprogramm und Marker korrekt: ${prog}, ${ind.scanStart.label} bis ${ind.scanEnd.label}.`;
-  if(!progOk) return `Programm "${prog}" passt nicht. Erwartet: ${ind.scanPrograms.join(" oder ")}.`;
-  let msg=`Programm "${prog}" korrekt.`;
-  if(!startOk) msg+=` Startmarker prüfen – erwartet nahe ${ind.scanStart.label}.`;
-  if(!endOk)   msg+=` Endmarker prüfen – erwartet nahe ${ind.scanEnd.label}.`;
-  return msg;
+  const startOk=sv>=c.scan.start.min&&sv<=c.scan.start.max;
+  const endOk=ev>=c.scan.end.min&&ev<=c.scan.end.max;
+  const fovOk=state.answers.scanLines.fov>=c.scan.minFov;
+  let msgs=[`Programm "${prog}" korrekt.`];
+  if(!startOk){
+    if(sv<c.scan.start.min) msgs.push("Start zu kranial: unnötige Strahlenexposition ohne diagnostischen Mehrwert.");
+    else msgs.push("Start zu kaudal: Gefahr, dass kraniale Ziel- oder Lymphabflussbereiche nicht vollständig erfasst werden.");
+  }
+  if(!endOk){
+    if(ev<c.scan.end.min) msgs.push("Ende zu kranial: Gefahr, dass kaudale Zielregion oder relevante Strukturen fehlen.");
+    else msgs.push("Ende zu kaudal: Scanbereich großzügig, aber vollständig. Strahlenexposition und klinische Vorgabe prüfen.");
+  }
+  if(!fovOk) msgs.push("FOV zu eng: Patientenumfang wäre potenziell nicht vollständig abgebildet.");
+  if(startOk&&endOk&&fovOk) return `Scanprogramm und Bereich korrekt: ${prog}, ${c.scan.start.label} bis ${c.scan.end.label}.`;
+  return msgs.join(" ");
 }
+
+// Punkt 9: Einheitliche evalAftercare
 function evalAftercare(){
-  const ind=IND[state.indId];
-  const required=["CT-Bilder auf Vollständigkeit prüfen","Achsgerechte Lagerung prüfen",
-    "Lagerung und Tischposition dokumentieren","Lagerungsfoto anfertigen"];
-  const requiredBladder=ind.bladder?"Blasen-/Rektumfüllung prüfen und dokumentieren":null;
-  const allRequired=requiredBladder?[...required,requiredBladder]:required;
+  const c=CASES[state.caseId];
+  const allRequired=[...c.aftercare.required,...c.aftercare.indicationSpecific];
   const found=allRequired.filter(i=>state.answers.aftercare.includes(i)).length;
   if(found>=allRequired.length) return "green";
   if(found>=2) return "yellow";
   return "red";
 }
 function evalAftercareText(){
-  const ind=IND[state.indId];
+  const c=CASES[state.caseId];
   const color=evalAftercare();
   if(color==="green") return "Alle wesentlichen Nachbearbeitungspunkte erfasst.";
-  if(color==="yellow") return `Teilweise vorhanden. Prüfe besonders: CT-Vollständigkeit, Achse, Lagerungsfoto und Dokumentation${ind.bladder?", Blasen-/Rektumfüllung":""}.`;
-  return `Nachbearbeitung unvollständig. Mindestens erforderlich: CT-Vollständigkeit, Achse, Lagerungsfoto, Dokumentation${ind.bladder?", Blasen-/Rektumfüllung":""}.`;
-}
-function evalDocs(){
-  if(state.indication.pilot){
-    const req=["approval","identity","diagnosis","symptoms","status","course","target","region","positioning","plausibility","control"];
-    const found=req.filter(id=>state.answers.documentFindings.includes(id)).length;
-    const distractor=state.answers.documentFindings.includes("notRelevant");
-    if(found>=7&&!distractor&&state.answers.documents.length>=10) return "green";
-    if(found>=5&&state.answers.documents.length>=10) return "yellow";
-    return "red";
-  }
-  if(state.answers.documents.length>=20) return "yellow";
-  if(state.answers.documents.length>=10) return "yellow";
-  return "red";
-}
-function evalDocsText(){
-  const color=evalDocs();
-  if(state.indication.pilot){
-    if(color==="green") return "Zentrale Fallinformationen priorisiert: Identität, Indikation, Zielvolumen, Lagerung, Blasen-/Rektumthema und Kontrollauftrag.";
-    if(color==="yellow") return "Mehrere relevante Infos erkannt. Prüfe: Zielvolumen, Beckenregion, Blasenfüllung und Kontrollauftrag.";
-    return "Dokumentenanalyse nicht prüfungsreif – zentrale Fallinformationen fehlen oder wurden nicht priorisiert.";
-  }
-  if(color==="yellow") return "Eigene Notiz vorhanden. Im Abschlussbericht mit Erwartungshorizont vergleichen.";
-  return "Keine ausreichende Notiz – prüfungsrelevante Informationen nicht sichtbar herausgearbeitet.";
+  const missing=[...c.aftercare.required,...c.aftercare.indicationSpecific].filter(i=>!state.answers.aftercare.includes(i));
+  if(color==="yellow") return `Teilweise vorhanden. Fehlend: ${missing.slice(0,3).join(", ")}${missing.length>3?"…":""}`;
+  return `Nachbearbeitung unvollständig. Mindestens erforderlich: ${c.aftercare.required.join(", ")}.`;
 }
 
 // ============================================================
-// SCHRITT 8: KOMPETENZBERICHT
+// SCHRITT 8: KOMPETENZBERICHT (Punkt 6, 7, 8, 10, 11 integriert)
 // ============================================================
 function renderReport(){
-  const ind=state.indication;
-  const id=state.indId;
-  const expected=IND[id];
-  const docExpected=ind.pilot
-    ?"Martin Weber aktiv identifizieren; Prostata-Ca. C61, Prostata + Samenblasen, Beckenregion, Nykturie/Dysurie, Blasenfüllung, Lagerungsvorgabe und Kontrollauftrag erkennen."
-    :`${expected.doc.diagnose} – Region: ${expected.doc.region} – Scan: ${expected.doc.scan} – Besonderheit: ${expected.doc.besonderheit}`;
-  const aidNames=expected.aidSets.map(s=>s.map(a=>AIDS.find(x=>x.id===a).name).join(" + ")).join(" ODER ");
-  const impulse=ind.pilot
-    ?"Was wäre die praktische Konsequenz, wenn Blasen-/Rektumfüllung nicht kontrolliert oder die Beckenlagerung nicht reproduzierbar dokumentiert wird?"
-    :`Was wäre die praktische Konsequenz, wenn bei ${ind.title} ${expected.special.split(".")[0].toLowerCase()}?`;
+  const c=CASES[state.caseId];
+  const es=c.expectedSummary;
+  const rp=c.referencePoints;
+  const pp=c.patientPreparation;
+
+  // Punkt 6: Lesbare Checkliste aus patientPreparation
+  const prepItems=[...pp.general,...pp.specific];
+  const prepExpectedHtml=checklistHtml(prepItems);
+  const mistakesHtml=typicalMistakesHtml(c);
+
+  // Punkt 7: Referenzpunkte mit Disclaimer
+  const refExpected=`Vertikal/AP: ${rp.vertical} · Longitudinal: ${rp.longitudinal} · Lateral: ${rp.lateral}. ${rp.note}`;
+
+  // Farben
+  const wfColor=evalWorkflow();
+  const docColor=evalDocs();
+  const conColor=evalConsole();
+  const aidColor=evalAids();
+  const idColor=state.answers.patientIdentity==="identity"?"green":"red";
+  const orderColor=state.answers.positioningOrder==="aids-axis-ref"?"green":"yellow";
+  const scanColor=evalScan();
+  const afterColor=evalAftercare();
+
+  // Punkt 6: Prüfungsrelevanz
+  function sev(color,koIfRed){
+    if(color==="green") return "prüfungsunkritisch";
+    if(color==="yellow") return "relevant, aber korrigierbar";
+    return koIfRed?"sicherheitskritisch / KO-nah":"deutlicher Prüfungsfehler";
+  }
+
+  const statusNote=c.status==="in-progress"?` <span class="severity-tag sev-minor">Fall in Bearbeitung – Auswertung eingeschränkt</span>`:"";
+
   return{
     title:"Kompetenzbericht",
     intro:"Dieser Bericht ist als Lernbericht gedacht: prüfungsnah, aber lernförderlich. Über Browserfunktion drucken oder als PDF speichern.",
     body:`<div class="summary-box">
-      <h3>Ergebnis: ${ind.title}</h3>
-      <p>Du hast den PLCT-Workflow vollständig durchlaufen. Die Ampeln zeigen keinen Notenwert, sondern Wiederholungsbedarf.</p>
+      <h3>Ergebnis: ${c.title}</h3>
+      <p>Du hast den PLCT-Workflow vollständig durchlaufen. Die Ampeln zeigen keinen Notenwert, sondern Wiederholungsbedarf.${statusNote}</p>
     </div>
     <div class="report-grid">
-      ${traffic("Workflow-Zuordnung",evalWorkflow(),evalWorkflowText())}
-      ${traffic("Dokumentenanalyse",evalDocs(),evalDocsText())}
-      ${traffic("Konsole",evalConsole(),evalConsoleText())}
-      ${traffic("Arbeitsplatzvorbereitung",evalAids(),evalAidsText())}
-      ${traffic("Patientensicherheit",state.answers.patientIdentity==="identity"?"green":"red",
-        state.answers.patientIdentity==="identity"
-          ?"Aktive Identitätsprüfung korrekt priorisiert."
-          :"Identitätsprüfung nicht korrekt priorisiert – sicherheits- und prüfungsrelevant.")}
-      ${traffic("Lagerungsreihenfolge",state.answers.positioningOrder==="aids-axis-ref"?"green":"yellow",
-        state.answers.positioningOrder==="aids-axis-ref"
-          ?"Reihenfolge prüfungsnah plausibel: Lagerungshilfen → achsgerecht → Referenzpunkt."
-          :"Reihenfolge prüfen: Lagerungshilfen anpassen → achsgerecht ausrichten → Referenzpunkt markieren.")}
-      ${traffic("CT-Scan-Kompetenz",evalScan(),evalScanText())}
-      ${traffic("Dokumentation & Nachbearbeitung",evalAftercare(),evalAftercareText())}
+      ${traffic("Workflow-Zuordnung",wfColor,evalWorkflowText(),sev(wfColor,false))}
+      ${traffic("Dokumentenanalyse",docColor,evalDocsText(),sev(docColor,false))}
+      ${traffic("Konsole",conColor,evalConsoleText(),sev(conColor,true))}
+      ${traffic("Arbeitsplatzvorbereitung",aidColor,evalAidsText(),sev(aidColor,false))}
+      ${traffic("Patientensicherheit",idColor,
+        idColor==="green"?"Aktive Identitätsprüfung korrekt priorisiert.":"Identitätsprüfung nicht korrekt priorisiert – sicherheits- und prüfungsrelevant.",
+        idColor==="green"?"prüfungsunkritisch":"sicherheitskritisch / KO-nah")}
+      ${traffic("Lagerungsreihenfolge",orderColor,
+        orderColor==="green"?"Reihenfolge prüfungsnah plausibel: Lagerungshilfen → achsgerecht → Referenzpunkt."
+          :"Reihenfolge prüfen: Lagerungshilfen anpassen → achsgerecht ausrichten → Referenzpunkt markieren.",
+        sev(orderColor,false))}
+      ${traffic("CT-Scan-Kompetenz",scanColor,evalScanText(),scanColor==="red"?"deutlicher Prüfungsfehler":sev(scanColor,false))}
+      ${traffic("Dokumentation & Nachbearbeitung",afterColor,evalAftercareText(),sev(afterColor,false))}
     </div>
     <div class="card-box">
-      <h4>Denkanstoß</h4><p>${impulse}</p>
+      <h4>Denkanstoß</h4><p>${getImpulse(state.caseId)}</p>
+    </div>
+    <div class="card-box">
+      <h4>Typische Prüfungsfallen bei dieser Indikation</h4>
+      ${mistakesHtml}
     </div>
     <div class="card-box answer-review">
       <h4>Eigene Antworten und Erwartungshorizont</h4>
-      ${review("Dokumentenanalyse",state.answers.documents||"Keine Eingabe",docExpected)}
-      ${ind.pilot?review("Ausgewählte Dokumentenbefunde",
-        state.answers.documentFindings.length?state.answers.documentFindings.join(", "):"keine",
-        "Handlungsrelevante Befunde priorisieren, ablenkende Angaben bewusst ignorieren."):""}
-      ${review("Patientenvorbereitung",state.answers.patientPrep||"Keine Eingabe",
-        `${expected.undress} ${expected.bladder?"Volle Blase und entleerter Enddarm abfragen.":""} ${expected.special}`)}
+      ${review("Dokumentenanalyse",state.answers.documents||"Keine Eingabe",es.document)}
+      ${review("Ausgewählte Dokumentenbefunde",
+        state.answers.documentFindings.length
+          ? state.answers.documentFindings.map(id=>{const f=c.documentFindings.find(x=>x.id===id);return f?f.title:id;}).join(", ")
+          : "keine",
+        "Kernbefunde priorisieren – handlungsrelevante von nicht handlungsleitenden Angaben trennen.")}
+      ${review("Nicht handlungsleitende Angaben (Reflexion)",state.answers.irrelevantNotes||"Keine Eingabe","Freitext – keine Bewertung. Ziel: Unterscheidung handlungsrelevanter vs. nicht handlungsleitender Angaben schulen.")}
+      ${reviewHtml("Patientenvorbereitung",state.answers.patientPrep||"Keine Eingabe",prepExpectedHtml)}
       ${review("Lagerungsreihenfolge",state.answers.positioningOrder||"keine",
-        "Lagerungshilfen anpassen → Patient achsgerecht ausrichten → Referenzpunkt markieren")}
-      ${review("Referenzpunkte",state.answers.refPoints||"Keine Eingabe",
-        `Vertikal: ${expected.refV} | Longitudinal: ${expected.refL} | Lateral: ${expected.refLat}`)}
+        "Lagerungshilfen anpassen → Patient achsgerecht ausrichten → Referenzpunkt markieren (Ausbildungsstandard)")}
+      ${review("Referenzpunkte",state.answers.refPoints||"Keine Eingabe",refExpected)}
       ${review("Scanbereich",`${state.answers.scanProgram||"kein"} | Start ${state.answers.scanStart} | Ende ${state.answers.scanEnd}`,
-        `${expected.scanDefault}: ${expected.scanStart.label} bis ${expected.scanEnd.label}`)}
+        es.scan)}
     </div>`
   };
 }
 
-function traffic(title,color,text){
+function traffic(title,color,text,severity){
   const label=color==="green"?"✓":color==="yellow"?"!":"×";
-  return`<div class="traffic-card"><div class="traffic-light ${color}">${label}</div><div><h4>${title}</h4><p>${text}</p></div></div>`;
+  const sevLabel=severity||"";
+  const sevClass=severity?(severity.includes("KO")?"sev-ko":severity.includes("deutlich")?"sev-major":severity.includes("relevant")?"sev-minor":"sev-ok"):"";
+  return`<div class="traffic-card"><div class="traffic-light ${color}">${label}</div><div><h4>${title}</h4><p>${text}</p>${sevLabel?`<span class="severity-tag ${sevClass}">${sevLabel}</span>`:""}</div></div>`;
 }
 function review(title,own,expected){
   return`<div class="review-item"><strong>${title}</strong><span><b>Deine Antwort:</b> ${esc(own)}<br><b>Erwartungshorizont:</b> ${esc(expected)}</span></div>`;
 }
+function reviewHtml(title,own,expectedHtml){
+  return`<div class="review-item"><strong>${title}</strong><span><b>Deine Antwort:</b> ${esc(own)}</span><br><b>Erwartungshorizont:</b>${expectedHtml}</div>`;
+}
+function checklistHtml(items){
+  return `<ul class="checklist">${items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`;
+}
+function typicalMistakesHtml(c){
+  const items=(c.typicalMistakes||[]).slice(0,4);
+  if(items.length===0) return `<p class="small-note">Für diese Indikation sind noch keine typischen Prüfungsfallen hinterlegt.</p>`;
+  return `<ul class="mistake-list">${items.map(m=>`<li><strong>${esc(m.title)}</strong> <span class="severity-tag ${m.severity==="ko"?"sev-ko":m.severity==="major"?"sev-major":"sev-minor"}">${severityText(m.severity)}</span><br>${esc(m.consequence)}</li>`).join("")}</ul>`;
+}
 function esc(s){return String(s).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+
+// ============================================================
+// NAVIGATION + VALIDATION
+// ============================================================
+function hasStepInput(){
+  const s=state.step;
+  const a=state.answers;
+  if(s===0) return Object.keys(a.workflow).length>0;
+  if(s===1) return a.documents.length>5||a.documentFindings.length>0;
+  if(s===2) return a.consolePercent!==""||a.aids.length>0||a.aidJustification.length>5;
+  if(s===3) return a.patientIdentity!==""||a.patientPrep.length>5;
+  if(s===4) return a.positioningOrder!==""||a.refPoints.length>5||a.refDotsTouched;
+  if(s===5) return a.scanProgram!==""||a.scanLinesTouched;
+  if(s===6) return a.aftercare.length>0;
+  return true;
+}
+function nextStep(){
+  if(state.step===STEPS.length-1){window.print();return;}
+  if(!hasStepInput()&&state.step<STEPS.length-1){
+    const existing=document.getElementById("validation-hint");
+    if(existing) existing.remove();
+    const hint=document.createElement("div");
+    hint.id="validation-hint";
+    hint.className="validation-hint";
+    hint.textContent="Du hast in diesem Schritt noch keine Eingabe gemacht. Trotzdem weiter?";
+    const btn=document.createElement("button");
+    btn.className="btn secondary";btn.style.marginLeft="12px";btn.style.marginTop="6px";
+    btn.textContent="Trotzdem weiter";
+    btn.onclick=()=>{hint.remove();state.step=Math.min(STEPS.length-1,state.step+1);render();window.scrollTo({top:0,behavior:"smooth"});};
+    hint.appendChild(btn);
+    document.querySelector(".control-row").before(hint);
+    return;
+  }
+  state.step=Math.min(STEPS.length-1,state.step+1);
+  render();window.scrollTo({top:0,behavior:"smooth"});
+}
+function prevStep(){
+  state.step=Math.max(0,state.step-1);
+  render();window.scrollTo({top:0,behavior:"smooth"});
+}
 
 // ============================================================
 // EVENT-BINDING
@@ -1586,12 +2589,6 @@ function bindStepEvents(){
   if(cp) cp.addEventListener("change",e=>{state.answers.consolePatient=e.target.checked;});
   const sp=document.querySelector("[data-scan-program]");
   if(sp) sp.addEventListener("change",e=>{state.answers.scanProgram=e.target.value;});
-  document.querySelectorAll("[data-range]").forEach(range=>{
-    range.addEventListener("input",e=>{
-      state.answers[e.target.dataset.range]=Number(e.target.value);
-      render();
-    });
-  });
   document.querySelectorAll("[data-aftercare]").forEach(chk=>{
     chk.addEventListener("change",e=>{
       const v=e.target.value;
@@ -1600,16 +2597,16 @@ function bindStepEvents(){
         :state.answers.aftercare.filter(x=>x!==v);
     });
   });
-  // Drag: Referenzpunkte (Step 5) und Scout-Linien (Step 6)
+  // Punkt 12: Drag-Tracking
   if(state.step===4) setTimeout(bindRefDotsDrag,80);
   if(state.step===5) setTimeout(bindScanDrag,80);
 }
 
 // ============================================================
-// SVG-DRAG ENGINE
+// SVG-DRAG ENGINE (Punkt 12: scoped querySelector statt getElementById)
 // ============================================================
 function makeSVGDrag(svgEl, handleId, onMove){
-  const h=document.getElementById(handleId);
+  const h=svgEl.querySelector('#'+handleId);
   if(!h||!svgEl) return;
   function toSVG(e){
     const pt=svgEl.createSVGPoint();
@@ -1625,14 +2622,14 @@ function bindRefDotsDrag(){
   const ssvg=document.getElementById('anat-side');
   const rd=state.answers.refDots;
   function updAnat(){
+    state.answers.refDotsTouched=true;
     if(fsvg){
-      const pv=document.getElementById('rpf-v');
-      const pll=document.getElementById('rpf-ll');
-      const plr=document.getElementById('rpf-lr');
+      const pv=fsvg.querySelector('#rpf-v');
+      const pll=fsvg.querySelector('#rpf-ll');
+      const plr=fsvg.querySelector('#rpf-lr');
       if(pv){pv.setAttribute('cx',rd.vx);pv.setAttribute('cy',rd.vy);}
       if(pll){pll.setAttribute('cx',rd.llx);pll.setAttribute('cy',rd.lly);}
       if(plr){plr.setAttribute('cx',rd.lrx);plr.setAttribute('cy',rd.lry);}
-      // move text labels
       const tv=fsvg.querySelector('#rpf-v ~ text');
       const tll=fsvg.querySelector('#rpf-ll ~ text');
       const tlr=fsvg.querySelector('#rpf-lr ~ text');
@@ -1641,8 +2638,8 @@ function bindRefDotsDrag(){
       if(tlr){tlr.setAttribute('x',rd.lrx+13);tlr.setAttribute('y',rd.lry+4);}
     }
     if(ssvg){
-      const sv=document.getElementById('rps-v');
-      const sd=document.getElementById('rps-d');
+      const sv=ssvg.querySelector('#rps-v');
+      const sd=ssvg.querySelector('#rps-d');
       if(sv){sv.setAttribute('cx',rd.vx_s);sv.setAttribute('cy',rd.vy_s);}
       if(sd){sd.setAttribute('cx',rd.dx);sd.setAttribute('cy',rd.dy);}
     }
@@ -1681,6 +2678,10 @@ function bindRefDotsDrag(){
 function updateScanVisuals(){
   const sl=state.answers.scanLines;
   const cx=140;
+  // Rückkopplung: Pixelposition → anatomische Werte für Evaluation
+  state.answers.scanStart=Math.round((sl.top-40)/3.0);
+  state.answers.scanEnd=Math.round((sl.bottom-40)/3.0);
+  state.answers.scanLinesTouched=true;
   ['front','side'].forEach(v=>{
     const svg=document.getElementById('scout-'+v);
     if(!svg) return;
@@ -1688,28 +2689,28 @@ function updateScanVisuals(){
     const fl=cx-sl.fov, fr=cx+sl.fov;
     const mid=Math.round((sl.top+sl.bottom)/2);
     const h=Math.max(0,sl.bottom-sl.top);
-    const field=document.getElementById('sc-field');
+    const field=svg.querySelector('#sc-field');
     if(field){
       if(isF){field.setAttribute('x',fl);field.setAttribute('width',sl.fov*2);}
       field.setAttribute('y',sl.top);field.setAttribute('height',h);
     }
-    const tl=document.getElementById('sc-top-line');
-    const th=document.getElementById('st-top-'+v);
-    const tt=document.getElementById('sc-top-txt');
+    const tl=svg.querySelector('#sc-top-line');
+    const th=svg.querySelector('#st-top-'+v);
+    const tt=svg.querySelector('#sc-top-txt');
     if(tl){tl.setAttribute('y1',sl.top);tl.setAttribute('y2',sl.top);}
     if(th) th.setAttribute('cy',sl.top);
     if(tt) tt.setAttribute('y',sl.top>16?sl.top-5:sl.top+16);
-    const bl=document.getElementById('sc-bot-line');
-    const bh=document.getElementById('st-bot-'+v);
-    const bt=document.getElementById('sc-bot-txt');
+    const bl=svg.querySelector('#sc-bot-line');
+    const bh=svg.querySelector('#st-bot-'+v);
+    const bt=svg.querySelector('#sc-bot-txt');
     if(bl){bl.setAttribute('y1',sl.bottom);bl.setAttribute('y2',sl.bottom);}
     if(bh) bh.setAttribute('cy',sl.bottom);
     if(bt) bt.setAttribute('y',sl.bottom+14);
     if(isF){
-      const fll=document.getElementById('sc-fl-line');
-      const frl=document.getElementById('sc-fr-line');
-      const flh=document.getElementById('st-fl');
-      const frh=document.getElementById('st-fr');
+      const fll=svg.querySelector('#sc-fl-line');
+      const frl=svg.querySelector('#sc-fr-line');
+      const flh=svg.querySelector('#st-fl');
+      const frh=svg.querySelector('#st-fr');
       if(fll){fll.setAttribute('x1',fl);fll.setAttribute('x2',fl);fll.setAttribute('y1',sl.top);fll.setAttribute('y2',sl.bottom);}
       if(frl){frl.setAttribute('x1',fr);frl.setAttribute('x2',fr);frl.setAttribute('y1',sl.top);frl.setAttribute('y2',sl.bottom);}
       if(flh){flh.setAttribute('cx',fl);flh.setAttribute('cy',mid);}
@@ -1746,17 +2747,8 @@ function bindScanDrag(){
   });
 }
 
-function nextStep(){
-  if(state.step===STEPS.length-1){window.print();return;}
-  state.step=Math.min(STEPS.length-1,state.step+1);
-  render();window.scrollTo({top:0,behavior:"smooth"});
-}
-function prevStep(){
-  state.step=Math.max(0,state.step-1);
-  render();window.scrollTo({top:0,behavior:"smooth"});
-}
-
 init();
 </script>
 </body>
 </html>
+              
