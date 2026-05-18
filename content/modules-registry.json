@@ -1,7 +1,7 @@
 {
-  "version": 2,
-  "lastUpdated": "2026-04-27",
-  "schemaNote": "Neue Felder: kapitel, reihenfolge, pflichtgrad, voraussetzungen, phase.",
+  "version": 3,
+  "lastUpdated": "2026-05-18",
+  "schemaNote": "v2-Schema gemaess ARCHITECTURE.md v2.0 + architecture/MODUL-SCHEMA-V2.md. Pflichtfelder pro Modul: mode, lehrjahr, tags, estimatedMinutes, printable. Legacy-Felder (category, order, difficulty) bleiben uebergangsweise, werden vom v2-Renderer ignoriert.",
   "modules": [
     {
       "id": "01-aufbau-abteilung",
@@ -13,7 +13,12 @@
       "kapitel": 1,
       "reihenfolge": 1,
       "pflichtgrad": "pflicht",
-      "phase": "MVP"
+      "phase": "MVP",
+      "mode": "online_solo",
+      "lehrjahr": [1],
+      "tags": ["orientierung", "abteilung", "rollen", "einstieg"],
+      "estimatedMinutes": 15,
+      "printable": true
     },
     {
       "id": "prostata-planungs-ct-enddarm",
@@ -25,7 +30,12 @@
       "kapitel": 5,
       "reihenfolge": 3,
       "pflichtgrad": "pflicht",
-      "phase": "MVP"
+      "phase": "MVP",
+      "mode": "online_solo",
+      "lehrjahr": [2, 3],
+      "tags": ["prostata", "plct", "enddarm", "lagerung", "becken", "setup"],
+      "estimatedMinutes": 20,
+      "printable": true
     },
     {
       "id": "10-mamma-lernsequenz",
@@ -39,8 +49,11 @@
       "pflichtgrad": "pflicht",
       "phase": "P3",
       "file": "content/lernsequenzen/10-mamma-lernsequenz.html",
+      "mode": "online_solo",
+      "lehrjahr": [2, 3],
+      "tags": ["mamma", "brustkrebs", "lernsequenz", "plct", "dibh", "lagerung", "praxisrotation"],
       "estimatedMinutes": 90,
-      "tags": ["mamma", "brustkrebs", "lernsequenz", "plct", "dibh", "lagerung", "praxisrotation"]
+      "printable": true
     },
     {
       "id": "11-bronchial-ca-lernsequenz",
@@ -55,8 +68,11 @@
       "voraussetzungen": ["10-mamma-lernsequenz"],
       "phase": "P3",
       "file": "content/lernsequenzen/11-bronchial-ca-lernsequenz.html",
+      "mode": "online_solo",
+      "lehrjahr": [2, 3],
+      "tags": ["bronchial-ca", "nsclc", "lernsequenz", "plct", "4dct", "itv", "dibh", "lagerung", "oar", "atemmanagement"],
       "estimatedMinutes": 70,
-      "tags": ["bronchial-ca", "nsclc", "lernsequenz", "plct", "4dct", "itv", "dibh", "lagerung", "oar", "atemmanagement"]
+      "printable": true
     },
     {
       "id": "14-fallvorstellung-wbrt",
@@ -68,7 +84,12 @@
       "reihenfolge": 1,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3"
+      "phase": "P3",
+      "mode": "online_solo",
+      "lehrjahr": [3],
+      "tags": ["wbrt", "ganzhirn", "fallvorstellung", "pruefung", "transfer"],
+      "estimatedMinutes": 30,
+      "printable": true
     },
     {
       "id": "14-fallvorstellung-mamma",
@@ -80,7 +101,12 @@
       "reihenfolge": 2,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3"
+      "phase": "P3",
+      "mode": "online_solo",
+      "lehrjahr": [3],
+      "tags": ["mamma", "dibh", "fallvorstellung", "pruefung", "transfer"],
+      "estimatedMinutes": 30,
+      "printable": true
     },
     {
       "id": "14-plct-stoerfall-hno",
@@ -92,7 +118,12 @@
       "reihenfolge": 3,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3"
+      "phase": "P3",
+      "mode": "online_solo",
+      "lehrjahr": [3],
+      "tags": ["hno", "plct", "zahnschiene", "stoerfall", "pruefung"],
+      "estimatedMinutes": 25,
+      "printable": true
     },
     {
       "id": "14-plct-stoerfall-prostata",
@@ -104,7 +135,12 @@
       "reihenfolge": 4,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3"
+      "phase": "P3",
+      "mode": "online_solo",
+      "lehrjahr": [3],
+      "tags": ["prostata", "plct", "blase", "stoerfall", "pruefung"],
+      "estimatedMinutes": 25,
+      "printable": true
     },
     {
       "id": "14-quiz-gesamtwissen",
@@ -116,7 +152,12 @@
       "reihenfolge": 5,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3"
+      "phase": "P3",
+      "mode": "online_solo",
+      "lehrjahr": [3],
+      "tags": ["pruefung", "plct", "fallvorstellung", "quiz-gesamtwissen"],
+      "estimatedMinutes": 30,
+      "printable": true
     }
   ]
 }
