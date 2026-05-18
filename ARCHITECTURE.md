@@ -1,7 +1,7 @@
 # ARCHITECTURE.md - Lernapp Strahlentherapie MTR
 
-**Version:** 1.0 (initiales Skelett)
-**Letzte Änderung:** 2026-04-18
+**Version:** 2.0 (Modul-Schema v2 + Quiz-Engine)
+**Letzte Änderung:** 2026-05-18
 **Autor:** Jan
 
 Dieses Dokument ist die Single Source of Truth für alle Architekturentscheidungen dieser Lernapp. Jede Änderung, die einer der hier dokumentierten Entscheidungen widerspricht, muss **hier zuerst** diskutiert und dokumentiert werden, bevor Code geschrieben wird.
@@ -63,6 +63,15 @@ Genau diese fünf Typen sind zugelassen:
 Die JSON-Schemas sind verbindlich und in `references/modul-schemas.md` im `lernapp-implementierung`-Skill dokumentiert.
 
 **Erweiterungs-Regel:** Ein neuer Modultyp wird nur dann ergänzt, wenn eine konkrete didaktische Notwendigkeit in mindestens **drei unterschiedlichen geplanten Modulen** besteht, die sich nachweislich nicht mit einem bestehenden Typ abbilden lassen. Die Ergänzung wird hier in diesem Dokument dokumentiert, bevor Code entsteht.
+
+**Querschnittsfunktionen (kein eigener Typ):**
+
+- **Exit-Slip** – Pflicht-Footer in jedem Modul (siehe §14).
+- **Print-View** – druckbare Skript-Ansicht jedes Moduls (siehe §14).
+- **Lehrjahr-Filter** – globale Tiefen-Steuerung auf Baustein-Ebene (siehe §15).
+- **Itembank + Quiz-Engine** – wiederverwendbare Items, gemeinsame Engine für Lernapp und Standalones (siehe §13).
+
+Diese Funktionen sind kein eigener Modultyp, sondern werden von allen Typen geteilt.
 
 ---
 
@@ -155,6 +164,17 @@ Haupt-Routen:
 
 **Gerätegebundenheit** ist bewusst akzeptierte Grenze.
 **Export/Import** als JSON-Datei ist Pflichtfunktion der v1, erreichbar unter `#/einstellungen`. So können Lernende ihren Fortschritt zwischen Schul-PC und Privatgerät übertragen.
+
+### 7.1 Übersicht aller localStorage-Keys
+
+Alle Keys tragen den Präfix `mtr_rt_` und werden gemeinsam exportiert/importiert.
+
+| Key | Inhalt | Eingeführt |
+|---|---|---|
+| `mtr_rt_progress` | Modul-Fortschritt (Status, Versuche, correctRate) | v1.0 |
+| `mtr_rt_settings` | Globale Einstellungen inkl. `lehrjahr`, `anrede` | v1.0 |
+| `mtr_rt_quiz_progress` | Item-Status der Quiz-Engine (Leitner-Boxen, Stats) | v2.0 |
+| `mtr_rt_exitslips` | Exit-Slip-Antworten pro Modul | v2.0 |
 
 ---
 
@@ -262,6 +282,12 @@ Die `content/modules-registry.json` erhält pro Modul folgende Felder zusätzlic
 | `pflichtgrad` | enum | ja | `pflicht`, `vertiefung` oder `exkurs` |
 | `voraussetzungen` | array | nein | Liste von Modul-IDs, die sinnvoll vorher bearbeitet wurden |
 | `phase` | enum | nein | `MVP`, `P2`, `P3`, `P4`, `P5` — nur für internes Tracking, nicht in UI |
+| `mode` | enum | ja (v2.0) | `online_solo`, `praesenz_gekoppelt`, `hybrid` |
+| `lehrjahr` | number[] | ja (v2.0) | Lehrjahre, in denen das Modul sinnvoll ist (z.B. `[1,2]`) |
+| `tags` | string[] | ja (v2.0) | Inhalts-Tags für Redundanzcheck und Filter |
+| `estimatedMinutes` | number | ja (v2.0) | Erwartete Bearbeitungszeit |
+| `printable` | boolean | nein (v2.0) | Print-View verfügbar (Default true) |
+| `online_fallback` | object | nur bei `mode: hybrid` | `videoUrl`, `alternativeTask` |
 
 ### 12.3 Bearbeitungszeit-Obergrenzen pro Modultyp
 
@@ -289,16 +315,135 @@ Das Dashboard gruppiert Module primär nach `kapitel`, sekundär nach `reihenfol
 
 ---
 
-## 13. Offene Entscheidungen
+## 13. Itembank und Quiz-Engine
 
-Keine aktuell. Alle offenen Punkte werden hier dokumentiert, bevor sie umgesetzt werden.
+Quiz-Items werden modul-unabhängig in einer zentralen Itembank gepflegt und über eine wiederverwendbare Engine ausgespielt. Detail-Spec: `architecture/QUIZ-ENGINE-SPEC.md`.
+
+### 13.1 Itembank
+
+Speicherort: `content/itembank/`
+
+```
+content/itembank/
+├── index.json              # Übersicht aller Items mit Tags (für Redundanzcheck)
+├── prostata.json           # Items je Themenfeld, max. 50 Items pro Datei
+├── mamma.json
+├── bronchial.json
+└── ...
+```
+
+- Item-IDs nach Schema `q-<thema>-<lfdnr>`, unveränderlich (gleiche Logik wie Modul-IDs in §12.1).
+- Items sind **kontextfrei**. Der Stem muss ohne Modul-Frame Sinn ergeben (`kontext_neutral: true` als Pflichtfeld).
+- Modul-spezifischer Kontext wird über `frames`-Feld im Modul-JSON ergänzt, nie im Item selbst.
+- Pro Item Pflicht: `lehrjahr[]`, `schwierigkeit`, `tags[]`.
+
+### 13.2 Quiz-Engine
+
+Datei: `js/quiz-engine.js`
+
+- Vanilla ES6+, keine externen Abhängigkeiten.
+- Wird in der Lernapp **und** in Standalones (Lernsequenzen) gleichermaßen genutzt.
+- Default-Modus: **`self-first`** – Lernende antwortet zuerst, dann erscheinen Lösung + Rationale. Kein Lösungs-Button vor Submit.
+- Ausnahme `mode: "instant"` nur für Prüfungs-Simulation.
+- **Leitner-light** mit 3 Boxen: 1 = neu/falsch, 2 = 1× korrekt, 3 = 2× korrekt in Folge (gemeistert).
+- Persistenz in `mtr_rt_quiz_progress` (siehe §7.1).
+- Synchroner `onRunDone`-Callback **vor** Re-Render des Dashboards, um den Bug „nicht bearbeitet nach Abschluss" zu vermeiden.
+
+### 13.3 Standalone-Anbindung
+
+Lernsequenzen und Standalones binden `quiz-engine.js` direkt ein und rufen `QuizEngine.start({...})`. Dieselbe Persistenz, dieselbe UI-Konvention. Inline-Items nur als Übergangslösung; Ziel ist Itembank-Referenz.
+
+### 13.4 Redundanzcheck
+
+Pflicht-Tool: `tools/redundanz-check.js` (Node, kein Build-Step). Wird manuell vor Releases ausgeführt und meldet:
+
+- Items mit ≥3 überlappenden Tags
+- Items, die in ≥2 Modulen referenziert sind (Info, kein Fehler)
+- Module mit ≥80% Tag-Überschneidung (Warnung)
 
 ---
 
-## 14. Änderungsprotokoll
+## 14. Exit-Slip und Print-View
+
+### 14.1 Exit-Slip (Pflicht in jedem Modul)
+
+Footer-Komponente am Ende **jedes** Moduls. Default-Slip (genau drei Fragen):
+
+1. Was war neu für dich? (Freitext)
+2. Was ist noch unklar? (Freitext)
+3. Wie sicher fühlst du dich jetzt? (Skala 1-5)
+
+Modul-spezifische Überschreibung möglich über `exitSlip`-Feld im Modul-JSON.
+
+**Persistenz:** `mtr_rt_exitslips`. Gerätelokal, kein Versand, keine Sammelstelle. Exportierbar zusammen mit Modul-Fortschritt unter `#/einstellungen`.
+
+### 14.2 Print-View (Pflicht bei `mode: online_solo` und `mode: hybrid`)
+
+„Skript drucken"-Button im Footer jedes Moduls (außer rein `praesenz_gekoppelt`).
+
+Render-Funktion `renderPrintView(moduleId)` erzeugt druckoptimierte HTML-Variante:
+
+- Alle Bausteine sichtbar, auch `visibility: "deep"`
+- Alle Klappboxen aufgeklappt
+- Quiz-Items inline mit Lösung und Rationale
+- Header: Modul-Titel, Lehrjahr-Marker, Datum
+- Footer: „Stand: <Datum>, Lernapp Strahlentherapie MTR"
+
+Stylesheet: `css/print.css`, eingebunden via `<link media="print">`.
+
+---
+
+## 15. Lehrjahr-Filter und Bausteine
+
+### 15.1 Bausteine
+
+Inhalte innerhalb eines Moduls werden in **Bausteinen** strukturiert. Ein Baustein ist die kleinste adressierbare Inhalts-Einheit mit eigener ID.
+
+```json
+{
+  "id": "b-<kurzname>",
+  "type": "text | image | video | callout | klappbox | decision | mc | freitext",
+  "body": "...",
+  "visibility": "default | deep",
+  "lehrjahr": [1, 2, 3],
+  "schwierigkeit": "basic | advanced",
+  "tags": ["..."]
+}
+```
+
+**Regeln:**
+
+- Pro Baustein **max. 150 Wörter im sichtbaren Bereich**. Mehr → `visibility: "deep"` (wird in `<details>` gerendert).
+- Jeder Baustein hat eigene `lehrjahr`- und `schwierigkeit`-Tags. Diese sind unabhängig von den Modul-Tags.
+
+### 15.2 Lehrjahr-Filter
+
+Globale Einstellung in `mtr_rt_settings.lehrjahr` (Werte: `1`, `2`, `3`, `"alle"`).
+
+Renderer blendet Bausteine aus, deren `lehrjahr`-Array das gewählte LJ nicht enthält. Modul-Liste im Dashboard zeigt zusätzlich LJ-Marker.
+
+### 15.3 Praxis-Module ohne Dozent
+
+Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Musterlösungsvideo + alternative Aufgabe für die Online-Bearbeitung. Verhindert Sackgassen bei Praxisstationen ohne Klinik-Zugang.
+
+---
+
+## 16. Offene Entscheidungen
+
+| Punkt | Status |
+|---|---|
+| Itembank-Versionierung: Item-Update vs. Item-Replace bei Inhaltsänderung | offen, entscheiden sobald ≥30 Items existieren |
+| Lehrjahr-Filter im Dashboard-UI: Chips, Dropdown oder Toggle | offen, kommt mit `lernapp-implementierung` |
+| Redundanzcheck als GitHub Action statt nur lokal | offen, P3-Nice-to-have |
+| Bilder-Support direkt in Quiz-Items (zusätzlich zu `image-analysis`-Typ) | offen, vorerst nein |
+
+---
+
+## 17. Änderungsprotokoll
 
 | Datum | Änderung | Grund |
 |---|---|---|
 | 2026-04-18 | Initialversion mit §§ 1-10 | Projektstart |
 | 2026-04-18 | §11 Canvas-Policy ergänzt | Verbindliche DOM-vs-Canvas-Leitlinie, Prüfbogen-Pflicht, hybride Architektur |
 | 2026-04-18 | §12 Konsistenzregeln für Curriculum und Module ergänzt, CURRICULUM.md als zweite Source of Truth eingeführt | Roter Faden von Anfang bis Ende, Feature-Creep-Vermeidung, gemeinsame Felder Kapitel/Pflichtgrad/Voraussetzungen |
+| 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
