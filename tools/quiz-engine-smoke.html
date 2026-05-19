@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz-Engine Smoke-Test</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    /* Nur Smoke-Test-spezifische Debug-Layer. Engine-CSS kommt aus app.css. */
+    .smoke-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+    .smoke-debug {
+      background: #1f2933; color: #f6f7f9;
+      padding: 0.75rem 1rem; border-radius: 6px;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+      font-size: 0.8rem; line-height: 1.45;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 280px; overflow: auto;
+    }
+    .smoke-section { margin: 1.5rem 0; }
+    .smoke-checklist { background: #fff7ed; border-left: 4px solid #f0a500; padding: 0.75rem 1rem; border-radius: 4px; font-size: 0.95rem; }
+    .smoke-checklist ol { margin: 0.5rem 0 0 1.2rem; padding: 0; }
+    .smoke-checklist li { margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+<main class="container">
+  <h1>Quiz-Engine Smoke-Test</h1>
+  <p class="muted">
+    Entwicklungs-Smoketest fuer <code>js/quiz-engine.js</code>. Nicht ueber das Lernapp-Dashboard verlinkt.
+    Eigener Storage-Key <code>smoke_test_quiz_progress</code> &mdash; der echte
+    <code>mtr_rt_quiz_progress</code> wird nicht angefasst.
+  </p>
+
+  <div class="smoke-checklist">
+    <strong>Was zu pruefen ist:</strong>
+    <ol>
+      <li>"Antwort pruefen" ist deaktiviert, solange nichts gewaehlt ist.</li>
+      <li>Falsche Antwort: gewaehlte Option <code>is-wrong</code>, richtige Option <code>is-correct</code>, Rationale erscheint, Box bleibt 1.</li>
+      <li>Multi-Item: mehrere Optionen toggelbar, Bewertung erst auf "Antwort pruefen".</li>
+      <li>Run beenden: Summary mit Boxen 1/2/3 erscheint.</li>
+      <li><strong>Anti-Bug:</strong> Im <em>onRunDone</em>-Log steht "localStorage in onRunDone-Moment: gesetzt" &mdash; Persistenz greift VOR dem Callback.</li>
+      <li>Run erneut starten: korrekt beantwortete Items zeigen "Box 2" oder "Box 3", falsche zeigen "Box 1". Leitner sortiert Box-1-Items nach vorn.</li>
+    </ol>
+  </div>
+
+  <div class="smoke-controls">
+    <button class="btn" id="btn-start">Run starten</button>
+    <button class="btn secondary" id="btn-reset">Fortschritt zuruecksetzen</button>
+    <button class="btn secondary" id="btn-show">localStorage neu lesen</button>
+  </div>
+
+  <section class="smoke-section">
+    <h2>Quiz-Host</h2>
+    <div id="quiz-host"></div>
+  </section>
+
+  <section class="smoke-section">
+    <h2>Callback-Log</h2>
+    <pre class="smoke-debug" id="log">(noch leer)</pre>
+  </section>
+
+  <section class="smoke-section">
+    <h2>localStorage: <code>smoke_test_quiz_progress</code></h2>
+    <pre class="smoke-debug" id="ls">(noch leer)</pre>
+  </section>
+</main>
+
+<script type="module">
+  import QuizEngine from '../js/quiz-engine.js';
+
+  const STORAGE_KEY = 'smoke_test_quiz_progress';
+
+  // --- Inline-Items: bewusst sm- statt q- als IDs, damit sie nie mit der
+  // spaeteren echten Itembank kollidieren.
+  const items = [
+    {
+      id: 'sm-prostata-blase-01',
+      type: 'single',
+      stem: 'Welche Blasenfuellung ist beim PLCT Prostata Standard?',
+      options: [
+        { id: 'a', text: 'Leere Blase',
+          korrekt: false,
+          rationale: 'Erhoeht Bewegungsanfaelligkeit und Duenndarm-Belastung im Strahlengang.' },
+        { id: 'b', text: 'Definiert gefuellt, ca. 250 ml',
+          korrekt: true,
+          rationale: 'Schiebt Duenndarm aus dem Strahlengang und sorgt fuer reproduzierbare Lagerung.' },
+        { id: 'c', text: 'Maximal gefuellt',
+          korrekt: false,
+          rationale: 'Unkomfortabel, Reproduzierbarkeit ueber die Serie leidet, Risiko Setup-Drift.' }
+      ],
+      correct: ['b'],
+      rationale_global: 'Standard im UKR: ca. 250 ml ca. 30 min vor PLCT und vor jeder Bestrahlung.',
+      lehrjahr: [2, 3],
+      schwierigkeit: 'basic',
+      tags: ['prostata', 'blasenfuellung', 'plct'],
+      kontext_neutral: true
+    },
+    {
+      id: 'sm-mamma-oar-01',
+      type: 'multi',
+      stem: 'Welche Risikoorgane werden bei linksseitiger Mamma-RT primaer geschont?',
+      options: [
+        { id: 'a', text: 'Herz',
+          korrekt: true,
+          rationale: 'LAD-Dosis ist klinisch relevanter Endpunkt fuer kardiale Spaettoxizitaet.' },
+        { id: 'b', text: 'Ipsilaterale Lunge',
+          korrekt: true,
+          rationale: 'V20 als Standard-Constraint.' },
+        { id: 'c', text: 'Schilddruese',
+          korrekt: false,
+          rationale: 'Bei reiner Mamma- oder Thoraxwand-RT typischerweise nicht im Volumen. Erst bei Supra-Feldern relevant.' },
+        { id: 'd', text: 'Kontralaterale Mamma',
+          korrekt: true,
+          rationale: 'Streustrahlung beachten, Dosis so niedrig wie moeglich halten.' }
+      ],
+      correct: ['a', 'b', 'd'],
+      rationale_global: 'Primaere OARs links: Herz/LAD, ipsi Lunge, kontra Mamma. Schilddruese nur bei Supra-Einschluss relevant.',
+      lehrjahr: [2, 3],
+      schwierigkeit: 'basic',
+      tags: ['mamma', 'oar', 'herz', 'lunge'],
+      kontext_neutral: true
+    },
+    {
+      id: 'sm-dibh-01',
+      type: 'single',
+      stem: 'Welches Verfahren vergroessert reproduzierbar den Abstand zwischen Herz und Brustwand bei linksseitiger Mamma-RT?',
+      options: [
+        { id: 'a', text: 'Freie Atmung',
+          korrekt: false,
+          rationale: 'Keine Distanzvergroesserung; Herz bleibt im typischen Strahlengang.' },
+        { id: 'b', text: 'DIBH (deep inspiration breath hold)',
+          korrekt: true,
+          rationale: 'Inspiratorische Lungenfuellung verschiebt das Herz nach kaudal/medial vom Bestrahlungsfeld weg.' },
+        { id: 'c', text: 'Bauchlage ohne Hilfsmittel',
+          korrekt: false,
+          rationale: 'Kann Lungendosis senken, Herzschonung jedoch weniger zuverlaessig als DIBH.' }
+      ],
+      correct: ['b'],
+      rationale_global: 'DIBH ist Standardverfahren zur Herzschonung bei linksseitiger Mamma-RT.',
+      lehrjahr: [2, 3],
+      schwierigkeit: 'basic',
+      tags: ['mamma', 'dibh', 'herz', 'atemmanagement'],
+      kontext_neutral: true
+    }
+  ];
+
+  const elLog = document.getElementById('log');
+  const elLs = document.getElementById('ls');
+  const elHost = document.getElementById('quiz-host');
+
+  function refreshLs() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { elLs.textContent = '(leer)'; return; }
+    try { elLs.textContent = JSON.stringify(JSON.parse(raw), null, 2); }
+    catch { elLs.textContent = raw; }
+  }
+
+  function logLine(msg) {
+    if (elLog.textContent === '(noch leer)') elLog.textContent = '';
+    const ts = new Date().toISOString().slice(11, 19);
+    elLog.textContent += '[' + ts + '] ' + msg + '\n';
+    elLog.scrollTop = elLog.scrollHeight;
+  }
+
+  // Engine mit eigenem Storage-Praefix initialisieren.
+  // Das fetched optional content/itembank/index.json; faellt still, wenn nicht erreichbar.
+  await QuizEngine.init({ storagePrefix: 'smoke_test_' });
+
+  document.getElementById('btn-start').addEventListener('click', async () => {
+    elLog.textContent = '';
+    logLine('start() aufgerufen mit ' + items.length + ' inline-Items.');
+    await QuizEngine.start({
+      inlineItems: items,
+      moduleId: 'smoke-test',
+      mode: 'self-first',
+      leitner: true,
+      shuffle: false,
+      container: elHost,
+      frames: {
+        'sm-prostata-blase-01': {
+          vor: 'Smoke-Frame VOR: kurzer Modul-Kontext oberhalb des Stems.',
+          nach: 'Smoke-Frame NACH: ggf. Verweis auf weitere Module.'
+        }
+      },
+      onItemDone: (id, korrekt) => {
+        logLine('onItemDone  ' + id + '  -> ' + (korrekt ? 'korrekt' : 'falsch'));
+        refreshLs();
+      },
+      onRunDone: (summary) => {
+        // Anti-Bug-Probe: localStorage MUSS hier bereits aktuell sein.
+        const raw = localStorage.getItem(STORAGE_KEY);
+        logLine('onRunDone  ' + JSON.stringify({
+          korrekt: summary.korrekt, gesamt: summary.gesamt,
+          dauerSek: summary.dauerSek, boxen: summary.boxen
+        }));
+        logLine('  -> localStorage in onRunDone-Moment: ' + (raw ? 'gesetzt' : 'LEER (BUG)'));
+        refreshLs();
+      }
+    });
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    QuizEngine.resetProgress();
+    refreshLs();
+    logLine('resetProgress() ausgefuehrt.');
+  });
+
+  document.getElementById('btn-show').addEventListener('click', refreshLs);
+
+  refreshLs();
+</script>
+</body>
+</html>
