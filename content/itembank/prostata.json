@@ -1,0 +1,470 @@
+{
+  "thema": "prostata",
+  "version": 1,
+  "lastUpdated": "2026-05-19",
+  "schemaNote": "Itemdatei der Quiz-Engine. Items strikt nach architecture/QUIZ-ENGINE-SPEC.md Abschnitt 3.1. Alle Stems kontext_neutral. Modul-spezifischer Kontext wird ausschliesslich ueber frames im Modul-JSON ergaenzt (z.B. prostata-planungs-ct-enddarm in Baustelle D), nie im Item selbst. Jeder Eintrag hier muss in content/itembank/index.json gespiegelt sein (id, file, tags). Tranche 1: 12 Items, 9 single + 3 multi, Cluster Blasenfuellung / Enddarm / Lagerung / OAR / CBCT.",
+  "items": [
+    {
+      "id": "q-prostata-01",
+      "type": "single",
+      "stem": "Welche Blasenfuellung gilt im UKR-Standard fuer das Planungs-CT bei Prostatakarzinom?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Leere Blase, direkt vor dem CT entleeren.",
+          "korrekt": false,
+          "rationale": "Erhoeht die Bewegungsanfaelligkeit der Prostata und laesst Duenndarm in den Bestrahlungsbereich rutschen."
+        },
+        {
+          "id": "o-b",
+          "text": "Definiert gefuellte Blase, max. 500 ml, ca. 1 h vor dem PLCT getrunken.",
+          "korrekt": true,
+          "rationale": "UKR-Standard. Verlagert Duenndarm kranial aus dem Strahlengang und stabilisiert die Prostatalage. Wichtig: Volumen muss taeglich reproduzierbar sein."
+        },
+        {
+          "id": "o-c",
+          "text": "Ueberfuellung mit beliebigem Volumen nach Motto je mehr desto besser.",
+          "korrekt": false,
+          "rationale": "Unkomfortabel, taeglich nicht reproduzierbar und vom Patienten ueber 6-8 Wochen nicht zu halten."
+        },
+        {
+          "id": "o-d",
+          "text": "Die Blasenfuellung spielt fuer die Prostata keine Rolle.",
+          "korrekt": false,
+          "rationale": "Falsch. Eine definierte Fuellung verlagert Duenndarm aus dem Strahlengang und gibt der Prostata eine stabile Nachbarschaft."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "UKR-Standard: max. 500 ml, ca. 1 h vor dem Planungs-CT trinken. Entscheidend ist nicht die absolute Fuellung, sondern dass der Patient dasselbe Volumen taeglich reproduzieren kann.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "blasenfuellung", "plct", "setup"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-02",
+      "type": "single",
+      "stem": "Ein Patient kommt mit leerer Blase zum Planungs-CT Prostata. Welche Konsequenz hat das, wenn ohne Korrektur weitergefahren wird?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Keine relevante Konsequenz, solange die Lagerung sitzt.",
+          "korrekt": false,
+          "rationale": "Die Lagerung allein gleicht die fehlende Verdraengung des Duenndarms nicht aus."
+        },
+        {
+          "id": "o-b",
+          "text": "Duenndarm rutscht in den Bestrahlungsbereich und die Prostatalage wird instabiler.",
+          "korrekt": true,
+          "rationale": "Volle Blase verdraengt Duenndarm nach kranial und stabilisiert die Anatomie. Ohne diese Verdraengung steigt das Risiko fuer Duenndarm-Dosis und fuer Tagesvariation der Prostatalage."
+        },
+        {
+          "id": "o-c",
+          "text": "Die Prostata wandert nach dorsal in den Enddarm.",
+          "korrekt": false,
+          "rationale": "Eine wesentliche dorsale Verlagerung haengt vor allem an der Enddarmfuellung, nicht an der Blasenfuellung."
+        },
+        {
+          "id": "o-d",
+          "text": "Die Femurkoepfe bekommen mehr Dosis.",
+          "korrekt": false,
+          "rationale": "Die Femurkopf-Belastung ist nicht primaer abhaengig von der Blasenfuellung."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Leere Blase = mehr Duenndarm im Feld, mehr Prostatabewegung, schlechtere Reproduzierbarkeit. Standardmassnahme: trinken lassen, ca. 1 h warten, dann Planungs-CT wiederholen.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "blasenfuellung", "oar", "plct"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-03",
+      "type": "single",
+      "stem": "Warum ist die Reproduzierbarkeit der Enddarmfuellung bei der Prostatabestrahlung so entscheidend?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Damit der Patient bequemer liegt.",
+          "korrekt": false,
+          "rationale": "Komfort spielt eine Rolle, ist aber nicht der eigentliche Grund."
+        },
+        {
+          "id": "o-b",
+          "text": "Weil ein veraenderter Fuellungszustand die Prostata verlagert und die taegliche Geometrie sonst vom Plan abweicht.",
+          "korrekt": true,
+          "rationale": "Die Prostata folgt der Enddarmfuellung. Aendert sich diese gegenueber dem PLCT, stimmen Konturierung und tatsaechliche Lage nicht mehr ueberein."
+        },
+        {
+          "id": "o-c",
+          "text": "Damit das CBCT schneller laeuft.",
+          "korrekt": false,
+          "rationale": "Die CBCT-Dauer ist von der Enddarmfuellung unabhaengig."
+        },
+        {
+          "id": "o-d",
+          "text": "Weil der Enddarm sonst im PTV liegt.",
+          "korrekt": false,
+          "rationale": "Das PTV wird so geplant, dass es das Rektum so weit wie moeglich aussparen. Problem ist die Lageveraenderung der Prostata, nicht die Lage des Enddarms im PTV."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Reproduzierbare Enddarmfuellung ist die Basis dafuer, dass die im Planungs-CT festgelegte Geometrie taeglich wieder hergestellt werden kann. Ohne diese Basis stimmen weder Konturierung noch Bildmatching.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "enddarm", "reproduzierbarkeit", "plct"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-04",
+      "type": "multi",
+      "stem": "Welche Massnahmen gehoeren typischerweise zur Standardvorbereitung des Enddarms vor einem Planungs-CT der Prostata?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Toilettengang zur Entleerung des Enddarms vor dem CT.",
+          "korrekt": true,
+          "rationale": "Erste und einfachste Massnahme der Routine."
+        },
+        {
+          "id": "o-b",
+          "text": "Diaetempfehlung (blaehungsarm, ballaststoffregulierend) ueber die Bestrahlungsserie.",
+          "korrekt": true,
+          "rationale": "Reduziert tagesvariable Gasfuellung und stabilisiert das Volumen."
+        },
+        {
+          "id": "o-c",
+          "text": "Mikroklist bei unzureichender Entleerung nach Ruecksprache.",
+          "korrekt": true,
+          "rationale": "Gehoert zur Routine, wird nach Absprache und Dokumentation eingesetzt."
+        },
+        {
+          "id": "o-d",
+          "text": "Verabreichung eines Laxans am CT-Tag durch die MTR ohne aerztliche Anordnung.",
+          "korrekt": false,
+          "rationale": "Medikamentengabe ist aerztlich anzuordnen und zu dokumentieren, nicht MTR-Entscheidung."
+        },
+        {
+          "id": "o-e",
+          "text": "Kompletter Trinkverzicht am CT-Tag.",
+          "korrekt": false,
+          "rationale": "Wuerde die parallel notwendige Blasenfuellung sabotieren."
+        }
+      ],
+      "correct": ["o-a", "o-b", "o-c"],
+      "rationale_global": "Die Vorbereitung laeuft als Routine ab: Toilettengang, Diaetempfehlung, bei Bedarf Mikroklist. Medikamentoese Schritte werden aerztlich angeordnet und dokumentiert. Trinken bleibt erlaubt und ist fuer die Blasenfuellung sogar Pflicht.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "enddarm", "plct", "vorbereitung"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-05",
+      "type": "single",
+      "stem": "Im Planungs-CT zeigt sich ein deutlich gefuellter Enddarm. Welche Konsequenz hat das, wenn der Plan ungeprueft auf dieser Geometrie erstellt wird?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Keine. Das CBCT korrigiert das taeglich.",
+          "korrekt": false,
+          "rationale": "Das CBCT korrigiert die Position des Patienten, nicht den Konturierungs-Bias durch eine fehlerhafte Ausgangslage. Ist der Enddarm taeglich weniger gefuellt, wandert die Prostata systematisch weg vom geplanten Zielvolumen."
+        },
+        {
+          "id": "o-b",
+          "text": "Die Prostata wandert nach ventral und kaudal, Konturierung und taegliches Setup driften systematisch auseinander.",
+          "korrekt": true,
+          "rationale": "Genau das ist der klinische Effekt: Unterdosierung im dorsalen CTV-Rand, Ueberdosierung der Rektum-Vorderwand."
+        },
+        {
+          "id": "o-c",
+          "text": "Die Femurkoepfe geraten in den Strahlengang.",
+          "korrekt": false,
+          "rationale": "Die Femurkopf-Geometrie wird durch die Enddarmfuellung nicht relevant veraendert."
+        },
+        {
+          "id": "o-d",
+          "text": "Der Bulbus penis bekommt zu wenig Dosis.",
+          "korrekt": false,
+          "rationale": "Der Bulbus penis ist OAR und soll geschont werden, nicht Zielstruktur."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Voller Enddarm beim PLCT bedeutet systematische Verlagerung der Prostata nach ventral und kaudal. Wenn der Enddarm taeglich anders gefuellt ist als am Plan, entsteht eine Unterdosierung im dorsalen CTV-Rand und eine Ueberdosierung der Rektum-Vorderwand. Korrekter Weg: Enddarm entleeren lassen, Vorbereitung dokumentieren, Wiederholungs-CT.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "enddarm", "setup", "reproduzierbarkeit", "cbct"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-06",
+      "type": "single",
+      "stem": "Welche Lagerung ist beim Planungs-CT und der Bestrahlung der Prostata Standard?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Bauchlage mit gepolsterter Beckenkippe.",
+          "korrekt": false,
+          "rationale": "Bauchlage ist Routine bei Rektum-Bestrahlung mit Belly-Board, nicht beim Prostata-Standard."
+        },
+        {
+          "id": "o-b",
+          "text": "Rueckenlage mit Bluebag/Vakuummatte oder mit Kniekeil und Fussfixation.",
+          "korrekt": true,
+          "rationale": "UKR-Standard: Rueckenlage, Becken und Beine in reproduzierbarer Halterung. Bluebag/Vakuummatte oder Kniekeil + Fussfix sind die ueblichen Varianten."
+        },
+        {
+          "id": "o-c",
+          "text": "Seitenlage mit beidseitiger Armueberstreckung.",
+          "korrekt": false,
+          "rationale": "Seitenlage ist fuer die Prostata nicht gebraeuchlich und nicht reproduzierbar genug."
+        },
+        {
+          "id": "o-d",
+          "text": "Rueckenlage ohne Hilfsmittel, freie Beinhaltung.",
+          "korrekt": false,
+          "rationale": "Liefert keine reproduzierbare Beinposition, Prostatalage variabel."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Standard: Rueckenlage, Arme ueber dem Kopf oder vor dem Oberkoerper, Becken und Beine in einer reproduzierbaren Halterung. Typisch sind Bluebag/Vakuummatte oder Kniekeil mit Fussfixation. Ziel: dieselbe Geometrie an jedem Bestrahlungstag.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "lagerung", "plct", "setup"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-07",
+      "type": "single",
+      "stem": "Wofuer dienen die Tattoo-Markierungen, die nach dem Planungs-CT auf der Haut des Patienten gesetzt werden?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Sie ersetzen das taegliche CBCT.",
+          "korrekt": false,
+          "rationale": "Hautmarker dienen dem Grob-Setup, nicht der bildgestuetzten Verifikation."
+        },
+        {
+          "id": "o-b",
+          "text": "Sie sind ein reproduzierbarer Grob-Bezug fuer das taegliche Lasersetup am Linac.",
+          "korrekt": true,
+          "rationale": "Tattoos sind dauerhafte Referenzpunkte fuer das Grob-Setup mit den Lasersystemen."
+        },
+        {
+          "id": "o-c",
+          "text": "Sie geben die Position des PTV direkt auf der Haut wieder.",
+          "korrekt": false,
+          "rationale": "Das PTV liegt im Inneren und ist nicht durch Hautpunkte abgebildet."
+        },
+        {
+          "id": "o-d",
+          "text": "Sie sind kosmetisch begruendet.",
+          "korrekt": false,
+          "rationale": "Tattoos sind klinisch begruendet, nicht kosmetisch."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Tattoos sind dauerhafte Referenzpunkte fuer das Grob-Setup mit den Lasersystemen. Sie ersetzen weder CBCT noch taegliche Lagekontrolle, sondern liefern den ersten reproduzierbaren Bezug zwischen Patient und Behandlungsraum.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "lagerung", "tattoos", "setup"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-08",
+      "type": "multi",
+      "stem": "Welche Strukturen sind bei der Bestrahlung der Prostata als Risikoorgane (OAR) zu beruecksichtigen?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Rektum, insbesondere die Vorderwand.",
+          "korrekt": true,
+          "rationale": "Dorsaler PTV-Rand, hoechste Dosis am Rektum."
+        },
+        {
+          "id": "o-b",
+          "text": "Harnblase.",
+          "korrekt": true,
+          "rationale": "Direkter Nachbar der Prostata, Standard-OAR."
+        },
+        {
+          "id": "o-c",
+          "text": "Femurkoepfe beidseits.",
+          "korrekt": true,
+          "rationale": "Liegen im seitlichen Feldverlauf, OAR mit Dosis-Constraint."
+        },
+        {
+          "id": "o-d",
+          "text": "Bulbus penis.",
+          "korrekt": true,
+          "rationale": "Sensibel fuer erektile Funktion, Standard-OAR mit eigener Dosis-Vorgabe."
+        },
+        {
+          "id": "o-e",
+          "text": "Schilddruese.",
+          "korrekt": false,
+          "rationale": "Liegt nicht im Strahlenfeld einer Prostatabestrahlung."
+        }
+      ],
+      "correct": ["o-a", "o-b", "o-c", "o-d"],
+      "rationale_global": "Die Standard-OAR bei Prostatabestrahlung sind Rektum (Vorderwand-nahe Dosis besonders kritisch), Blase, Femurkoepfe und Bulbus penis. Die jeweiligen Dosis-Constraints orientieren sich an Empfehlungen wie QUANTEC.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "oar", "zielvolumen", "planung"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-09",
+      "type": "single",
+      "stem": "Warum ist die Rektum-Vorderwand bei der Prostatabestrahlung das besonders kritische OAR-Areal?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Weil sie unmittelbar an die dorsale CTV-Grenze grenzt und damit der hoechsten Dosis ausgesetzt ist.",
+          "korrekt": true,
+          "rationale": "Direkter Kontakt zur dorsalen PTV-Kante = hoechste Rektum-Dosis."
+        },
+        {
+          "id": "o-b",
+          "text": "Weil Rektum-Tumoren bei diesen Patienten haeufig sind.",
+          "korrekt": false,
+          "rationale": "Inzidenz spielt fuer die OAR-Bewertung der Bestrahlung keine direkte Rolle."
+        },
+        {
+          "id": "o-c",
+          "text": "Weil sie die einzige Struktur ist, die im CBCT sichtbar wird.",
+          "korrekt": false,
+          "rationale": "Im CBCT sind mehrere Strukturen sichtbar, insbesondere auch Prostata, Blase und Knochen."
+        },
+        {
+          "id": "o-d",
+          "text": "Weil sie als Zielvolumen mitbestrahlt wird.",
+          "korrekt": false,
+          "rationale": "Das Rektum ist OAR, nicht Zielvolumen."
+        }
+      ],
+      "correct": ["o-a"],
+      "rationale_global": "Die Rektum-Vorderwand liegt direkt hinter der Prostata und damit am dorsalen Rand des PTV. Hier ist die Dosis am hoechsten. Entsprechend sensibel reagiert die Vorderwand auf jede Konturabweichung, jede Fuellungsabweichung und jeden Setup-Fehler.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "oar", "rektum", "planung"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-10",
+      "type": "single",
+      "stem": "Welche Aufgabe hat das taegliche CBCT vor der Prostatabestrahlung?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Es ersetzt das Planungs-CT.",
+          "korrekt": false,
+          "rationale": "Das PLCT bleibt die Planungsgrundlage. CBCT vergleicht den Tageszustand mit dem PLCT."
+        },
+        {
+          "id": "o-b",
+          "text": "Es prueft die aktuelle Lage von Knochen, Prostata, Enddarm und Blase und ermoeglicht eine Korrektur vor der Fraktion.",
+          "korrekt": true,
+          "rationale": "Genau die Aufgabe: Geometrie-Abgleich vor jeder Fraktion mit Korrekturmoeglichkeit."
+        },
+        {
+          "id": "o-c",
+          "text": "Es liefert nur einen kosmetischen Vergleich.",
+          "korrekt": false,
+          "rationale": "CBCT-Befund hat direkten Einfluss auf die Setup-Korrektur und die Frage Bestrahlen oder Eingreifen."
+        },
+        {
+          "id": "o-d",
+          "text": "Es dient ausschliesslich der Dokumentation.",
+          "korrekt": false,
+          "rationale": "Dokumentation ist ein Nebenprodukt, nicht der Zweck."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Taegliches CBCT vergleicht die aktuelle Geometrie mit dem Planungs-CT. Korrigiert wird primaer die Lage, geprueft werden Knochen und Weichteile (Prostata, Enddarm, Blase). Bei deutlichen Abweichungen muss die Vorbereitung wiederholt werden.",
+      "lehrjahr": [2, 3],
+      "schwierigkeit": "basic",
+      "tags": ["prostata", "cbct", "igrt", "setup"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-11",
+      "type": "single",
+      "stem": "Welcher Match-Modus ist beim CBCT vor der Prostatabestrahlung primaer zu waehlen und warum?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Reiner Knochenmatch, weil die Prostata sich nicht relativ zum Becken bewegt.",
+          "korrekt": false,
+          "rationale": "Die Prostata bewegt sich abhaengig von Enddarm- und Blasenfuellung relativ zum knoechernen Becken."
+        },
+        {
+          "id": "o-b",
+          "text": "Weichteilmatch auf die Prostata, ergaenzt durch Knochenmatch als Grobreferenz.",
+          "korrekt": true,
+          "rationale": "Standard: Knochen als Grobreferenz, dann Weichteilmatch auf die Prostata. Goldmarker erleichtern den Match deutlich."
+        },
+        {
+          "id": "o-c",
+          "text": "Ausschliesslich Hautmarkerausrichtung, kein Match noetig.",
+          "korrekt": false,
+          "rationale": "Hautmarker liefern nur die Grobpositionierung. Die Feinkorrektur erfolgt am Innenbild."
+        },
+        {
+          "id": "o-d",
+          "text": "Match auf den Bulbus penis, weil er die stabilste Struktur ist.",
+          "korrekt": false,
+          "rationale": "Der Bulbus penis ist nicht die Referenzstruktur fuer das Matching."
+        }
+      ],
+      "correct": ["o-b"],
+      "rationale_global": "Bei der Prostata ist Weichteilmatch der Standard, weil die Prostata sich relativ zum knoechernen Becken verschiebt. Der Knochenmatch dient als Grobreferenz, der entscheidende Schritt ist das Anpassen auf die Prostata. Goldmarker erleichtern den Match deutlich.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "cbct", "igrt", "matching"],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-prostata-12",
+      "type": "multi",
+      "stem": "Welche Befunde im taeglichen CBCT vor der Prostatabestrahlung erfordern in der Regel ein aktives Eingreifen vor der Fraktion?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Deutlich gefuellter Enddarm, der die Prostata sichtbar verlagert.",
+          "korrekt": true,
+          "rationale": "Klassisches Eingreif-Kriterium: Patient zur Entleerung, Vorbereitung wiederholen."
+        },
+        {
+          "id": "o-b",
+          "text": "Leere oder stark ueberfuellte Blase ausserhalb des definierten Volumens.",
+          "korrekt": true,
+          "rationale": "Verstoesst gegen den Plan, Duenndarm rutscht in das Feld oder Setup verschiebt sich. Vorbereitung anpassen."
+        },
+        {
+          "id": "o-c",
+          "text": "Lageabweichung ueber der abteilungsinternen Toleranz nach Couch-Korrektur.",
+          "korrekt": true,
+          "rationale": "Wenn Couch-Korrektur die Abweichung nicht ausreicht, ist ein erneutes Setup oder Ruecksprache Pflicht."
+        },
+        {
+          "id": "o-d",
+          "text": "Geringe Tagesvariation der Hautmarker bei korrektem Innenbild.",
+          "korrekt": false,
+          "rationale": "Hautmarker sind Grobreferenz. Entscheidend ist das CBCT-Innenbild. Solange dort die Geometrie passt, kein Eingriff."
+        },
+        {
+          "id": "o-e",
+          "text": "Kleine Gasblase im Enddarm ohne relevante Prostataverlagerung.",
+          "korrekt": false,
+          "rationale": "Haeufiger Normalbefund. Wird nach Bewertung im Team in der Regel ohne Intervention bestrahlt."
+        }
+      ],
+      "correct": ["o-a", "o-b", "o-c"],
+      "rationale_global": "Eingegriffen wird, wenn die Geometrie fuer die Fraktion nicht mehr stimmt: signifikante Enddarmfuellung, abweichende Blasenfuellung, Restabweichung ueber Toleranz nach Couch-Korrektur. Hautmarker-Bagatellen oder kleine Gasblasen ohne Strukturversatz sind keine Eingriffsindikation.",
+      "lehrjahr": [3],
+      "schwierigkeit": "advanced",
+      "tags": ["prostata", "cbct", "igrt", "eingreifkriterien"],
+      "kontext_neutral": true
+    }
+  ]
+}

@@ -2,5 +2,18 @@
   "version": 1,
   "lastUpdated": "2026-05-19",
   "schemaNote": "Itembank-Index der Quiz-Engine. Pro Eintrag: id (= q-<thema>-<lfdnr>), file (Pfad relativ zu content/itembank/), tags. Wird beim QuizEngine.init() einmal gelesen. Items werden on-demand aus den Themen-Dateien nachgeladen. Baustelle C fuellt diesen Index.",
-  "items": []
+  "items": [
+    { "id": "q-prostata-01", "file": "prostata.json", "tags": ["prostata", "blasenfuellung", "plct", "setup"] },
+    { "id": "q-prostata-02", "file": "prostata.json", "tags": ["prostata", "blasenfuellung", "oar", "plct"] },
+    { "id": "q-prostata-03", "file": "prostata.json", "tags": ["prostata", "enddarm", "reproduzierbarkeit", "plct"] },
+    { "id": "q-prostata-04", "file": "prostata.json", "tags": ["prostata", "enddarm", "plct", "vorbereitung"] },
+    { "id": "q-prostata-05", "file": "prostata.json", "tags": ["prostata", "enddarm", "setup", "reproduzierbarkeit", "cbct"] },
+    { "id": "q-prostata-06", "file": "prostata.json", "tags": ["prostata", "lagerung", "plct", "setup"] },
+    { "id": "q-prostata-07", "file": "prostata.json", "tags": ["prostata", "lagerung", "tattoos", "setup"] },
+    { "id": "q-prostata-08", "file": "prostata.json", "tags": ["prostata", "oar", "zielvolumen", "planung"] },
+    { "id": "q-prostata-09", "file": "prostata.json", "tags": ["prostata", "oar", "rektum", "planung"] },
+    { "id": "q-prostata-10", "file": "prostata.json", "tags": ["prostata", "cbct", "igrt", "setup"] },
+    { "id": "q-prostata-11", "file": "prostata.json", "tags": ["prostata", "cbct", "igrt", "matching"] },
+    { "id": "q-prostata-12", "file": "prostata.json", "tags": ["prostata", "cbct", "igrt", "eingreifkriterien"] }
+  ]
 }
