@@ -1,0 +1,7 @@
+{
+  "thema": "TODO: Themenname in kleinbuchstaben, z.B. prostata, mamma, lagerung",
+  "version": 1,
+  "lastUpdated": "2026-05-19",
+  "schemaNote": "Leere Vorlage. Datei umbenennen in <thema>.json (nur [a-z0-9-]). Items strikt nach architecture/QUIZ-ENGINE-SPEC.md Abschnitt 3.1: id (q-<thema>-<lfdnr>, unveraenderlich), type (single|multi in v1), stem (modul-unabhaengig), options[] mit eigener rationale, correct[], rationale_global, lehrjahr[], schwierigkeit (basic|advanced), tags[], kontext_neutral=true. Jeder Eintrag in dieser Datei muss zusaetzlich in content/itembank/index.json gespiegelt werden (id, file, tags).",
+  "items": []
+}

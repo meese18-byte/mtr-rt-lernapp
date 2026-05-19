@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-05-19",
+  "schemaNote": "Itembank-Index der Quiz-Engine. Pro Eintrag: id (= q-<thema>-<lfdnr>), file (Pfad relativ zu content/itembank/), tags. Wird beim QuizEngine.init() einmal gelesen. Items werden on-demand aus den Themen-Dateien nachgeladen. Baustelle C fuellt diesen Index.",
+  "items": []
+}
