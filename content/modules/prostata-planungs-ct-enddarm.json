@@ -49,6 +49,30 @@
         "feedback": "Nicht zulässig. Eine MTR kompensiert eine fehlerhafte Ausgangslage nicht durch Konturierungs-Kompromisse. Zielvolumendefinition ist ärztliche Aufgabe und setzt ein qualitativ einwandfreies Planungs-CT voraus. Der korrekte Weg bleibt: reproduzierbare Ausgangslage herstellen und Wiederholungs-CT."
       }
     ],
-    "reinforcement": "Reproduzierbare Enddarmfüllung ist die Grundvoraussetzung jeder Prostata-Bestrahlung. Das tägliche CBCT prüft nicht nur den Knochenstand, sondern auch Enddarm und Harnblase. Weicht der Füllungszustand deutlich vom Planungs-CT ab, muss interveniert werden – nicht einfach bestrahlt werden."
+    "reinforcement": "Reproduzierbare Enddarmfüllung ist die Grundvoraussetzung jeder Prostata-Bestrahlung. Das tägliche CBCT prüft nicht nur den Knochenstand, sondern auch Enddarm und Harnblase. Weicht der Füllungszustand deutlich vom Planungs-CT ab, muss interveniert werden – nicht einfach bestrahlt werden.",
+    "followUpQuiz": {
+      "lead": "Drei Items aus der Itembank sichern den klinischen Transfer: Konsequenz → Begründung → Übertrag auf das tägliche CBCT.",
+      "itemRefs": ["q-prostata-05", "q-prostata-03", "q-prostata-12"],
+      "frames": {
+        "q-prostata-05": {
+          "vor": "Im konkreten Fall war der Enddarm beim Planungs-CT deutlich gefüllt. Ordne die klinische Konsequenz ein, wenn auf dieser Geometrie weitergeplant würde.",
+          "nach": "Genau dieser systematische Drift ist der Grund, warum der Patient zur Entleerung geschickt und das CT wiederholt wird."
+        },
+        "q-prostata-03": {
+          "vor": "Warum verlangt der Standardablauf eine reproduzierbare Enddarmfüllung über die gesamte Serie?",
+          "nach": "Reproduzierbarkeit ist die Bedingung, unter der Konturierung, Plan und tägliches Setup überhaupt zusammenpassen."
+        },
+        "q-prostata-12": {
+          "vor": "Übertrag in den Klinikalltag: Welche Befunde im täglichen CBCT rechtfertigen ein aktives Eingreifen vor der Fraktion?",
+          "nach": "Eingreifkriterien sind im Team abgesprochen und dokumentiert. Bagatell-Variationen werden nicht überreguliert."
+        }
+      },
+      "engineOptions": {
+        "mode": "self-first",
+        "leitner": true,
+        "shuffle": false
+      },
+      "passThreshold": 0.66
+    }
   }
 }

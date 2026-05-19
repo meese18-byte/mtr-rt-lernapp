@@ -148,12 +148,33 @@ Bausteine sind die kleinste adressierbare Inhalts-Einheit innerhalb eines Moduls
         "lehrjahr": [2,3],
         "schwierigkeit": "advanced"
       }
-    ]
+    ],
+    "followUpQuiz": {
+      "lead": "string (optional, kurzer Hinweis vor dem Quiz)",
+      "itemRefs": ["q-thema-NN", ...],
+      "frames": {
+        "q-thema-NN": { "vor": "string", "nach": "string" }
+      },
+      "engineOptions": {
+        "mode": "self-first | instant",
+        "leitner": true,
+        "shuffle": false
+      },
+      "passThreshold": 0.66
+    }
   }
 }
 ```
 
 Max. 5 Optionen pro Entscheidung (ARCH §12.3).
+
+**`followUpQuiz` (optional, Baustelle D):** Eingebetteter Quiz-Block am Ende des
+Fall-Flows. Strukturell identisch zu §5.4, aber ohne eigenen Modul-Rahmen.
+Der Case-Renderer ruft die Quiz-Engine erst nach der Fall-Entscheidung auf.
+Modul gilt erst dann als `completed`, wenn der Quiz-Run synchron
+`onRunDone` gefeuert hat (Anti-Bug-Regel, QUIZ-ENGINE-SPEC §4).
+`correctRate` = arithmetisches Mittel aus Fall-Treffer (1/0) und Quiz-Rate.
+Frames leben hier im Case-Modul, nie im Item.
 
 ### 5.3 `image-analysis`
 
@@ -198,7 +219,16 @@ Max. 6 Klickregionen ODER 4 MC-Optionen (ARCH §12.3). `alternative_mc` ist Barr
 }
 ```
 
-**Wichtig:** `itemRefs` referenziert die Itembank. Inline-Items sind verboten – sonst geht die Wiederverwendung verloren. `frames` ist optional und modul-spezifisch.
+**Wichtig:** `itemRefs` referenziert die Itembank und ist der Standardweg. Inline-Items
+(`body.inlineItems`, Engine-konformes Item-Format gemäß QUIZ-ENGINE-SPEC §3.1) sind
+ausschließlich als Fallback erlaubt (Spec §6.2, §8) – sinnvoll in Standalones oder
+bei Übergangs-Modulen, deren Items noch nicht in der Bank liegen. Inline-Nutzung in
+v2-Modulen vermeiden, sonst geht die Wiederverwendung verloren.
+
+Ein **Legacy-Format** `body.questions[]` (Felder `text`, `options[].label/correct/feedback`,
+ohne IDs) aus v1-Modulen wird vom Renderer on-the-fly in Engine-Items konvertiert
+(Migrations-Brücke, Konsolen-Warnung). Neue Module nicht mehr in diesem Format
+anlegen. `frames` ist optional und modul-spezifisch.
 
 Max. 15 Item-Refs pro Modul (ARCH §12.3).
 
