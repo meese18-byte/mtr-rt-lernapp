@@ -125,6 +125,33 @@ radiotherapy-learning-app/
     └── clips/                  # Nur Clips <20 MB und <=30 Sek
 ```
 
+### 5.1 Push-Disziplin (Standalone ↔ Root)
+
+**Pflicht-Check vor jedem Push, der `fallmodule-standalone/`, `mtr-lernmodul/` oder
+einen anderen Standalone-Ordner anfasst:** Vor dem Commit prüfen, ob durch den Diff
+versehentlich Root-Dateien (insbesondere `index.html`, `css/app.css`, Dateien unter
+`js/`, `content/`, `media/`) gelöscht oder verschoben wurden. Standalone-Ordner sind
+abgeschottete Mini-Apps; an der Root liegt die Haupt-App-Auslieferung für
+GitHub Pages.
+
+**Konkretes Vorgehen (Soll-Routine):**
+
+1. `git status` und `git diff --stat` lesen, bevor `git add -A` ausgeführt wird.
+2. Bei Standalone-Änderungen gezielt `git add fallmodule-standalone/...` o.ä.
+   statt pauschalem `add -A`.
+3. Nach `git add` ein `git status` zur Kontrolle – tauchen unter "deleted:"
+   Root-Dateien auf, wird der Commit abgebrochen und der Diff geprüft.
+4. Erst dann `git commit` und `git push`.
+
+**Hintergrund:** Commit `e63211a` (2026-05-18) hat im Zuge einer Standalone-Aktualisierung
+das Root-`index.html` stillschweigend gelöscht. Folge: 404 auf
+https://meese18-byte.github.io/mtr-rt-lernapp/ bis zur Wiederherstellung am 2026-05-19.
+Das Risiko bleibt strukturell, weil Standalones und Haupt-App im selben Pages-Branch liegen.
+
+**Sekundär-Schutz:** `tools/check-root.sh` (geplant, P3) als Pre-Push-Hook, der die
+Existenz von `index.html`, `js/app.js`, `css/app.css` prüft und bei Fehlen den Push
+verweigert. Bis dahin gilt die manuelle Routine als verbindlich.
+
 ---
 
 ## 6. Navigation und Routing
@@ -448,3 +475,4 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 | 2026-04-18 | §12 Konsistenzregeln für Curriculum und Module ergänzt, CURRICULUM.md als zweite Source of Truth eingeführt | Roter Faden von Anfang bis Ende, Feature-Creep-Vermeidung, gemeinsame Felder Kapitel/Pflichtgrad/Voraussetzungen |
 | 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
 | 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `prostata-planungs-ct-enddarm` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
+| 2026-05-20 | §5.1 Push-Disziplin (Standalone ↔ Root) ergänzt: verpflichtender Pre-Push-Check auf gelöschte Root-Dateien bei Änderungen in Standalone-Ordnern. | Reaktion auf Incident 2026-05-19: Commit `e63211a` hat `index.html` im Root stillschweigend gelöscht, GitHub Pages lieferte bis zur Wiederherstellung 404. Strukturelle Schutzregel statt Einzelfall-Reparatur. |

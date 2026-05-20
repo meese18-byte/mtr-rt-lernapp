@@ -3,6 +3,7 @@
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc } from '../util.js';
+import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -34,6 +35,9 @@ export async function render(container, module) {
   } else {
     renderMCMode(imageSlot, interact, feedbackSlot, img, body, module);
   }
+
+  // Exit-Slip-Footer (Baustelle E)
+  mountExitSlip(view, module);
 }
 
 function renderMCMode(imageSlot, interact, feedbackSlot, img, body, module) {

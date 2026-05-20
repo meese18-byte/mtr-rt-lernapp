@@ -4,6 +4,7 @@
 import { loadInfotext } from '../registry.js';
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc, renderMarkdownSimple } from '../util.js';
+import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -70,6 +71,9 @@ export async function render(container, module) {
     });
     checks.appendChild(wrap);
   });
+
+  // Exit-Slip-Footer (Baustelle E)
+  mountExitSlip(view, module);
 
   function countAnswered() {
     return checks.querySelectorAll('.feedback').length;

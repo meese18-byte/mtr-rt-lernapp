@@ -13,6 +13,7 @@
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc, renderMedia } from '../util.js';
 import { QuizEngine } from '../quiz-engine.js';
+import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -92,6 +93,10 @@ export async function render(container, module) {
     li.appendChild(btn);
     ul.appendChild(li);
   });
+
+  // Exit-Slip-Footer (Baustelle E) - sitzt unter case-followup, damit der
+  // Lernende ihn auch nach dem followUpQuiz noch in Reichweite hat.
+  mountExitSlip(view, module);
 }
 
 // --------------------------------------------------------------------

@@ -28,6 +28,7 @@
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc } from '../util.js';
 import { QuizEngine } from '../quiz-engine.js';
+import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -95,6 +96,9 @@ export async function render(container, module) {
   } catch (e) {
     host.innerHTML = `<p class="quiz-empty">Quiz konnte nicht gestartet werden: ${esc(e.message)}</p>`;
   }
+
+  // Exit-Slip-Footer (Baustelle E)
+  mountExitSlip(view, module);
 }
 
 // --------------------------------------------------------------------

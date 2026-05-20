@@ -193,12 +193,12 @@ async function renderEinstellungen() {
         <label class="btn secondary" for="importFile">Datei importieren</label>
         <input type="file" id="importFile" accept=".json,application/json" class="hidden">
       </div>
-      <p class="muted">Hinweis: Der Import ersetzt deinen aktuellen lokalen Fortschritt.</p>
+      <p class="muted">Der Export enthält Modul-Fortschritt, Quiz-Status (Leitner-Boxen) und Exit-Slip-Antworten. Der Import ersetzt deinen aktuellen lokalen Stand. Ältere Export-Dateien (nur Modul-Fortschritt) werden weiterhin akzeptiert.</p>
     </section>
 
     <section class="module-view">
       <h2>Fortschritt zurücksetzen</h2>
-      <p>Löscht alle gespeicherten Fortschrittsdaten aus diesem Browser. Diese Aktion ist nicht rückgängig zu machen.</p>
+      <p>Löscht alle gespeicherten Daten dieser Lernapp aus diesem Browser: Modul-Fortschritt, Einstellungen, Quiz-Status und Exit-Slip-Antworten. Diese Aktion ist nicht rückgängig zu machen.</p>
       <div class="btn-row">
         <button class="btn secondary" id="reset">Fortschritt zurücksetzen</button>
       </div>

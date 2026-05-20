@@ -2,6 +2,7 @@
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc } from '../util.js';
+import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -81,4 +82,7 @@ export async function render(container, module) {
       evalBox.innerHTML += `<div class="feedback"><p>Abgeschlossen. ${ticked} von ${total} Leitpunkten selbst bestätigt.</p><p><a class="btn secondary" href="#/">Zurück zur Übersicht</a></p></div>`;
     });
   });
+
+  // Exit-Slip-Footer (Baustelle E)
+  mountExitSlip(view, module);
 }
