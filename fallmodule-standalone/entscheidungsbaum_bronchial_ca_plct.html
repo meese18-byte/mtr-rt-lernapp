@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entscheidungsbaum Bronchial-Ca PLCT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f4f0;min-height:100vh;padding:2rem 1rem}
+#app{max-width:680px;margin:0 auto}
+.hdr-label{font-size:11px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:.3rem}
+.hdr-title{font-size:18px;font-weight:500;color:#1a1a1a;margin-bottom:1.5rem}
+.prog-bar{display:flex;gap:6px;align-items:center;margin-bottom:1.25rem}
+.prog-seg{height:3px;flex:1;background:#e0ddd6;border-radius:2px;transition:background .3s}
+.prog-seg.done{background:#1D9E75}
+.prog-seg.active{background:#9FE1CB}
+.prog-lbl{font-size:11px;color:#999;white-space:nowrap}
+.trail{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:1rem}
+.trail-item{font-size:12px;color:#999;background:#e8e5df;border-radius:4px;padding:2px 7px}
+.trail-sep{color:#ccc;font-size:11px}
+.sit-box{background:#fff;border:0.5px solid #ddd;border-radius:12px;padding:1.25rem;margin-bottom:1rem;animation:fi .25s ease}
+.sit-box.highlight{border-left:3px solid #1D9E75}
+.sit-box.warn{border-left:3px solid #EF9F27}
+.sit-box.danger{border-left:3px solid #E24B4A}
+.sit-box.reflex{border-left:3px solid #534AB7;background:#f8f7ff}
+.sit-lbl{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.sit-txt{font-size:15px;color:#1a1a1a;line-height:1.7}
+.q-lbl{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.q-txt{font-size:15px;font-weight:500;color:#1a1a1a;line-height:1.6;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.opt{background:#fff;border:0.5px solid #ccc;border-radius:8px;padding:.85rem 1rem;font-size:14px;color:#1a1a1a;text-align:left;cursor:pointer;line-height:1.5;transition:all .15s;display:flex;gap:.75rem;align-items:flex-start;width:100%}
+.opt:hover{background:#f9f8f5;border-color:#aaa}
+.opt.sel{border-color:#1D9E75;background:#f0fbf6}
+.opt-lt{font-weight:500;color:#aaa;flex-shrink:0;min-width:16px}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.btn{background:#fff;border:0.5px solid #ccc;border-radius:8px;padding:.6rem 1.25rem;font-size:14px;color:#1a1a1a;cursor:pointer;transition:all .15s}
+.btn:hover{background:#f5f4f0;border-color:#aaa}
+.btn.p{border-color:#1D9E75;color:#085041;font-weight:500}
+.btn.p:hover{background:#f0fbf6}
+.btn.sec{color:#666}
+.end-box{background:#fff;border-radius:12px;padding:1.5rem;margin-top:.5rem;animation:fi .25s ease}
+.end-opt{border:1.5px solid #1D9E75}
+.end-warn{border:1.5px solid #EF9F27}
+.end-stop{border:1.5px solid #E24B4A}
+.end-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.end-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-g{background:#1D9E75}
+.dot-a{background:#EF9F27}
+.dot-r{background:#E24B4A}
+.end-title{font-size:16px;font-weight:500;color:#1a1a1a}
+.end-txt{font-size:14px;color:#444;line-height:1.8;white-space:pre-line}
+.freitext{width:100%;min-height:120px;border:0.5px solid #ccc;border-radius:8px;padding:.75rem;font-size:14px;font-family:inherit;color:#1a1a1a;background:#fff;resize:vertical;line-height:1.6}
+.freitext:focus{outline:none;border-color:#1D9E75}
+.hint-box{background:#f5f4f0;border-radius:8px;padding:1rem;margin-top:.75rem}
+.hint-lbl{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+.hint-row{display:flex;gap:.5rem;align-items:flex-start;font-size:13px;color:#555;line-height:1.5;margin-bottom:.35rem;cursor:pointer;padding:.2rem 0}
+.hc{width:16px;height:16px;border:1.5px solid #ccc;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.hc.on{background:#1D9E75;border-color:#1D9E75;color:#fff;font-size:10px}
+.ht{flex:1}
+.ht.on{color:#085041}
+.reflex-input{width:100%;min-height:80px;border:0.5px solid #b0a8e0;border-radius:8px;padding:.75rem;font-size:14px;font-family:inherit;color:#1a1a1a;background:#fff;resize:vertical;line-height:1.6}
+.reflex-input:focus{outline:none;border-color:#534AB7}
+.reflex-hints{margin-top:.75rem;font-size:13px;color:#534AB7;line-height:1.7}
+.reflex-hint-item{display:flex;gap:.5rem;align-items:flex-start;margin-bottom:.3rem;cursor:pointer}
+.rhc{width:15px;height:15px;border:1.5px solid #b0a8e0;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px}
+.rhc.on{background:#534AB7;border-color:#534AB7;color:#fff}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="hdr-label">Praktische Prüfungsvorbereitung · Strahlentherapie</div>
+<div class="hdr-title">Entscheidungsbaum – Planungs-CT Bronchial-Ca</div>
+<div id="root"></div>
+</div>
+<script>
+const STEPS=['k1','k2a','k2b','k3','k4','k5','k6','k7'];
+
+// Node types:
+// standard: situation + question + options
+// situation_bridge: show a situation, then a "Weiter" button to next node
+// reflex: reflexion pause with freitext + hints, then continues to next node
+// freitext: final documentation task
+
+const NODES={
+  k1:{
+    id:'k1',step:0,
+    situation:'Patient mit Bronchial-Ca am Planungs-CT. Er wirkt belastet, atmet flach und schnell. Beim Versuch, ihn flach zu lagern, sagt er sofort: Ich bekomme so keine Luft. Er kennt das – er schlaeft zuhause nur noch mit erhoehtem Oberkoerper. Klinisch besteht eine O2-Pflicht. Am PLCT ist aktuell kein mobiles O2-Geraet verfuegbar.',
+    question:'Was ist Ihr erster Schritt?',
+    options:[
+      {id:'A',text:'Patient atementlastend positionieren, Zustand beobachten, O2-Verfuegbarkeit aktiv klaeren und Ruecksprache vorbereiten.',
+       next_node:'k2a',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'Sie richten den Patienten auf der Liege auf – halbsitzend, Oberkoerper angestuetzt. Er atmet sofort ruhiger. Er sagt: Das ist besser. Eine Kollegin bietet an, ein O2-Geraet von der Nachbarstation zu holen – ca. 10 Minuten. Der Patient ist stabil und ansprechbar. Jetzt muss die eigentliche Lagerung fuer den PLCT geplant werden.'}},
+      {id:'B',text:'Patient trotzdem flach lagern und zuegig scannen – je schneller, desto kuerzer die Belastung.',
+       next_node:'k1b_seq',situation_after:null},
+      {id:'C',text:'Termin sofort abbrechen und Patient zurueckschicken – ohne O2 ist ein PLCT nicht vertretbar.',
+       next_node:'k1c_seq',situation_after:null},
+      {id:'D',text:'Oberkoerper hochlagern und scannen, sobald der Patient subjektiv sagt, es geht.',
+       next_node:'k1d_seq',situation_after:null}
+    ]
+  },
+
+  // K1B consequence chain
+  k1b_seq:{
+    id:'k1b_seq',step:0,type:'situation_bridge',
+    sit:{cls:'danger',lbl:'Was passiert',txt:'Sie lagern den Patienten flach. Er beginnt sofort zu keuchen und richtet sich panisch auf. SpO2 faellt sichtbar ab. Er sagt: Ich kann nicht, ich kann nicht. Flache Rueckenlage bei Orthopnoe ist kontraindiziert – der Patient ist jetzt aufgewuehlt und verweigert jede weitere Kooperation.'},
+    question:'Wie reagieren Sie jetzt?',
+    options:[
+      {id:'A',text:'Patient sofort hochlagern, beruhigen, Zustand stabilisieren und dann O2 organisieren.',
+       next_node:'k1b_recovery',situation_after:null},
+      {id:'B',text:'Scan trotzdem versuchen – der Patient muss es kurz durchhalten.',
+       next_node:'end_k1b_insist',situation_after:null},
+      {id:'C',text:'Arzt sofort rufen – Situation ausser Kontrolle.',
+       next_node:'end_k1b_arzt',situation_after:null}
+    ]
+  },
+  k1b_recovery:{
+    id:'k1b_recovery',step:0,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Situation nach Stabilisierung',txt:'Der Patient ist wieder halbsitzend, atmet ruhiger. Er ist aber misstrauisch und nervoes. Er fragt: Muessen Sie das nochmal versuchen? O2 ist noch nicht da. Sie haben jetzt gut 15 Minuten verloren. Der naechste Patient wartet bereits.\n\nKonsequenz bis hierher: Die falsche Erstentscheidung hat Zeit gekostet, das Vertrauen des Patienten beschaedigt und den Ablauf gestresst. Die eigentliche Arbeit beginnt jetzt – aber unter schlechteren Vorzeichen.'},
+    question:'Wie geht es weiter?',
+    options:[
+      {id:'A',text:'Situation erklaeren, Vertrauen zurueckgewinnen, O2 organisieren und Lagerung neu planen.',
+       next_node:'k2a',situation_after:null},
+      {id:'B',text:'Termin abbrechen und neuen Termin ueber Ambulanz und Patientlotsin koordinieren lassen.',
+       next_node:'end_k1b_abbruch',situation_after:null}
+    ]
+  },
+  end_k1b_insist:{type:'stop',title:'Scan abgebrochen – Patientensicherheit gefaehrdet',
+    text:'Sie versuchen es erneut. Der Patient weigert sich kooperativ mitzumachen. SpO2 faellt weiter. Der Scan ist nicht durchfuehrbar, der Patient ist in einem schlechteren Zustand als bei Ankunft.\n\nKonsequenz: Arzt informieren, Patient sichern. Neuer Termin nur mit aerztlicher Begleitung. Die Situation haette von Beginn an anders gemanagt werden muessen.'},
+  end_k1b_arzt:{type:'warn',title:'Arzt informiert – aber Eigenhandlung fehlte',
+    text:'Der Arzt kommt und stabilisiert den Patienten mit Hochlagerung – genau das, was Sie bereits haetten tun koennen und sollen. Die Situation waere vermeidbar gewesen.\n\nKonsequenz: PLCT wird verschoben. Neuer Termin ueber Ambulanz und Patientlotsin. Das ist ein unnötiger organisatorischer Aufwand, der durch fruehzeitig richtiges Handeln vermeidbar gewesen waere.'},
+  end_k1b_abbruch:{type:'warn',title:'Termin abgebrochen – nachvollziehbar, aber vermeidbar',
+    text:'Der Abbruch ist nach dieser Eskalation verstaendlich. Aber die Ursache war die falsche Erstentscheidung – nicht die Situation selbst.\n\nNeuer Termin muss ueber Ambulanz und Patientlotsin koordiniert werden. Therapiebeginn verzoegert sich. Der Patient muss erneut anreisen.'},
+
+  // K1C consequence chain
+  k1c_seq:{
+    id:'k1c_seq',step:0,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert',txt:'Sie schicken den Patienten zurueck. 20 Minuten spaeter ruft der zustaendige Arzt an: Warum wurde der Termin abgebrochen? Konnte wirklich kein O2 organisiert werden? Die Ambulanz und die Patientlotsin sind informiert – sie fragen nach der Begruendung.'},
+    question:'Was antworten Sie?',
+    options:[
+      {id:'A',text:'Ehrlich begruenden: O2 fehlte, Patient war dyspnoisch – eine Pruefung ob O2 kurzfristig verfuegbar gewesen waere, habe ich nicht durchgefuehrt.',
+       next_node:'end_k1c_ehrlich',situation_after:null},
+      {id:'B',text:'Begruenden: Ohne O2 war ein sicherer PLCT nicht moeglich – das ist korrekt so.',
+       next_node:'end_k1c_defend',situation_after:null}
+    ]
+  },
+  end_k1c_ehrlich:{type:'warn',title:'Ehrliche Einschaetzung – aber vermeidbarer Aufwand',
+    text:'Die ehrliche Antwort ist der richtige Umgang mit dem Fehler. Der Arzt akzeptiert die Begruendung, haelt aber fest: In solchen Faellen zuerst klaeren, ob O2 kurzfristig verfuegbar ist – dann entscheiden.\n\nKonsequenz: Neuer Termin wird ueber Ambulanz und Patientlotsin koordiniert. Therapiebeginn verzoegert sich um mehrere Tage. Vermeidbar gewesen.'},
+  end_k1c_defend:{type:'warn',title:'Formal richtig – inhaltlich unvollstaendig',
+    text:'Die Aussage ist nicht falsch – aber unvollstaendig. Ohne O2 haette nicht gescannt werden duerfen. Die Frage ist aber: Haette O2 in 10 Minuten verfuegbar sein koennen?\n\nDiese Pruefung hat gefehlt. Der Arzt wird nachhaken. Konsequenz: Neuer Termin, koordiniert ueber Ambulanz und Patientlotsin. Therapiebeginn verzoegert.'},
+
+  // K1D consequence chain
+  k1d_seq:{
+    id:'k1d_seq',step:0,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert',txt:'Der Patient sagt, es gehe. Sie scannen. SpO2 sinkt waehrend des Scans auf 88% – Sie sehen es auf dem Monitor, sagen aber nichts. Der Scan ist technisch abgeschlossen.\n\nZwei Tage spaeter: Der Physiker meldet sich. Die Atemexkursionen im Scan sind so stark, dass die Dosisberechnung am Tumor unsicher ist. Ausserdem: keine O2-Dokumentation, keine Lagerungsbegruendung.'},
+    question:'Wie reagieren Sie auf die Rueckmeldung des Physikers?',
+    options:[
+      {id:'A',text:'Situation offenlegen: Patient war O2-pflichtig, SpO2 war gefallen, wurde aber nicht dokumentiert.',
+       next_node:'end_k1d_offen',situation_after:null},
+      {id:'B',text:'Scan war technisch in Ordnung – die Entscheidung ueber Wiederholung liegt beim Arzt.',
+       next_node:'end_k1d_passiv',situation_after:null}
+    ]
+  },
+  end_k1d_offen:{type:'stop',title:'PLCT muss wiederholt werden – mit vermeidbarer Strahlenbelastung',
+    text:'Die offene Rueckmeldung ist richtig. Das Ergebnis bleibt aber dasselbe: Der PLCT muss wiederholt werden – diesmal mit O2, korrekter Lagerung und vollstaendiger Dokumentation.\n\nKonsequenz: Erneute Strahlenbelastung fuer den Patienten. Neuer Termin ueber Ambulanz und Patientlotsin. Behandlungsverzoegerung. Alles vermeidbar gewesen.'},
+  end_k1d_passiv:{type:'stop',title:'Verantwortung abgegeben – kein professionelles Handeln',
+    text:'Die Entscheidung wird an den Arzt weitergegeben, ohne eigene Einschaetzung. Das ist keine professionelle Rueckmeldung.\n\nDer Arzt wird die Situation nachvollziehen und feststellen: SpO2-Abfall waehrend des Scans, keine O2-Dokumentation, keine Lagerungsbegruendung. PLCT wird wiederholt. Konsequenzen wie zuvor – plus Vertrauensverlust.'},
+
+  // Optimal path continues
+  k2a:{
+    id:'k2a',step:1,
+    situation:null,
+    question:'Welche Lagerungsanpassung waehlen Sie fuer den Oberkoerper?',
+    options:[
+      {id:'A',text:'Nackenschale oder kleinen Keil nur unter den Kopf legen.',
+       next_node:'k2a_a_seq',situation_after:null},
+      {id:'B',text:'Schiefe Ebene (grosser Keil) unter den gesamten Oberkoerper legen – gleichmaessige Elevation des Rumpfes.',
+       next_node:'k2b',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'Die Schiefe Ebene liegt. Der Oberkoerper ist gleichmaessig um ca. 30 Grad erhoht. Der Patient atmet sichtbar ruhiger, keine Atemhilfsmuskulatur mehr aktiv. Er sagt: Das ist viel besser. O2 ist noch nicht da. Jetzt muss die restliche Lagerung komplett gemacht werden – Arme und Knie.'}},
+      {id:'C',text:'Weiche Schaumstoffmatte unterlegen fuer mehr Komfort.',
+       next_node:'k2a_c_seq',situation_after:null},
+      {id:'D',text:'Beine erhoehen zur Entspannung.',
+       next_node:'k2a_d_seq',situation_after:null}
+    ]
+  },
+
+  k2a_a_seq:{
+    id:'k2a_a_seq',step:1,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert',txt:'Sie legen die Nackenschale unter. Der Patient liegt mit leicht erhoehtem Kopf. Nach 2 Minuten sagt er: Es ist immer noch schwer zu atmen. Die Atemhilfsmuskulatur ist weiter aktiv. Die Orthopnoe ist durch reine Kopfhochlagerung nicht ausreichend entlastet – die Atemmechanik verbessert sich nur, wenn der gesamte Rumpf erhoben wird.'},
+    question:'Wie reagieren Sie?',
+    options:[
+      {id:'A',text:'Schiefe Ebene zusaetzlich unterlegen – Oberkoerper komplett anheben.',
+       next_node:'k2b',
+       situation_after:{cls:'highlight',lbl:'Korrektur greift',txt:'Mit der Schiefen Ebene verbessert sich die Atmung deutlich. Der Patient entspannt sich. Die Kopflagerung allein hat nicht gereicht – die Kombination aus Keil und Schiefer Ebene funktioniert. Weiter zur Armposition.'}},
+      {id:'B',text:'Warten – vielleicht gewoehnt sich der Patient an die Position.',
+       next_node:'end_k2a_warten',situation_after:null}
+    ]
+  },
+  end_k2a_warten:{type:'warn',title:'Abwarten bei klinischem Signal – nicht vertretbar',
+    text:'Der Patient gibt aktiv Rueckmeldung, dass die Atmung schwer faellt. Das ist kein Gewoehungseffekt, sondern ein klinisches Signal.\n\nKonsequenz: Lagerung muss korrigiert werden. Abwarten verlaengert die Belastung unnoetig und verzoegert den Scan weiter.'},
+
+  k2a_c_seq:{
+    id:'k2a_c_seq',step:1,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert',txt:'Die weiche Matte liegt. Der Patient wirkt etwas entspannter. Aber nach 3 Minuten sagt er: Die Luft ist immer noch knapp. Die Atemmechanik hat sich nicht verbessert – weiche Unterlagen aendern die Koerperhaltung nicht ausreichend. Zusaetzlich: Weiche Unterlagen sind fuer die taeglich reproduzierbare Bestrahlung ungeeignet.'},
+    question:'Wie reagieren Sie?',
+    options:[
+      {id:'A',text:'Schiefe Ebene unter Matte und Patient legen – Oberkoerper anheben.',
+       next_node:'k2b',
+       situation_after:{cls:'highlight',lbl:'Korrektur greift',txt:'Die Schiefe Ebene hebt den Oberkoerper gleichmaessig an. Atmung verbessert sich deutlich. Die Matte wird entfernt – sie wuerde die Reproduzierbarkeit beeintraechtigen. Weiter zur Armposition.'}},
+      {id:'B',text:'So belassen – der Patient sagt es sei etwas besser.',
+       next_node:'end_k2a_c_belassen',situation_after:null}
+    ]
+  },
+  end_k2a_c_belassen:{type:'warn',title:'Suboptimale Lagerung akzeptiert – Planungsproblem vorprogrammiert',
+    text:'Leichte subjektive Besserung ist keine ausreichende Grundlage fuer einen Planungs-CT. Die Lagerung ist weder fuer die Atemmechanik optimal noch fuer taeglich reproduzierbare Bestrahlung geeignet.\n\nKonsequenz: Scan unter diesen Bedingungen wird in der Planung Probleme erzeugen. Rueckmeldung des Physikers oder Arztes wahrscheinlich.'},
+
+  k2a_d_seq:{
+    id:'k2a_d_seq',step:1,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert',txt:'Die Beine sind leicht erhoben. Der Patient wirkt etwas entspannter – aber atmet weiterhin angestrengt. Die Beinlagerung verbessert die Atemmechanik bei Orthopnoe in Rueckenlage nicht. Der Patient sagt nach 2 Minuten: An der Luft hat sich nichts geaendert.'},
+    question:'Wie reagieren Sie?',
+    options:[
+      {id:'A',text:'Schiefe Ebene unterlegen – das eigentliche Problem angehen.',
+       next_node:'k2b',
+       situation_after:{cls:'highlight',lbl:'Richtige Massnahme greift',txt:'Schiefe Ebene liegt, Oberkoerper erhoben. Atmung deutlich besser. Die Beinlagerung bleibt als Komfortmassnahme erhalten, ist aber nicht die Loesung des Problems gewesen. Weiter zur Armposition.'}},
+      {id:'B',text:'Noch mehr Beinerhöhung versuchen.',
+       next_node:'end_k2a_d_mehr',situation_after:null}
+    ]
+  },
+  end_k2a_d_mehr:{type:'warn',title:'Falsche Massnahme intensiviert – keine Besserung',
+    text:'Mehr Beinerhöhung veraendert die Atemsituation nicht. Das Kernproblem – der Rueckfluss von Fluessigkeit in die Lunge bei flacher Lage – wird durch Beinlagerung nicht adressiert.\n\nKonsequenz: Zeit verloren, Patient weiter belastet. Lagerung muss neu angesetzt werden.'},
+
+  // K2B - Arm position
+  k2b:{
+    id:'k2b',step:2,
+    situation:null,
+    question:'Wie lagern Sie Arme und Knie fuer diesen Thorax-PLCT?',
+    options:[
+      {id:'A',text:'Arme in Armhalterung ueber dem Kopf, Kniestep unter den Knien.',
+       next_node:'k3',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'Lagerung steht. Arme sicher in der Armhalterung, Kniestep platziert. Der Patient haelt die Position gut. In diesem Moment kommt die Kollegin mit dem O2-Geraet zurueck. Sie schliessen es an. SpO2 steigt innerhalb von 2 Minuten auf 94%. Der Patient wirkt entspannt. Jetzt stellt sich die Frage nach der O2-Schlauchfuehrung und der weiteren Vorgehensweise.'}},
+      {id:'B',text:'Arme seitlich am Koerper anlegen, Kniestep unter den Knien.',
+       next_node:'k2b_b_reflex',situation_after:null},
+      {id:'C',text:'Arme auf dem Bauch verschraenken, Kniestep unter den Knien.',
+       next_node:'k2b_c_seq',situation_after:null},
+      {id:'D',text:'Arme in Armhalterung ueber dem Kopf – kein Kniestep noetig.',
+       next_node:'k2b_d_seq',situation_after:null}
+    ]
+  },
+
+  // K2B-B: Reflexionspause vor dem Scan
+  k2b_b_reflex:{
+    id:'k2b_b_reflex',step:2,type:'reflex',
+    sit:{cls:'reflex',lbl:'Reflexionspause – bevor es weitergeht',txt:'Sie haben die Arme seitlich angelegt. Bevor Sie mit dem Scan fortfahren: Diese Position weicht von der Standardlagerung fuer Thorax-PLCT ab. Nehmen Sie sich einen Moment.'},
+    question:'Warum haben Sie die Arme seitlich gelagert? Und was muss jetzt zusaetzlich sichergestellt werden?',
+    reflex_hints:[
+      'Patient konnte Arme nicht in Armhalterung heben (z.B. Schulterarthrose, Schmerzen)',
+      'Aerztliche Indikation fuer Alternativlagerung liegt vor oder wird eingeholt',
+      'Dokumentation der Begruendung ist zwingend erforderlich',
+      'Reproduzierbarkeit der seitlichen Armposition fuer taeglich Bestrahlung sicherstellen'
+    ],
+    next_node:'k2b_b_seq'
+  },
+
+  k2b_b_seq:{
+    id:'k2b_b_seq',step:2,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert – Planungsbesprechung',txt:'Scan ist abgeschlossen. Zwei Tage spaeter meldet sich der Physiker: Die Arme ueberlagern partiell den lateralen Thorax. Die Dosisberechnung fuer den Tumor ist an einer Stelle eingeschraenkt. Der Arzt fragt nach: Warum wurden die Arme seitlich gelagert? Liegt eine dokumentierte Begruendung vor?'},
+    question:'Wie antworten Sie?',
+    options:[
+      {id:'A',text:'Begruendung liegt vor: Patient konnte Arme nicht heben, Arzt war informiert, dokumentiert.',
+       next_node:'end_k2b_b_ok',situation_after:null},
+      {id:'B',text:'Keine formale Begruendung – es schien praktisch so besser.',
+       next_node:'end_k2b_b_nodoc',situation_after:null}
+    ]
+  },
+  end_k2b_b_ok:{type:'warn',title:'Akzeptabel – aber Planung eingeschraenkt',
+    text:'Die Begruendung ist vorhanden und die Entscheidung nachvollziehbar. Arme seitlich ist bei dokumentierter Indikation vertretbar.\n\nAber: Die Bildgebung ist eingeschraenkt. Je nach Ausmass muss der Physiker entscheiden, ob der Scan verwertbar ist oder ob eine Wiederholung – diesmal mit aerztlicher Begleitung zur Lagerungsoptimierung – notwendig ist.'},
+  end_k2b_b_nodoc:{type:'stop',title:'Keine Begruendung dokumentiert – PLCT Wiederholung wahrscheinlich',
+    text:'Ohne dokumentierte medizinische Begruendung ist die Abweichung von der Standardlagerung nicht vertretbar. Der Arzt kann die Entscheidung nicht nachvollziehen.\n\nKonsequenz: PLCT muss wahrscheinlich wiederholt werden. Koordination ueber Ambulanz und Patientlotsin. Erneute Strahlenbelastung. Haette durch Ruecksprache und Dokumentation vor dem Scan vermieden werden koennen.'},
+
+  // K2B-C: Arme auf Bauch – delayed consequence
+  k2b_c_seq:{
+    id:'k2b_c_seq',step:2,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert – Scan laeuft',txt:'Arme auf dem Bauch. Scan wird gestartet. Technisch laeuft alles. Der Patient toleriert die Lagerung. Sie denken: War doch kein Problem.'},
+    question:'Was tun Sie nach dem Scan?',
+    options:[
+      {id:'A',text:'Alles dokumentieren wie sonst – Scan abgeschlossen, Lagerung war akzeptabel.',
+       next_node:'k2b_c_plannung',situation_after:null},
+      {id:'B',text:'Arztruecksprache suchen wegen der ungewoehnlichen Armposition – bevor die Daten in die Planung gehen.',
+       next_node:'end_k2b_c_arzt',situation_after:null}
+    ]
+  },
+  k2b_c_plannung:{
+    id:'k2b_c_plannung',step:2,type:'situation_bridge',
+    sit:{cls:'danger',lbl:'Planungsbesprechung – 2 Tage spaeter',txt:'Der Arzt schaut die CT-Daten an. Er fragt sofort: Warum liegen die Arme auf dem Bauch? Das geht fuer die Bestrahlung nicht – die Arme wuerden im Strahlengang liegen und die Dosisverteilung am Tumor kompromittieren. Der PLCT muss wiederholt werden.\n\nJetzt: Wer koordiniert den neuen Termin? Was wird dokumentiert?'},
+    question:'Wie gehen Sie mit der Situation um?',
+    options:[
+      {id:'A',text:'Offen kommunizieren: Armposition war ein Fehler, haette vorher Ruecksprache gehalten werden muessen. Neuen Termin organisieren.',
+       next_node:'end_k2b_c_offen',situation_after:null},
+      {id:'B',text:'Erklaeren: Patient konnte Arme nicht anders lagern.',
+       next_node:'end_k2b_c_erklaer',situation_after:null}
+    ]
+  },
+  end_k2b_c_arzt:{type:'warn',title:'Richtige Reaktion – aber zu spaet',
+    text:'Die Ruecksprache nach dem Scan ist besser als keine. Der Arzt wird die Bilder anschauen und wahrscheinlich entscheiden, dass ein neuer PLCT noetig ist.\n\nDer richtige Moment fuer die Ruecksprache waere gewesen: Bevor gescannt wird, sobald klar ist, dass der Patient die Arme nur auf den Bauch legen kann. Das haette die erneute Strahlenbelastung vermieden.'},
+  end_k2b_c_offen:{type:'stop',title:'Ehrlicher Umgang – trotzdem PLCT Wiederholung',
+    text:'Die offene Kommunikation ist die einzig richtige Reaktion. Der Fehler wird anerkannt.\n\nKonsequenz: PLCT-Wiederholung. Koordination ueber Ambulanz und Patientlotsin. Erneute Strahlenbelastung. Behandlungsverzoegerung.\n\nDie wichtigste Lehre: Wenn ein Patient die Arme nur auf den Bauch legen kann, ist das ein Grund fuer sofortige Arztruecksprache – nicht nach dem Scan.'},
+  end_k2b_c_erklaer:{type:'stop',title:'Begruendung unvollstaendig – Konsequenz bleibt',
+    text:'Wenn der Patient die Arme tatsaechlich nicht anders lagern konnte, haette das dokumentiert und ein Arzt hinzugezogen werden muessen – vor dem Scan.\n\nKonsequenz unveraendert: PLCT-Wiederholung mit aerztlicher Begleitung. Strahlenbelastung. Verzoegerung. Die Begruendung aendert das Ergebnis nicht – sie haette nur vorher kommen muessen.'},
+
+  // K2B-D: Armhalterung ohne Kniestep
+  k2b_d_seq:{
+    id:'k2b_d_seq',step:2,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Was passiert – Scan laeuft',txt:'Arme in Armhalterung, kein Kniestep. Scan wird gestartet. Der Patient liegt – aber nach 3 Minuten sagt er: Ich muss die Beine etwas anziehen. Sie sehen, wie er unwillkuerlich die Knie leicht anhebt. Die Lendenwirbelsaeule liegt ueberstreckt. Sie scannen trotzdem durch.'},
+    question:'Was tun Sie?',
+    options:[
+      {id:'A',text:'Scan abbrechen, Kniestep nachlegen, Lagerung neu einstellen – dann neu scannen.',
+       next_node:'end_k2b_d_korr',situation_after:null},
+      {id:'B',text:'Scan fertigstellen – ein bisschen Bewegung macht nichts.',
+       next_node:'k2b_d_fraktur',situation_after:null}
+    ]
+  },
+  k2b_d_fraktur:{
+    id:'k2b_d_fraktur',step:2,type:'situation_bridge',
+    sit:{cls:'danger',lbl:'Erste Fraktion – 5 Tage spaeter',txt:'Der Patient kommt zur ersten Bestrahlung. Das Behandlungsteam versucht die Lagerung aus dem PLCT zu reproduzieren. Ohne Kniestep liegt der Patient anders als im Scan. Die Bildverifikation schlaegt an – die Position stimmt nicht ueberein. Die Behandlung kann nicht begonnen werden.'},
+    question:'Was passiert jetzt?',
+    options:[
+      {id:'A',text:'Kniestep unterlegen und erneut verifizieren.',
+       next_node:'end_k2b_d_fraktion_kniestep',situation_after:null},
+      {id:'B',text:'Arzt informieren und Entscheidung ueber Behandlungsstart anfordern.',
+       next_node:'end_k2b_d_fraktion_arzt',situation_after:null}
+    ]
+  },
+  end_k2b_d_korr:{type:'warn',title:'Korrektur richtig – aber Aufwand vermeidbar',
+    text:'Die Entscheidung, abzubrechen und korrekt zu lagern, ist fachlich richtig. Scan wird wiederholt – aber mit korrekter Lagerung.\n\nDer Kniestep haette von Anfang an gelagert werden muessen. Der Mehraufwand entsteht durch die initiale Fehlentscheidung.'},
+  end_k2b_d_fraktion_kniestep:{type:'stop',title:'Setup-Abweichung aufgeloest – aber PLCT-Wiederholung noetig',
+    text:'Mit Kniestep verbessert sich die Verifikation. Aber: Die aktuelle Behandlungsplanung basiert auf einem Scan ohne Kniestep. Die Dosisberechnung ist auf die falsche Koerperposition ausgelegt.\n\nKonsequenz: Neuer PLCT mit Kniestep. Neue Planung. Koordination ueber Ambulanz und Patientlotsin. Erneute Strahlenbelastung. Behandlungsverzoegerung. Alles durch fehlenden Kniestep beim Erst-PLCT.'},
+  end_k2b_d_fraktion_arzt:{type:'stop',title:'Arzt entscheidet – Ergebnis dasselbe',
+    text:'Der Arzt schaut sich die Verifikationsbilder an. Entscheidung: Neuer PLCT mit korrekter Lagerung erforderlich. Behandlung wird verschoben.\n\nKonsequenz: Identisch mit vorherigem Endpunkt. Der Unterschied: Hier ist ein Arzt eingebunden, was den Ablauf verlaengert. Die Ursache bleibt der fehlende Kniestep beim Erst-PLCT.'},
+
+  k3:{
+    id:'k3',step:3,
+    situation:null,
+    question:'O2 ist da und laeuft. Wie fuehren Sie den Schlauch und wie stellen Sie die weitere Versorgung sicher?',
+    options:[
+      {id:'A',text:'Scan ohne weitere O2-Massnahmen – die Lagerung hat die Atmung ja ausreichend verbessert.',
+       next_node:'k3_a_seq',situation_after:null},
+      {id:'B',text:'O2-Schlauch kollisionsfrei zur Seite fuehren, Patient ueberwacht, Schlauch fixiert ohne Zug oder Knick.',
+       next_node:'k4',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'O2 laeuft stabil. SpO2 haelt sich bei 94%. Der Schlauch liegt ohne Zug und ohne Kollisionsrisiko mit der Gantry. Der Patient haelt die Position seit 4 Minuten. Der naechste Patient wartet bereits. Sie schauen auf die Lagerung: Kann ich jetzt scannen?'}},
+      {id:'C',text:'Patient allein lassen, waehrend der Schlauch am Geraet fixiert wird.',
+       next_node:'end_k3c',situation_after:null},
+      {id:'D',text:'Sofort den Arzt rufen – O2-Pflicht geht ueber MTR-Kompetenz.',
+       next_node:'end_k3d',situation_after:null}
+    ]
+  },
+  k3_a_seq:{
+    id:'k3_a_seq',step:3,type:'situation_bridge',
+    sit:{cls:'danger',lbl:'Was passiert waehrend des Scans',txt:'Sie beginnen den Scan. Nach 90 Sekunden sehen Sie auf dem Monitor: SpO2 faellt von 94% auf 87%. Der Patient bewegt sich unruhig. Sie brechen ab. Der Patient ist kurzatmig, der O2-Schlauch liegt unverbunden neben ihm – er ist beim Scan-Start herausgefallen und wurde nicht gesichert.'},
+    question:'Was tun Sie jetzt?',
+    options:[
+      {id:'A',text:'O2 sofort wieder anlegen, Schlauch sichern, Patient stabilisieren.',
+       next_node:'end_k3a_recover',situation_after:null},
+      {id:'B',text:'Arzt rufen – SpO2-Abfall erfordert aerztliche Entscheidung.',
+       next_node:'end_k3a_arzt',situation_after:null}
+    ]
+  },
+  end_k3a_recover:{type:'warn',title:'Situation beherrschbar – aber Scan muss wiederholt werden',
+    text:'Patient ist wieder stabilisiert. O2 laeuft. Scan muss neu gestartet werden – diesmal mit gesichertem Schlauch.\n\nKonsequenz: Zeitverlust, erhoehte Belastung fuer den Patienten, unnoetiger Stressmoment. Durch korrekte Schlauchfuehrung vor dem Scan vermeidbar gewesen.'},
+  end_k3a_arzt:{type:'warn',title:'Arzt hinzugezogen – korrekt bei SpO2-Abfall',
+    text:'Bei SpO2-Abfall auf 87% ist aerztliche Entscheidung sinnvoll. Der Arzt stabilisiert, O2 wird wieder gesichert.\n\nKonsequenz: Scan wird mit aerztlicher Begleitung wiederholt. Mehraufwand durch fehlende Schlauchsicherung. Vermeidbar.'},
+  end_k3c:{type:'stop',title:'Patient allein gelassen – Grundpflicht verletzt',
+    text:'Bei aktiver Dyspnoe und laufendem O2 darf der Patient nicht unbeaufsichtigt sein. Sichtkontakt, Kommunikation und Erreichbarkeit sind keine Optionen – sie sind Pflicht.\n\nKonsequenz: Dieser Moment ist ein klinisches und ethisches Versagen, unabhaengig davon, ob es zu einem Zwischenfall kommt.'},
+  end_k3d:{type:'warn',title:'Zu passiv – MTR-Kompetenz nicht ausgeschoepft',
+    text:'O2 anlegen, Schlauch fuehren und Patienten ueberwachen sind eigenstaendige MTR-Aufgaben. Der Arzt wird dann notwendig, wenn die MTR-Optionen ausgeschoepft sind.\n\nReflexartige Arzteskalation ohne vorherige Eigennahmen ist nicht fachgerecht.'},
+
+  k4:{
+    id:'k4',step:4,
+    situation:null,
+    question:'Was pruefen Sie jetzt, bevor Sie den Scan starten?',
+    options:[
+      {id:'A',text:'Sofort scannen – der Patient liegt gut und die Zeit draengt.',
+       next_node:'end_k4a',situation_after:null},
+      {id:'B',text:'Reproduzierbarkeit, Scanbereich/FOV, Armposition, Schlauchfuehrung, Bestrahlbarkeit und Patientenverhalten systematisch pruefen.',
+       next_node:'k5',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'Sie gehen die Punkte durch: Oberkoeperhoehe mit Schiefer Ebene reproduzierbar. Arme stabil in Armhalterung. Kniestep positioniert. O2-Schlauch ohne Zug links herausgefuehrt. Thorax liegt vollstaendig im Scanbereich. Patient haelt seit 4 Minuten ohne Beschwerden. SpO2 94%. Die Lagerung sieht planungstauglich aus – aber ist sie es wirklich?'}},
+      {id:'C',text:'Nur SpO2 und subjektives Befinden abfragen – wenn beides passt, los.',
+       next_node:'end_k4c',situation_after:null},
+      {id:'D',text:'Termin abbrechen – jede Abweichung von flacher Standardlagerung ist ein Ausschlusskriterium.',
+       next_node:'end_k4d',situation_after:null}
+    ]
+  },
+  end_k4a:{type:'warn',title:'Zu schnell – fehlende Pruefung wird spaeter zum Problem',
+    text:'Der Scan wird gemacht. Bei der Planung faellt auf: Der O2-Schlauch erzeugt ein Artefakt im Zielgebiet, die Armposition ist nicht exakt dokumentiert und beim ersten Bestrahlungstermin kann die Lagerung nicht reproduziert werden.\n\nEin neuer PLCT wird noetig. Die vermeintliche Zeitersparnis von 5 Minuten hat eine Woche Verzoegerung erzeugt.'},
+  end_k4c:{type:'warn',title:'Unvollstaendige Pruefung – Reproduzierbarkeit nicht gesichert',
+    text:'SpO2 und subjektives Befinden sind notwendige, aber nicht hinreichende Kriterien. Reproduzierbarkeit, Scanbereich, Armposition und Schlauchfuehrung wurden nicht geprueft.\n\nDiese Luecken werden beim Behandlungsteam auffallen.'},
+  end_k4d:{type:'warn',title:'Vorschneller Abbruch – Behandlungsverzoegerung ohne Notwendigkeit',
+    text:'Abweichungen von der Standardlagerung sind kein automatisches Ausschlusskriterium. Sie muessen fachlich bewertet werden.\n\nEin unnötiger Abbruch verzoegert den Therapiebeginn und belastet den Patienten zusaetzlich.'},
+
+  k5:{
+    id:'k5',step:5,
+    situation:null,
+    question:'Welche Kriterien entscheiden, ob unter dieser Lagerung gescannt werden kann?',
+    options:[
+      {id:'A',text:'Entscheidend ist, dass der Patient bequem liegt und die Position haelt.',
+       next_node:'end_k5a',situation_after:null},
+      {id:'B',text:'Atemtoleranz, Stabilitaet, Reproduzierbarkeit, CT-Scanbereich, Armposition, O2-Schlauchfuehrung und spaetere Bestrahlbarkeit am Linac muessen alle erfuellt sein.',
+       next_node:'k6',
+       situation_after:{cls:'highlight',lbl:'Was passiert als naechstes',txt:'Alle Kriterien erfuellt. Die Lagerung ist planungstauglich. Jetzt steht die letzte Huerdle: Die Situation weicht deutlich von der Standardlagerung ab. O2-Pflicht, Schiefe Ebene, besondere Schlauchfuehrung. Was muss vor dem Scan noch geregelt und dokumentiert werden?'}},
+      {id:'C',text:'Entscheidend ist nur, dass der Tumor vollstaendig im Scanbereich liegt.',
+       next_node:'end_k5c',situation_after:null},
+      {id:'D',text:'Entscheidend ist, dass die Standarddokumentation ausgefuellt wird.',
+       next_node:'end_k5d',situation_after:null}
+    ]
+  },
+  end_k5a:{type:'warn',title:'Unvollstaendige Bewertung – Planungsfehler moeglich',
+    text:'Komfort und Toleranz sind notwendige, aber nicht hinreichende Bedingungen. Ohne Pruefung von Reproduzierbarkeit, Scanbereich, Armposition, Schlauchfuehrung und Bestrahlbarkeit ist die Lagerung nicht wirklich freigegeben.\n\nDiese Luecken fuehren spaetestens bei der Bestrahlungsplanung zu Problemen.'},
+  end_k5c:{type:'warn',title:'Zu eng gedacht – OAR und Bestrahlbarkeit vergessen',
+    text:'Zielgebiet im Scanbereich ist notwendig, aber nicht ausreichend. Risikoorgane, Lagerungsqualitaet, taegliches Setup und Bestrahlbarkeit am Linac muessen mitgedacht werden.\n\nEine Planung, die am CT noch funktioniert, kann am Linac scheitern.'},
+  end_k5d:{type:'stop',title:'Standarddokumentation bei Nicht-Standardsituation – kritischer Fehler',
+    text:'Standarddokumentation bei erheblich abweichender Lagerung ist nicht nur unvollstaendig – sie ist irrefuehrend. Das Behandlungsteam geht von normaler Lagerung aus und kann die Position nicht reproduzieren.\n\nDas ist ein Behandlungssicherheitsproblem mit direkten Konsequenzen fuer den Patienten.'},
+
+  k6:{
+    id:'k6',step:6,
+    situation:null,
+    question:'Wie sichern Sie die Situation ab und was dokumentieren Sie?',
+    options:[
+      {id:'A',text:'Scannen und nur PLCT Thorax dokumentieren – Details sind implizit.',
+       next_node:'end_k6a',situation_after:null},
+      {id:'B',text:'O2-Pflicht, Schiefe Ebene, Armhalterung, Kniestep, Schlauchfuehrung, Toleranz und Reproduktionshinweise vollstaendig dokumentieren. Ruecksprache mit Arzt wegen erheblicher Abweichung.',
+       next_node:'k7',situation_after:null},
+      {id:'C',text:'Direkt den Arzt informieren ohne eigene Einschaetzung – er soll entscheiden.',
+       next_node:'end_k6c',situation_after:null},
+      {id:'D',text:'Foto der Lagerung machen – das reicht als Dokumentation.',
+       next_node:'end_k6d',situation_after:null}
+    ]
+  },
+  end_k6a:{type:'stop',title:'Fehlende Dokumentation – Behandlungssicherheit gefaehrdet',
+    text:'PLCT Thorax reicht nicht. Ohne Dokumentation von O2-Pflicht, Schiefer Ebene, Armhalterung, Kniestep und Schlauchfuehrung kann das Behandlungsteam die Lagerung nicht reproduzieren.\n\nBei der ersten Fraktion wird es zu Lagerungsproblemen kommen. Ein neuer PLCT mit erneuter Strahlenbelastung wird noetig.'},
+  end_k6c:{type:'warn',title:'Ruecksprache ohne Vorbereitung – unter MTR-Niveau',
+    text:'Ruecksprache mit dem Arzt ist sinnvoll – aber die MTR bringt eine konkrete Situationsbeschreibung mit: Lagerung, O2-Status, Reproduzierbarkeit, offene Fragen. Eine Meldung ohne eigene Einschaetzung ist keine professionelle Ruecksprache.'},
+  end_k6d:{type:'warn',title:'Foto allein reicht nicht',
+    text:'Ein Foto kann die schriftliche Dokumentation ergaenzen, ersetzt sie aber nicht. Schlauchfuehrung, Besonderheiten, Reproduktionshinweise lassen sich nicht zuverlaessig aus einem Foto ablesen.\n\nStrukturierte Dokumentation ist Pflicht.'},
+
+  k7:{id:'k7',step:7,isFreitext:true}
+};
+
+const FREITEXT_HINTS=[
+  'Patient konnte flache Rueckenlage wegen Orthopnoe nicht tolerieren',
+  'Lagerung mit Schiefer Ebene (Oberkörperhochlagerung ca. 30 Grad)',
+  'O2-Versorgung waehrend PLCT erforderlich und organisiert',
+  'O2-Schlauch kollisionsfrei links herausgefuehrt, ohne Zug oder Knick',
+  'Arme in Armhalterung, Kniestep unter den Knien',
+  'Patient tolerierte Lagerung stabil ueber gesamte Scandauer',
+  'Reproduzierbarkeit fuer taeglich Fraktionen gewaehrleistet',
+  'Ruecksprache mit Arzt erfolgt – Lagerung dokumentiert freigegeben'
+];
+
+const END_OPTIMAL={type:'optimal',title:'Scan vertretbar – Planungs-CT erfolgreich durchgefuehrt',
+  text:'Alle Voraussetzungen erfuellt:\n\u2022 Patient atemstabil unter O2\n\u2022 Schiefe Ebene reproduzierbar angebracht\n\u2022 Arme in Armhalterung, Kniestep positioniert\n\u2022 O2-Schlauch kollisionsfrei gefuehrt\n\u2022 Scanbereich vollstaendig abgedeckt\n\u2022 Spaetere Bestrahlbarkeit geprueft und plausibel\n\u2022 Ruecksprache mit Arzt erfolgt\n\u2022 Dokumentation vollstaendig\n\nDer Planungs-CT wurde unter diesen Bedingungen fachgerecht durchgefuehrt.'};
+
+let S={
+  node:'k1',
+  history:[],
+  nodeStack:[],
+  selected:null,
+  pendingSit:null,
+  showingSit:false,
+  isEnd:false,
+  endData:null,
+  reflexValue:'',
+  reflexChecked:[],
+  reflexSubmitted:false,
+  freitextValue:'',
+  freitextSubmitted:false,
+  hintChecked:[]
+};
+
+function r(){
+  const root=document.getElementById('root');
+  if(!root)return;
+  if(S.isEnd){rEnd(root);return;}
+  const node=NODES[S.node];
+  if(!node)return;
+  if(node.isFreitext){rFreitext(root);return;}
+  if(node.type==='reflex'){rReflex(root,node);return;}
+  if(S.showingSit&&S.pendingSit){rSitBridge(root,node);return;}
+  if(node.type==='situation_bridge'){rSitBridgeNode(root,node);return;}
+  rNode(root,node);
+}
+
+function prog(step){
+  const segs=STEPS.map((s,i)=>`<div class="prog-seg ${i<step?'done':i===step?'active':''}"></div>`).join('');
+  return `<div class="prog-bar">${segs}<span class="prog-lbl">${step+1} / ${STEPS.length}</span></div>`;
+}
+
+function trail(){
+  if(!S.history.length)return'';
+  const items=S.history.map(h=>`<span class="trail-item">${h}</span><span class="trail-sep">›</span>`).join('');
+  return`<div class="trail">${items}</div>`;
+}
+
+function sitBox(sit){
+  return`<div class="sit-box ${sit.cls||''}"><div class="sit-lbl">${sit.lbl}</div><div class="sit-txt">${sit.txt}</div></div>`;
+}
+
+function rNode(root,node){
+  const sit=node.situation?`<div class="sit-box"><div class="sit-lbl">Situation</div><div class="sit-txt">${node.situation}</div></div>`:'';
+  const opts=node.options.map(o=>`<button class="opt ${S.selected&&S.selected.id===o.id?'sel':''}" onclick="pick('${o.id}')" ${S.selected?'disabled':''}><span class="opt-lt">${o.id}</span><span>${o.text}</span></button>`).join('');
+  const rst=S.history.length?`<div class="btn-row"><button class="btn sec" onclick="reset()">Neu starten</button></div>`:'';
+  root.innerHTML=`${prog(node.step)}${trail()}${sit}<div class="q-lbl">Entscheidung</div><div class="q-txt">${node.question}</div><div class="opts">${opts}</div>${rst}`;
+}
+
+function rSitBridge(root,node){
+  const next=S.selected?S.selected.next_node:'';
+  const fromId=S.node;
+  const optId=S.selected?S.selected.id:'';
+  root.innerHTML=`${prog(node.step)}${trail()}${sitBox(S.pendingSit)}<div class="btn-row"><button class="btn p" onclick="adv('${next}','${fromId}','${optId}')">Weiter \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rSitBridgeNode(root,node){
+  const opts=node.options.map(o=>`<button class="opt ${S.selected&&S.selected.id===o.id?'sel':''}" onclick="pick('${o.id}')" ${S.selected?'disabled':''}><span class="opt-lt">${o.id}</span><span>${o.text}</span></button>`).join('');
+  root.innerHTML=`${prog(node.step)}${trail()}${sitBox(node.sit)}<div class="q-lbl">Entscheidung</div><div class="q-txt">${node.question}</div><div class="opts">${opts}</div><div class="btn-row"><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rReflex(root,node){
+  const hints=node.reflex_hints.map((h,i)=>`<div class="reflex-hint-item" onclick="togReflex(${i})"><div class="rhc ${S.reflexChecked.includes(i)?'on':''}">${S.reflexChecked.includes(i)?'\u2713':''}</div><span>${h}</span></div>`).join('');
+  if(!S.reflexSubmitted){
+    root.innerHTML=`${prog(node.step)}${trail()}${sitBox(node.sit)}<div class="q-lbl">Reflexion</div><div class="q-txt">${node.question}</div><textarea class="reflex-input" placeholder="Ihre Begruendung..." oninput="S.reflexValue=this.value">${S.reflexValue}</textarea><div class="btn-row" style="margin-top:.75rem"><button class="btn p" onclick="submitReflex()">Weiter \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+    const ta=document.getElementById('reflex-input-ta');
+    const tael=root.querySelector('.reflex-input');
+    if(tael)tael.value=S.reflexValue;
+  } else {
+    root.innerHTML=`${prog(node.step)}${trail()}${sitBox(node.sit)}<div style="background:#f8f7ff;border:0.5px solid #b0a8e0;border-radius:8px;padding:1rem;margin-bottom:1rem;font-size:14px;line-height:1.6;color:#1a1a1a;white-space:pre-wrap">${S.reflexValue||'(keine Eingabe)'}</div><div class="hint-box"><div class="hint-lbl">Orientierungspunkte – was sollte beruecksichtigt werden?</div><div class="reflex-hints">${hints}</div></div><div class="btn-row" style="margin-top:1rem"><button class="btn p" onclick="advReflex('${node.next_node}','${node.id}')">Weiter \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+  }
+}
+
+function rEnd(root){
+  const e=S.endData;
+  const bc=e.type==='stop'?'end-stop':e.type==='warn'?'end-warn':'end-opt';
+  const dc=e.type==='stop'?'dot-r':e.type==='warn'?'dot-a':'dot-g';
+  const backBtn=e.type==='warn'&&S.nodeStack.length?`<button class="btn p" onclick="goBack()">&#8592; Entscheidung wiederholen</button>`:'';
+  root.innerHTML=`${trail()}<div class="end-box ${bc}"><div class="end-hdr"><div class="end-dot ${dc}"></div><div class="end-title">${e.title}</div></div><div class="end-txt">${e.text}</div></div><div class="btn-row" style="margin-top:1rem">${backBtn}<button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rFreitext(root){
+  const hints=FREITEXT_HINTS.map((h,i)=>`<div class="hint-row" onclick="togHint(${i})"><div class="hc ${S.hintChecked.includes(i)?'on':''}">${S.hintChecked.includes(i)?'\u2713':''}</div><span class="ht ${S.hintChecked.includes(i)?'on':''}">${h}</span></div>`).join('');
+  const cnt=S.hintChecked.length;
+  if(!S.freitextSubmitted){
+    root.innerHTML=`${prog(7)}${trail()}<div class="sit-box highlight"><div class="sit-lbl">Abschlussaufgabe</div><div class="sit-txt">Der Scan wurde erfolgreich durchgefuehrt. Formulieren Sie einen Dokumentationseintrag fuer das Behandlungsteam – so, dass die Lagerung bei jeder Fraktion reproduziert werden kann.</div></div><div class="q-lbl">Ihr Dokumentationseintrag</div><textarea class="freitext" placeholder="PLCT Thorax – Besonderheiten der Lagerung..." oninput="S.freitextValue=this.value">${S.freitextValue}</textarea><div class="btn-row" style="margin-top:.75rem"><button class="btn p" onclick="submitFreitext()">Eintrag abgeben</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+    const ta=root.querySelector('.freitext');
+    if(ta)ta.value=S.freitextValue;
+  } else {
+    root.innerHTML=`${prog(7)}${trail()}<div style="background:#f5f4f0;border-radius:8px;padding:1rem;margin-bottom:1rem;font-size:14px;color:#1a1a1a;line-height:1.6;white-space:pre-wrap">${S.freitextValue||'(kein Eintrag)'}</div><div class="hint-box"><div class="hint-lbl">Abgleich – welche Punkte sind enthalten? (${cnt} / ${FREITEXT_HINTS.length})</div>${hints}<div style="font-size:12px;color:#999;margin-top:.5rem">Haken Sie an, welche Aspekte Ihr Eintrag abgedeckt hat.</div></div><div class="btn-row" style="margin-top:1rem"><button class="btn p" onclick="finishOpt()">Ergebnis anzeigen \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+  }
+}
+
+function pick(id){
+  if(S.selected)return;
+  const node=NODES[S.node];
+  const opt=node.options.find(o=>o.id===id);
+  S.selected=opt;
+  if(opt.situation_after){
+    S.nodeStack.push(S.node);
+    S.pendingSit=opt.situation_after;
+    S.showingSit=true;
+    r();
+    return;
+  }
+  const nextId=opt.next_node;
+  const nx=NODES[nextId];
+  if(nx&&(nx.type==='stop'||nx.type==='warn'||nx.type==='optimal')){
+    S.nodeStack.push(S.node);
+    S.history.push(S.node.toUpperCase()+'\u2192'+id);
+    S.isEnd=true;
+    S.endData=nx;
+    r();
+    return;
+  }
+  if(!nx){r();return;}
+  S.nodeStack.push(S.node);
+  S.history.push(S.node.toUpperCase()+'\u2192'+id);
+  S.node=nextId;
+  S.selected=null;
+  r();
+}
+function adv(nextId,fromId,optId){
+  S.nodeStack.push(fromId);
+  S.history.push(fromId.toUpperCase()+'\u2192'+optId);
+  const nx=NODES[nextId];
+  if(!nx){r();return;}
+  if(nx.type==='stop'||nx.type==='warn'||nx.type==='optimal'){
+    S.isEnd=true;
+    S.endData=nx;
+  } else {
+    S.node=nextId;
+    S.selected=null;
+    S.pendingSit=null;
+    S.showingSit=false;
+  }
+  r();
+}
+
+function advReflex(nextId,fromId){
+  S.nodeStack.push(fromId);
+  S.history.push(fromId.toUpperCase()+'\u2192R');
+  const nx=NODES[nextId];
+  if(!nx){r();return;}
+  S.node=nextId;
+  S.selected=null;
+  S.pendingSit=null;
+  S.showingSit=false;
+  r();
+}
+
+function submitReflex(){
+  S.reflexSubmitted=true;
+  r();
+}
+
+function togReflex(i){
+  S.reflexChecked=S.reflexChecked.includes(i)?S.reflexChecked.filter(x=>x!==i):[...S.reflexChecked,i];
+  r();
+}
+
+function togHint(i){
+  S.hintChecked=S.hintChecked.includes(i)?S.hintChecked.filter(x=>x!==i):[...S.hintChecked,i];
+  r();
+}
+
+function submitFreitext(){
+  if(!S.freitextValue.trim())return;
+  S.freitextSubmitted=true;
+  r();
+}
+
+function finishOpt(){
+  S.isEnd=true;
+  S.endData=END_OPTIMAL;
+  r();
+}
+
+function reset(){
+  S={node:'k1',history:[],nodeStack:[],selected:null,pendingSit:null,showingSit:false,isEnd:false,endData:null,reflexValue:'',reflexChecked:[],reflexSubmitted:false,freitextValue:'',freitextSubmitted:false,hintChecked:[]};
+  r();
+}
+
+function goBack(){
+  if(!S.nodeStack.length)return;
+  const prev=S.nodeStack.pop();
+  S.history.pop();
+  S.node=prev;
+  S.selected=null;
+  S.pendingSit=null;
+  S.showingSit=false;
+  S.isEnd=false;
+  S.endData=null;
+  r();
+}
+
+r();
+</script>
+</body>
+</html>

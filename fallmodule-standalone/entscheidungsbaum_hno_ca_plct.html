@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entscheidungsbaum HNO-Ca PLCT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f4f0;min-height:100vh;padding:2rem 1rem}
+#app{max-width:680px;margin:0 auto}
+.hdr-label{font-size:11px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:.3rem}
+.hdr-title{font-size:18px;font-weight:500;color:#1a1a1a;margin-bottom:1.5rem}
+.prog-bar{display:flex;gap:6px;align-items:center;margin-bottom:1.25rem}
+.prog-seg{height:3px;flex:1;background:#e0ddd6;border-radius:2px;transition:background .3s}
+.prog-seg.done{background:#1D9E75}
+.prog-seg.active{background:#9FE1CB}
+.prog-lbl{font-size:11px;color:#999;white-space:nowrap}
+.trail{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:1rem}
+.trail-item{font-size:12px;color:#999;background:#e8e5df;border-radius:4px;padding:2px 7px}
+.trail-sep{color:#ccc;font-size:11px}
+.sit-box{background:#fff;border:0.5px solid #ddd;border-radius:12px;padding:1.25rem;margin-bottom:1rem;animation:fi .25s ease}
+.sit-box.highlight{border-left:3px solid #1D9E75}
+.sit-box.warn{border-left:3px solid #EF9F27}
+.sit-box.danger{border-left:3px solid #E24B4A}
+.sit-box.reflex{border-left:3px solid #534AB7;background:#f8f7ff}
+.sit-lbl{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.sit-txt{font-size:15px;color:#1a1a1a;line-height:1.7}
+.q-lbl{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.q-txt{font-size:15px;font-weight:500;color:#1a1a1a;line-height:1.6;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.opt{background:#fff;border:0.5px solid #ccc;border-radius:8px;padding:.85rem 1rem;font-size:14px;color:#1a1a1a;text-align:left;cursor:pointer;line-height:1.5;transition:all .15s;display:flex;gap:.75rem;align-items:flex-start;width:100%}
+.opt:hover{background:#f9f8f5;border-color:#aaa}
+.opt.sel{border-color:#1D9E75;background:#f0fbf6}
+.opt-lt{font-weight:500;color:#aaa;flex-shrink:0;min-width:16px}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.btn{background:#fff;border:0.5px solid #ccc;border-radius:8px;padding:.6rem 1.25rem;font-size:14px;color:#1a1a1a;cursor:pointer;transition:all .15s}
+.btn:hover{background:#f5f4f0;border-color:#aaa}
+.btn.p{border-color:#1D9E75;color:#085041;font-weight:500}
+.btn.p:hover{background:#f0fbf6}
+.btn.sec{color:#666}
+.end-box{background:#fff;border-radius:12px;padding:1.5rem;margin-top:.5rem;animation:fi .25s ease}
+.end-opt{border:1.5px solid #1D9E75}
+.end-warn{border:1.5px solid #EF9F27}
+.end-stop{border:1.5px solid #E24B4A}
+.end-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.end-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-g{background:#1D9E75}
+.dot-a{background:#EF9F27}
+.dot-r{background:#E24B4A}
+.end-title{font-size:16px;font-weight:500;color:#1a1a1a}
+.end-txt{font-size:14px;color:#444;line-height:1.8;white-space:pre-line}
+.freitext{width:100%;min-height:140px;border:0.5px solid #ccc;border-radius:8px;padding:.75rem;font-size:14px;font-family:inherit;color:#1a1a1a;background:#fff;resize:vertical;line-height:1.6}
+.freitext:focus{outline:none;border-color:#1D9E75}
+.hint-box{background:#f5f4f0;border-radius:8px;padding:1rem;margin-top:.75rem}
+.hint-lbl{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+.hint-row{display:flex;gap:.5rem;align-items:flex-start;font-size:13px;color:#555;line-height:1.5;margin-bottom:.35rem;cursor:pointer;padding:.2rem 0}
+.hc{width:16px;height:16px;border:1.5px solid #ccc;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.hc.on{background:#1D9E75;border-color:#1D9E75;color:#fff;font-size:10px}
+.ht{flex:1}
+.ht.on{color:#085041}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="hdr-label">Praktische Prüfungsvorbereitung · Strahlentherapie</div>
+<div class="hdr-title">Entscheidungsbaum – Planungs-CT HNO · Herr K.</div>
+<div id="root"></div>
+</div>
+<script>
+const STEPS=['k1','k2','k3','k4b','k5a','k5b','k6'];
+
+const NODES={
+
+  // K1 – Maskenauswahl
+  k1:{
+    id:'k1',step:0,
+    situation:'Herr K., 58 Jahre, Oropharynx-Ca. links (T3 N2 M0), primäre Radiochemotherapie, VMAT. Er betritt den PLCT-Raum, setzt sich wortlos auf die Liege und verschränkt die Arme. Im Anforderungsschein findet sich kein expliziter Hinweis zur Maske vom Arzt.',
+    question:'Welche Maske bereiten Sie für die Maskenanfertigung vor?',
+    options:[
+      {id:'A',text:'Standardmaske mit passender Nackenschale.',
+       next_node:'k2',situation_after:null},
+      {id:'B',text:'Hochpräzisionsmaske – kann die Präzision erhöhen.',
+       next_node:'end_k1b',situation_after:null},
+      {id:'C',text:'IMRT-Maske.',
+       next_node:'end_k1c',situation_after:null},
+      {id:'D',text:'Erst lagern, dann den Arzt fragen welche Maske gemeint ist.',
+       next_node:'end_k1d',situation_after:null}
+    ]
+  },
+  end_k1b:{type:'warn',title:'Hochpräzisionsmaske – Indikation nicht gegeben',
+    text:'Die Hochpräzisionsmaske erhöht die Lagerungsgenauigkeit, ist aber nicht bei jedem Oropharynx-Ca. indiziert. Indikationen sind u.a. Nasopharynx-Ca., stereotaktische Konzepte oder explizite ärztliche Verordnung.\n\nOhne diese Indikation ist die Standardmaske das korrekte Instrument. Eine Maskenauswahl auf Eigeninitiative ohne Grundlage ist nicht korrekt.'},
+  end_k1c:{type:'warn',title:'IMRT ist eine Technik – keine Maske',
+    text:'IMRT beschreibt die Bestrahlungstechnik, nicht die Lagerungshilfe. Die Maskenwahl richtet sich nach Indikation, Körperregion und ärztlicher Verordnung – nicht nach der geplanten Bestrahlungstechnik.\n\nFür diesen Oropharynx-PLCT ist die Standardmaske indiziert.'},
+  end_k1d:{type:'warn',title:'Eigenständigkeit gefehlt – unter MTR-Niveau',
+    text:'Die Maskenauswahl für einen Standard-Oropharynx-PLCT gehört zur eigenständigen Handlungskompetenz der MTR. Ohne explizite Abweichung im Anforderungsschein ist die Standardmaske die korrekte Wahl.\n\nEin Arzt für diese Entscheidung heranzuziehen zeigt eine Lücke in der beruflichen Eigenverantwortung.'},
+
+  // K2 – Zahnschiene prüfen
+  k2:{
+    id:'k2',step:1,
+    situation:'Standardmaske liegt bereit. Beim nochmaligen Blick auf den Anforderungsschein fällt auf: Feld Zahnschiene – "in Planung". Kein Haken bei "vorhanden und mitgebracht". Herr K. sitzt auf der Liege und wartet.',
+    question:'Was tun Sie jetzt?',
+    options:[
+      {id:'A',text:'Herrn K. direkt fragen ob er die Zahnschiene dabei hat.',
+       next_node:'k2_a_seq',situation_after:null},
+      {id:'B',text:'Weitermachen – Zahnschiene kann später nachgereicht werden.',
+       next_node:'end_k2b',situation_after:null},
+      {id:'C',text:'Sofort den Arzt anrufen – Zahnschiene ist Arztsache.',
+       next_node:'end_k2c',situation_after:null},
+      {id:'D',text:'Dokumentieren und weiter – im Schein steht "in Planung", das reicht.',
+       next_node:'end_k2d',situation_after:null}
+    ]
+  },
+  end_k2b:{type:'stop',title:'Maske unbrauchbar – PLCT muss wiederholt werden',
+    text:'Maskenanfertigung ohne Zahnschiene ist ein grundlegender Fehler. Die Maske wird exakt auf die aktuelle Mundstellung angepasst. Mit eingesetzter Zahnschiene verändert sich das Mundvolumen – die Maske passt nicht mehr.\n\nKonsequenz: Neuer Termin, neue Maskenanfertigung, erneute CT-Dosis für den Patienten. Vollständig vermeidbar.'},
+  end_k2c:{type:'warn',title:'Eigenständige Klärung wäre MTR-Aufgabe gewesen',
+    text:'Den Patienten direkt nach der Zahnschiene zu fragen ist keine ärztliche Aufgabe – das ist Workflow-Management am PLCT und gehört zur eigenständigen Handlungskompetenz der MTR.\n\nDer Arzt wird dieselbe Frage stellen. Zeit wurde unnötig verschwendet, Eigenverantwortung nicht wahrgenommen.'},
+  end_k2d:{type:'stop',title:'"In Planung" bedeutet: nicht vorhanden',
+    text:'"In Planung" im Anforderungsschein bedeutet explizit, dass die Zahnschiene noch nicht vorliegt. Diese Information zu ignorieren und mit der Maskenanfertigung fortzufahren ist ein Prozessfehler.\n\nKonsequenz: Maske muss nach Zahnschienen-Lieferung wiederholt werden. Erneute Strahlenbelastung für den Patienten.'},
+
+  // K2 Konsequenzkette – Patient hat keine Zahnschiene dabei
+  k2_a_seq:{
+    id:'k2_a_seq',step:1,type:'situation_bridge',
+    sit:{cls:'warn',lbl:'Antwort von Herrn K.',txt:'Sie fragen direkt: "Haben Sie Ihre Zahnschiene dabei?" Er schaut kurz auf, sagt trocken: "Nein. Hatte noch keinen Termin dafür." Er zuckt mit den Schultern und schaut wieder weg.'},
+    question:'Wie entscheiden Sie weiter?',
+    options:[
+      {id:'A',text:'Termin verschieben – PLCT und Maskenanfertigung erst wenn Zahnschiene vorliegt.',
+       next_node:'k3_ok_seq',situation_after:null},
+      {id:'B',text:'Ohne Zahnschiene scannen – Trismus ist mild, der Unterschied ist gering.',
+       next_node:'end_k3b',situation_after:null},
+      {id:'C',text:'Arzt informieren und entscheiden lassen.',
+       next_node:'end_k3c',situation_after:null}
+    ]
+  },
+  end_k3b:{type:'stop',title:'Maske ohne Zahnschiene angefertigt – PLCT muss wiederholt werden',
+    text:'Die Zahnschiene verändert das Volumen im Mundraum und damit die Kopfform. Eine Maske die ohne Zahnschiene angefertigt wurde, passt nicht wenn die Zahnschiene später eingesetzt wird – unabhängig davon wie mild der Trismus ist.\n\nKonsequenz: Neue Maskenanfertigung, neuer PLCT, erneute Strahlenbelastung. Vollständig vermeidbar gewesen.'},
+  end_k3c:{type:'warn',title:'Arzt wird dieselbe Entscheidung treffen',
+    text:'Die Konsequenz ist eindeutig: ohne Zahnschiene kein PLCT. Diese Einschätzung ist kein ärztliches Urteil – sie ist Prozesswissen der MTR.\n\nDen Arzt einzubeziehen ist nicht falsch, zeigt aber eine Lücke in der eigenständigen Handlungskompetenz für Routinevorgänge.'},
+
+  // K3 – Zeitsprung + K4a Nackenschalenauswahl
+  k3_ok_seq:{
+    id:'k3_ok_seq',step:2,type:'situation_bridge',
+    sit:{cls:'highlight',lbl:'Zeitsprung – zwei Tage später',txt:'Herr K. kommt wieder. Zahnschiene liegt vor, sitzt bereits. Er hält sie kurz hoch ohne etwas zu sagen, dann legt er sich wortlos auf die Liege.\n\nSie beginnen mit der Lagerung. Beim Beobachten fällt auf: kleiner Kopf, kurzer Hals.'},
+    question:'Welche Nackenschale wählen Sie als Ausgangspunkt?',
+    options:[
+      {id:'A',text:'Nackenschale A – flache Standardschale.',
+       next_node:'end_k4a_a',situation_after:null},
+      {id:'B',text:'Nackenschale B – höhere Standardschale.',
+       next_node:'end_k4a_b',situation_after:null},
+      {id:'C',text:'Nackenschale E – für kleinen Kopf / kurzen Hals.',
+       next_node:'k4b',
+       situation_after:{cls:'highlight',lbl:'Hinterkopf liegt plan',txt:'Nackenschale E liegt. Der Hinterkopf liegt plan auf. Sie fahren mit den Fingern im Nackenbereich entlang – und stellen fest: zwischen Nacken und Nackenschale passt ein Finger hindurch. Tastbare Lücke im Nackenbereich.'}},
+      {id:'D',text:'Nackenschale F – für kleinen Kopf, höhere Variante.',
+       next_node:'end_k4a_f',situation_after:null}
+    ]
+  },
+  end_k4a_a:{type:'warn',title:'Nackenschale A – zu flach für kleinen Kopf / kurzen Hals',
+    text:'Nackenschale A ist die flache Standardvariante. Bei kleinem Kopf und kurzem Hals liegt der Hinterkopf zu hoch – die Nackenschale füllt den Nackenbereich nicht aus.\n\nKriterium nicht erfüllt: Hinterkopf und Nacken müssen plan auf der Nackenschale aufliegen. Nackenschalen E und F sind für diesen Patienten indiziert.'},
+  end_k4a_b:{type:'warn',title:'Nackenschale B – zu groß für kleinen Kopf / kurzen Hals',
+    text:'Nackenschale B ist die höhere Standardvariante für normale bis große Köpfe. Bei kleinem Kopf und kurzem Hals sitzt der Kopf zu hoch – Kinn zeigt nach vorne/oben, keine plane Auflage.\n\nKriterium nicht erfüllt: Nackenschalen E und F sind für diesen Patienten indiziert.'},
+  end_k4a_f:{type:'warn',title:'Nackenschale F – möglich, aber nicht der erste Schritt',
+    text:'Nackenschale F ist die höhere Variante für kleinen Kopf / kurzen Hals. Sie wird gewählt wenn Nackenschale E nicht ausreicht.\n\nKorrekte Vorgehensweise: Erst E testen – wenn Hinterkopf und Nacken plan liegen, ist E ausreichend. F erst wenn E zu wenig Höhe bietet. Schritt für Schritt, nicht überspringen.'},
+
+  // K4b – Nacken hebt ab, Keil C Entscheidung
+  k4b:{
+    id:'k4b',step:3,
+    situation:null,
+    question:'Hinterkopf liegt plan. Ein Finger passt zwischen Nackenschale und Nacken – tastbare Lücke. Was tun Sie?',
+    options:[
+      {id:'A',text:'Keil C mit Spitze caudal unterlegen.',
+       next_node:'end_k4b_a',situation_after:null},
+      {id:'B',text:'Erhöhungsblock H dazulegen.',
+       next_node:'end_k4b_b',situation_after:null},
+      {id:'C',text:'Auf Nackenschale A wechseln.',
+       next_node:'end_k4b_c',situation_after:null},
+      {id:'D',text:'Keil C mit Spitze cranial unterlegen.',
+       next_node:'k5a',
+       situation_after:{cls:'highlight',lbl:'Lagerung korrigiert',txt:'Keil C liegt mit der Spitze Richtung Kopf. Der dicke Teil hebt die Nackenschale im Nacken-/Schulterbereich an. Sie fahren erneut mit den Fingern durch: Nacken liegt jetzt plan. Hinterkopf weiterhin plan. Herr K. liegt ruhig.\n\nIn diesem Moment sagt er beiläufig: "Ich hab gerade ganz viel Speichel. Ich muss ständig schlucken."'}},
+      {id:'E',text:'Nackenschale A mit Erhöhungsblock H kombinieren.',
+       next_node:'end_k4b_e',situation_after:null}
+    ]
+  },
+  end_k4b_a:{type:'warn',title:'Keil C caudal – falsche Wirkrichtung',
+    text:'Mit Spitze caudal liegt der dicke Teil des Keils unter dem Hinterkopf. Das hebt den Kopf an und schiebt das Kinn nach oben – die Lücke im Nackenbereich bleibt bestehen oder vergrößert sich.\n\nKorrekt wäre Spitze cranial: dicker Teil im Nacken-/Schulterbereich, Lücke wird gezielt ausgefüllt.'},
+  end_k4b_b:{type:'warn',title:'Erhöhungsblock H – adressiert das falsche Problem',
+    text:'Der Erhöhungsblock H erhöht die Gesamthöhe der Lagerung. Das Nackenprofil – die Lücke zwischen Nacken und Nackenschale – wird damit nicht korrigiert.\n\nDer Keil C mit Spitze cranial ist das gezielte Instrument für dieses spezifische Problem.'},
+  end_k4b_c:{type:'warn',title:'Nackenschale A – falsche Grundlage',
+    text:'Nackenschale A ist die flache Standardschale und nicht für kleinen Kopf / kurzen Hals geeignet. Ein Wechsel auf A verschlechtert die Situation.\n\nDie Grundentscheidung für Nackenschale E war richtig. Das Problem im Nackenbereich wird mit Keil C Spitze cranial gelöst – nicht durch Wechsel der Schale.'},
+  end_k4b_e:{type:'warn',title:'Falsche Grundschale – Kombination löst es nicht',
+    text:'Nackenschale A ist für diesen Patienten nicht geeignet. Eine Kombination mit dem Erhöhungsblock H ändert an der falschen Grundgeometrie nichts.\n\nKorrekt: Nackenschale E + Keil C Spitze cranial. Das adressiert gezielt den Nackenbereich ohne die Hinterkopfposition zu verändern.'},
+
+  // K5a – Kehlkopfproblem erkennen
+  k5a:{
+    id:'k5a',step:4,
+    situation:null,
+    question:'Herr K. sagt: "Ich hab gerade ganz viel Speichel. Ich muss ständig schlucken." Was ist das konkrete Problem für die Maskenanfertigung?',
+    options:[
+      {id:'A',text:'Speichelfluss verändert die Gewebedichte im CT – der Scan wird verfälscht.',
+       next_node:'end_k5a_a',situation_after:null},
+      {id:'B',text:'Beim Schlucken hebt sich der Kehlkopf. Liegt die Maske auf dem Kehlkopf auf, drückt sie bei jeder Fraktion – über 30 Fraktionen nicht tolerierbar.',
+       next_node:'k5b',situation_after:null},
+      {id:'C',text:'Speichelfluss ist weder für CT noch für die Bestrahlung relevant – kein Handlungsbedarf.',
+       next_node:'end_k5a_c',situation_after:null},
+      {id:'D',text:'Kehlkopfbewegung beim Schlucken verändert das Zielvolumen im CT.',
+       next_node:'end_k5a_d',situation_after:null}
+    ]
+  },
+  end_k5a_a:{type:'warn',title:'Gewebedichte – kein relevantes Problem hier',
+    text:'Speichelfluss verändert die Gewebedichte nicht in einem klinisch relevanten Ausmaß. Das ist nicht das Problem.\n\nDas tatsächliche Risiko: Beim Schlucken hebt sich der Kehlkopf. Wird die Maske in dieser Position fest angelegt, drückt sie bei jeder späteren Fraktion auf den Kehlkopf.'},
+  end_k5a_c:{type:'stop',title:'Problem nicht erkannt – Compliance-Gefährdung über alle Fraktionen',
+    text:'Speichelfluss selbst ist kein Problem. Aber das Schlucken ist es: Der Kehlkopf hebt sich dabei. Eine Maske die in dieser Stellung angefertigt wird, drückt dauerhaft auf den Kehlkopf.\n\nHerr K. wird es nicht sofort sagen. Er toleriert es – bis es nicht mehr geht. Ab Fraktion 5–10: Druckstelle, Schmerzen, Setup-Probleme, Maskenanpassung notwendig.'},
+  end_k5a_d:{type:'warn',title:'Zielvolumen – kein relevanter Einfluss',
+    text:'Der Kehlkopf liegt beim Oropharynx-Ca. nicht im Zielvolumen. Eine kurzzeitige Bewegung beim Schlucken verändert das Zielvolumen nicht relevant.\n\nDas eigentliche Problem ist mechanisch: Maske auf dem Kehlkopf → dauerhafter Druckpunkt → Compliance über die gesamte RT-Serie gefährdet.'},
+
+  // K5b – Lösung Kehlkopfproblem
+  k5b:{
+    id:'k5b',step:5,
+    situation:'Sie haben das Problem erkannt. Der Kehlkopf muss bei der Maskenanfertigung berücksichtigt werden – für heute und für alle 30+ Fraktionen.',
+    question:'Wie gehen Sie konkret vor?',
+    options:[
+      {id:'A',text:'Maske im Kehlkopfbereich einen Fingerbreit locker lassen – Kehlkopf hat Bewegungsfreiheit.',
+       next_node:'k6',
+       situation_after:{cls:'highlight',lbl:'Lösung greift',txt:'Maske wurde im Kehlkopfbereich bewusst nicht fest angedrückt. Ein Fingerbreit Spielraum. Herr K. schluckt kurz – kein Widerstand, kein Druckpunkt. Die Maske sitzt stabil an Stirn, Wangen und Kinn.\n\nJetzt muss diese Besonderheit dokumentiert werden – so dass jede Kollegin bei Fraktion 1 bis 30 dasselbe weiß.'}},
+      {id:'B',text:'Maske im Halsbereich umschlagen – Hals bleibt frei, Unterkiefer wird zusätzlich fixiert.',
+       next_node:'k6',
+       situation_after:{cls:'highlight',lbl:'Alternative Lösung – ebenfalls korrekt',txt:'Halsbereich der Maske umgeschlagen. Kehlkopf liegt vollständig frei. Unterkiefer ist durch den Umschlag zusätzlich fixiert. Herr K. toleriert die Maske gut – kein Druckpunkt.\n\nBeide Lösungen sind klinisch korrekt. Entscheidend ist jetzt die vollständige Dokumentation der Besonderheit.'}},
+      {id:'C',text:'Maske vollständig fest andrücken – Reproduzierbarkeit hat Vorrang vor Komfort.',
+       next_node:'end_k5b_c',situation_after:null},
+      {id:'D',text:'Herrn K. anweisen während des Anlegens nicht zu schlucken.',
+       next_node:'end_k5b_d',situation_after:null}
+    ]
+  },
+  end_k5b_c:{type:'stop',title:'Druckpunkt auf Kehlkopf – Compliance-Versagen vorprogrammiert',
+    text:'Reproduzierbarkeit ist wichtig – aber eine Maske die dauerhaft auf den Kehlkopf drückt, wird Herr K. nicht 30 Mal stillschweigend tolerieren.\n\nEr wird es nicht aktiv melden. Er wird die Maske schlechter halten. Ab Fraktion 5: Setupproblem. Ab Fraktion 10: Schmerzen, Ablehnung.\n\nKonsequenz: Maskenanpassung oder Neuanfertigung mitten in der laufenden RT.'},
+  end_k5b_d:{type:'warn',title:'Anweisung allein löst das strukturelle Problem nicht',
+    text:'"Nicht schlucken" ist keine zuverlässige Maßnahme – der Schluckreiz ist ein Reflex, besonders bei verstärktem Speichelfluss und bestehender Mukositis.\n\nDie Maske muss konstruktiv angepasst werden: locker lassen oder umschlagen. Nur dann ist der Kehlkopf bei jeder Fraktion dauerhaft sicher.'},
+
+  // K6 – Dokumentation (Freitext)
+  k6:{id:'k6',step:6,isFreitext:true}
+};
+
+const FREITEXT_HINTS=[
+  'Lagerung: Rückenlage, Arme seitlich, Knierolle',
+  'Nackenschale E + Keil C mit Spitze cranial',
+  'Zahnschiene vorhanden und eingesetzt',
+  'Standardmaske angefertigt',
+  'Besonderheit: Kehlkopfbereich einen Fingerbreit locker gelassen ODER Halsbereich umgeschlagen',
+  'Begründung: verstärkter Speichelfluss / häufiges Schlucken → Kehlkopf muss Bewegungsfreiheit behalten',
+  'Hinweis für Setup: Patient gibt kein aktives Feedback – Besonderheit bei jeder Fraktion aktiv prüfen'
+];
+
+const END_OPTIMAL={type:'optimal',title:'Maskenanfertigung abgeschlossen – PLCT kann durchgeführt werden',
+  text:'Alle Voraussetzungen erfüllt:\n\u2022 Standardmaske korrekt identifiziert und ausgewählt\n\u2022 Zahnschiene vorhanden und eingesetzt\n\u2022 Nackenschale E + Keil C Spitze cranial – plane Auflage Hinterkopf und Nacken\n\u2022 Kehlkopfbereich berücksichtigt – Druckpunkt verhindert\n\u2022 Dokumentation vollständig – Besonderheit für alle Fraktionen festgehalten\n\u2022 Patientencharakter einbezogen: Herr K. meldet sich nicht aktiv – Dokumentation schützt ihn\n\nDie Maskenanfertigung wurde fachgerecht durchgeführt. Der PLCT kann stattfinden.'};
+
+let S={
+  node:'k1',
+  history:[],
+  nodeStack:[],
+  selected:null,
+  pendingSit:null,
+  showingSit:false,
+  isEnd:false,
+  endData:null,
+  freitextValue:'',
+  freitextSubmitted:false,
+  hintChecked:[]
+};
+
+function r(){
+  const root=document.getElementById('root');
+  if(!root)return;
+  if(S.isEnd){rEnd(root);return;}
+  const node=NODES[S.node];
+  if(!node)return;
+  if(node.isFreitext){rFreitext(root);return;}
+  if(S.showingSit&&S.pendingSit){rSitBridge(root,node);return;}
+  if(node.type==='situation_bridge'){rSitBridgeNode(root,node);return;}
+  rNode(root,node);
+}
+
+function prog(step){
+  const segs=STEPS.map((s,i)=>`<div class="prog-seg ${i<step?'done':i===step?'active':''}"></div>`).join('');
+  return`<div class="prog-bar">${segs}<span class="prog-lbl">${step+1} / ${STEPS.length}</span></div>`;
+}
+
+function trail(){
+  if(!S.history.length)return'';
+  const items=S.history.map(h=>`<span class="trail-item">${h}</span><span class="trail-sep">›</span>`).join('');
+  return`<div class="trail">${items}</div>`;
+}
+
+function sitBox(sit){
+  return`<div class="sit-box ${sit.cls||''}"><div class="sit-lbl">${sit.lbl}</div><div class="sit-txt">${sit.txt}</div></div>`;
+}
+
+function rNode(root,node){
+  const sit=node.situation?`<div class="sit-box"><div class="sit-lbl">Situation</div><div class="sit-txt">${node.situation}</div></div>`:'';
+  const opts=node.options.map(o=>`<button class="opt ${S.selected&&S.selected.id===o.id?'sel':''}" onclick="pick('${o.id}')" ${S.selected?'disabled':''}><span class="opt-lt">${o.id}</span><span>${o.text}</span></button>`).join('');
+  const rst=S.history.length?`<div class="btn-row"><button class="btn sec" onclick="reset()">Neu starten</button></div>`:'';
+  root.innerHTML=`${prog(node.step)}${trail()}${sit}<div class="q-lbl">Entscheidung</div><div class="q-txt">${node.question}</div><div class="opts">${opts}</div>${rst}`;
+}
+
+function rSitBridge(root,node){
+  const next=S.selected?S.selected.next_node:'';
+  const fromId=S.node;
+  const optId=S.selected?S.selected.id:'';
+  root.innerHTML=`${prog(node.step)}${trail()}${sitBox(S.pendingSit)}<div class="btn-row"><button class="btn p" onclick="adv('${next}','${fromId}','${optId}')">Weiter \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rSitBridgeNode(root,node){
+  const opts=node.options.map(o=>`<button class="opt ${S.selected&&S.selected.id===o.id?'sel':''}" onclick="pick('${o.id}')" ${S.selected?'disabled':''}><span class="opt-lt">${o.id}</span><span>${o.text}</span></button>`).join('');
+  root.innerHTML=`${prog(node.step)}${trail()}${sitBox(node.sit)}<div class="q-lbl">Entscheidung</div><div class="q-txt">${node.question}</div><div class="opts">${opts}</div><div class="btn-row"><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rEnd(root){
+  const e=S.endData;
+  const bc=e.type==='stop'?'end-stop':e.type==='warn'?'end-warn':'end-opt';
+  const dc=e.type==='stop'?'dot-r':e.type==='warn'?'dot-a':'dot-g';
+  const backBtn=e.type==='warn'&&S.nodeStack.length?`<button class="btn p" onclick="goBack()">&#8592; Entscheidung wiederholen</button>`:'';
+  root.innerHTML=`${trail()}<div class="end-box ${bc}"><div class="end-hdr"><div class="end-dot ${dc}"></div><div class="end-title">${e.title}</div></div><div class="end-txt">${e.text}</div></div><div class="btn-row" style="margin-top:1rem">${backBtn}<button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+}
+
+function rFreitext(root){
+  const hints=FREITEXT_HINTS.map((h,i)=>`<div class="hint-row" onclick="togHint(${i})"><div class="hc ${S.hintChecked.includes(i)?'on':''}">${S.hintChecked.includes(i)?'\u2713':''}</div><span class="ht ${S.hintChecked.includes(i)?'on':''}">${h}</span></div>`).join('');
+  const cnt=S.hintChecked.length;
+  if(!S.freitextSubmitted){
+    root.innerHTML=`${prog(6)}${trail()}<div class="sit-box highlight"><div class="sit-lbl">Abschlussaufgabe – Dokumentation</div><div class="sit-txt">Maske ist angefertigt, Herr K. toleriert sie gut. Formulieren Sie den Dokumentationseintrag für den CT-Anforderungsschein – so vollständig, dass jede Kollegin den Setup bei Fraktion 1 bis 30 eigenständig und korrekt reproduzieren kann.</div></div><div class="q-lbl">Ihr Dokumentationseintrag</div><textarea class="freitext" placeholder="Lagerung, Hilfsmittel, Besonderheiten..." oninput="S.freitextValue=this.value">${S.freitextValue}</textarea><div class="btn-row" style="margin-top:.75rem"><button class="btn p" onclick="submitFreitext()">Eintrag abgeben</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+    const ta=root.querySelector('.freitext');
+    if(ta)ta.value=S.freitextValue;
+  } else {
+    root.innerHTML=`${prog(6)}${trail()}<div style="background:#f5f4f0;border-radius:8px;padding:1rem;margin-bottom:1rem;font-size:14px;color:#1a1a1a;line-height:1.6;white-space:pre-wrap">${S.freitextValue||'(kein Eintrag)'}</div><div class="hint-box"><div class="hint-lbl">Erwartungshorizont – welche Punkte sind enthalten? (${cnt} / ${FREITEXT_HINTS.length})</div>${hints}<div style="font-size:12px;color:#999;margin-top:.75rem;line-height:1.6;padding:.5rem 0;border-top:0.5px solid #ddd;margin-top:.75rem">Herr K. wird es nicht sagen wenn die Maske drückt. Die Dokumentation schützt ihn.</div></div><div class="btn-row" style="margin-top:1rem"><button class="btn p" onclick="finishOpt()">Ergebnis anzeigen \u2192</button><button class="btn sec" onclick="reset()">Neu starten</button></div>`;
+  }
+}
+
+function pick(id){
+  if(S.selected)return;
+  const node=NODES[S.node];
+  const opt=node.options.find(o=>o.id===id);
+  S.selected=opt;
+  if(opt.situation_after){
+    S.nodeStack.push(S.node);
+    S.pendingSit=opt.situation_after;
+    S.showingSit=true;
+    r();
+    return;
+  }
+  const nextId=opt.next_node;
+  const nx=NODES[nextId];
+  if(nx&&(nx.type==='stop'||nx.type==='warn'||nx.type==='optimal')){
+    S.nodeStack.push(S.node);
+    S.history.push(S.node.toUpperCase()+'\u2192'+id);
+    S.isEnd=true;
+    S.endData=nx;
+    r();
+    return;
+  }
+  if(!nx){r();return;}
+  S.nodeStack.push(S.node);
+  S.history.push(S.node.toUpperCase()+'\u2192'+id);
+  S.node=nextId;
+  S.selected=null;
+  r();
+}
+
+function adv(nextId,fromId,optId){
+  S.nodeStack.push(fromId);
+  S.history.push(fromId.toUpperCase()+'\u2192'+optId);
+  const nx=NODES[nextId];
+  if(!nx){r();return;}
+  if(nx.type==='stop'||nx.type==='warn'||nx.type==='optimal'){
+    S.isEnd=true;
+    S.endData=nx;
+  } else {
+    S.node=nextId;
+    S.selected=null;
+    S.pendingSit=null;
+    S.showingSit=false;
+  }
+  r();
+}
+
+function togHint(i){
+  S.hintChecked=S.hintChecked.includes(i)?S.hintChecked.filter(x=>x!==i):[...S.hintChecked,i];
+  r();
+}
+
+function submitFreitext(){
+  if(!S.freitextValue.trim())return;
+  S.freitextSubmitted=true;
+  r();
+}
+
+function finishOpt(){
+  S.isEnd=true;
+  S.endData=END_OPTIMAL;
+  r();
+}
+
+function reset(){
+  S={node:'k1',history:[],nodeStack:[],selected:null,pendingSit:null,showingSit:false,isEnd:false,endData:null,freitextValue:'',freitextSubmitted:false,hintChecked:[]};
+  r();
+}
+
+function goBack(){
+  if(!S.nodeStack.length)return;
+  const prev=S.nodeStack.pop();
+  S.history.pop();
+  S.node=prev;
+  S.selected=null;
+  S.pendingSit=null;
+  S.showingSit=false;
+  S.isEnd=false;
+  S.endData=null;
+  r();
+}
+
+r();
+</script>
+</body>
+</html>
