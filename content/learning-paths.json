@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-09-28",
+  "schemaNote": "V3: Lernpfade sind Kompositionen aus Standardmodulen und keine Modultypen. Pfade werden erst eingetragen, wenn die referenzierten Module existieren.",
+  "paths": []
+}
