@@ -152,7 +152,7 @@ das Root-`index.html` stillschweigend gelöscht. Folge: 404 auf
 https://meese18-byte.github.io/mtr-rt-lernapp/ bis zur Wiederherstellung am 2026-05-19.
 Das Risiko bleibt strukturell, weil Standalones und Haupt-App im selben Pages-Branch liegen.
 
-**Sekundär-Schutz:** `tools/check-root.sh` (geplant, P3) als Pre-Push-Hook, der die
+**Sekundär-Schutz:** `tools/check-root.sh` als manueller Pre-Push-Check, der die
 Existenz von `index.html`, `js/app.js`, `css/app.css` prüft und bei Fehlen den Push
 verweigert. Bis dahin gilt die manuelle Routine als verbindlich.
 
@@ -211,7 +211,7 @@ Alle Keys tragen den Präfix `mtr_rt_` und werden gemeinsam exportiert/importier
 
 ## 8. Medien-Policy
 
-**Bilder:** JPEG oder WebP, max. 300 KB, max. 1600 px Breite. Dateinamen nur `[a-z0-9\-]`. Alt-Text Pflicht.
+**Bilder:** JPEG/WebP bevorzugt für Fotos; PNG für verlustarme technische Darstellungen; SVG für selbst erstellte Schemata ohne eingebettete externe Inhalte. Richtwert max. 300 KB und max. 1600 px Breite bei Rasterbildern; begründete Ausnahmen für fachlich notwendige Detailbilder. Dateinamen künftig nur `[a-z0-9\-]`. Alt-Text Pflicht.
 
 **Videos lokal:** Nur bei <20 MB und <=30 Sek. Sonst automatisch als Embed einbinden.
 
