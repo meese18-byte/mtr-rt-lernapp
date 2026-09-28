@@ -60,7 +60,7 @@ Genau diese fünf Typen sind zugelassen:
 4. **`quiz`** - Fragenblock mit begründetem Feedback pro Option.
 5. **`transfer`** - Freitext-Reflexion mit Selbstbewertungs-Checkliste.
 
-Die JSON-Schemas sind verbindlich und in `references/modul-schemas.md` im `lernapp-implementierung`-Skill dokumentiert.
+Das verbindliche Inhaltsschema steht in `architecture/MODUL-SCHEMA-V3.md`.
 
 **Erweiterungs-Regel:** Ein neuer Modultyp wird nur dann ergänzt, wenn eine konkrete didaktische Notwendigkeit in mindestens **drei unterschiedlichen geplanten Modulen** besteht, die sich nachweislich nicht mit einem bestehenden Typ abbilden lassen. Die Ergänzung wird hier in diesem Dokument dokumentiert, bevor Code entsteht.
 
@@ -160,7 +160,7 @@ verweigert. Bis dahin gilt die manuelle Routine als verbindlich.
 
 ## 6. Navigation und Routing
 
-Hash-basierter Router (z.B. `#/module/prostata-planungs-ct-enddarm`). Kein pushState, keine Server-Rewrites nötig. Funktioniert zuverlässig unter GitHub Pages auch bei Seiten-Reloads.
+Hash-basierter Router (z.B. `#/module/05-enddarmvorbereitung-becken`). Kein pushState, keine Server-Rewrites nötig. Funktioniert zuverlässig unter GitHub Pages auch bei Seiten-Reloads.
 
 Haupt-Routen:
 - `#/` - Dashboard mit Kategorien und Fortschritt
@@ -180,7 +180,7 @@ Haupt-Routen:
 {
   "version": 1,
   "modules": {
-    "prostata-planungs-ct-enddarm": {
+    "05-enddarmvorbereitung-becken": {
       "status": "completed",
       "lastAccess": "2026-04-18T10:23:00Z",
       "attempts": 2,
@@ -487,6 +487,6 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 | 2026-04-18 | §11 Canvas-Policy ergänzt | Verbindliche DOM-vs-Canvas-Leitlinie, Prüfbogen-Pflicht, hybride Architektur |
 | 2026-04-18 | §12 Konsistenzregeln für Curriculum und Module ergänzt, CURRICULUM.md als zweite Source of Truth eingeführt | Roter Faden von Anfang bis Ende, Feature-Creep-Vermeidung, gemeinsame Felder Kapitel/Pflichtgrad/Voraussetzungen |
 | 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
-| 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `prostata-planungs-ct-enddarm` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
+| 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `05-enddarmvorbereitung-becken` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
 | 2026-05-20 | §5.1 Push-Disziplin (Standalone ↔ Root) ergänzt: verpflichtender Pre-Push-Check auf gelöschte Root-Dateien bei Änderungen in Standalone-Ordnern. | Reaktion auf Incident 2026-05-19: Commit `e63211a` hat `index.html` im Root stillschweigend gelöscht, GitHub Pages lieferte bis zur Wiederherstellung 404. Strukturelle Schutzregel statt Einzelfall-Reparatur. |
 | 2026-09-28 | v3.0: `sequence` als aktiver Modultyp abgeschafft; Lernpfade als Komposition eingeführt; Registry zur kanonischen Metadatenquelle erklärt; Legacy-Migration, Medienregister und Content-Validator verbindlich ergänzt. | Vorbereitung des Vollausbaus auf die gesamte fachpraktische MTR-Ausbildung ohne Architektur-Drift. |
