@@ -223,6 +223,28 @@ async function renderModule(id) {
   }
   const r = await renderers[type]();
   await r.render(viewEl, module);
+  mountPrintTools(module);
+}
+
+function mountPrintTools(module) {
+  if (module.printable === false || module.mode === 'praesenz_gekoppelt') return;
+  const view = viewEl.querySelector('.module-view');
+  if (!view || view.querySelector('.print-tools')) return;
+
+  const tools = document.createElement('div');
+  tools.className = 'print-tools btn-row';
+  tools.innerHTML = '<button class="btn secondary" type="button">Modul drucken</button>';
+  const button = tools.querySelector('button');
+
+  button.addEventListener('click', () => {
+    const details = Array.from(view.querySelectorAll('details'));
+    const states = details.map(d => d.open);
+    details.forEach(d => { d.open = true; });
+    window.print();
+    details.forEach((d, i) => { d.open = states[i]; });
+  });
+
+  view.appendChild(tools);
 }
 
 async function renderInfotextPage(id) {
