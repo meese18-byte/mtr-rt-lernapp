@@ -163,10 +163,10 @@ verweigert. Bis dahin gilt die manuelle Routine als verbindlich.
 Hash-basierter Router (z.B. `#/module/05-enddarmvorbereitung-becken`). Kein pushState, keine Server-Rewrites nötig. Funktioniert zuverlässig unter GitHub Pages auch bei Seiten-Reloads.
 
 Haupt-Routen:
-- `#/` - Dashboard mit Kategorien und Fortschritt
+- `#/` - Dashboard nach Curriculum-Kapiteln mit Lehrjahr-/Pflichtgrad-Filter und Fortschritt
 - `#/module/:id` - Ein Modul anzeigen
 - `#/info/:id` - Ein Infotext
-- `#/pruefung` - Prüfungs-Pfad (gefilterte Ansicht von Quiz-Modulen)
+- `#/pruefung` - Prüfungsvorbereitung (alle aktiven Kapitel-14- bzw. `pruefung`-Module)
 - `#/einstellungen` - Export/Import, Fortschritt zurücksetzen
 
 ---
@@ -188,7 +188,9 @@ Haupt-Routen:
     }
   },
   "settings": {
-    "anrede": "du"
+    "anrede": "du",
+    "lehrjahr": "alle",
+    "pflichtgrad": "alle"
   }
 }
 ```
@@ -347,7 +349,7 @@ Pro Modul zeigt das Dashboard ein Badge:
 - `vertiefung` → blau (`.badge-vertiefung`)
 - `exkurs` → grau (`.badge-exkurs`)
 
-Filter auf dem Dashboard: `Alle | Pflicht | Vertiefung | Exkurs`.
+Filter auf dem Dashboard: `Alle | Pflicht | Vertiefung | Exkurs`; Auswahl wird in `mtr_rt_settings.pflichtgrad` gespeichert.
 
 ### 12.5 Kapitel-Gruppierung im Dashboard
 
