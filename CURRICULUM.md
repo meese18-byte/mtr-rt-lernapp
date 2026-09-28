@@ -103,7 +103,7 @@ Jedes Modul bekommt genau einen Tag zur Prüfungsrelevanz:
 | `vertiefung` | Über MTAPrV-Kern hinaus, stärkt Verständnis und Praxis | blaues Badge |
 | `exkurs` | Fachliche Anreicherung ohne direkte Prüfungsrelevanz | graues Badge |
 
-**Regel**: Der MVP (Phase 1) besteht zu mindestens 80 % aus `pflicht`-Modulen.
+**Regel:** Kerncurriculare Lernpfade bestehen überwiegend aus `pflicht`-Modulen. `vertiefung` und `exkurs` dürfen den Pflichtpfad ergänzen, aber nicht verdecken.
 
 ---
 
@@ -137,9 +137,9 @@ Module, die die Obergrenze sprengen, werden **geteilt**.
 
 Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 
-**Legende**: ✅ live · 🟡 in Arbeit · ⬜ geplant · ❌ verworfen
+**Legende**: ✅ live · 🟡 draft/review · ⬜ planned · ❌ verworfen
 
-| ID | Titel | Typ | Tag | Phase | Status |
+| ID | Titel | Typ | Tag | Priorität | Status |
 |---|---|---|---|---|---|
 | 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | Core | ✅ |
 | 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | Core | ✅ |
