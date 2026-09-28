@@ -1,4 +1,4 @@
-# MTR RT Lernapp – Starterprojekt
+# MTR RT Lernapp – Strahlentherapie
 
 Webbasierte Lernapp für die fachpraktische Ausbildung der MTR in der Strahlentherapie.
 Statisch, ohne Frameworks, GitHub-Pages-tauglich.
@@ -34,9 +34,12 @@ Dann im Browser `http://localhost:8080` öffnen.
 ```
 .
 ├── index.html
-├── ARCHITECTURE.md          <- Single Source of Truth. Vor jeder Änderung lesen.
+├── ARCHITECTURE.md          <- Technische Single Source of Truth. Vor jeder Änderung lesen.
+├── CURRICULUM.md            <- Inhaltliche Single Source of Truth.
 ├── .nojekyll                <- Verhindert Jekyll-Verarbeitung auf GitHub Pages
-├── css/app.css
+├── css/
+│   ├── app.css
+│   └── print.css            <- V3-Druckansicht (wird schrittweise vervollständigt)
 ├── js/
 │   ├── app.js               <- Router, Dashboard, Einstellungen
 │   ├── storage.js           <- localStorage + Export/Import
@@ -50,12 +53,19 @@ Dann im Browser `http://localhost:8080` öffnen.
 │       ├── quiz.js
 │       └── transfer.js
 ├── content/
-│   ├── modules-registry.json
-│   ├── modules/             <- Ein JSON pro Modul
+│   ├── modules-registry.json <- kanonische Modul-Metadaten
+│   ├── learning-paths.json   <- Komposition mehrerer Standardmodule
+│   ├── modules/              <- Ein JSON pro Modul
 │   └── infotexte/           <- Ein Markdown pro Infotext
-└── media/
-    ├── images/
-    └── clips/
+├── media/
+│   ├── MEDIA-REGISTER.md     <- Rechte-/Anonymisierungsstatus
+│   ├── images/
+│   ├── clips/
+│   └── documents/
+└── tools/
+    ├── validate-content.js
+    ├── redundanz-check.js
+    └── check-root.sh
 ```
 
 ## Ein neues Modul anlegen
@@ -66,7 +76,8 @@ Dann im Browser `http://localhost:8080` öffnen.
    - ggf. einen Markdown-Infotext unter `content/infotexte/<id>.md`
    - einen neuen Eintrag in `content/modules-registry.json`
    - ggf. Mediendateien unter `media/`
-3. Änderungen in GitHub Desktop committen und pushen. Ca. eine Minute später live.
+3. Vor dem Push `node tools/validate-content.js` ausführen.
+4. Änderungen committen und pushen. GitHub Pages übernimmt die statische Auslieferung.
 
 ## Die fünf Modultypen
 
@@ -78,7 +89,11 @@ Dann im Browser `http://localhost:8080` öffnen.
 | `quiz` | Fragenliste zum Prüfungstraining mit Feedback pro Antwort |
 | `transfer` | Offene Reflexionsaufgabe mit Selbstbewertungs-Checkliste |
 
-Mehr Details in `ARCHITECTURE.md` und in den Skill-Referenzen.
+Mehr Details in `ARCHITECTURE.md` und `architecture/MODUL-SCHEMA-V3.md`.
+
+## Lernpfade
+
+Lernpfade (z. B. Mamma oder Prostata) sind **keine zusätzlichen Modultypen**. Sie werden in `content/learning-paths.json` als geordnete Folge vorhandener Module definiert. Bestehende HTML-Lernsequenzen sind Legacy-Inhalte und werden schrittweise in Standardmodule migriert.
 
 ## Datenschutz
 

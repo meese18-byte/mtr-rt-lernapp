@@ -20,7 +20,11 @@ const KEY_EXITSLIPS     = PREFIX + 'exitslips';
 
 const SCHEMA_VERSION = 1;
 const EXPORT_SCHEMA = 'mtr-rt-export';
-const EXPORT_SCHEMA_VERSION = 2;
+const EXPORT_SCHEMA_VERSION = 3;
+
+const MODULE_ID_MIGRATIONS = {
+  'prostata-planungs-ct-enddarm': '05-enddarmvorbereitung-becken'
+};
 
 function defaultProgress() {
   return {
@@ -30,19 +34,73 @@ function defaultProgress() {
   };
 }
 
+function defaultSettings() {
+  return {
+    anrede: 'du',
+    lehrjahr: 'alle',
+    pflichtgrad: 'alle'
+  };
+}
+
+export function loadSettings() {
+  try {
+    const raw = localStorage.getItem(KEY_SETTINGS);
+    if (!raw) return defaultSettings();
+    return { ...defaultSettings(), ...JSON.parse(raw) };
+  } catch (e) {
+    console.warn('Einstellungen konnten nicht geladen werden.', e);
+    return defaultSettings();
+  }
+}
+
+export function saveSettings(settings) {
+  try {
+    localStorage.setItem(KEY_SETTINGS, JSON.stringify({ ...defaultSettings(), ...settings }));
+  } catch (e) {
+    console.warn('Einstellungen konnten nicht gespeichert werden.', e);
+  }
+}
+
 // --------------------------------------------------------------------
 // Progress (mtr_rt_progress)
 // --------------------------------------------------------------------
+
+function migrateModuleIds(progress) {
+  const data = { ...progress, modules: { ...(progress.modules || {}) } };
+  let changed = false;
+
+  for (const [oldId, newId] of Object.entries(MODULE_ID_MIGRATIONS)) {
+    const oldEntry = data.modules[oldId];
+    if (!oldEntry) continue;
+
+    const newEntry = data.modules[newId];
+    if (!newEntry) {
+      data.modules[newId] = oldEntry;
+    } else if (oldEntry.status === 'completed' && newEntry.status !== 'completed') {
+      data.modules[newId] = { ...newEntry, ...oldEntry, status: 'completed' };
+    }
+    delete data.modules[oldId];
+    changed = true;
+  }
+
+  return { data, changed };
+}
 
 export function loadProgress() {
   try {
     const raw = localStorage.getItem(KEY_PROGRESS);
     if (!raw) return defaultProgress();
-    const data = JSON.parse(raw);
-    if (!data.version || data.version < SCHEMA_VERSION) {
-      return { ...defaultProgress(), ...data, version: SCHEMA_VERSION };
+
+    const parsed = JSON.parse(raw);
+    const normalized = (!parsed.version || parsed.version < SCHEMA_VERSION)
+      ? { ...defaultProgress(), ...parsed, version: SCHEMA_VERSION }
+      : parsed;
+
+    const migrated = migrateModuleIds(normalized);
+    if (migrated.changed) {
+      localStorage.setItem(KEY_PROGRESS, JSON.stringify(migrated.data));
     }
-    return data;
+    return migrated.data;
   } catch (e) {
     console.warn('Progress konnte nicht geladen werden, wird zurueckgesetzt.', e);
     return defaultProgress();
@@ -90,7 +148,7 @@ function buildCombinedExport() {
     schemaVersion: EXPORT_SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
     progress:      readRaw(KEY_PROGRESS)      || defaultProgress(),
-    settings:      readRaw(KEY_SETTINGS)      || null,
+    settings:      readRaw(KEY_SETTINGS)      || defaultSettings(),
     quiz_progress: readRaw(KEY_QUIZ_PROGRESS) || null,
     exitslips:     readRaw(KEY_EXITSLIPS)     || {}
   };

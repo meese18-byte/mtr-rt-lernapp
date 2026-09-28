@@ -1,0 +1,86 @@
+/* V3 Druckansicht – statisch, ohne externe Abhängigkeiten */
+
+@page {
+  margin: 16mm;
+}
+
+html,
+body {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.app-header,
+.app-footer,
+.skip-link,
+.main-nav,
+.progress-overview,
+.dashboard-filter,
+.btn-row,
+button,
+input[type="file"],
+.exit-slip-form,
+.click-marker {
+  display: none !important;
+}
+
+.container,
+.module-view {
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.module-view {
+  font-size: 11pt;
+  line-height: 1.45;
+}
+
+.module-view h1 {
+  font-size: 20pt;
+  margin-top: 0;
+}
+
+.module-view h2 {
+  font-size: 15pt;
+  break-after: avoid;
+}
+
+.module-view h3,
+.module-view figure,
+.module-view table,
+.module-view .feedback {
+  break-inside: avoid;
+}
+
+.module-view img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+details,
+details > * {
+  display: block !important;
+}
+
+details > summary {
+  font-weight: 700;
+}
+
+a {
+  color: #000 !important;
+  text-decoration: none !important;
+}
+
+.badge {
+  border: 1px solid #777 !important;
+  background: transparent !important;
+  color: #000 !important;
+}
+
+.print-tools {
+  display: none !important;
+}

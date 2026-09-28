@@ -1,4 +1,4 @@
-# Modul-Schema v2 (final)
+# Modul-Schema V2 – Legacy / deprecated
 
 **Status:** Entwurf zur Aufnahme in ARCHITECTURE.md §4 + §12
 **Datum:** 2026-05-18
@@ -8,7 +8,7 @@
 
 ## 1. Zweck
 
-Diese Datei fixiert das endgültige JSON-Schema für alle Modultypen der Lernapp. Sie ist die verbindliche Spec für `lernapp-implementierung` und für jeden Standalone, der sich an die App-Architektur halten soll.
+**Nicht mehr verbindlich für neue Implementierungen.** Seit 2026-09-28 gilt `architecture/MODUL-SCHEMA-V3.md`. Diese Datei bleibt ausschließlich als Migrationsreferenz für bestehende V2-Module und alte Standalones erhalten.
 
 ---
 

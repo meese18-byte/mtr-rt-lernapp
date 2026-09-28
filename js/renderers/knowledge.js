@@ -3,7 +3,7 @@
 
 import { loadInfotext } from '../registry.js';
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
-import { esc, renderMarkdownSimple } from '../util.js';
+import { esc, renderMarkdownSimple , moduleContextLabel } from '../util.js';
 import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
@@ -13,7 +13,7 @@ export async function render(container, module) {
   const view = document.createElement('article');
   view.className = 'module-view';
   view.innerHTML = `
-    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(module.category)}</p>
+    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <p class="muted">${esc(module.body.intro || '')}</p>
     <div id="kn-infotext"><p class="loading">Infotext wird geladen…</p></div>

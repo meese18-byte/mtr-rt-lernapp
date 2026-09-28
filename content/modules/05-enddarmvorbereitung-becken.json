@@ -1,5 +1,5 @@
 {
-  "id": "prostata-planungs-ct-enddarm",
+  "id": "05-enddarmvorbereitung-becken",
   "type": "case",
   "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
   "category": "Becken – Prostata",
@@ -10,10 +10,18 @@
     "Der Lernende begründet, warum die Reproduzierbarkeit der Enddarmfüllung eine Grundvoraussetzung für die Prostata-Bestrahlung ist.",
     "Der Lernende leitet die korrekte Handlungskette zur Wiederherstellung einer reproduzierbaren Ausgangslage ab."
   ],
-  "tags": ["prostata", "planungs-ct", "enddarm", "setup", "lagerung"],
+  "tags": [
+    "prostata",
+    "planungs-ct",
+    "enddarm",
+    "setup",
+    "lagerung"
+  ],
   "examRelevance": "MTAPrV praktische Prüfung – Setup-Verifikation und Lagerung bei Beckenbestrahlung",
   "relatedModules": [],
-  "relatedInfotexte": ["enddarmvorbereitung-becken"],
+  "relatedInfotexte": [
+    "enddarmvorbereitung-becken"
+  ],
   "body": {
     "scenario": {
       "situation": "Sie bereiten das Planungs-CT eines Patienten mit lokal begrenztem Prostatakarzinom vor. Die Aufnahmen sind gefahren. Beim Sichten der Schnittbilder fällt Ihnen auf, dass der Enddarm stark gefüllt ist. Der Patient gibt auf Rückfrage an, er habe das morgendliche Vorbereitungsschema nicht vollständig durchgeführt.",
@@ -52,7 +60,11 @@
     "reinforcement": "Reproduzierbare Enddarmfüllung ist die Grundvoraussetzung jeder Prostata-Bestrahlung. Das tägliche CBCT prüft nicht nur den Knochenstand, sondern auch Enddarm und Harnblase. Weicht der Füllungszustand deutlich vom Planungs-CT ab, muss interveniert werden – nicht einfach bestrahlt werden.",
     "followUpQuiz": {
       "lead": "Drei Items aus der Itembank sichern den klinischen Transfer: Konsequenz → Begründung → Übertrag auf das tägliche CBCT.",
-      "itemRefs": ["q-prostata-05", "q-prostata-03", "q-prostata-12"],
+      "itemRefs": [
+        "q-prostata-05",
+        "q-prostata-03",
+        "q-prostata-12"
+      ],
       "frames": {
         "q-prostata-05": {
           "vor": "Im konkreten Fall war der Enddarm beim Planungs-CT deutlich gefüllt. Ordne die klinische Konsequenz ein, wenn auf dieser Geometrie weitergeplant würde.",
@@ -74,5 +86,6 @@
       },
       "passThreshold": 0.66
     }
-  }
+  },
+  "umbenannt_von": "prostata-planungs-ct-enddarm"
 }

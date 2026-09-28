@@ -11,7 +11,7 @@
 //                         correctRate = Mittel aus Fall (1/0) und Quiz-Rate.
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
-import { esc, renderMedia } from '../util.js';
+import { esc, renderMedia , moduleContextLabel } from '../util.js';
 import { QuizEngine } from '../quiz-engine.js';
 import { mountExitSlip } from '../exit-slip.js';
 
@@ -29,7 +29,7 @@ export async function render(container, module) {
   );
 
   view.innerHTML = `
-    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(module.category || '')}</p>
+    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <h2>Situation</h2>
     <p>${esc(s.situation || '')}</p>

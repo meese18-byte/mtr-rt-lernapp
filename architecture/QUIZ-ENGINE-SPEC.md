@@ -1,4 +1,4 @@
-# Quiz-Engine-Spec (final)
+# Quiz-Engine-Spec (V3-kompatibel)
 
 **Status:** Entwurf zur Aufnahme in ARCHITECTURE.md
 **Datum:** 2026-05-18
@@ -8,7 +8,7 @@
 
 ## 1. Zweck
 
-Eine wiederverwendbare, kontextfreie JavaScript-Engine, die in der Lernapp **und** in jedem Standalone (Lernsequenz) gleichermaßen Quiz-Items abspielt. Implementiert die SuS-Anforderungen self-first, Leitner-light, persistenter Item-Status.
+Eine wiederverwendbare, kontextfreie JavaScript-Engine für die Haupt-Lernapp. Bestehende Standalones dürfen sie während der V3-Migration weiterhin als Legacy-Komponente verwenden. Neue Inhalte entstehen ausschließlich in der Haupt-App.
 
 ---
 
@@ -201,7 +201,7 @@ QuizEngine.start({
   inlineItems: null,  // alternativ: Array von Item-Objekten
   
   // Modul-Kontext für Persistenz
-  moduleId: "prostata-planungs-ct-enddarm",
+  moduleId: "05-enddarmvorbereitung-becken",
   
   // Optionale Frames
   frames: { "q-prostata-blase-01": { vor: "...", nach: "..." } },
@@ -258,9 +258,9 @@ Alle Klassen werden in `css/app.css` definiert und sind Engine-Vertrag.
 
 ---
 
-## 8. Standalone-Nutzung (Lernsequenzen, Standalones)
+## 8. Legacy-Standalone-Nutzung während der V3-Migration
 
-Damit Standalones (Mamma, Bronchial, Prostata, MTR-Lernmodul V1) dieselbe Engine nutzen können, gilt:
+Für bestehende Standalones (Mamma, Bronchial, Prostata, MTR-Lernmodul V1) gilt bis zur Migration:
 
 1. Standalone bindet `<script src="../js/quiz-engine.js"></script>` ein (relativer Pfad in Repo).
 2. Standalone ruft `QuizEngine.init({...})`.
@@ -277,7 +277,7 @@ QuizEngine.start({
 ```
 
 4. Persistenz funktioniert auch im Standalone (gleicher `localStorage`-Key).
-5. Empfehlung: Auch in Standalones langfristig **kein** inline-Items, sondern Itembank-Referenzen – um Wiederverwendung zu sichern. Inline nur als Übergangslösung.
+5. Keine neuen Standalones anlegen. Bestehende Inline-Items werden bei der fachlichen Migration in die zentrale Itembank überführt.
 
 ---
 
@@ -316,7 +316,7 @@ Wird nicht automatisch in CI ausgeführt – Jan ruft das Tool vor jedem Release
 4. Prostata-Items in `content/itembank/prostata.json` migrieren.
 5. Prostata-Standalone auf Engine umstellen.
 6. Weitere Item-Typen (`cloze`, `numeric`, `order`) nachziehen.
-7. Restliche Standalones migrieren.
+7. Restliche Legacy-Standalones in Standardmodule und Lernpfade überführen.
 
 ---
 
