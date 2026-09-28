@@ -1,19 +1,15 @@
 {
   "version": 4,
   "lastUpdated": "2026-09-28",
-  "schemaNote": "V3-Migration gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist nur noch als explizit markierter Legacy-Eintrag zulaessig.",
+  "schemaNote": "V3 gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist ausschließlich als status=legacy + legacy=true waehrend der Migration zulaessig.",
   "modules": [
     {
       "id": "01-aufbau-abteilung",
       "title": "Aufbau einer Strahlentherapie-Abteilung",
       "type": "knowledge",
-      "category": "Orientierung",
-      "order": 10,
-      "difficulty": "einstieg",
       "kapitel": 1,
       "reihenfolge": 1,
       "pflichtgrad": "pflicht",
-      "phase": "MVP",
       "mode": "online_solo",
       "lehrjahr": [
         1
@@ -33,13 +29,9 @@
       "id": "05-enddarmvorbereitung-becken",
       "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm",
       "type": "case",
-      "category": "Becken Prostata",
-      "order": 10,
-      "difficulty": "fortgeschritten",
       "kapitel": 5,
       "reihenfolge": 3,
       "pflichtgrad": "pflicht",
-      "phase": "MVP",
       "mode": "online_solo",
       "lehrjahr": [
         2,
@@ -62,13 +54,9 @@
       "id": "10-mamma-lernsequenz",
       "title": "Mission Mamma: Von der Fallakte zum PLCT-Setting",
       "type": "sequence",
-      "category": "Indikationen II",
-      "order": 10,
-      "difficulty": "fortgeschritten",
       "kapitel": 10,
       "reihenfolge": 1,
       "pflichtgrad": "pflicht",
-      "phase": "P3",
       "file": "content/lernsequenzen/10-mamma-lernsequenz.html",
       "mode": "online_solo",
       "lehrjahr": [
@@ -94,16 +82,12 @@
       "id": "11-bronchial-ca-lernsequenz",
       "title": "Fall Herr K.: Bronchial-Ca. PLCT, OAR und Atemmanagement",
       "type": "sequence",
-      "category": "Indikationen II",
-      "order": 20,
-      "difficulty": "fortgeschritten",
       "kapitel": 10,
       "reihenfolge": 2,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [
         "10-mamma-lernsequenz"
       ],
-      "phase": "P3",
       "file": "content/lernsequenzen/11-bronchial-ca-lernsequenz.html",
       "mode": "online_solo",
       "lehrjahr": [
@@ -131,13 +115,10 @@
       "id": "14-fallvorstellung-wbrt",
       "title": "Fallvorstellung: Ganzhirnbestrahlung (WBRT)",
       "type": "transfer",
-      "category": "Pruefungsvorbereitung Teil 3",
-      "difficulty": "pruefungsreife",
       "kapitel": 14,
       "reihenfolge": 1,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3",
       "mode": "online_solo",
       "lehrjahr": [
         3
@@ -157,13 +138,10 @@
       "id": "14-fallvorstellung-mamma",
       "title": "Fallvorstellung: Mammakarzinom links mit DIBH",
       "type": "transfer",
-      "category": "Pruefungsvorbereitung Teil 3",
-      "difficulty": "pruefungsreife",
       "kapitel": 14,
       "reihenfolge": 2,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3",
       "mode": "online_solo",
       "lehrjahr": [
         3
@@ -183,13 +161,10 @@
       "id": "14-plct-stoerfall-hno",
       "title": "PLCT-Simulation: HNO-Tumor, fehlende Zahnschiene",
       "type": "case",
-      "category": "Pruefungsvorbereitung Teil 3",
-      "difficulty": "pruefungsreife",
       "kapitel": 14,
       "reihenfolge": 3,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3",
       "mode": "online_solo",
       "lehrjahr": [
         3
@@ -209,13 +184,10 @@
       "id": "14-plct-stoerfall-prostata",
       "title": "PLCT-Simulation: Prostata-Ca, leere Blase",
       "type": "case",
-      "category": "Pruefungsvorbereitung Teil 3",
-      "difficulty": "pruefungsreife",
       "kapitel": 14,
       "reihenfolge": 4,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3",
       "mode": "online_solo",
       "lehrjahr": [
         3
@@ -235,13 +207,10 @@
       "id": "14-quiz-gesamtwissen",
       "title": "Pruefungsquiz: Gesamtwissen PLCT und Fallvorstellung",
       "type": "quiz",
-      "category": "Pruefungsvorbereitung Teil 3",
-      "difficulty": "pruefungsreife",
       "kapitel": 14,
       "reihenfolge": 5,
       "pflichtgrad": "pflicht",
       "voraussetzungen": [],
-      "phase": "P3",
       "mode": "online_solo",
       "lehrjahr": [
         3
