@@ -34,6 +34,32 @@ function defaultProgress() {
   };
 }
 
+function defaultSettings() {
+  return {
+    anrede: 'du',
+    lehrjahr: 'alle'
+  };
+}
+
+export function loadSettings() {
+  try {
+    const raw = localStorage.getItem(KEY_SETTINGS);
+    if (!raw) return defaultSettings();
+    return { ...defaultSettings(), ...JSON.parse(raw) };
+  } catch (e) {
+    console.warn('Einstellungen konnten nicht geladen werden.', e);
+    return defaultSettings();
+  }
+}
+
+export function saveSettings(settings) {
+  try {
+    localStorage.setItem(KEY_SETTINGS, JSON.stringify({ ...defaultSettings(), ...settings }));
+  } catch (e) {
+    console.warn('Einstellungen konnten nicht gespeichert werden.', e);
+  }
+}
+
 // --------------------------------------------------------------------
 // Progress (mtr_rt_progress)
 // --------------------------------------------------------------------
@@ -121,7 +147,7 @@ function buildCombinedExport() {
     schemaVersion: EXPORT_SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
     progress:      readRaw(KEY_PROGRESS)      || defaultProgress(),
-    settings:      readRaw(KEY_SETTINGS)      || null,
+    settings:      readRaw(KEY_SETTINGS)      || defaultSettings(),
     quiz_progress: readRaw(KEY_QUIZ_PROGRESS) || null,
     exitslips:     readRaw(KEY_EXITSLIPS)     || {}
   };
