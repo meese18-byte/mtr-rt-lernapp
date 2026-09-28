@@ -1,7 +1,7 @@
 // renderers/transfer.js - Transfer-Aufgabe (offene Reflexion mit Selbstbewertung)
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
-import { esc } from '../util.js';
+import { esc , moduleContextLabel } from '../util.js';
 import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
@@ -12,7 +12,7 @@ export async function render(container, module) {
   const view = document.createElement('article');
   view.className = 'module-view transfer';
   view.innerHTML = `
-    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(module.category)}</p>
+    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <h2>Aufgabe</h2>
     <p>${esc(body.prompt || '')}</p>
