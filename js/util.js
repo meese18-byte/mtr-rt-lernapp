@@ -127,3 +127,33 @@ export function shuffleArray(arr) {
   }
   return a;
 }
+
+
+/**
+ * Kanonische Kapitelnamen aus CURRICULUM.md.
+ */
+export function chapterLabel(chapter) {
+  return {
+    1: 'Orientierung',
+    2: 'Grundlagen I – Strahlung und Biologie',
+    3: 'Grundlagen II – Volumina und Dosis',
+    4: 'Patientenweg 1 – Aufnahme und Aufklärung',
+    5: 'Patientenweg 2 – Planungs-CT',
+    6: 'Patientenweg 3 – Bestrahlungsplanung',
+    7: 'Patientenweg 4 – Erstbestrahlung und Verifikation',
+    8: 'Patientenweg 5 – Laufende Therapie',
+    9: 'Indikationen I – Becken',
+    10: 'Indikationen II – Thorax und Abdomen',
+    11: 'Indikationen III – Schädel und HNO',
+    12: 'Sonderverfahren',
+    13: 'Strahlenschutz und Qualität',
+    14: 'Abschluss und Prüfungsvorbereitung'
+  }[Number(chapter)] || 'Weitere Inhalte';
+}
+
+export function moduleContextLabel(module) {
+  if (module && module.kapitel) {
+    return `${String(module.kapitel).padStart(2, '0')} · ${chapterLabel(module.kapitel)}`;
+  }
+  return module && module.category ? module.category : 'Lernmodul';
+}
