@@ -1,7 +1,7 @@
 // app.js - Bootstrap, Router, Dashboard, Einstellungen
 
 import { loadRegistry, loadModule } from './registry.js';
-import { loadProgress, exportProgressAsFile, importProgressFromFile, resetProgress } from './storage.js';
+import { loadProgress, loadSettings, saveSettings, exportProgressAsFile, importProgressFromFile, resetProgress } from './storage.js';
 import { getModuleProgress, getOverallProgress } from './progress.js';
 import { esc } from './util.js';
 
@@ -45,68 +45,141 @@ async function route() {
 
 async function renderDashboard() {
   const registry = await loadRegistry();
+  const settings = loadSettings();
   const overall = getOverallProgress(registry);
 
-  // Gruppierung nach Kategorie
-  const byCategory = {};
-  registry.modules.forEach(m => {
-    if (!byCategory[m.category]) byCategory[m.category] = [];
-    byCategory[m.category].push(m);
-  });
-  Object.values(byCategory).forEach(arr => arr.sort((a, b) => (a.order || 0) - (b.order || 0)));
+  const activeModules = (registry.modules || []).filter(m => m.status !== 'legacy' && !m.legacy);
+  const legacyModules = (registry.modules || []).filter(m => m.status === 'legacy' || m.legacy);
 
-  const hasModules = registry.modules.length > 0;
+  const selectedYear = String(settings.lehrjahr || 'alle');
+  const visibleModules = activeModules.filter(m => {
+    if (selectedYear === 'alle') return true;
+    return Array.isArray(m.lehrjahr) && m.lehrjahr.map(String).includes(selectedYear);
+  });
+
+  // V3: primär nach Kapitel, sekundär nach reihenfolge.
+  const byChapter = {};
+  visibleModules.forEach(m => {
+    const key = Number(m.kapitel) || 0;
+    if (!byChapter[key]) byChapter[key] = [];
+    byChapter[key].push(m);
+  });
+  Object.values(byChapter).forEach(arr => arr.sort((a, b) => (a.reihenfolge || 0) - (b.reihenfolge || 0)));
 
   viewEl.innerHTML = `
     <h1>Willkommen in der Lernapp Strahlentherapie</h1>
     <p>Fachpraktischer Unterricht, Prüfungsvorbereitung und Nachschlagewerk für MTR-Auszubildende.</p>
 
     <section class="progress-overview" aria-label="Dein Fortschritt">
-      <strong>Fortschritt:</strong> ${overall.completed} von ${overall.total} Modulen abgeschlossen (${overall.percent}%).
+      <strong>Fortschritt:</strong> ${overall.completed} von ${overall.total} aktiven Modulen abgeschlossen (${overall.percent}%).
       <div class="progress-bar" role="progressbar" aria-valuenow="${overall.percent}" aria-valuemin="0" aria-valuemax="100">
         <span style="width: ${overall.percent}%"></span>
       </div>
     </section>
 
-    ${hasModules ? '' : `<p class="muted">Noch keine Module vorhanden. Lege das erste Modul unter <code>content/modules/</code> an und ergänze es in <code>content/modules-registry.json</code>.</p>`}
+    <section class="dashboard-filter module-view" aria-label="Lehrjahr filtern">
+      <label for="dashboard-lehrjahr"><strong>Lehrjahr:</strong></label>
+      <select id="dashboard-lehrjahr">
+        <option value="alle" ${selectedYear === 'alle' ? 'selected' : ''}>Alle</option>
+        <option value="1" ${selectedYear === '1' ? 'selected' : ''}>1. Lehrjahr</option>
+        <option value="2" ${selectedYear === '2' ? 'selected' : ''}>2. Lehrjahr</option>
+        <option value="3" ${selectedYear === '3' ? 'selected' : ''}>3. Lehrjahr</option>
+      </select>
+    </section>
 
-    <div id="categories"></div>
+    <div id="chapters"></div>
+    ${legacyModules.length ? '<section id="legacy-modules" class="legacy-block"><h2>Bestehende Lernsequenzen · Migration</h2><p class="muted">Diese älteren Mini-Apps bleiben vorübergehend erreichbar, zählen aber nicht zum regulären Modulfortschritt.</p><div class="module-grid"></div></section>' : ''}
   `;
 
-  const catBlock = viewEl.querySelector('#categories');
-  Object.keys(byCategory).sort().forEach(cat => {
+  viewEl.querySelector('#dashboard-lehrjahr').addEventListener('change', (e) => {
+    saveSettings({ ...settings, lehrjahr: e.target.value });
+    renderDashboard();
+  });
+
+  const chapterBlock = viewEl.querySelector('#chapters');
+  const chapterNumbers = Object.keys(byChapter).map(Number).sort((a, b) => a - b);
+
+  if (chapterNumbers.length === 0) {
+    chapterBlock.innerHTML = '<p class="muted">Für diesen Lehrjahr-Filter sind noch keine aktiven Module vorhanden.</p>';
+  }
+
+  chapterNumbers.forEach(chapter => {
     const block = document.createElement('section');
     block.className = 'category-block';
-    block.innerHTML = `<h2>${esc(cat)}</h2><div class="module-grid"></div>`;
+    block.innerHTML = `<h2>${String(chapter).padStart(2, '0')} · ${esc(chapterLabel(chapter))}</h2><div class="module-grid"></div>`;
     const grid = block.querySelector('.module-grid');
-    byCategory[cat].forEach(mod => {
-      const progress = getModuleProgress(mod.id);
-      grid.appendChild(buildCard(mod, progress));
+    byChapter[chapter].forEach(mod => {
+      grid.appendChild(buildCard(mod, getModuleProgress(mod.id)));
     });
-    catBlock.appendChild(block);
+    chapterBlock.appendChild(block);
   });
+
+  if (legacyModules.length) {
+    const grid = viewEl.querySelector('#legacy-modules .module-grid');
+    legacyModules
+      .sort((a, b) => (a.kapitel || 0) - (b.kapitel || 0) || (a.reihenfolge || 0) - (b.reihenfolge || 0))
+      .forEach(mod => grid.appendChild(buildCard(mod, { status: 'legacy' })));
+  }
+}
+
+function chapterLabel(chapter) {
+  return {
+    1: 'Orientierung',
+    2: 'Grundlagen I – Strahlung und Biologie',
+    3: 'Grundlagen II – Volumina und Dosis',
+    4: 'Patientenweg 1 – Aufnahme und Aufklärung',
+    5: 'Patientenweg 2 – Planungs-CT',
+    6: 'Patientenweg 3 – Bestrahlungsplanung',
+    7: 'Patientenweg 4 – Erstbestrahlung und Verifikation',
+    8: 'Patientenweg 5 – Laufende Therapie',
+    9: 'Indikationen I – Becken',
+    10: 'Indikationen II – Thorax und Abdomen',
+    11: 'Indikationen III – Schädel und HNO',
+    12: 'Sonderverfahren',
+    13: 'Strahlenschutz und Qualität',
+    14: 'Abschluss und Prüfungsvorbereitung'
+  }[chapter] || 'Weitere Inhalte';
 }
 
 function buildCard(mod, progress) {
   const a = document.createElement('a');
   a.className = 'module-card';
-  // Lernsequenzen sind eigenständige HTML-Seiten – direkt verlinken
-  a.href = mod.type === 'sequence' && mod.file
-    ? mod.file
-    : `#/module/${mod.id}`;
-  if (mod.type === 'sequence') {
+
+  const isLegacy = mod.status === 'legacy' || mod.legacy;
+  a.href = isLegacy && mod.file ? mod.file : `#/module/${mod.id}`;
+
+  if (isLegacy && mod.file) {
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener');
   }
+
   a.setAttribute('aria-label', `Modul öffnen: ${mod.title}`);
+
   const statusBadge = progress.status === 'completed'
     ? '<span class="badge status-completed">abgeschlossen</span>'
-    : (progress.status === 'in-progress' ? '<span class="badge status-in-progress">begonnen</span>' : '');
+    : (progress.status === 'in-progress'
+      ? '<span class="badge status-in-progress">begonnen</span>'
+      : (isLegacy ? '<span class="badge badge-legacy">Legacy</span>' : ''));
+
+  const yearBadge = Array.isArray(mod.lehrjahr) && mod.lehrjahr.length
+    ? `<span class="badge">LJ ${esc(mod.lehrjahr.join('/'))}</span>`
+    : '';
+
+  const dutyBadge = mod.pflichtgrad
+    ? `<span class="badge badge-${esc(mod.pflichtgrad)}">${esc(pflichtgradLabel(mod.pflichtgrad))}</span>`
+    : '';
+
+  const timeBadge = Number.isFinite(Number(mod.estimatedMinutes))
+    ? `<span class="badge">${Number(mod.estimatedMinutes)} Min</span>`
+    : '';
+
   a.innerHTML = `
     <h3>${esc(mod.title)}</h3>
     <div class="meta">
-      <span class="badge type-${esc(mod.type)}">${esc(typeLabel(mod.type))}</span>
-      <span class="badge">${esc(difficultyLabel(mod.difficulty))}</span>
+      <span class="badge type-${esc(isLegacy ? 'legacy' : mod.type)}">${esc(isLegacy ? 'Legacy-Lernsequenz' : typeLabel(mod.type))}</span>
+      ${dutyBadge}
+      ${yearBadge}
+      ${timeBadge}
       ${statusBadge}
     </div>
   `;
@@ -119,12 +192,16 @@ function typeLabel(t) {
     'case': 'Fall',
     'image-analysis': 'Bildanalyse',
     'quiz': 'Quiz',
-    'transfer': 'Transfer',
-    'sequence': 'Lernsequenz'
+    'transfer': 'Transfer'
   }[t] || t;
 }
-function difficultyLabel(d) {
-  return { 'grundlagen': 'Grundlagen', 'fortgeschritten': 'Fortgeschritten', 'pruefungsreife': 'Prüfungsniveau' }[d] || d;
+
+function pflichtgradLabel(value) {
+  return {
+    'pflicht': 'Pflicht',
+    'vertiefung': 'Vertiefung',
+    'exkurs': 'Exkurs'
+  }[value] || value;
 }
 
 async function renderModule(id) {
@@ -165,18 +242,23 @@ async function renderInfotextPage(id) {
 
 async function renderPruefung() {
   const registry = await loadRegistry();
-  const quizzes = registry.modules.filter(m => m.type === 'quiz');
+  const modules = (registry.modules || [])
+    .filter(m => m.status !== 'legacy' && !m.legacy)
+    .filter(m => Number(m.kapitel) === 14 || (Array.isArray(m.tags) && m.tags.includes('pruefung')))
+    .sort((a, b) => (a.reihenfolge || 0) - (b.reihenfolge || 0));
+
   viewEl.innerHTML = `
     <h1>Prüfungsvorbereitung</h1>
-    <p>Gefilterte Ansicht aller Quiz-Module für gezieltes Prüfungstraining.</p>
+    <p>Fallvorstellungen, Störfälle, Quiz- und Transfermodule für die gezielte Abschlussvorbereitung.</p>
     <div class="module-grid"></div>
   `;
+
   const grid = viewEl.querySelector('.module-grid');
-  if (quizzes.length === 0) {
-    grid.innerHTML = '<p class="muted">Noch keine Quiz-Module vorhanden.</p>';
+  if (modules.length === 0) {
+    grid.innerHTML = '<p class="muted">Noch keine Module für die Prüfungsvorbereitung vorhanden.</p>';
     return;
   }
-  quizzes.forEach(m => grid.appendChild(buildCard(m, getModuleProgress(m.id))));
+  modules.forEach(m => grid.appendChild(buildCard(m, getModuleProgress(m.id))));
 }
 
 async function renderEinstellungen() {
