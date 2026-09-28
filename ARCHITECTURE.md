@@ -1,7 +1,7 @@
 # ARCHITECTURE.md - Lernapp Strahlentherapie MTR
 
-**Version:** 2.0 (Modul-Schema v2 + Quiz-Engine)
-**Letzte Änderung:** 2026-05-18
+**Version:** 3.0 (kanonische Modularchitektur + Lernpfade)
+**Letzte Änderung:** 2026-09-28
 **Autor:** Jan
 
 Dieses Dokument ist die Single Source of Truth für alle Architekturentscheidungen dieser Lernapp. Jede Änderung, die einer der hier dokumentierten Entscheidungen widerspricht, muss **hier zuerst** diskutiert und dokumentiert werden, bevor Code geschrieben wird.
@@ -75,23 +75,19 @@ Diese Funktionen sind kein eigener Modultyp, sondern werden von allen Typen gete
 
 ---
 
-### Sondertyp 6 – Lernsequenz (`sequence`)
+### Lernpfade (kein Modultyp)
 
-**Dokumentiert:** 2026-04-22 | **Begründung:** Das Mamma-Ca.-Modul (10-mamma-lernsequenz) erfordert eine verkettete Unterrichtsstruktur mit Praxisrotation, Dozentenmodus und Export, die in keinem der fünf Standardtypen abgebildet werden kann.
+Ein **Lernpfad** bündelt mehrere Module zu einer fachlich sinnvollen Abfolge, z. B. Mamma, Prostata oder Bronchial-Ca. Lernpfade sind **keine Module** und erzeugen keine sechste Renderer- oder Fortschrittslogik.
 
-**Zugelassen, wenn alle drei Bedingungen erfüllt sind:**
-1. Der Lerninhalt umfasst >60 Minuten strukturierte Arbeitszeit.
-2. Eine Praxisrotation oder Praxisstation ist integriert.
-3. Dozentenmodus und Export/Drucken sind vorhanden.
+**Verbindliche Regeln:**
+1. Zulässig bleiben genau die fünf Standardmodultypen `knowledge`, `case`, `image-analysis`, `quiz`, `transfer`.
+2. Lernpfade werden in `content/learning-paths.json` definiert und referenzieren ausschließlich vorhandene Modul-IDs.
+3. Der Fortschritt eines Lernpfads wird aus dem Fortschritt seiner Module berechnet; kein eigener localStorage-Key.
+4. Bestehende HTML-Lernsequenzen bleiben während der V3-Migration als **Legacy-Inhalte** erreichbar, dürfen aber nicht mehr als Vorlage für neue Module dienen.
+5. Nach fachlicher Zerlegung in Standardmodule werden Legacy-Lernsequenzen aus der aktiven Registry entfernt und archiviert.
 
-**Technische Regeln (identisch zu Standardmodulen):**
-- Nur Vanilla HTML5, CSS3, ES6+ – kein Framework, keine externen Skripte.
-- Keine externen Schriftarten (Google Fonts verboten). Systemfont-Stack verwenden.
-- localStorage ausschließlich mit Präfix `mtr_rt_`.
-- Dateipfad: `content/lernsequenzen/[id].html`
-- Keine neuen Unterordner ohne Architektur-Entscheidung.
+**Begründung:** Die früheren `sequence`-Seiten entwickelten sich zu eigenständigen Mini-Apps mit eigener Navigation, Persistenz und UI. Das widerspricht dem Ziel einer langfristig wartbaren, einheitlichen Lernplattform.
 
-**Dieser Typ ist keine Freifahrt für beliebige HTML-Seiten.** Jede neue Lernsequenz braucht eine explizite Freigabe hier in ARCHITECTURE.md.
 
 ---
 
@@ -104,7 +100,8 @@ radiotherapy-learning-app/
 ├── README.md               # Kurzanleitung für Autorin/Nutzer
 ├── .nojekyll               # Verhindert Jekyll-Verarbeitung durch GitHub Pages
 ├── css/
-│   └── app.css             # Das einzige Stylesheet
+│   ├── app.css             # Haupt-Stylesheet
+│   └── print.css           # Druckansicht
 ├── js/
 │   ├── app.js              # Bootstrap, Router, Navigation
 │   ├── storage.js          # localStorage + Export/Import
@@ -117,12 +114,19 @@ radiotherapy-learning-app/
 │       ├── quiz.js
 │       └── transfer.js
 ├── content/
-│   ├── modules-registry.json   # Liste aller Module
+│   ├── modules-registry.json   # Kanonische Metadaten aller Module
+│   ├── learning-paths.json     # Zusammensetzung curricularer Lernpfade
 │   ├── modules/                # Ein JSON pro Modul
 │   └── infotexte/              # Ein Markdown pro Infotext
-└── media/
-    ├── images/
-    └── clips/                  # Nur Clips <20 MB und <=30 Sek
+├── media/
+│   ├── MEDIA-REGISTER.md       # Rechte-/Anonymisierungsstatus aller öffentlichen Medien
+│   ├── images/
+│   ├── clips/
+│   └── documents/
+└── tools/
+    ├── validate-content.js     # Struktur- und Referenzprüfung
+    ├── redundanz-check.js      # Inhalts-/Tag-Redundanzen
+    └── check-root.sh           # Schutz zentraler Root-Dateien
 ```
 
 ### 5.1 Push-Disziplin (Standalone ↔ Root)
@@ -298,23 +302,32 @@ Diese Regeln ergänzen die Inhaltsstruktur in `CURRICULUM.md` um technische Kons
 - IDs sind unveränderlich — einmal in der Registry, nie mehr umbenennen (würde localStorage-Fortschritt von Nutzern zerstören)
 - Ausnahme: Migration. Dann `umbenannt_von`-Feld im Modul-JSON setzen und Fortschritt in `progress.js` mitmigrieren
 
-### 12.2 Neue Registry-Felder (verbindlich)
+### 12.2 Registry als Single Source of Truth (verbindlich)
 
-Die `content/modules-registry.json` erhält pro Modul folgende Felder zusätzlich zu `id`, `title`, `type`:
+`content/modules-registry.json` ist die **einzige kanonische Quelle für organisatorische Modul-Metadaten**. Moduldateien enthalten primär Lerninhalt und dürfen diese Werte nicht als zweite Wahrheit pflegen.
+
+Pflichtfelder pro aktivem Modul:
 
 | Feld | Typ | Pflicht | Beschreibung |
 |---|---|---|---|
+| `id` | string | ja | stabile Modul-ID nach §12.1 |
+| `title` | string | ja | kanonischer Modultitel |
+| `type` | enum | ja | einer der fünf Standardmodultypen |
 | `kapitel` | number | ja | Kapitelnummer 1-14 aus CURRICULUM.md |
-| `reihenfolge` | number | ja | Sortierung innerhalb des Kapitels, Ganzzahl ab 1 |
+| `reihenfolge` | number | ja | Sortierung innerhalb des Kapitels |
 | `pflichtgrad` | enum | ja | `pflicht`, `vertiefung` oder `exkurs` |
-| `voraussetzungen` | array | nein | Liste von Modul-IDs, die sinnvoll vorher bearbeitet wurden |
-| `phase` | enum | nein | `MVP`, `P2`, `P3`, `P4`, `P5` — nur für internes Tracking, nicht in UI |
-| `mode` | enum | ja (v2.0) | `online_solo`, `praesenz_gekoppelt`, `hybrid` |
-| `lehrjahr` | number[] | ja (v2.0) | Lehrjahre, in denen das Modul sinnvoll ist (z.B. `[1,2]`) |
-| `tags` | string[] | ja (v2.0) | Inhalts-Tags für Redundanzcheck und Filter |
-| `estimatedMinutes` | number | ja (v2.0) | Erwartete Bearbeitungszeit |
-| `printable` | boolean | nein (v2.0) | Print-View verfügbar (Default true) |
-| `online_fallback` | object | nur bei `mode: hybrid` | `videoUrl`, `alternativeTask` |
+| `status` | enum | ja | `planned`, `draft`, `review`, `live` oder `legacy` |
+| `mode` | enum | ja | `online_solo`, `praesenz_gekoppelt`, `hybrid` |
+| `lehrjahr` | number[] | ja | sinnvolle Lehrjahre |
+| `tags` | string[] | ja | Filter, Suche, Redundanzcheck |
+| `estimatedMinutes` | number | ja | erwartete Bearbeitungszeit |
+| `printable` | boolean | nein | Default: true |
+| `voraussetzungen` | array | nein | sinnvoll vorher bearbeitete Modul-IDs |
+
+**Migrationsregel:** Legacy-`sequence`-Einträge dürfen während der V3-Umstellung noch mit `status: "legacy"` und `legacy: true` in der Registry stehen. Sie zählen nicht zum regulären Modulfortschritt und werden nicht als sechster Modultyp weiterentwickelt.
+
+Beim Laden eines Standardmoduls werden Registry-Metadaten mit dem Inhalts-JSON zusammengeführt; bei Doppelungen gewinnt die Registry.
+
 
 ### 12.3 Bearbeitungszeit-Obergrenzen pro Modultyp
 
@@ -376,9 +389,9 @@ Datei: `js/quiz-engine.js`
 - Persistenz in `mtr_rt_quiz_progress` (siehe §7.1).
 - Synchroner `onRunDone`-Callback **vor** Re-Render des Dashboards, um den Bug „nicht bearbeitet nach Abschluss" zu vermeiden.
 
-### 13.3 Standalone-Anbindung
+### 13.3 Legacy-Standalone-Anbindung
 
-Lernsequenzen und Standalones binden `quiz-engine.js` direkt ein und rufen `QuizEngine.start({...})`. Dieselbe Persistenz, dieselbe UI-Konvention. Inline-Items nur als Übergangslösung; Ziel ist Itembank-Referenz.
+Bestehende Standalones dürfen die gemeinsame `quiz-engine.js` während der Migration weiterverwenden. Neue Lerninhalte entstehen jedoch ausschließlich in der Haupt-App. Inline-Items bleiben nur als Migrationsbrücke zulässig; Ziel ist die zentrale Itembank.
 
 ### 13.4 Redundanzcheck
 
@@ -460,8 +473,8 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 | Punkt | Status |
 |---|---|
 | Itembank-Versionierung: Item-Update vs. Item-Replace bei Inhaltsänderung | offen, entscheiden sobald ≥30 Items existieren |
-| Lehrjahr-Filter im Dashboard-UI: Chips, Dropdown oder Toggle | offen, kommt mit `lernapp-implementierung` |
-| Redundanzcheck als GitHub Action statt nur lokal | offen, P3-Nice-to-have |
+| Lehrjahr-Filter im Dashboard-UI | V3: Dropdown als einfache, wartbare Standardlösung |
+| Redundanzcheck als GitHub Action statt nur lokal | später; lokales Tool bleibt Pflicht vor Releases |
 | Bilder-Support direkt in Quiz-Items (zusätzlich zu `image-analysis`-Typ) | offen, vorerst nein |
 
 ---
@@ -476,3 +489,4 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 | 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
 | 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `prostata-planungs-ct-enddarm` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
 | 2026-05-20 | §5.1 Push-Disziplin (Standalone ↔ Root) ergänzt: verpflichtender Pre-Push-Check auf gelöschte Root-Dateien bei Änderungen in Standalone-Ordnern. | Reaktion auf Incident 2026-05-19: Commit `e63211a` hat `index.html` im Root stillschweigend gelöscht, GitHub Pages lieferte bis zur Wiederherstellung 404. Strukturelle Schutzregel statt Einzelfall-Reparatur. |
+| 2026-09-28 | v3.0: `sequence` als aktiver Modultyp abgeschafft; Lernpfade als Komposition eingeführt; Registry zur kanonischen Metadatenquelle erklärt; Legacy-Migration, Medienregister und Content-Validator verbindlich ergänzt. | Vorbereitung des Vollausbaus auf die gesamte fachpraktische MTR-Ausbildung ohne Architektur-Drift. |
