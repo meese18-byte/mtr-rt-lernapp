@@ -26,7 +26,7 @@
 //     die Anti-Bug-Regel aus QUIZ-ENGINE-SPEC §4 eingehalten wird.
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
-import { esc } from '../util.js';
+import { esc , moduleContextLabel } from '../util.js';
 import { QuizEngine } from '../quiz-engine.js';
 import { mountExitSlip } from '../exit-slip.js';
 
@@ -40,7 +40,7 @@ export async function render(container, module) {
   const view = document.createElement('article');
   view.className = 'module-view quiz';
   view.innerHTML = `
-    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(module.category || '')}</p>
+    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <p class="muted">${esc(resolved.lead)}</p>
     <div class="quiz-host" id="quiz-host"></div>
