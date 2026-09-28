@@ -37,7 +37,8 @@ function defaultProgress() {
 function defaultSettings() {
   return {
     anrede: 'du',
-    lehrjahr: 'alle'
+    lehrjahr: 'alle',
+    pflichtgrad: 'alle'
   };
 }
 
