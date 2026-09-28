@@ -48,31 +48,28 @@ Ein Kapitel enthält 2-7 Module.
 
 ---
 
-## 3. MVP (Phase 1) – Was geht zuerst live
+## 3. Ausbauprinzip V3
 
-Nicht alle 14 Kapitel entstehen gleichzeitig.
-Der MVP besteht aus einem geschlossenen Themenkreis rund um das bestehende Referenzmodul Prostata-Enddarm.
+Der frühe MVP-Plan (8 Module rund um Prostata/Planungs-CT) hat seinen Zweck als Prototyp erfüllt. Für den geplanten Vollausbau wird nicht mehr nach P2/P3/P4/P5 gesteuert, sondern nach **curricularer Priorität und Modulstatus**.
 
-**Ziel**: Eine Azubine kann in 1-2 Lernsitzungen einen realen klinischen Prozess – Planungs-CT bis Bestrahlung Becken – in der App komplett durcharbeiten. Das MVP beweist, ob das Konzept trägt.
+### Verbindlicher Status pro Modul
 
-| Kapitel | Module (MVP-Phase 1) |
-|---|---|
-| 01 Orientierung | 01-aufbau-abteilung · 01-rollen-berufsgruppen · 01-tagesablauf |
-| 05 Planungs-CT | 05-ablauf-planungsct · 05-lagerung-immobilisierung · 05-enddarmvorbereitung-becken *(bestehendes Referenzmodul, umbenennen)* |
-| 09 Indikationen Becken | 09-prostata-grundlagen · 09-rektum-grundlagen |
+- `planned` – curricular vorgesehen, noch nicht ausgearbeitet
+- `draft` – fachlich/didaktisch in Bearbeitung
+- `review` – zur fachlichen Freigabe bereit
+- `live` – produktiv in der Haupt-App
+- `legacy` – Altinhalt während der V3-Migration; kein neuer Ausbau
 
-Zielzahl **MVP: 8 Module**. Arbeitsaufwand realistisch 20-30 Stunden.
+### Ausbau-Reihenfolge
 
-### Folgephasen
+1. Architektur V3 und Datenmodell stabilisieren.
+2. Vollständige Ausbildungs-Landkarte für Lehrjahr 1–3 erstellen.
+3. Einen Referenz-Lernpfad vollständig als Standardmodule umsetzen und testen.
+4. Danach themenweise Serienproduktion entlang des realen Unterrichts und der klinischen Relevanz.
+5. Legacy-Standalones werden als Content-Quelle ausgeschlachtet und anschließend archiviert.
 
-- **Phase 2 – Grundlagen nachziehen**: Kapitel 02, 03
-- **Phase 3 – Weitere Indikationen**: Kapitel 10, 11, 12
-- **Phase 4 – Prozessstationen komplettieren**: Kapitel 04, 06, 07, 08
-- **Phase 5 – Querschnitt und Prüfung**: Kapitel 13, 14
+**Regel:** Neue Inhalte entstehen nur noch in der Haupt-App und ausschließlich in einem der fünf Standardmodultypen.
 
-Phase 2-5 erst starten, wenn MVP in einer echten Testgruppe läuft und Feedback vorliegt.
-
----
 
 ## 4. Modul-ID-Schema
 
@@ -144,14 +141,14 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 
 | ID | Titel | Typ | Tag | Phase | Status |
 |---|---|---|---|---|---|
-| 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | MVP | ✅ *(umzubenennen, aktuell `prostata-planungs-ct-enddarm`)* |
-| 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | MVP | ✅ |
-| 01-rollen-berufsgruppen | Berufsgruppen und ihre Rollen | knowledge | pflicht | MVP | ⬜ |
-| 01-tagesablauf | Typischer Tagesablauf einer MTR | knowledge | pflicht | MVP | ⬜ |
-| 05-ablauf-planungsct | Ablauf eines Planungs-CT | knowledge | pflicht | MVP | ⬜ |
-| 05-lagerung-immobilisierung | Lagerung und Immobilisierung (Grundlagen) | knowledge | pflicht | MVP | ⬜ |
-| 09-prostata-grundlagen | Prostata – Grundlagen der Bestrahlung | knowledge | pflicht | MVP | ⬜ |
-| 09-rektum-grundlagen | Rektum – Grundlagen der Bestrahlung | knowledge | pflicht | MVP | ⬜ |
+| 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | Core | ✅ |
+| 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | Core | ✅ |
+| 01-rollen-berufsgruppen | Berufsgruppen und ihre Rollen | knowledge | pflicht | Core | ⬜ |
+| 01-tagesablauf | Typischer Tagesablauf einer MTR | knowledge | pflicht | Core | ⬜ |
+| 05-ablauf-planungsct | Ablauf eines Planungs-CT | knowledge | pflicht | Core | ⬜ |
+| 05-lagerung-immobilisierung | Lagerung und Immobilisierung (Grundlagen) | knowledge | pflicht | Core | ⬜ |
+| 09-prostata-grundlagen | Prostata – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
+| 09-rektum-grundlagen | Rektum – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
 
 ---
 
@@ -161,12 +158,13 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 |---|---|---|
 | 2026-04-18 | Curriculum initial angelegt, 14-Kapitel-Struktur, MVP Phase 1 mit 8 Modulen definiert | Roter Faden von Anfang an, Vermeidung Feature-Creep |
 | 2026-04-18 | Modul 01-aufbau-abteilung live (knowledge, 3 Verständnisfragen) | Erstes echtes MVP-Modul, Blaupause-Charakter für alle weiteren |
+| 2026-09-28 | V3-Ausbauprinzip eingeführt; altes Phasenmodell durch Modulstatus ersetzt; kanonische Prostata-ID migriert. | Vollausbau der fachpraktischen Ausbildung mit stabiler Architektur statt Prototyp-Phasen. |
 
 ---
 
 ## 10. Arbeitsprinzipien für Jan
 
 - **Erst Kapitel planen, dann Module bauen.** Kein spontanes Modul außerhalb der Kapitelstruktur.
-- **MVP zuerst zu Ende bringen**, bevor Phase 2 beginnt.
+- **Referenz-Lernpfad zuerst vollständig testen**, bevor themenweise Serienproduktion beginnt.
 - **Jede Kapitel-Änderung** wird zuerst hier im Änderungsprotokoll eingetragen, dann umgesetzt.
-- **Pflichtgrad ehrlich vergeben**: Wenn der MVP voll von `vertiefung` ist, ist der MVP falsch.
+- **Pflichtgrad ehrlich vergeben**: Kernmodule bleiben klar von Vertiefung und Exkurs getrennt.
