@@ -201,7 +201,7 @@ QuizEngine.start({
   inlineItems: null,  // alternativ: Array von Item-Objekten
   
   // Modul-Kontext für Persistenz
-  moduleId: "prostata-planungs-ct-enddarm",
+  moduleId: "05-enddarmvorbereitung-becken",
   
   // Optionale Frames
   frames: { "q-prostata-blase-01": { vor: "...", nach: "..." } },
