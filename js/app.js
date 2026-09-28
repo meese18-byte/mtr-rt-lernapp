@@ -52,9 +52,12 @@ async function renderDashboard() {
   const legacyModules = (registry.modules || []).filter(m => m.status === 'legacy' || m.legacy);
 
   const selectedYear = String(settings.lehrjahr || 'alle');
+  const selectedDuty = String(settings.pflichtgrad || 'alle');
   const visibleModules = activeModules.filter(m => {
-    if (selectedYear === 'alle') return true;
-    return Array.isArray(m.lehrjahr) && m.lehrjahr.map(String).includes(selectedYear);
+    const yearMatches = selectedYear === 'alle'
+      || (Array.isArray(m.lehrjahr) && m.lehrjahr.map(String).includes(selectedYear));
+    const dutyMatches = selectedDuty === 'alle' || m.pflichtgrad === selectedDuty;
+    return yearMatches && dutyMatches;
   });
 
   // V3: primär nach Kapitel, sekundär nach reihenfolge.
@@ -77,13 +80,20 @@ async function renderDashboard() {
       </div>
     </section>
 
-    <section class="dashboard-filter module-view" aria-label="Lehrjahr filtern">
+    <section class="dashboard-filter module-view" aria-label="Module filtern">
       <label for="dashboard-lehrjahr"><strong>Lehrjahr:</strong></label>
       <select id="dashboard-lehrjahr">
         <option value="alle" ${selectedYear === 'alle' ? 'selected' : ''}>Alle</option>
         <option value="1" ${selectedYear === '1' ? 'selected' : ''}>1. Lehrjahr</option>
         <option value="2" ${selectedYear === '2' ? 'selected' : ''}>2. Lehrjahr</option>
         <option value="3" ${selectedYear === '3' ? 'selected' : ''}>3. Lehrjahr</option>
+      </select>
+      <label for="dashboard-pflichtgrad"><strong>Pflichtgrad:</strong></label>
+      <select id="dashboard-pflichtgrad">
+        <option value="alle" ${selectedDuty === 'alle' ? 'selected' : ''}>Alle</option>
+        <option value="pflicht" ${selectedDuty === 'pflicht' ? 'selected' : ''}>Pflicht</option>
+        <option value="vertiefung" ${selectedDuty === 'vertiefung' ? 'selected' : ''}>Vertiefung</option>
+        <option value="exkurs" ${selectedDuty === 'exkurs' ? 'selected' : ''}>Exkurs</option>
       </select>
     </section>
 
@@ -92,7 +102,13 @@ async function renderDashboard() {
   `;
 
   viewEl.querySelector('#dashboard-lehrjahr').addEventListener('change', (e) => {
-    saveSettings({ ...settings, lehrjahr: e.target.value });
+    settings.lehrjahr = e.target.value;
+    saveSettings(settings);
+    renderDashboard();
+  });
+  viewEl.querySelector('#dashboard-pflichtgrad').addEventListener('change', (e) => {
+    settings.pflichtgrad = e.target.value;
+    saveSettings(settings);
     renderDashboard();
   });
 
@@ -154,6 +170,10 @@ function buildCard(mod, progress) {
     ? `<span class="badge">${Number(mod.estimatedMinutes)} Min</span>`
     : '';
 
+  const prereqHint = Array.isArray(mod.voraussetzungen) && mod.voraussetzungen.length
+    ? `<p class="module-prereq muted">Vorher sinnvoll: ${esc(mod.voraussetzungen.join(', '))}</p>`
+    : '';
+
   a.innerHTML = `
     <h3>${esc(mod.title)}</h3>
     <div class="meta">
@@ -163,6 +183,7 @@ function buildCard(mod, progress) {
       ${timeBadge}
       ${statusBadge}
     </div>
+    ${prereqHint}
   `;
   return a;
 }
@@ -280,7 +301,14 @@ async function renderEinstellungen() {
         <option value="2" ${String(settings.lehrjahr) === '2' ? 'selected' : ''}>2. Lehrjahr</option>
         <option value="3" ${String(settings.lehrjahr) === '3' ? 'selected' : ''}>3. Lehrjahr</option>
       </select>
-      <p class="muted">Der Filter steuert die Modulauswahl auf dem Dashboard. Baustein-Tiefenfilter werden im weiteren V3-Ausbau ergänzt.</p>
+      <label for="settings-pflichtgrad"><strong>Pflichtgrad filtern:</strong></label>
+      <select id="settings-pflichtgrad">
+        <option value="alle" ${String(settings.pflichtgrad) === 'alle' ? 'selected' : ''}>Alle</option>
+        <option value="pflicht" ${String(settings.pflichtgrad) === 'pflicht' ? 'selected' : ''}>Pflicht</option>
+        <option value="vertiefung" ${String(settings.pflichtgrad) === 'vertiefung' ? 'selected' : ''}>Vertiefung</option>
+        <option value="exkurs" ${String(settings.pflichtgrad) === 'exkurs' ? 'selected' : ''}>Exkurs</option>
+      </select>
+      <p class="muted">Die Filter steuern die Modulauswahl auf dem Dashboard. Baustein-Tiefenfilter werden im weiteren V3-Ausbau ergänzt.</p>
     </section>
 
     <section class="module-view">
@@ -309,7 +337,12 @@ async function renderEinstellungen() {
   `;
 
   viewEl.querySelector('#settings-lehrjahr').addEventListener('change', (e) => {
-    saveSettings({ ...settings, lehrjahr: e.target.value });
+    settings.lehrjahr = e.target.value;
+    saveSettings(settings);
+  });
+  viewEl.querySelector('#settings-pflichtgrad').addEventListener('change', (e) => {
+    settings.pflichtgrad = e.target.value;
+    saveSettings(settings);
   });
 
   viewEl.querySelector('#export').addEventListener('click', exportProgressAsFile);
