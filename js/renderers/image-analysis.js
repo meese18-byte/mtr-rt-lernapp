@@ -2,7 +2,7 @@
 // Unterstützt zwei Modi: Multiple-Choice (default) und Klickpunkt ("click-region").
 
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
-import { esc } from '../util.js';
+import { esc , moduleContextLabel } from '../util.js';
 import { mountExitSlip } from '../exit-slip.js';
 
 export async function render(container, module) {
@@ -17,7 +17,7 @@ export async function render(container, module) {
   const mode = body.mode === 'click-region' ? 'click' : 'mc';
 
   view.innerHTML = `
-    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(module.category)}</p>
+    <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <p>${esc(body.question || '')}</p>
     <div class="image-slot"></div>
