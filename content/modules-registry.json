@@ -1,7 +1,7 @@
 {
-  "version": 3,
-  "lastUpdated": "2026-05-18",
-  "schemaNote": "v2-Schema gemaess ARCHITECTURE.md v2.0 + architecture/MODUL-SCHEMA-V2.md. Pflichtfelder pro Modul: mode, lehrjahr, tags, estimatedMinutes, printable. Legacy-Felder (category, order, difficulty) bleiben uebergangsweise, werden vom v2-Renderer ignoriert.",
+  "version": 4,
+  "lastUpdated": "2026-09-28",
+  "schemaNote": "V3-Migration gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist nur noch als explizit markierter Legacy-Eintrag zulaessig.",
   "modules": [
     {
       "id": "01-aufbau-abteilung",
@@ -15,10 +15,19 @@
       "pflichtgrad": "pflicht",
       "phase": "MVP",
       "mode": "online_solo",
-      "lehrjahr": [1],
-      "tags": ["orientierung", "abteilung", "rollen", "einstieg"],
+      "lehrjahr": [
+        1
+      ],
+      "tags": [
+        "orientierung",
+        "abteilung",
+        "rollen",
+        "einstieg"
+      ],
       "estimatedMinutes": 15,
-      "printable": true
+      "printable": true,
+      "voraussetzungen": [],
+      "status": "live"
     },
     {
       "id": "prostata-planungs-ct-enddarm",
@@ -32,10 +41,22 @@
       "pflichtgrad": "pflicht",
       "phase": "MVP",
       "mode": "online_solo",
-      "lehrjahr": [2, 3],
-      "tags": ["prostata", "plct", "enddarm", "lagerung", "becken", "setup"],
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "prostata",
+        "plct",
+        "enddarm",
+        "lagerung",
+        "becken",
+        "setup"
+      ],
       "estimatedMinutes": 20,
-      "printable": true
+      "printable": true,
+      "voraussetzungen": [],
+      "status": "live"
     },
     {
       "id": "10-mamma-lernsequenz",
@@ -50,10 +71,24 @@
       "phase": "P3",
       "file": "content/lernsequenzen/10-mamma-lernsequenz.html",
       "mode": "online_solo",
-      "lehrjahr": [2, 3],
-      "tags": ["mamma", "brustkrebs", "lernsequenz", "plct", "dibh", "lagerung", "praxisrotation"],
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "mamma",
+        "brustkrebs",
+        "lernsequenz",
+        "plct",
+        "dibh",
+        "lagerung",
+        "praxisrotation"
+      ],
       "estimatedMinutes": 90,
-      "printable": true
+      "printable": true,
+      "voraussetzungen": [],
+      "status": "legacy",
+      "legacy": true
     },
     {
       "id": "11-bronchial-ca-lernsequenz",
@@ -62,17 +97,35 @@
       "category": "Indikationen II",
       "order": 20,
       "difficulty": "fortgeschritten",
-      "kapitel": 11,
-      "reihenfolge": 1,
+      "kapitel": 10,
+      "reihenfolge": 2,
       "pflichtgrad": "pflicht",
-      "voraussetzungen": ["10-mamma-lernsequenz"],
+      "voraussetzungen": [
+        "10-mamma-lernsequenz"
+      ],
       "phase": "P3",
       "file": "content/lernsequenzen/11-bronchial-ca-lernsequenz.html",
       "mode": "online_solo",
-      "lehrjahr": [2, 3],
-      "tags": ["bronchial-ca", "nsclc", "lernsequenz", "plct", "4dct", "itv", "dibh", "lagerung", "oar", "atemmanagement"],
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "bronchial-ca",
+        "nsclc",
+        "lernsequenz",
+        "plct",
+        "4dct",
+        "itv",
+        "dibh",
+        "lagerung",
+        "oar",
+        "atemmanagement"
+      ],
       "estimatedMinutes": 70,
-      "printable": true
+      "printable": true,
+      "status": "legacy",
+      "legacy": true
     },
     {
       "id": "14-fallvorstellung-wbrt",
@@ -86,10 +139,19 @@
       "voraussetzungen": [],
       "phase": "P3",
       "mode": "online_solo",
-      "lehrjahr": [3],
-      "tags": ["wbrt", "ganzhirn", "fallvorstellung", "pruefung", "transfer"],
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "wbrt",
+        "ganzhirn",
+        "fallvorstellung",
+        "pruefung",
+        "transfer"
+      ],
       "estimatedMinutes": 30,
-      "printable": true
+      "printable": true,
+      "status": "live"
     },
     {
       "id": "14-fallvorstellung-mamma",
@@ -103,10 +165,19 @@
       "voraussetzungen": [],
       "phase": "P3",
       "mode": "online_solo",
-      "lehrjahr": [3],
-      "tags": ["mamma", "dibh", "fallvorstellung", "pruefung", "transfer"],
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "mamma",
+        "dibh",
+        "fallvorstellung",
+        "pruefung",
+        "transfer"
+      ],
       "estimatedMinutes": 30,
-      "printable": true
+      "printable": true,
+      "status": "live"
     },
     {
       "id": "14-plct-stoerfall-hno",
@@ -120,10 +191,19 @@
       "voraussetzungen": [],
       "phase": "P3",
       "mode": "online_solo",
-      "lehrjahr": [3],
-      "tags": ["hno", "plct", "zahnschiene", "stoerfall", "pruefung"],
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "hno",
+        "plct",
+        "zahnschiene",
+        "stoerfall",
+        "pruefung"
+      ],
       "estimatedMinutes": 25,
-      "printable": true
+      "printable": true,
+      "status": "live"
     },
     {
       "id": "14-plct-stoerfall-prostata",
@@ -137,10 +217,19 @@
       "voraussetzungen": [],
       "phase": "P3",
       "mode": "online_solo",
-      "lehrjahr": [3],
-      "tags": ["prostata", "plct", "blase", "stoerfall", "pruefung"],
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "prostata",
+        "plct",
+        "blase",
+        "stoerfall",
+        "pruefung"
+      ],
       "estimatedMinutes": 25,
-      "printable": true
+      "printable": true,
+      "status": "live"
     },
     {
       "id": "14-quiz-gesamtwissen",
@@ -154,10 +243,18 @@
       "voraussetzungen": [],
       "phase": "P3",
       "mode": "online_solo",
-      "lehrjahr": [3],
-      "tags": ["pruefung", "plct", "fallvorstellung", "quiz-gesamtwissen"],
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "pruefung",
+        "plct",
+        "fallvorstellung",
+        "quiz-gesamtwissen"
+      ],
       "estimatedMinutes": 30,
-      "printable": true
+      "printable": true,
+      "status": "live"
     }
   ]
 }
