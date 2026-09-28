@@ -263,9 +263,22 @@ async function renderPruefung() {
 
 async function renderEinstellungen() {
   const progress = loadProgress();
+  const settings = loadSettings();
   const count = Object.keys(progress.modules || {}).length;
   viewEl.innerHTML = `
     <h1>Einstellungen</h1>
+
+    <section class="module-view">
+      <h2>Lernansicht</h2>
+      <label for="settings-lehrjahr"><strong>Lehrjahr filtern:</strong></label>
+      <select id="settings-lehrjahr">
+        <option value="alle" ${String(settings.lehrjahr) === 'alle' ? 'selected' : ''}>Alle Lehrjahre</option>
+        <option value="1" ${String(settings.lehrjahr) === '1' ? 'selected' : ''}>1. Lehrjahr</option>
+        <option value="2" ${String(settings.lehrjahr) === '2' ? 'selected' : ''}>2. Lehrjahr</option>
+        <option value="3" ${String(settings.lehrjahr) === '3' ? 'selected' : ''}>3. Lehrjahr</option>
+      </select>
+      <p class="muted">Der Filter steuert die Modulauswahl auf dem Dashboard. Baustein-Tiefenfilter werden im weiteren V3-Ausbau ergänzt.</p>
+    </section>
 
     <section class="module-view">
       <h2>Fortschritt exportieren und importieren</h2>
@@ -291,6 +304,10 @@ async function renderEinstellungen() {
       <p>Diese Lernapp läuft vollständig im Browser. Es werden keine Daten an Server übertragen, keine Cookies gesetzt und keine Analyse-Tools eingebunden. Dein Fortschritt liegt nur in deinem Browser (<code>localStorage</code>).</p>
     </section>
   `;
+
+  viewEl.querySelector('#settings-lehrjahr').addEventListener('change', (e) => {
+    saveSettings({ ...settings, lehrjahr: e.target.value });
+  });
 
   viewEl.querySelector('#export').addEventListener('click', exportProgressAsFile);
   viewEl.querySelector('#importFile').addEventListener('change', async (e) => {
