@@ -15,40 +15,36 @@
   ],
   "body": {
     "mode": "mc",
-    "question": "Welche Aussage beschreibt die vier Darstellungen am besten?",
+    "question": "Welche Aussage passt zum Vergleich?",
     "image": {
       "src": "./media/images/dosis-technikvergleich-beta.svg",
       "alt": "Vier schematische Beckenquerschnitte: Vier-Felder-Box, 3D-konformale Sechs-Felder-Technik, IMRT Step-and-Shoot und VMAT.",
-      "caption": "Gleiche Anatomie, vier Applikationsprinzipien. Vergleiche vor allem Einstrahlrichtungen und Form der Dosisverteilung."
+      "caption": "Gleiche Anatomie, vier Applikationsprinzipien. Vergleiche vor allem Einstrahlrichtungen und Form der Dosisverteilung.",
+      "layout": "wide-scroll"
     },
     "options": [
       {
-        "label": "Von der Boxtechnik zu 3D-CRT und IMRT/VMAT wird die Dosis gezielter geformt. IMRT nutzt feste Winkel mit Segmenten; VMAT appliziert während der Rotation.",
+        "label": "Box und 3D-CRT nutzen feste Felder. IMRT moduliert feste Winkel. VMAT moduliert während der Rotation.",
         "correct": true,
-        "feedback": "Richtig. Entscheidend ist nicht nur die Zahl der Felder, sondern wie die Intensität geformt und aus welchen Winkeln appliziert wird."
+        "feedback": "Richtig. Das ist der zentrale Unterschied der vier Applikationsprinzipien."
       },
       {
-        "label": "Alle vier Techniken unterscheiden sich nur durch die Zahl der Fraktionen.",
+        "label": "Alle vier Techniken unterscheiden sich nur durch die Fraktionierung.",
         "correct": false,
-        "feedback": "Nein. Hier wird die Applikation innerhalb einer Fraktion verglichen, nicht das Fraktionierungsschema."
+        "feedback": "Nein. Verglichen wird hier die Art der Dosisapplikation innerhalb einer Fraktion."
       },
       {
-        "label": "IMRT und VMAT sind gleich: Beide bestrahlen ausschließlich aus vier festen Richtungen.",
+        "label": "IMRT und VMAT bestrahlen beide nur aus vier festen Richtungen.",
         "correct": false,
-        "feedback": "Nein. Step-and-Shoot-IMRT arbeitet mit festen Gantrywinkeln und Segmenten. VMAT moduliert während einer Gantryrotation."
-      },
-      {
-        "label": "Die Vier-Felder-Box ist die komplexeste Technik, weil vier Felder gleichzeitig appliziert werden.",
-        "correct": false,
-        "feedback": "Nein. Die Felder werden nacheinander appliziert. IMRT und VMAT besitzen eine deutlich komplexere Intensitätsmodulation."
+        "feedback": "Nein. Step-and-Shoot-IMRT nutzt feste Winkel. VMAT appliziert während der Gantryrotation."
       }
     ],
     "reinforcement": "Vergleiche immer zwei Dinge getrennt: 1. Aus welchen Richtungen kommt die Strahlung? 2. Wird die Intensität innerhalb der Felder oder während der Rotation moduliert?",
     "analysisPrompts": [
-      "Welche Einstrahlrichtungen erkennst du?",
-      "Wie verändert sich die Form der Hochdosisregion?",
-      "Wo siehst du den größten Unterschied zwischen Boxtechnik und IMRT/VMAT?",
-      "Was unterscheidet Step-and-Shoot-IMRT von VMAT?"
+      "Zähle die festen Einstrahlrichtungen bei Technik 1 und 2.",
+      "Welche Technik zeigt die engste Hochdosisregion um das PTV?",
+      "Woran erkennst du die Step-and-Shoot-IMRT? Nenne ein Merkmal.",
+      "Woran erkennst du die VMAT? Nenne ein Merkmal."
     ]
   }
 }
