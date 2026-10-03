@@ -146,3 +146,10 @@ Nach Dosisverteilung und QM/Risikomanagement werden fünf Fragen beantwortet:
 5. Was wird für Beta 2 gestrichen, vereinfacht oder ausgebaut?
 
 **Entscheidungsregel:** Nur Funktionen mit erkennbarem Unterrichts- oder Effizienzgewinn werden weitergeführt.
+
+
+## 10. Konkreter Pilot-Unterricht
+
+Der 160-Minuten-Pilot fuer Dosisverteilung ist dokumentiert unter:
+
+- `docs/UNTERRICHTSPLAN-DOSISVERTEILUNG-3LJ-BETA.md`
