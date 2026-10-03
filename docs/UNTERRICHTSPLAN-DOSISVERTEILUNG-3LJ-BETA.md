@@ -54,7 +54,7 @@ Die Lernenden koennen am Ende der Einheit:
 |---:|---|---|---|---|
 | 0–10 | Einstieg | Vier unterschiedliche Dosisverteilungen zeigen. Frage: **„Was ist gleich? Was ist unterschiedlich?“** Noch keine Techniknamen verlangen. | Bildimpuls, Think-Pair-Share | Beamer, 4 Planbilder |
 | 10–25 | Gemeinsame Basis | Konformitaet, Homogenitaet, Dosisgradient, Isodosen. Leitfrage: **„Woran erkennst du einen guten Plan?“** | Kurzinput + Lehrgespraech | 4–5 Folien / Tafel |
-| 25–40 | Beta-App 1 | Knowledge-Modul bearbeiten. Auftrag: **„Bearbeite das Modul. Notiere einen Punkt, der neu oder unklar ist.“** | Einzelarbeit / Partner bei Bedarf | Lern-App, QR-Code |
+| 25–40 | Beta-App 1 | Ca. 8 Min Knowledge-Modul. Danach kurz zu zweit: **„Was war neu oder unklar?“** | Einzelarbeit → 2er-Austausch | Lern-App, QR-Code |
 | 40–65 | Technikvergleich | Gruppen vergleichen 4 Dosisverteilungen: Vier-Felder-Box, 3D-CRT mit 6 Feldern, IMRT Step-and-Shoot und VMAT. | Gruppenarbeit 3–4 Pers. | Planbilder / App-Element / Arbeitskarte |
 | 65–80 | Auswertung Technik | Ergebnisse vergleichen. Fokus: **„Woran habt ihr die Technik erkannt?“** Verbindung zu Konformitaet, Homogenitaet, Gradient. | Plenum, Teach-Back | Beamer / Tafel |
 | 80–95 | DVH verstehen | DVH als Zusammenfassung. Grundprinzip von Dosis- und Volumenkennwerten. Leitfrage: **„Was kann ich aus der Kurve lesen?“** | Kurzinput + gelenktes Fragen | DVH-Abbildung |
@@ -186,3 +186,10 @@ Lernende, 3 kurze Rueckmeldungen:
 2. **„Wo war unklar, was du tun solltest?“**
 3. **„Was wuerdest du fuer die Wiederholung wieder nutzen?“**
 
+
+
+## 10. Offener visueller Baustein vor dem Praxistest
+
+Der Planfall ist aktuell fachlich als Textfall funktionsfaehig. Fuer die finale Beta soll er nach Moeglichkeit durch ein **anonymisiertes CBCT-Beispiel mit veraenderter Becken-/Rektumanatomie** ergaenzt werden.
+
+Bis ein geeignetes klinisches Bild vorliegt, wird **kein kuenstlich realistisch wirkendes CBCT** als Ersatz verwendet. Der Textfall bleibt der sichere Fallback.
