@@ -61,9 +61,16 @@ export async function render(container, module) {
 
 function renderMCMode(imageSlot, interact, feedbackSlot, img, body, module) {
   const fig = document.createElement('figure');
+  if (img.layout === 'wide-scroll') fig.className = 'wide-image-figure';
   fig.innerHTML = `<img src="${esc(img.src)}" alt="${esc(img.alt || '')}">`;
   if (img.caption) fig.innerHTML += `<figcaption>${esc(img.caption)}</figcaption>`;
   imageSlot.appendChild(fig);
+  if (img.layout === 'wide-scroll') {
+    const hint = document.createElement('p');
+    hint.className = 'muted wide-image-hint';
+    hint.textContent = 'Auf kleinen Bildschirmen: seitlich wischen, um alle vier Techniken zu vergleichen.';
+    imageSlot.appendChild(hint);
+  }
 
   const ul = document.createElement('ul');
   ul.className = 'options';
