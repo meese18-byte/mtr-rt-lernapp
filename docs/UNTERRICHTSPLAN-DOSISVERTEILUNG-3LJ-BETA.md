@@ -15,7 +15,7 @@ Die Lernenden koennen am Ende der Einheit:
 
 1. Konformitaet, Homogenitaet und Dosisgradient unterscheiden.
 2. Isodosen in einem Bestrahlungsplan grundlegend lesen.
-3. typische Dosisverteilungen von Gegenfeldern, 3D-CRT/Mehrfeld und IMRT/VMAT vergleichen.
+3. typische Dosisverteilungen von Vier-Felder-Box, 3D-CRT, IMRT und VMAT vergleichen.
 4. zentrale DVH-Angaben grundlegend einordnen.
 5. erklaeren, was ein DVH zeigt und was es nicht zeigt.
 6. Planungssituation und tagesaktuelle Anatomie voneinander unterscheiden.
@@ -29,7 +29,7 @@ Die Lernenden koennen am Ende der Einheit:
 - Konformitaet, Homogenitaet, Dosisgradient
 - Isodosen als raeumliche Dosisdarstellung
 - Zusammenhang: Bestrahlungstechnik -> Dosisverteilung
-- Gegenfelder -> 3D-CRT/Mehrfeld -> IMRT/VMAT
+- Vier-Felder-Box -> 3D-CRT (6 Felder) -> IMRT (Step-and-Shoot) -> VMAT
 - DVH: Dosis-Volumen-Beziehung
 - DVH-Kennwerte im Grundprinzip
 - Grenze des DVH: keine raeumliche Lageinformation, keine tagesaktuelle Anatomie
@@ -41,7 +41,7 @@ Die Lernenden koennen am Ende der Einheit:
 - Hilfsmittel zur Dosisanpassung
 
 ### Nicht vertiefen
-- Step-and-Shoot vs. Sliding Window
+- keine vertiefte Segment-/Leaf-Dynamik; Step-and-Shoot nur als Grundprinzip im Vergleich zu VMAT
 - DIBH/Gating
 - Stereotaxie/SRS/SBRT
 - vollstaendiger IGRT-Workflow
@@ -52,10 +52,10 @@ Die Lernenden koennen am Ende der Einheit:
 
 | Zeit | Phase | Inhalt / Arbeitsauftrag | Methode | Material / Medium |
 |---:|---|---|---|---|
-| 0–10 | Einstieg | Drei unterschiedliche Dosisverteilungen zeigen. Frage: **„Was ist gleich? Was ist unterschiedlich?“** Noch keine Techniknamen verlangen. | Bildimpuls, Think-Pair-Share | Beamer, 3 Planbilder |
+| 0–10 | Einstieg | Vier unterschiedliche Dosisverteilungen zeigen. Frage: **„Was ist gleich? Was ist unterschiedlich?“** Noch keine Techniknamen verlangen. | Bildimpuls, Think-Pair-Share | Beamer, 4 Planbilder |
 | 10–25 | Gemeinsame Basis | Konformitaet, Homogenitaet, Dosisgradient, Isodosen. Leitfrage: **„Woran erkennst du einen guten Plan?“** | Kurzinput + Lehrgespraech | 4–5 Folien / Tafel |
 | 25–40 | Beta-App 1 | Knowledge-Modul bearbeiten. Auftrag: **„Bearbeite das Modul. Notiere einen Punkt, der neu oder unklar ist.“** | Einzelarbeit / Partner bei Bedarf | Lern-App, QR-Code |
-| 40–65 | Technikvergleich | Gruppen ordnen 3 Dosisverteilungen den Grundprinzipien Gegenfeld, 3D-CRT/Mehrfeld, IMRT/VMAT zu. | Gruppenarbeit 3–4 Pers. | Planbilder / App-Element / Arbeitskarte |
+| 40–65 | Technikvergleich | Gruppen vergleichen 4 Dosisverteilungen: Vier-Felder-Box, 3D-CRT mit 6 Feldern, IMRT Step-and-Shoot und VMAT. | Gruppenarbeit 3–4 Pers. | Planbilder / App-Element / Arbeitskarte |
 | 65–80 | Auswertung Technik | Ergebnisse vergleichen. Fokus: **„Woran habt ihr die Technik erkannt?“** Verbindung zu Konformitaet, Homogenitaet, Gradient. | Plenum, Teach-Back | Beamer / Tafel |
 | 80–95 | DVH verstehen | DVH als Zusammenfassung. Grundprinzip von Dosis- und Volumenkennwerten. Leitfrage: **„Was kann ich aus der Kurve lesen?“** | Kurzinput + gelenktes Fragen | DVH-Abbildung |
 | 95–110 | DVH-Mikroaufgaben | 3 kurze Aufgaben: **„Lies den Wert ab.“ – „Vergleiche zwei Kurven.“ – „Was zeigt das DVH nicht?“** | Partnerarbeit | App oder 1 Arbeitsblatt |
@@ -72,7 +72,7 @@ Die Lernenden koennen am Ende der Einheit:
 
 ### Auftrag fuer die Lernenden
 
-**Schaut euch die drei Dosisverteilungen an.**
+**Schaut euch die vier Dosisverteilungen an.**
 
 1. Ordnet jede Verteilung einer Technik zu.
 2. Markiert die Hochdosisregion.
@@ -151,7 +151,7 @@ Beispiele:
 
 ### Vor der Stunde vorbereiten
 - QR-Code / Link zur Beta-Lernapp testen
-- 3 Dosisverteilungen fuer den Technikvergleich bereitstellen
+- 4 Dosisverteilungen fuer den Technikvergleich bereitstellen
 - 1 DVH-Abbildung bereitstellen
 - Case-Modul testen
 - optional Kahoot-Import bereitstellen
