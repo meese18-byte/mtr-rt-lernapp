@@ -1,0 +1,48 @@
+{
+  "id": "03-dosisverteilung-isodosen",
+  "learningGoals": [
+    "Die Lernenden erklären die Grundidee einer Dosisverteilung und die Funktion von Isodosen.",
+    "Die Lernenden unterscheiden Konformität und Homogenität auf Begriffsebene.",
+    "Die Lernenden beschreiben, welche Information ein DVH liefert und welche Information darin verloren geht.",
+    "Die Lernenden leiten aus einer auffälligen Darstellung Fragen für die Plausibilitätsprüfung ab, ohne eigenständig eine Planfreigabe zu ersetzen."
+  ],
+  "examRelevance": "3. Lehrjahr – Dosisverteilung, Planverständnis und fachpraktische Plausibilisierung im strahlentherapeutischen Workflow.",
+  "relatedModules": [
+    "06-plancheck-dvh-isodosen"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "intro": "Beta-Modul. Fachinhalt wird aus dem vorhandenen Lehr-Lernscript Dosisverteilung & Isodosen abgeleitet und vor Veröffentlichung fachlich geprüft.",
+    "sections": [
+      {
+        "id": "ziel",
+        "type": "text",
+        "body": "Warum betrachten wir Dosisverteilungen? Ziel ist, die räumliche Dosis im Zielvolumen und die Belastung umliegender Strukturen beurteilen zu können.",
+        "visibility": "default",
+        "lehrjahr": [
+          3
+        ],
+        "schwierigkeit": "basic",
+        "tags": [
+          "dosisverteilung"
+        ]
+      },
+      {
+        "id": "begriffe",
+        "type": "callout",
+        "body": "Beta-Fokus: Isodosen, Konformität, Homogenität und DVH werden nicht isoliert auswendig gelernt, sondern als Werkzeuge zum Lesen und Hinterfragen eines Bestrahlungsplans.",
+        "visibility": "default",
+        "lehrjahr": [
+          3
+        ],
+        "schwierigkeit": "basic",
+        "tags": [
+          "isodosen",
+          "dvh",
+          "planverstaendnis"
+        ]
+      }
+    ],
+    "itemRefs": []
+  }
+}
