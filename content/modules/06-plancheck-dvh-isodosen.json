@@ -1,0 +1,48 @@
+{
+  "id": "06-plancheck-dvh-isodosen",
+  "learningGoals": [
+    "Die Lernenden strukturieren einen einfachen Plancheck vor der Behandlung.",
+    "Die Lernenden unterscheiden offensichtliche Inkonsistenzen von klinisch zu bewertenden Planparametern.",
+    "Die Lernenden benennen, wann eine Auffälligkeit vor der Behandlung geklärt und eskaliert werden muss."
+  ],
+  "examRelevance": "3. Lehrjahr – Transfer von Dosis-/Planwissen in eine sichere MTR-Handlung.",
+  "relatedModules": [
+    "03-dosisverteilung-isodosen"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "scenario": {
+      "situation": "Vor einer Ersteinstellung prüfen Sie einen freigegeben wirkenden Bestrahlungsplan. Verschreibung, Planangaben und dargestellte Dosisinformationen wirken an einzelnen Stellen nicht schlüssig. Zusätzlich tauchen Kennwerte auf, die anatomisch nicht zum behandelten Körperbereich passen.",
+      "question": "Wie gehen Sie strukturiert vor, bevor die Behandlung begonnen wird?"
+    },
+    "options": [
+      {
+        "label": "Behandlung starten und Auffälligkeiten später dokumentieren.",
+        "correct": false,
+        "feedback": "Nicht geeignet. Ungeklärte Diskrepanzen werden vor der Behandlung geklärt."
+      },
+      {
+        "label": "Verschreibung, Patient/Plan-Zuordnung und relevante Planinformationen systematisch abgleichen und Unstimmigkeiten vor Behandlung eskalieren.",
+        "correct": true,
+        "feedback": "Das ist der sichere Grundweg. Die MTR plausibilisiert und klärt Widersprüche, ohne die fachliche Planfreigabe eigenständig zu ersetzen."
+      },
+      {
+        "label": "Nur das DVH betrachten; wenn die Kurven plausibel aussehen, reicht das.",
+        "correct": false,
+        "feedback": "Zu eng. Ein DVH ersetzt weder räumliche Isodosenbeurteilung noch die Prüfung von Zuordnung, Verschreibung und Workflow."
+      }
+    ],
+    "reinforcement": "Beta-Fokus: Planlesen bedeutet nicht, die Bestrahlungsplanung zu übernehmen. Es bedeutet, relevante Informationen zu verstehen, offensichtliche Widersprüche zu erkennen und vor der Anwendung sicher zu klären.",
+    "followUpQuiz": {
+      "lead": "Masterfragen werden nach fachlicher Verifikation aus der zentralen Itembank ergänzt.",
+      "itemRefs": [],
+      "frames": {},
+      "engineOptions": {
+        "mode": "self-first",
+        "leitner": true,
+        "shuffle": false
+      },
+      "passThreshold": 0.66
+    }
+  }
+}
