@@ -49,6 +49,14 @@ Typische Angaben sind:
 - **D2:** hoher Dosisbereich im Volumen
 - **Vx:** Anteil des Volumens, der mindestens eine bestimmte Dosis erhält
 
+![Schematisches kumulatives DVH mit PTV und zwei Risikoorganen](./media/images/dvh-beta-schematisch.svg)
+
+**Schau kurz auf die Kurven:**
+
+- Welche Kurve gehört zum PTV?
+- Welches OAR hat bei 40 Gy das größere bestrahlte Volumen?
+- Welche Information fehlt trotz des DVH?
+
 Der entscheidende Haken:
 
 > **Ein DVH zeigt wie viel Dosis ein Volumen bekommt – aber nicht, wo diese Dosis liegt.**
