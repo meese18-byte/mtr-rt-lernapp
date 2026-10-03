@@ -197,3 +197,45 @@ Eine Frage darf erst in die zentrale Itembank, wenn:
 - der MTR-Handlungsrahmen korrekt abgegrenzt ist,
 - die Erklaerung den Grund fuer richtig/falsch enthaelt.
 
+
+
+## 12. Sprachstandard fuer Aufgaben
+
+Die Beta verwendet bewusst eine klare Erwachsenenbildungssprache. Fachliche Tiefe bleibt erhalten, die Aufgabenformulierung wird jedoch sprachlich vereinfacht.
+
+### Verbindliche Regeln
+
+- Eine Aufgabe fragt moeglichst nur **eine Sache gleichzeitig**.
+- Der Arbeitsauftrag steht **am Satzanfang**.
+- Kurze Verben bevorzugen: **Nenne, Ordne zu, Vergleiche, Begruende, Entscheide, Markiere, Erklaere.**
+- Keine unnoetigen Einleitungen wie "Setzen Sie sich mit ... auseinander" oder "Leiten Sie unter Beruecksichtigung ... her".
+- Fachbegriffe bleiben erhalten, wenn sie Lerngegenstand sind.
+- Zusatzbedingungen werden getrennt und sichtbar angegeben.
+- Wenn mehrere Schritte noetig sind, werden sie nummeriert.
+- Eine Frage soll nach einmaligem Lesen erkennen lassen, **was als Antwort erwartet wird**.
+- Antworttiefe wird konkret gemacht: z. B. "Nenne zwei Gruende" statt "Erlaeutere ausfuehrlich".
+- Keine kuenstlich akademische Sprache, wenn ein kurzer Fachsatz dasselbe leistet.
+
+### Beispiel
+
+Zu komplex:
+"Beurteilen Sie unter Einbeziehung der dargestellten Dosisverteilung und der bekannten Prinzipien der Bestrahlungsplanung, inwiefern die vorliegende Technik hinsichtlich Konformitaet und Schonung der Risikoorgane als plausibel einzustufen ist."
+
+Beta-Fassung:
+"Beurteile den Plan: Ist die Dosis gut an das Zielvolumen angepasst? Nenne zwei Gruende."
+
+Zu komplex:
+"Leiten Sie aus dem vorliegenden Arbeitsszenario die sich fuer die MTR ergebenden Handlungsnotwendigkeiten ab."
+
+Beta-Fassung:
+"Was musst du als MTR jetzt tun? Nenne die Schritte in der richtigen Reihenfolge."
+
+### Qualitaetscheck vor Freigabe
+
+Jede Aufgabe wird vor Veroeffentlichung mit drei Fragen geprueft:
+
+1. Ist sofort klar, was die Lernenden tun sollen?
+2. Kann der Satz kuerzer werden, ohne fachliche Information zu verlieren?
+3. Gibt es eine Formulierung, die zwei verschiedene Interpretationen zulaesst?
+
+Wenn Frage 1 mit Nein oder Frage 3 mit Ja beantwortet wird, wird die Aufgabe umformuliert.
