@@ -1,6 +1,6 @@
 // app.js - Bootstrap, Router, Dashboard, Einstellungen
 
-import { loadRegistry, loadModule } from './registry.js';
+import { loadRegistry, loadModule, loadLearningPaths } from './registry.js';
 import { loadProgress, loadSettings, saveSettings, exportProgressAsFile, importProgressFromFile, resetProgress } from './storage.js';
 import { getModuleProgress, getOverallProgress } from './progress.js';
 import { esc, chapterLabel } from './util.js';
@@ -27,6 +27,9 @@ async function route() {
     } else if (hash.startsWith('/module/')) {
       const id = hash.substring('/module/'.length);
       await renderModule(id);
+    } else if (hash.startsWith('/path/')) {
+      const id = hash.substring('/path/'.length);
+      await renderLearningPath(id);
     } else if (hash.startsWith('/info/')) {
       const id = hash.substring('/info/'.length);
       await renderInfotextPage(id);
@@ -44,11 +47,11 @@ async function route() {
 }
 
 async function renderDashboard() {
-  const registry = await loadRegistry();
+  const [registry, learningPaths] = await Promise.all([loadRegistry(), loadLearningPaths()]);
   const settings = loadSettings();
   const overall = getOverallProgress(registry);
 
-  const activeModules = (registry.modules || []).filter(m => m.status !== 'legacy' && !m.legacy);
+  const activeModules = (registry.modules || []).filter(m => ['draft', 'review', 'live'].includes(m.status) && !m.legacy);
   const legacyModules = (registry.modules || []).filter(m => m.status === 'legacy' || m.legacy);
 
   const selectedYear = String(settings.lehrjahr || 'alle');
@@ -58,6 +61,11 @@ async function renderDashboard() {
       || (Array.isArray(m.lehrjahr) && m.lehrjahr.map(String).includes(selectedYear));
     const dutyMatches = selectedDuty === 'alle' || m.pflichtgrad === selectedDuty;
     return yearMatches && dutyMatches;
+  });
+
+  const visiblePaths = (learningPaths.paths || []).filter(path => {
+    return selectedYear === 'alle'
+      || (Array.isArray(path.lehrjahr) && path.lehrjahr.map(String).includes(selectedYear));
   });
 
   // V3: primär nach Kapitel, sekundär nach reihenfolge.
@@ -97,6 +105,8 @@ async function renderDashboard() {
       </select>
     </section>
 
+    ${visiblePaths.length ? '<section id="learning-paths" class="category-block"><h2>Lernpfade</h2><p class="muted">Module in sinnvoller Reihenfolge bearbeiten.</p><div class="module-grid"></div></section>' : ''}
+
     <div id="chapters"></div>
     ${legacyModules.length ? '<section id="legacy-modules" class="legacy-block"><h2>Bestehende Lernsequenzen · Migration</h2><p class="muted">Diese älteren Mini-Apps bleiben vorübergehend erreichbar, zählen aber nicht zum regulären Modulfortschritt.</p><div class="module-grid"></div></section>' : ''}
   `;
@@ -112,6 +122,33 @@ async function renderDashboard() {
     renderDashboard();
   });
 
+  const pathGrid = viewEl.querySelector('#learning-paths .module-grid');
+  if (pathGrid) {
+    const activeIds = new Set(activeModules.map(m => m.id));
+    visiblePaths.forEach(path => {
+      const modules = (path.moduleIds || [])
+        .filter(id => activeIds.has(id))
+        .map(id => registry.modules.find(m => m.id === id))
+        .filter(Boolean);
+      if (!modules.length) return;
+
+      const completed = modules.filter(m => getModuleProgress(m.id).status === 'completed').length;
+      const card = document.createElement('a');
+      card.className = 'module-card';
+      card.href = '#/path/' + path.id;
+      card.setAttribute('aria-label', 'Lernpfad öffnen: ' + path.title);
+      card.innerHTML = `
+        <h3>${esc(path.title)}</h3>
+        <div class="meta">
+          <span class="badge">Lernpfad</span>
+          <span class="badge">${modules.length} Module</span>
+          <span class="badge">${completed}/${modules.length} abgeschlossen</span>
+        </div>
+        <p class="muted">In festgelegter Reihenfolge bearbeiten.</p>
+      `;
+      pathGrid.appendChild(card);
+    });
+  }
   const chapterBlock = viewEl.querySelector('#chapters');
   const chapterNumbers = Object.keys(byChapter).map(Number).sort((a, b) => a - b);
 
@@ -206,6 +243,42 @@ function pflichtgradLabel(value) {
   }[value] || value;
 }
 
+async function renderLearningPath(id) {
+  const [registry, learningPaths] = await Promise.all([loadRegistry(), loadLearningPaths()]);
+  const path = (learningPaths.paths || []).find(p => p.id === id);
+
+  if (!path) {
+    viewEl.innerHTML = '<p>Lernpfad nicht gefunden. <a href="#/">Zur Startseite</a>.</p>';
+    return;
+  }
+
+  const modules = (path.moduleIds || [])
+    .map(moduleId => registry.modules.find(m => m.id === moduleId))
+    .filter(m => m && ['draft', 'review', 'live'].includes(m.status) && !m.legacy);
+
+  viewEl.innerHTML = `
+    <p class="breadcrumb"><a href="#/">Start</a> → Lernpfad</p>
+    <h1>${esc(path.title)}</h1>
+    <p>Bearbeite die Module in dieser Reihenfolge. Dein Fortschritt wird lokal in diesem Browser gespeichert.</p>
+    <div class="module-grid" id="path-modules"></div>
+  `;
+
+  const grid = viewEl.querySelector('#path-modules');
+  if (!modules.length) {
+    grid.innerHTML = '<p class="muted">Für diesen Lernpfad sind noch keine nutzbaren Module vorhanden.</p>';
+    return;
+  }
+
+  modules.forEach((mod, index) => {
+    const wrap = document.createElement('div');
+    const step = document.createElement('p');
+    step.className = 'muted';
+    step.innerHTML = '<strong>Schritt ' + (index + 1) + '</strong>';
+    wrap.appendChild(step);
+    wrap.appendChild(buildCard(mod, getModuleProgress(mod.id)));
+    grid.appendChild(wrap);
+  });
+}
 async function renderModule(id) {
   viewEl.innerHTML = '<p class="loading">Modul wird geladen…</p>';
 
