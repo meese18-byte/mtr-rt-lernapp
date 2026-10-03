@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "lastUpdated": "2026-10-03",
   "schemaNote": "V3 gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist ausschließlich als status=legacy + legacy=true waehrend der Migration zulaessig.",
   "modules": [
@@ -324,6 +324,32 @@
         "13-qm-risikomanagement"
       ],
       "status": "draft"
+    },
+    {
+      "id": "03-technikvergleich-dosis",
+      "title": "Technikvergleich: Was macht die Dosisverteilung?",
+      "type": "image-analysis",
+      "kapitel": 3,
+      "reihenfolge": 2,
+      "pflichtgrad": "pflicht",
+      "status": "draft",
+      "mode": "hybrid",
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "dosisverteilung",
+        "vier-felder-box",
+        "3d-crt",
+        "imrt",
+        "vmat",
+        "technikvergleich"
+      ],
+      "estimatedMinutes": 12,
+      "printable": true,
+      "voraussetzungen": [
+        "03-dosisverteilung-isodosen"
+      ]
     }
   ]
 }
