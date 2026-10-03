@@ -150,6 +150,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 | 09-prostata-grundlagen | Prostata – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
 | 09-rektum-grundlagen | Rektum – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
 | 03-dosisverteilung-isodosen | Dosisverteilung und Isodosen verstehen | knowledge | pflicht | Beta 3LJ | 🟡 |
+| 03-technikvergleich-dosis | Technikvergleich: Was macht die Dosisverteilung? | image-analysis | pflicht | Beta 3LJ | 🟡 |
 | 06-plancheck-dvh-isodosen | Plancheck: DVH und Isodosen plausibilisieren | case | pflicht | Beta 3LJ | 🟡 |
 | 13-qm-risikomanagement | Qualitäts- und Risikomanagement in der Strahlentherapie | knowledge | pflicht | Beta 3LJ | 🟡 |
 | 13-fehlerfall-risikomanagement | Fehlerfall: Risiko erkennen, handeln, lernen | case | pflicht | Beta 3LJ | 🟡 |
