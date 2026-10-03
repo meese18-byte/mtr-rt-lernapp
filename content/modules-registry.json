@@ -244,7 +244,7 @@
         "dvh",
         "bestrahlungsplanung"
       ],
-      "estimatedMinutes": 12,
+      "estimatedMinutes": 8,
       "printable": true,
       "voraussetzungen": [],
       "status": "draft"
