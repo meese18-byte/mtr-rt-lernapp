@@ -43,6 +43,12 @@
         "feedback": "Nein. Die Felder werden nacheinander appliziert. IMRT und VMAT besitzen eine deutlich komplexere Intensitätsmodulation."
       }
     ],
-    "reinforcement": "Vergleiche immer zwei Dinge getrennt: 1. Aus welchen Richtungen kommt die Strahlung? 2. Wird die Intensität innerhalb der Felder oder während der Rotation moduliert?"
+    "reinforcement": "Vergleiche immer zwei Dinge getrennt: 1. Aus welchen Richtungen kommt die Strahlung? 2. Wird die Intensität innerhalb der Felder oder während der Rotation moduliert?",
+    "analysisPrompts": [
+      "Welche Einstrahlrichtungen erkennst du?",
+      "Wie verändert sich die Form der Hochdosisregion?",
+      "Wo siehst du den größten Unterschied zwischen Boxtechnik und IMRT/VMAT?",
+      "Was unterscheidet Step-and-Shoot-IMRT von VMAT?"
+    ]
   }
 }
