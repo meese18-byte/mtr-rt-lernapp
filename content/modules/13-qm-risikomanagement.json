@@ -1,0 +1,49 @@
+{
+  "id": "13-qm-risikomanagement",
+  "learningGoals": [
+    "Die Lernenden ordnen Qualitätsmanagement, Qualitätssicherung und dokumentierte Arbeitsabläufe in den strahlentherapeutischen Prozess ein.",
+    "Die Lernenden erklären den Unterschied zwischen Abnahme- und Konstanzprüfung auf Grundebene.",
+    "Die Lernenden erläutern die Funktion von Interventionsschwellen.",
+    "Die Lernenden unterscheiden prospektive Risikoanalyse/FMEA und Lernen aus Ereignissen über CIRS."
+  ],
+  "examRelevance": "3. Lehrjahr – Qualitätsmanagement sowie Risiko- und Fehlermanagement in der Strahlentherapie.",
+  "relatedModules": [
+    "13-fehlerfall-risikomanagement"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "intro": "Beta-Modul. Grundlage sind der bayerische MTR-Lehrplan und die vorhandene Fachquelle zu Qualität und Sicherheit in der Strahlentherapie.",
+    "sections": [
+      {
+        "id": "qm",
+        "type": "text",
+        "body": "Qualität entsteht nicht erst bei einer technischen Prüfung. Sie wird durch definierte Anforderungen, Verantwortlichkeiten, Arbeitsanweisungen, Prüfungen und dokumentierte Reaktionen auf Abweichungen organisiert.",
+        "visibility": "default",
+        "lehrjahr": [
+          3
+        ],
+        "schwierigkeit": "basic",
+        "tags": [
+          "qualitaetsmanagement",
+          "sop"
+        ]
+      },
+      {
+        "id": "risiko",
+        "type": "callout",
+        "body": "Risikomanagement fragt nicht nur: Was ist passiert? Es fragt auch: Was könnte passieren, warum könnte es passieren und wie verhindern oder begrenzen wir die Folgen?",
+        "visibility": "default",
+        "lehrjahr": [
+          3
+        ],
+        "schwierigkeit": "basic",
+        "tags": [
+          "risikomanagement",
+          "fmea",
+          "cirs"
+        ]
+      }
+    ],
+    "itemRefs": []
+  }
+}
