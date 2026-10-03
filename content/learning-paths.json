@@ -1,6 +1,30 @@
 {
-  "version": 1,
-  "lastUpdated": "2026-09-28",
+  "version": 3,
+  "lastUpdated": "2026-10-03",
   "schemaNote": "V3: Lernpfade sind Kompositionen aus Standardmodulen und keine Modultypen. Pfade werden erst eingetragen, wenn die referenzierten Module existieren.",
-  "paths": []
+  "paths": [
+    {
+      "id": "lp-3lj-dosisverteilung-beta",
+      "title": "3. Lehrjahr: Dosisverteilung – Beta",
+      "lehrjahr": [
+        3
+      ],
+      "moduleIds": [
+        "03-dosisverteilung-isodosen",
+        "03-technikvergleich-dosis",
+        "06-plancheck-dvh-isodosen"
+      ]
+    },
+    {
+      "id": "lp-3lj-qm-risiko-beta",
+      "title": "3. Lehrjahr: Qualitäts- und Risikomanagement – Beta",
+      "lehrjahr": [
+        3
+      ],
+      "moduleIds": [
+        "13-qm-risikomanagement",
+        "13-fehlerfall-risikomanagement"
+      ]
+    }
+  ]
 }

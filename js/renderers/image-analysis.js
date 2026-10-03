@@ -21,14 +21,33 @@ export async function render(container, module) {
     <h1>${esc(module.title)}</h1>
     <p>${esc(body.question || '')}</p>
     <div class="image-slot"></div>
+    <div class="analysis-prompts"></div>
     <div class="interaction-slot"></div>
     <div class="feedback-slot"></div>
   `;
   container.appendChild(view);
 
   const imageSlot = view.querySelector('.image-slot');
+  const prompts = view.querySelector('.analysis-prompts');
   const interact = view.querySelector('.interaction-slot');
   const feedbackSlot = view.querySelector('.feedback-slot');
+
+  const analysisPrompts = Array.isArray(body.analysisPrompts) ? body.analysisPrompts : [];
+  if (analysisPrompts.length) {
+    const box = document.createElement('section');
+    box.className = 'learning-prompts';
+    box.innerHTML = '<h2>Schau genau hin</h2>';
+    const ol = document.createElement('ol');
+    analysisPrompts.forEach(prompt => {
+      const li = document.createElement('li');
+      li.textContent = prompt;
+      ol.appendChild(li);
+    });
+    box.appendChild(ol);
+    prompts.appendChild(box);
+  } else {
+    prompts.remove();
+  }
 
   if (mode === 'click') {
     renderClickMode(imageSlot, feedbackSlot, img, body, module);
@@ -42,9 +61,16 @@ export async function render(container, module) {
 
 function renderMCMode(imageSlot, interact, feedbackSlot, img, body, module) {
   const fig = document.createElement('figure');
+  if (img.layout === 'wide-scroll') fig.className = 'wide-image-figure';
   fig.innerHTML = `<img src="${esc(img.src)}" alt="${esc(img.alt || '')}">`;
   if (img.caption) fig.innerHTML += `<figcaption>${esc(img.caption)}</figcaption>`;
   imageSlot.appendChild(fig);
+  if (img.layout === 'wide-scroll') {
+    const hint = document.createElement('p');
+    hint.className = 'muted wide-image-hint';
+    hint.textContent = 'Auf kleinen Bildschirmen: seitlich wischen, um alle vier Techniken zu vergleichen.';
+    imageSlot.appendChild(hint);
+  }
 
   const ul = document.createElement('ul');
   ul.className = 'options';

@@ -30,7 +30,7 @@ export function markModuleCompleted(moduleId, correctRate = null) {
 export function getOverallProgress(registry) {
   const p = loadProgress();
   // V3: Legacy-Sequenzen sind Migrationsquellen und zählen nicht zum regulären Lernfortschritt.
-  const activeModules = (registry.modules || []).filter(m => m.status !== 'legacy' && !m.legacy);
+  const activeModules = (registry.modules || []).filter(m => ['draft', 'review', 'live'].includes(m.status) && !m.legacy);
   const total = activeModules.length;
   if (total === 0) return { total: 0, completed: 0, percent: 0 };
   const completed = activeModules.filter(m => {

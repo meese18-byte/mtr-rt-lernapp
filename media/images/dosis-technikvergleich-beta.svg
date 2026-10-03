@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 620" role="img" aria-labelledby="title desc">
+<title id="title">Vier Bestrahlungstechniken im Vergleich</title>
+<desc id="desc">Schematischer axialer Beckenquerschnitt mit gleicher Anatomie und vier unterschiedlichen Bestrahlungstechniken: Vier-Felder-Box, 3D-konformale Sechs-Felder-Technik, IMRT Step-and-Shoot und VMAT.</desc>
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#334155"/></marker>
+  <marker id="arcArrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L0,8 L9,4 z" fill="#7c3aed"/></marker>
+  <style>
+    .t{font-family:Arial,Helvetica,sans-serif;fill:#102a43}.h{font-size:25px;font-weight:700}.s{font-size:17px}.cap{font-size:18px;font-weight:700}
+    .body{fill:#f7dfae;stroke:#64748b;stroke-width:2}.bone{fill:#cbd5e1;stroke:#64748b;stroke-width:2}.oar{fill:#a78bfa;opacity:.55}.ptv{fill:#ef4444;stroke:#991b1b;stroke-width:3}
+    .iso1{fill:#ef4444;opacity:.78}.iso2{fill:#facc15;opacity:.5}.iso3{fill:#34d399;opacity:.38}.iso4{fill:#38bdf8;opacity:.3}.iso5{fill:#6366f1;opacity:.22}
+    .beam{stroke:#334155;stroke-width:5;fill:none;marker-end:url(#arrow)}.field{fill:#0f172a;opacity:.78}.seg{fill:#0f172a}.arc{stroke:#7c3aed;stroke-width:8;fill:none;marker-end:url(#arcArrow)}
+    .panel{fill:#fff;stroke:#cbd5e1;stroke-width:2;rx:14}.num{fill:#0f4c81}.ntext{fill:#fff;font-family:Arial;font-size:28px;font-weight:700;text-anchor:middle;dominant-baseline:middle}
+  </style>
+</defs>
+
+<rect width="1600" height="620" fill="#f8fafc"/>
+<text x="800" y="42" text-anchor="middle" class="t h">Bestrahlungstechniken – gleiche Anatomie, unterschiedliche Dosisverteilung</text>
+<text x="800" y="70" text-anchor="middle" class="t s">Schematische Lernabbildung – nicht zur klinischen Planbewertung</text>
+
+<!-- Reusable anatomy by duplication -->
+<!-- Panel 1 -->
+<g transform="translate(20 95)">
+<rect class="panel" width="375" height="495"/>
+<circle cx="35" cy="36" r="23" class="num"/><text x="35" y="37" class="ntext">1</text>
+<text x="70" y="43" class="t cap">Vier-Felder-Box</text>
+<g transform="translate(25 80)">
+<ellipse cx="162" cy="150" rx="135" ry="95" class="body"/>
+<ellipse cx="82" cy="155" rx="31" ry="23" class="bone"/><ellipse cx="242" cy="155" rx="31" ry="23" class="bone"/>
+<ellipse cx="92" cy="170" rx="25" ry="17" class="oar"/><ellipse cx="232" cy="170" rx="25" ry="17" class="oar"/>
+<rect x="125" y="110" width="74" height="80" rx="20" class="iso5"/>
+<rect x="132" y="116" width="60" height="68" rx="16" class="iso4"/>
+<rect x="138" y="122" width="48" height="56" rx="14" class="iso3"/>
+<rect x="143" y="127" width="38" height="46" rx="12" class="iso2"/>
+<rect x="148" y="132" width="28" height="36" rx="10" class="iso1"/>
+<rect x="150" y="134" width="24" height="32" rx="8" class="ptv"/>
+<!-- 4 fields -->
+<path d="M162 10 V93" class="beam"/><path d="M162 290 V207" class="beam"/>
+<path d="M12 150 H110" class="beam"/><path d="M312 150 H214" class="beam"/>
+<rect x="145" y="30" width="34" height="18" class="field"/><rect x="145" y="252" width="34" height="18" class="field"/>
+<rect x="30" y="132" width="18" height="34" class="field"/><rect x="276" y="132" width="18" height="34" class="field"/>
+</g>
+<text x="28" y="407" class="t s">• AP/PA + zwei laterale Felder</text>
+<text x="28" y="433" class="t s">• feste Einstrahlrichtungen</text>
+<text x="28" y="459" class="t s">• eher boxförmige Hochdosisregion</text>
+</g>
+
+<!-- Panel 2 -->
+<g transform="translate(415 95)">
+<rect class="panel" width="375" height="495"/>
+<circle cx="35" cy="36" r="23" class="num"/><text x="35" y="37" class="ntext">2</text>
+<text x="70" y="43" class="t cap">3D-CRT – 6 Felder</text>
+<g transform="translate(25 80)">
+<ellipse cx="162" cy="150" rx="135" ry="95" class="body"/>
+<ellipse cx="82" cy="155" rx="31" ry="23" class="bone"/><ellipse cx="242" cy="155" rx="31" ry="23" class="bone"/>
+<ellipse cx="92" cy="170" rx="25" ry="17" class="oar"/><ellipse cx="232" cy="170" rx="25" ry="17" class="oar"/>
+<path d="M108 104 Q162 82 216 104 Q235 150 214 195 Q162 218 110 195 Q88 150 108 104Z" class="iso5"/>
+<path d="M116 111 Q162 94 208 111 Q224 150 205 187 Q162 204 119 187 Q101 150 116 111Z" class="iso4"/>
+<path d="M125 119 Q162 105 199 119 Q211 150 197 178 Q162 192 127 178 Q113 150 125 119Z" class="iso3"/>
+<path d="M135 127 Q162 116 189 127 Q199 150 188 170 Q162 181 136 170 Q125 150 135 127Z" class="iso2"/>
+<rect x="150" y="134" width="24" height="32" rx="8" class="ptv"/>
+<!-- 6 beams -->
+<path d="M162 10 V96" class="beam"/><path d="M162 290 V204" class="beam"/>
+<path d="M35 55 L117 112" class="beam"/><path d="M289 55 L207 112" class="beam"/>
+<path d="M35 245 L117 188" class="beam"/><path d="M289 245 L207 188" class="beam"/>
+</g>
+<text x="28" y="407" class="t s">• sechs feste Winkel</text>
+<text x="28" y="433" class="t s">• MLC formt die Felder an</text>
+<text x="28" y="459" class="t s">• bessere Anpassung als Boxtechnik</text>
+</g>
+
+<!-- Panel 3 -->
+<g transform="translate(810 95)">
+<rect class="panel" width="375" height="495"/>
+<circle cx="35" cy="36" r="23" class="num"/><text x="35" y="37" class="ntext">3</text>
+<text x="70" y="43" class="t cap">IMRT – Step-and-Shoot</text>
+<g transform="translate(25 80)">
+<ellipse cx="162" cy="150" rx="135" ry="95" class="body"/>
+<ellipse cx="82" cy="155" rx="31" ry="23" class="bone"/><ellipse cx="242" cy="155" rx="31" ry="23" class="bone"/>
+<ellipse cx="92" cy="170" rx="25" ry="17" class="oar"/><ellipse cx="232" cy="170" rx="25" ry="17" class="oar"/>
+<path d="M117 112 Q162 84 207 112 Q228 147 211 187 Q162 213 113 187 Q96 147 117 112Z" class="iso5"/>
+<path d="M125 118 Q162 96 199 118 Q216 149 202 180 Q162 200 122 180 Q108 149 125 118Z" class="iso4"/>
+<path d="M133 124 Q162 107 191 124 Q204 150 194 174 Q162 190 130 174 Q120 150 133 124Z" class="iso3"/>
+<path d="M141 130 Q162 118 183 130 Q193 150 184 168 Q162 180 140 168 Q131 150 141 130Z" class="iso2"/>
+<rect x="150" y="134" width="24" height="32" rx="8" class="ptv"/>
+<!-- fixed angles + MLC segmented symbols -->
+<g>
+<path d="M162 12 V98" class="beam"/><path d="M45 70 L119 116" class="beam"/><path d="M279 70 L205 116" class="beam"/>
+<path d="M20 150 H111" class="beam"/><path d="M304 150 H213" class="beam"/><path d="M55 245 L120 188" class="beam"/><path d="M269 245 L204 188" class="beam"/>
+</g>
+<g transform="translate(148 28)"><rect width="8" height="28" class="seg"/><rect x="11" width="8" height="18" class="seg"/><rect x="22" width="8" height="24" class="seg"/></g>
+<g transform="translate(49 78) rotate(-55)"><rect width="7" height="25" class="seg"/><rect x="10" width="7" height="17" class="seg"/><rect x="20" width="7" height="22" class="seg"/></g>
+<g transform="translate(254 57) rotate(55)"><rect width="7" height="22" class="seg"/><rect x="10" width="7" height="16" class="seg"/><rect x="20" width="7" height="27" class="seg"/></g>
+</g>
+<text x="28" y="407" class="t s">• feste Gantrywinkel</text>
+<text x="28" y="433" class="t s">• mehrere MLC-Segmente pro Winkel</text>
+<text x="28" y="459" class="t s">• Intensität wird schrittweise moduliert</text>
+</g>
+
+<!-- Panel 4 -->
+<g transform="translate(1205 95)">
+<rect class="panel" width="375" height="495"/>
+<circle cx="35" cy="36" r="23" class="num"/><text x="35" y="37" class="ntext">4</text>
+<text x="70" y="43" class="t cap">VMAT</text>
+<g transform="translate(25 80)">
+<ellipse cx="162" cy="150" rx="135" ry="95" class="body"/>
+<ellipse cx="82" cy="155" rx="31" ry="23" class="bone"/><ellipse cx="242" cy="155" rx="31" ry="23" class="bone"/>
+<ellipse cx="92" cy="170" rx="25" ry="17" class="oar"/><ellipse cx="232" cy="170" rx="25" ry="17" class="oar"/>
+<path d="M113 110 Q162 80 211 110 Q235 150 213 190 Q162 220 111 190 Q89 150 113 110Z" class="iso5"/>
+<path d="M122 117 Q162 92 202 117 Q220 150 204 183 Q162 207 120 183 Q104 150 122 117Z" class="iso4"/>
+<path d="M132 124 Q162 105 192 124 Q205 150 195 176 Q162 194 129 176 Q119 150 132 124Z" class="iso3"/>
+<path d="M141 130 Q162 118 183 130 Q193 150 184 168 Q162 180 140 168 Q131 150 141 130Z" class="iso2"/>
+<rect x="150" y="134" width="24" height="32" rx="8" class="ptv"/>
+<!-- arcs -->
+<path d="M55 60 A145 115 0 0 1 275 62" class="arc"/>
+<path d="M275 238 A145 115 0 0 1 55 240" class="arc"/>
+<text x="162" y="18" text-anchor="middle" class="t s">Rotation</text>
+</g>
+<text x="28" y="407" class="t s">• kontinuierliche Gantryrotation</text>
+<text x="28" y="433" class="t s">• MLC, Dosisrate und Winkel dynamisch</text>
+<text x="28" y="459" class="t s">• hochkonforme Dosisverteilung</text>
+</g>
+</svg>

@@ -636,3 +636,28 @@ h3 { font-size: 1.1rem; margin: 1.25rem 0 0.4rem; }
   padding-top: 1rem;
   border-top: 2px solid #e5e7eb;
 }
+
+
+/* --- Breite Lehrgrafiken auf kleinen Bildschirmen --- */
+.wide-image-figure {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e3e7eb;
+  border-radius: 6px;
+  background: #fff;
+}
+.wide-image-figure img {
+  width: 900px;
+  max-width: none;
+  height: auto;
+}
+.wide-image-hint {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+@media (min-width: 980px) {
+  .wide-image-figure img {
+    width: 100%;
+    max-width: 100%;
+  }
+}
