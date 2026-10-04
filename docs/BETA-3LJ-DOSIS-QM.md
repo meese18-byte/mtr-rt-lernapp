@@ -125,6 +125,7 @@ Die Beta gilt nur dann als Erfolg, wenn sie im realen Unterricht mindestens dies
 6. **Aktualisierbarkeit:** Eine fachliche Änderung lässt sich an einer definierten Stelle korrigieren.
 7. **Plattformdisziplin:** Eine externe Plattform bleibt nur im Prozess, wenn ihr Mehrwert den Pflegeaufwand klar übersteigt.
 8. **Verstaendliche Aufgabensprache:** Arbeitsauftraege sind kurz, eindeutig und handlungsorientiert formuliert. Fachliche Tiefe darf nicht durch unnoetig akademische Sprache verdeckt werden.
+9. **Retrieval vor Erklärung:** Lernende beobachten, ordnen oder entscheiden zuerst. Infotext, Lösung und ausführliche Erklärung folgen danach.
 
 ## 8. Bewusst nicht Teil der Beta
 
