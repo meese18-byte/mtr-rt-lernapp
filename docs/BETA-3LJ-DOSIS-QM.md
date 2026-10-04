@@ -172,3 +172,11 @@ Qualitaetsfrage vor Freigabe:
 > Kann ein Lernender die richtige Antwort finden, ohne den Inhalt verstanden zu haben, nur weil sie direkt davor steht?
 
 Wenn ja, wird der Baustein umgebaut.
+
+
+## Verbindlicher Aufgabenstandard
+
+Fuer neue und ueberarbeitete Schuelerauftraege gilt:
+`docs/AUFGABEN-FRAGESTANDARD.md`
+
+Damit werden Aufgabenformulierung und Erwartungshorizont bereits bei der Erstellung gemeinsam geplant.
