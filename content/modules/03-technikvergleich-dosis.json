@@ -15,36 +15,41 @@
   ],
   "body": {
     "mode": "mc",
-    "question": "Welche Aussage passt zum Vergleich?",
+    "question": "Welche Zuordnung ist richtig?",
     "image": {
-      "src": "./media/images/dosis-technikvergleich-beta.svg",
-      "alt": "Vier schematische Beckenquerschnitte: Vier-Felder-Box, 3D-konformale Sechs-Felder-Technik, IMRT Step-and-Shoot und VMAT.",
-      "caption": "Gleiche Anatomie, vier Applikationsprinzipien. Vergleiche vor allem Einstrahlrichtungen und Form der Dosisverteilung.",
+      "src": "./media/images/dosis-technikvergleich-beta-student.svg",
+      "alt": "Vier schematische Beckenquerschnitte A bis D mit unterschiedlichen Einstrahlrichtungen und Dosisverteilungen.",
+      "caption": "Ordne A bis D selbst zu. Die Lösung erscheint erst nach deiner Antwort.",
       "layout": "wide-scroll"
     },
     "options": [
       {
-        "label": "Box und 3D-CRT nutzen feste Felder. IMRT moduliert feste Winkel. VMAT moduliert während der Rotation.",
+        "label": "A Box · B 3D-CRT · C Step-and-Shoot-IMRT · D VMAT",
         "correct": true,
-        "feedback": "Richtig. Das ist der zentrale Unterschied der vier Applikationsprinzipien."
+        "feedback": "Richtig. Prüfe jetzt die Merkmale in der Lösungsgrafik."
       },
       {
-        "label": "Alle vier Techniken unterscheiden sich nur durch die Fraktionierung.",
+        "label": "A 3D-CRT · B Box · C VMAT · D Step-and-Shoot-IMRT",
         "correct": false,
-        "feedback": "Nein. Verglichen wird hier die Art der Dosisapplikation innerhalb einer Fraktion."
+        "feedback": "Nicht ganz. Achte besonders auf feste Feldrichtungen, Segmentierung und Rotationsbogen."
       },
       {
-        "label": "IMRT und VMAT bestrahlen beide nur aus vier festen Richtungen.",
+        "label": "A VMAT · B Step-and-Shoot-IMRT · C Box · D 3D-CRT",
         "correct": false,
-        "feedback": "Nein. Step-and-Shoot-IMRT nutzt feste Winkel. VMAT appliziert während der Gantryrotation."
+        "feedback": "Nicht ganz. Ordne zuerst die eindeutig feste Vier-Felder-Anordnung und die Rotation zu."
       }
     ],
     "reinforcement": "Vergleiche immer zwei Dinge getrennt: 1. Aus welchen Richtungen kommt die Strahlung? 2. Wird die Intensität innerhalb der Felder oder während der Rotation moduliert?",
     "analysisPrompts": [
-      "Zähle die festen Einstrahlrichtungen bei Technik 1 und 2.",
-      "Welche Technik zeigt die engste Hochdosisregion um das PTV?",
-      "Woran erkennst du die Step-and-Shoot-IMRT? Nenne ein Merkmal.",
-      "Woran erkennst du die VMAT? Nenne ein Merkmal."
-    ]
+      "Ordne A–D zu: Vier-Felder-Box, 3D-CRT, Step-and-Shoot-IMRT, VMAT.",
+      "Nenne für zwei Zuordnungen je ein sichtbares Merkmal.",
+      "Welche Technik arbeitet mit einer Rotation?"
+    ],
+    "solutionImage": {
+      "src": "./media/images/dosis-technikvergleich-beta.svg",
+      "alt": "Lösung: Vier-Felder-Box, 3D-CRT mit sechs Feldern, Step-and-Shoot-IMRT und VMAT.",
+      "caption": "Lösung und Merkmale der vier Techniken.",
+      "layout": "wide-scroll"
+    }
   }
 }
