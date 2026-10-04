@@ -7,66 +7,66 @@
   "reihenfolge": 1,
   "pflichtgrad": "pflicht",
   "body": {
-    "intro": "Lies einen Bestrahlungsplan mit einer einfachen Leitfrage: Wo liegt die Dosis – und warum liegt sie dort?",
+    "intro": "Starte ohne Nachschlagen. Nutze dein Vorwissen und die Planlogik.",
     "infotext": "03-dosisverteilung-isodosen",
     "checkQuestions": [
       {
-        "question": "Zwei Pläne haben ein ähnliches DVH. Was prüfst du als Nächstes?",
+        "question": "Die Hochdosis folgt dem PTV sehr eng. Welcher Begriff passt am besten?",
         "options": [
           {
-            "label": "Die Isodosen im CT.",
+            "label": "Konformität",
             "correct": true,
-            "feedback": "Richtig. So prüfst du die räumliche Lage der Dosis."
+            "feedback": "Richtig. Entscheidend ist die räumliche Anpassung der Hochdosis an das Zielvolumen."
           },
           {
-            "label": "Nur die Bestrahlungszeit.",
+            "label": "Homogenität",
             "correct": false,
-            "feedback": "Die Zeit sagt nichts über die räumliche Dosislage aus."
+            "feedback": "Homogenität beschreibt die Gleichmäßigkeit der Dosis im Zielvolumen."
           },
           {
-            "label": "Nur die Feldnamen.",
+            "label": "Fraktionierung",
             "correct": false,
-            "feedback": "Feldnamen ersetzen keine räumliche Planbeurteilung."
+            "feedback": "Fraktionierung beschreibt die Aufteilung der Gesamtdosis auf mehrere Sitzungen."
           }
         ]
       },
       {
-        "question": "Plan A deckt das PTV gut ab, zeigt aber viel Niedrigdosis im Normalgewebe. Was ist richtig?",
+        "question": "Im PTV gibt es große Dosisunterschiede. Welcher Begriff ist hier betroffen?",
         "options": [
           {
-            "label": "Gute Zielabdeckung schließt eine größere Niedrigdosisregion nicht aus.",
+            "label": "Homogenität",
             "correct": true,
-            "feedback": "Richtig. Konformität im Hochdosisbereich und Niedrigdosisvolumen sind getrennt zu betrachten."
+            "feedback": "Richtig. Große Dosisunterschiede im Zielvolumen sprechen gegen eine homogene Verteilung."
           },
           {
-            "label": "Dann ist das DVH automatisch falsch.",
+            "label": "Konformität",
             "correct": false,
-            "feedback": "Nein. Das DVH kann trotzdem korrekt sein."
+            "feedback": "Konformität beschreibt vor allem die räumliche Anpassung an das Zielvolumen."
           },
           {
-            "label": "Dann muss die Technik eine Vier-Felder-Box sein.",
+            "label": "Dosisleistung",
             "correct": false,
-            "feedback": "Das lässt sich daraus nicht sicher ableiten."
+            "feedback": "Die Dosisleistung beschreibt die Dosis pro Zeit."
           }
         ]
       },
       {
-        "question": "Warum vergleichst du Planungsbild und aktuelle Bildgebung?",
+        "question": "Was kannst du aus einem DVH allein nicht beurteilen?",
         "options": [
           {
-            "label": "Weil sich die Anatomie zwischen Planung und Behandlung verändern kann.",
+            "label": "Wo ein hoher Dosisbereich im Körper liegt.",
             "correct": true,
-            "feedback": "Richtig. Ein guter Plan gilt für die geplante Geometrie."
+            "feedback": "Richtig. Die räumliche Lage geht im DVH verloren."
           },
           {
-            "label": "Weil das DVH täglich neu gezeichnet werden muss.",
+            "label": "Wie viel Volumen mindestens eine bestimmte Dosis erhält.",
             "correct": false,
-            "feedback": "Nein. Das ist nicht die Aufgabe der täglichen MTR-Bildführung."
+            "feedback": "Genau diese Dosis-Volumen-Beziehung kann ein DVH zeigen."
           },
           {
-            "label": "Weil Isodosen im CBCT automatisch neu berechnet werden.",
+            "label": "Ob zwei Strukturen unterschiedliche Dosisverläufe haben.",
             "correct": false,
-            "feedback": "Nicht im üblichen Standardworkflow am Gerät."
+            "feedback": "Die Kurven lassen sich miteinander vergleichen."
           }
         ]
       }
@@ -113,7 +113,8 @@
           }
         ]
       }
-    ]
+    ],
+    "questionFirst": true
   },
   "learningGoals": [
     "Konformität, Homogenität und Dosisgradient unterscheiden.",
