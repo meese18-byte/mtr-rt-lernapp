@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
 <title id="title">Schematisches kumulatives DVH</title>
-<desc id="desc">Kumulatives Dosis-Volumen-Histogramm mit einer steilen PTV-Kurve und zwei früher abfallenden Risikoorgan-Kurven. Nur für Ausbildungszwecke.</desc>
+<desc id="desc">Kumulatives Dosis-Volumen-Histogramm mit drei nicht benannten Kurven A, B und C. Die Strukturen sollen aus dem Kurvenverlauf erschlossen werden.</desc>
 <rect width="900" height="520" fill="#ffffff"/>
 <text x="450" y="34" text-anchor="middle" font-family="Arial" font-size="26" font-weight="700" fill="#102a43">DVH lesen – schematisches Beispiel</text>
 <text x="450" y="61" text-anchor="middle" font-family="Arial" font-size="16" fill="#52606d">Kumulative Darstellung · nur für Ausbildungszwecke · keine klinischen Grenzwerte</text>
@@ -40,8 +40,8 @@
 </g>
 
 <g transform="translate(160 455)" font-family="Arial" font-size="17">
-  <line x1="0" y1="0" x2="42" y2="0" stroke="#dc2626" stroke-width="6"/><text x="55" y="6" fill="#334155">PTV</text>
-  <line x1="190" y1="0" x2="232" y2="0" stroke="#2563eb" stroke-width="5"/><text x="245" y="6" fill="#334155">OAR A</text>
-  <line x1="385" y1="0" x2="427" y2="0" stroke="#16a34a" stroke-width="5"/><text x="440" y="6" fill="#334155">OAR B</text>
+  <line x1="0" y1="0" x2="42" y2="0" stroke="#dc2626" stroke-width="6"/><text x="55" y="6" fill="#334155">Kurve A</text>
+  <line x1="190" y1="0" x2="232" y2="0" stroke="#2563eb" stroke-width="5"/><text x="245" y="6" fill="#334155">Kurve B</text>
+  <line x1="385" y1="0" x2="427" y2="0" stroke="#16a34a" stroke-width="5"/><text x="440" y="6" fill="#334155">Kurve C</text>
 </g>
 </svg>
