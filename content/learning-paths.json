@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "lastUpdated": "2026-10-03",
+  "version": 4,
+  "lastUpdated": "2026-10-04",
   "schemaNote": "V3: Lernpfade sind Kompositionen aus Standardmodulen und keine Modultypen. Pfade werden erst eingetragen, wenn die referenzierten Module existieren.",
   "paths": [
     {
@@ -12,6 +12,7 @@
       "moduleIds": [
         "03-dosisverteilung-isodosen",
         "03-technikvergleich-dosis",
+        "06-realplan-dvh-isodosen",
         "06-plancheck-dvh-isodosen"
       ]
     },
