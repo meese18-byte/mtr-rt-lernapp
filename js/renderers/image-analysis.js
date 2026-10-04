@@ -89,6 +89,13 @@ function renderMCMode(imageSlot, interact, feedbackSlot, img, body, module) {
       fb.className = 'feedback ' + (opt.correct ? 'correct' : 'incorrect');
       fb.innerHTML = `<p>${esc(opt.feedback)}</p>`;
       feedbackSlot.appendChild(fb);
+      if (body.solutionImage && body.solutionImage.src) {
+        const sol = document.createElement('figure');
+        sol.className = body.solutionImage.layout === 'wide-scroll' ? 'wide-image-figure' : '';
+        sol.innerHTML = `<img src="${esc(body.solutionImage.src)}" alt="${esc(body.solutionImage.alt || 'Lösung')}">`;
+        if (body.solutionImage.caption) sol.innerHTML += `<figcaption>${esc(body.solutionImage.caption)}</figcaption>`;
+        feedbackSlot.appendChild(sol);
+      }
       if (body.reinforcement) {
         const rein = document.createElement('div');
         rein.className = 'feedback';
