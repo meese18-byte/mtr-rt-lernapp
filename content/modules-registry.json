@@ -1,6 +1,6 @@
 {
-  "version": 6,
-  "lastUpdated": "2026-10-03",
+  "version": 7,
+  "lastUpdated": "2026-10-04",
   "schemaNote": "V3 gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist ausschließlich als status=legacy + legacy=true waehrend der Migration zulaessig.",
   "modules": [
     {
@@ -254,7 +254,7 @@
       "title": "Plancheck: DVH und Isodosen plausibilisieren",
       "type": "case",
       "kapitel": 6,
-      "reihenfolge": 1,
+      "reihenfolge": 2,
       "pflichtgrad": "pflicht",
       "mode": "hybrid",
       "lehrjahr": [
@@ -271,7 +271,7 @@
       "estimatedMinutes": 20,
       "printable": true,
       "voraussetzungen": [
-        "03-dosisverteilung-isodosen"
+        "06-realplan-dvh-isodosen"
       ],
       "status": "draft"
     },
@@ -349,6 +349,32 @@
       "printable": true,
       "voraussetzungen": [
         "03-dosisverteilung-isodosen"
+      ]
+    },
+    {
+      "id": "06-realplan-dvh-isodosen",
+      "title": "Planvergleich: DVH und Isodosen zusammen lesen",
+      "type": "image-analysis",
+      "kapitel": 6,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "status": "draft",
+      "mode": "hybrid",
+      "lehrjahr": [
+        3
+      ],
+      "tags": [
+        "dvh",
+        "isodosen",
+        "planvergleich",
+        "bestrahlungsplanung",
+        "bildanalyse"
+      ],
+      "estimatedMinutes": 15,
+      "printable": true,
+      "voraussetzungen": [
+        "03-dosisverteilung-isodosen",
+        "03-technikvergleich-dosis"
       ]
     }
   ]
