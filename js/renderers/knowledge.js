@@ -135,5 +135,13 @@ export async function render(container, module) {
     done.innerHTML = `<p><strong>Modul abgeschlossen.</strong> ${correctCount} von ${total} Verständnisfragen korrekt.</p>
       <p><a class="btn secondary" href="#/">Zurück zur Übersicht</a></p>`;
     checks.appendChild(done);
+    const infoWrap = view.querySelector('#kn-info-wrap');
+    if (questionFirst && infoWrap) {
+      infoWrap.classList.remove('hidden');
+      const note = document.createElement('div');
+      note.className = 'feedback';
+      note.innerHTML = '<p><strong>Jetzt vergleichen:</strong> Lies die Kurzinfo und prüfe, was du schon richtig begründet hast.</p>';
+      infoWrap.prepend(note);
+    }
   }
 }
