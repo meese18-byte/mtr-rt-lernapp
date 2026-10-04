@@ -16,17 +16,32 @@ export async function render(container, module) {
     <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <p class="muted">${esc(module.body.intro || '')}</p>
+    <div id="kn-prechecks"></div>
     <div id="kn-infotext"><p class="loading">Infotext wird geladen…</p></div>
-    <h2>Verständnisfragen</h2>
+    <h2>Transferfragen</h2>
     <div id="kn-checks"></div>
   `;
   container.appendChild(view);
+
+  const pre = view.querySelector('#kn-prechecks');
+  const preQuestions = module.body.preQuestions || [];
+  const attemptFirst = module.body.mode === 'attempt-first' && preQuestions.length > 0;
+
+  if (attemptFirst) {
+    const head = document.createElement('div');
+    head.className = 'feedback';
+    head.innerHTML = '<p><strong>Erst selbst denken.</strong> Beantworte die kurzen Fragen. Danach wird die Erklärung eingeblendet.</p>';
+    pre.appendChild(head);
+  } else {
+    pre.remove();
+  }
 
   // Infotext laden
   if (module.body.infotext) {
     try {
       const md = await loadInfotext(module.body.infotext);
       view.querySelector('#kn-infotext').innerHTML = renderMarkdownSimple(md);
+      if (attemptFirst) view.querySelector('#kn-infotext').hidden = true;
     } catch (e) {
       view.querySelector('#kn-infotext').innerHTML = '<p class="muted">Infotext nicht verfügbar.</p>';
     }
@@ -34,7 +49,40 @@ export async function render(container, module) {
     view.querySelector('#kn-infotext').remove();
   }
 
-  // Verständnisfragen
+  if (attemptFirst) {
+    let preAnswered = 0;
+    preQuestions.forEach(q => {
+      const wrap = document.createElement('section');
+      wrap.innerHTML = `<p><strong>${esc(q.question)}</strong></p><ul class="options"></ul><div class="feedback-slot"></div>`;
+      const ul = wrap.querySelector('.options');
+      q.options.forEach(opt => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.label;
+        btn.addEventListener('click', () => {
+          if (wrap.dataset.answered) return;
+          wrap.dataset.answered = '1';
+          ul.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+          btn.classList.add(opt.correct ? 'correct' : 'incorrect');
+          const fb = document.createElement('div');
+          fb.className = 'feedback ' + (opt.correct ? 'correct' : 'incorrect');
+          fb.innerHTML = `<p>${esc(opt.feedback || (opt.correct ? 'Richtig.' : 'Nicht ganz.'))}</p>`;
+          wrap.querySelector('.feedback-slot').appendChild(fb);
+          preAnswered++;
+          if (preAnswered === preQuestions.length) {
+            const info = view.querySelector('#kn-infotext');
+            if (info) info.hidden = false;
+          }
+        });
+        li.appendChild(btn);
+        ul.appendChild(li);
+      });
+      pre.appendChild(wrap);
+    });
+  }
+
+  // Transferfragen
   const checks = view.querySelector('#kn-checks');
   const questions = module.body.checkQuestions || [];
   let correctCount = 0;
