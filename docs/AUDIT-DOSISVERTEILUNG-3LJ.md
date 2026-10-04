@@ -239,3 +239,20 @@ Jede Aufgabe wird vor Veroeffentlichung mit drei Fragen geprueft:
 3. Gibt es eine Formulierung, die zwei verschiedene Interpretationen zulaesst?
 
 Wenn Frage 1 mit Nein oder Frage 3 mit Ja beantwortet wird, wird die Aufgabe umformuliert.
+
+
+## 13. Retrieval before reveal
+
+Neue Beta-Regel aus dem Unterrichtsfeedback:
+
+> **Die Lernenden versuchen zuerst zu beobachten, zuzuordnen oder zu entscheiden. Erklaerung und Loesung folgen danach.**
+
+Konsequenzen:
+- Infotexte stehen nicht direkt vor Fragen, deren Antwort sie wortgleich enthalten.
+- Vergleichsgrafiken zeigen vor der Bearbeitung keine Techniknamen oder Loesungshinweise.
+- DVH-Kurven koennen zunaechst neutral als A/B/C gekennzeichnet werden.
+- Feedback erklaert den Loesungsweg erst nach der eigenen Entscheidung.
+- Transferfragen duerfen nicht nur einen Satz aus dem Infotext wiederholen.
+- Aufgaben bleiben sprachlich kurz und eindeutig.
+
+Ziel ist nicht, Informationen zu verstecken, sondern **Abruf, Beobachtung und Begruendung vor dem Nachlesen zu aktivieren**.
