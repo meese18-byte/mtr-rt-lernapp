@@ -11,62 +11,105 @@
     "infotext": "03-dosisverteilung-isodosen",
     "checkQuestions": [
       {
-        "question": "Was beschreibt die Konformität eines Bestrahlungsplans?",
+        "question": "Zwei Pläne haben ein ähnliches DVH. Was prüfst du als Nächstes?",
         "options": [
           {
-            "label": "Wie gleichmäßig die Dosis im Zielvolumen verteilt ist.",
-            "correct": false,
-            "feedback": "Das beschreibt die Homogenität."
-          },
-          {
-            "label": "Wie gut sich die Hochdosisregion an das Zielvolumen anpasst.",
+            "label": "Die Isodosen im CT.",
             "correct": true,
-            "feedback": "Richtig. Konformität beschreibt die räumliche Anpassung der behandelten Hochdosisregion an das Zielvolumen."
+            "feedback": "Richtig. So prüfst du die räumliche Lage der Dosis."
           },
           {
-            "label": "Wie schnell die Dosis pro Minute abgegeben wird.",
+            "label": "Nur die Bestrahlungszeit.",
             "correct": false,
-            "feedback": "Das ist die Dosisleistung, nicht die Konformität."
+            "feedback": "Die Zeit sagt nichts über die räumliche Dosislage aus."
+          },
+          {
+            "label": "Nur die Feldnamen.",
+            "correct": false,
+            "feedback": "Feldnamen ersetzen keine räumliche Planbeurteilung."
           }
         ]
       },
       {
-        "question": "Was kann ein DVH allein nicht zeigen?",
+        "question": "Plan A deckt das PTV gut ab, zeigt aber viel Niedrigdosis im Normalgewebe. Was ist richtig?",
         "options": [
           {
-            "label": "Welcher Volumenanteil mindestens eine bestimmte Dosis erhält.",
-            "correct": false,
-            "feedback": "Genau dafür kann ein DVH verwendet werden."
-          },
-          {
-            "label": "Die mittlere Dosis eines Organs.",
-            "correct": false,
-            "feedback": "Dmean kann aus dem DVH bzw. der Planauswertung angegeben werden."
-          },
-          {
-            "label": "Wo im Körper ein hoher Dosisbereich liegt.",
+            "label": "Gute Zielabdeckung schließt eine größere Niedrigdosisregion nicht aus.",
             "correct": true,
-            "feedback": "Richtig. Das DVH enthält keine räumliche Lageinformation. Dafür brauchst du die Isodosen im Bild."
+            "feedback": "Richtig. Konformität im Hochdosisbereich und Niedrigdosisvolumen sind getrennt zu betrachten."
+          },
+          {
+            "label": "Dann ist das DVH automatisch falsch.",
+            "correct": false,
+            "feedback": "Nein. Das DVH kann trotzdem korrekt sein."
+          },
+          {
+            "label": "Dann muss die Technik eine Vier-Felder-Box sein.",
+            "correct": false,
+            "feedback": "Das lässt sich daraus nicht sicher ableiten."
           }
         ]
       },
       {
-        "question": "Warum können Isodosen bei IMRT oder VMAT anders aussehen als bei Gegenfeldern?",
+        "question": "Warum vergleichst du Planungsbild und aktuelle Bildgebung?",
         "options": [
           {
-            "label": "Weil bei IMRT/VMAT die Intensität zusätzlich moduliert werden kann.",
+            "label": "Weil sich die Anatomie zwischen Planung und Behandlung verändern kann.",
             "correct": true,
-            "feedback": "Richtig. Dadurch kann die Hochdosisregion stärker an komplexe Zielvolumina angepasst werden."
+            "feedback": "Richtig. Ein guter Plan gilt für die geplante Geometrie."
           },
           {
-            "label": "Weil bei IMRT/VMAT keine Risikoorgane berücksichtigt werden.",
+            "label": "Weil das DVH täglich neu gezeichnet werden muss.",
             "correct": false,
-            "feedback": "Im Gegenteil: Die Schonung von Risikoorganen ist ein wichtiges Ziel der Optimierung."
+            "feedback": "Nein. Das ist nicht die Aufgabe der täglichen MTR-Bildführung."
           },
           {
-            "label": "Weil bei Gegenfeldern immer Elektronen verwendet werden.",
+            "label": "Weil Isodosen im CBCT automatisch neu berechnet werden.",
             "correct": false,
-            "feedback": "Nein. Gegenfelder können auch mit Photonen durchgeführt werden."
+            "feedback": "Nicht im üblichen Standardworkflow am Gerät."
+          }
+        ]
+      }
+    ],
+    "mode": "attempt-first",
+    "preQuestions": [
+      {
+        "question": "Was prüfst du an einer Isodosenverteilung zuerst?",
+        "options": [
+          {
+            "label": "Zielabdeckung und Dosis zu Risikoorganen.",
+            "correct": true,
+            "feedback": "Gute Richtung. Genau daraus leiten wir die weitere Beurteilung ab."
+          },
+          {
+            "label": "Nur die Anzahl der Bestrahlungsfelder.",
+            "correct": false,
+            "feedback": "Die Feldzahl allein sagt noch nicht, ob die Dosisverteilung passt."
+          },
+          {
+            "label": "Nur die Behandlungsdauer.",
+            "correct": false,
+            "feedback": "Die Behandlungsdauer ist dafür nicht die zentrale Information."
+          }
+        ]
+      },
+      {
+        "question": "Ein DVH sieht unauffällig aus. Welche Frage bleibt trotzdem offen?",
+        "options": [
+          {
+            "label": "Wo die Dosis räumlich im CT liegt.",
+            "correct": true,
+            "feedback": "Richtig. Diese Information liefert das DVH allein nicht."
+          },
+          {
+            "label": "Ob überhaupt ein Plan vorhanden ist.",
+            "correct": false,
+            "feedback": "Das ist aus dem Szenario bereits klar."
+          },
+          {
+            "label": "Wie viele Mitarbeitende am Gerät stehen.",
+            "correct": false,
+            "feedback": "Das hat mit der Dosisverteilung nichts zu tun."
           }
         ]
       }
