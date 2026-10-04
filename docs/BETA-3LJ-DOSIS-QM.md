@@ -180,3 +180,20 @@ Fuer neue und ueberarbeitete Schuelerauftraege gilt:
 `docs/AUFGABEN-FRAGESTANDARD.md`
 
 Damit werden Aufgabenformulierung und Erwartungshorizont bereits bei der Erstellung gemeinsam geplant.
+
+
+## Council-Revision Dosisverteilung – 2026-10-04
+
+Fuer den realen Beta-Test gilt zusaetzlich:
+
+- Schritt 1 enthaelt vor der Aufloesung mindestens **eine freie Abrufleistung** ohne automatische Inhaltsbewertung.
+- Schritt 2: Die vier offenen Technikauftraege muessen bearbeitet sein, bevor die MC-Kontrolle und damit die Loesung freigeschaltet werden.
+- Schritt 3: Die vier offenen Plananalyse-Auftraege muessen bearbeitet sein, bevor die MC-Kontrolle und die Aufloesung freigeschaltet werden.
+- Schritt 4: Nach der Fallentscheidung folgt **eine** offene Begruendung zum unauffaelligen Knochen-Match; die bisherigen drei Wiederholungs-MC entfallen.
+- Offene Antworten werden technisch nur auf **nicht leer** geprueft. Die fachliche Qualitaet wird im Selbstvergleich bzw. in der gemeinsamen Auswertung aufgegriffen.
+- Mobile Darstellung: Technikvergleich wird als Uebersicht plus Einzelkarten A-D gezeigt; DVH und Isodosenbild werden auf kleinen Displays untereinander dargestellt.
+- Keine weiteren Features bis zum realen Unterrichtstest.
+
+Leitlogik:
+
+**Beobachten / Abrufen -> selbst formulieren -> entscheiden -> Loesung bzw. Feedback sehen -> gemeinsam auswerten.**
