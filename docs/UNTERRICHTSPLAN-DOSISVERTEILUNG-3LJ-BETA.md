@@ -58,7 +58,7 @@ Die Lernenden koennen am Ende der Einheit:
 | 40–65 | Technikvergleich | Gruppen vergleichen 4 Dosisverteilungen: Vier-Felder-Box, 3D-CRT mit 6 Feldern, IMRT Step-and-Shoot und VMAT. | Gruppenarbeit 3–4 Pers. | Planbilder / App-Element / Arbeitskarte |
 | 65–80 | Auswertung Technik | Ergebnisse vergleichen. Fokus: **„Woran habt ihr die Technik erkannt?“** Verbindung zu Konformitaet, Homogenitaet, Gradient. | Plenum, Teach-Back | Beamer / Tafel |
 | 80–95 | DVH verstehen | DVH als Zusammenfassung. Grundprinzip von Dosis- und Volumenkennwerten. Leitfrage: **„Was kann ich aus der Kurve lesen?“** | Kurzinput + gelenktes Fragen | DVH-Abbildung |
-| 95–110 | Realplan: DVH + Isodosen | Klinisches Bildpaar betrachten. Auftrag: **1. Welche Kurven könnten Zielvolumina sein? 2. Was kannst du im DVH gut vergleichen? 3. Welche Information erkennst du nur im Isodosenbild? 4. Nenne eine Frage, die du vor einer Planbewertung noch klären würdest.** | Partnerarbeit | anonymisiertes DVH + zugehöriges Isodosenbild; nicht im öffentlichen Repo |
+| 95–110 | Realplan: DVH + Isodosen | Klinisches Bildpaar bearbeiten. **1. Ordnet die Zielvolumen-Kurven im DVH zu. Nennt ein Kurvenmerkmal als Begründung. 2. Vergleicht zwei OAR-Kurven. Nennt einen Unterschied. 3. Nennt zwei Informationen, die ihr im Isodosenbild erkennt, im DVH aber nicht. 4. Nennt eine zusätzliche Information, die ihr vor einer fachlichen Planbeurteilung noch braucht.** | Partnerarbeit | anonymisiertes DVH + zugehöriges Isodosenbild; nicht im öffentlichen Repo |
 | 110–135 | Beta-App 2: Planfall | Prostata-/Beckenfall: Planinformation + heutiges CBCT. Auftrag in 4 Schritten: **1. Was fällt auf? 2. Warum ist das wichtig? 3. Was zeigt der Plan – was zeigt das CBCT? 4. Was tust du als MTR?** | Fallarbeit in Kleingruppen | Case-Modul |
 | 135–150 | Fallauswertung | Gruppen nennen ihre Handlungskette. Dozent ordnet und korrigiert. | Fallgespraech / Teach-Back | Beamer / Tafel |
 | 150–158 | Wissenscheck | 5–8 kurze Masterfragen. Nur Kerninhalte. | Kahoot oder analoger Schnellcheck | Kahoot optional |
@@ -205,3 +205,36 @@ Einsatz in der Beta:
 - erst danach klinischer Transferfall.
 
 Die Roh-Screenshots werden **nicht automatisch in das oeffentliche GitHub-Repository uebernommen**. Vor einer oeffentlichen Nutzung werden Anonymisierung, Bildausschnitt und Nutzungsfreigabe geprueft. Fuer den Praesenzunterricht koennen sie als lokale bzw. geschuetzte Unterrichtsmedien eingesetzt werden.
+
+
+### Erwartungshorizont Realplan – nur fuer Dozierende
+
+**Teilauftrag 1 – Zielvolumen-Kurven**
+- Erwartetes Produkt: Zuordnung der Zielvolumen-Kurve(n) + je ein sichtbares Kurvenmerkmal.
+- Tragfaehige Begruendung: spaeter/steiler Abfall im hohen Dosisbereich bzw. hohe Volumenabdeckung im verordneten Dosisbereich.
+- Nicht erforderlich: exakte klinische Planfreigabe oder Grenzwertentscheidung.
+
+**Teilauftrag 2 – OAR-Vergleich**
+- Erwartetes Produkt: ein klar benannter Unterschied zwischen zwei ausgewaehlten Kurven.
+- Akzeptiert werden z. B. Unterschiede bei Volumenanteil zu einer Dosis, mittlerer Belastung oder Kurvenverlauf, sofern am gezeigten DVH nachvollziehbar.
+
+**Teilauftrag 3 – Isodosenbild gegen DVH**
+- Zwei Aspekte erwartet.
+- Kerngedanke: Das Isodosenbild liefert raeumliche Information, z. B. Lage der Hochdosis, Bezug zu Anatomie/OAR, Hot-/Cold-Spot-Lokalisation oder Form der Dosisverteilung.
+- Das DVH bildet die Dosis-Volumen-Beziehung ab, aber nicht die raeumliche Lage.
+
+**Teilauftrag 4 – fehlende Information**
+- Eine fachlich begruendbare Zusatzinformation reicht.
+- Moeglich sind z. B. Verordnung/Zieldosis, Planungsziele bzw. lokale Constraints, Konturen/Strukturzuordnung oder klinischer Kontext.
+- Ziel ist zu erkennen: Aus einem einzelnen DVH-/Isodosen-Screenshot darf keine vollstaendige klinische Planfreigabe abgeleitet werden.
+
+**Typische Fehlkonzepte fuer das Feedback**
+- „Die roteste/hoechste Kurve ist automatisch gut.“
+- „Das DVH zeigt, wo die Dosis im Koerper liegt.“
+- „Ein einzelner guter Zahlenwert reicht zur Planbewertung.“
+
+
+## 12. Sprach- und Aufgabenstandard
+
+Alle Schuelerauftraege dieser Beta folgen dem internen Standard `docs/AUFGABEN-FRAGESTANDARD.md`:
+**eindeutiger Operator + klarer Gegenstand + erwarteter Umfang + ggf. Bedingung/Produkt**, ohne die fachliche Loesung vorwegzunehmen.
