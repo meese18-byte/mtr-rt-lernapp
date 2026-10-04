@@ -153,3 +153,21 @@ Nach Dosisverteilung und QM/Risikomanagement werden fünf Fragen beantwortet:
 Der 160-Minuten-Pilot fuer Dosisverteilung ist dokumentiert unter:
 
 - `docs/UNTERRICHTSPLAN-DOSISVERTEILUNG-3LJ-BETA.md`
+
+
+## 11. Didaktische Regel: Antworten nicht vorwegnehmen
+
+Die Beta folgt dem Prinzip **Versuch -> Rueckmeldung -> Erklaerung -> Transfer**.
+
+Verbindlich:
+- Eine Frage darf nicht unmittelbar durch Text, Bildbeschriftung oder Legende davor beantwortet werden.
+- Definitionen, Loesungen und beschriftete Grafiken werden erst **nach einem ersten eigenen Versuch** gezeigt, wenn die Aufgabe genau dieses Wissen prueft.
+- Vorwissen wird aktiv abgerufen, bevor die Kurzinfo erscheint.
+- Nach einer Erklaerung folgen **Transferfragen**, keine wortgleichen Wiederholungsfragen.
+- Bilder erhalten bei Zuordnungsaufgaben eine **Schuelerversion ohne Loesungslabels** und bei Bedarf eine Loesungsversion.
+- Offene Aufgaben wie *entscheiden, begruenden, zeichnen, vergleichen* werden bevorzugt, wenn sie zum Lernziel passen.
+
+Qualitaetsfrage vor Freigabe:
+> Kann ein Lernender die richtige Antwort finden, ohne den Inhalt verstanden zu haben, nur weil sie direkt davor steht?
+
+Wenn ja, wird der Baustein umgebaut.
