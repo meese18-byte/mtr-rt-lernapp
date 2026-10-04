@@ -42,15 +42,16 @@
     "reinforcement": "Nutze sichtbare Merkmale: Anzahl fester Winkel, Segmentierung und Rotationsbewegung. Erst danach ordnest du den Techniknamen zu.",
     "analysisPrompts": [
       "Ordne A–D zu: Vier-Felder-Box, 3D-CRT mit 6 Feldern, Step-and-Shoot-IMRT, VMAT.",
-      "Nenne zu jeder Zuordnung ein sichtbares Merkmal.",
-      "Welche Technik hat keine festen Gantrywinkel?",
-      "Welche Darstellung zeigt die engste Hochdosisregion?"
+      "Nenne zu jeder Zuordnung genau ein sichtbares Merkmal.",
+      "Vergleiche Technik B und C. Nenne zwei Unterschiede in der Strahlenabgabe.",
+      "Welche Technik arbeitet ohne feste Gantrywinkel? Begründe mit einem sichtbaren Merkmal."
     ],
     "solutionImage": {
       "src": "./media/images/dosis-technikvergleich-beta.svg",
       "alt": "Lösung: Vier-Felder-Box, 3D-CRT mit sechs Feldern, Step-and-Shoot-IMRT und VMAT.",
       "caption": "Lösung und Merkmale der vier Techniken.",
       "layout": "wide-scroll"
-    }
+    },
+    "intro": "Arbeite zuerst nur mit der Grafik. Ergebnis: 4 Zuordnungen und zu jeder Zuordnung genau 1 sichtbares Merkmal."
   }
 }
