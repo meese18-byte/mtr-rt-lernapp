@@ -1,0 +1,57 @@
+{
+  "id": "06-realplan-dvh-isodosen",
+  "learningGoals": [
+    "Zielvolumen-typische und OAR-typische DVH-Verläufe anhand sichtbarer Merkmale unterscheiden.",
+    "Informationen aus DVH und Isodosenbild gezielt vergleichen.",
+    "Erkennen, welche Zusatzinformationen für eine belastbare Planbeurteilung noch fehlen."
+  ],
+  "examRelevance": "3. Lehrjahr – Planverständnis und fachlich begründete Plausibilisierung ohne eigenständige Planfreigabe.",
+  "relatedModules": [
+    "03-dosisverteilung-isodosen",
+    "03-technikvergleich-dosis",
+    "06-plancheck-dvh-isodosen"
+  ],
+  "relatedInfotexte": [
+    "03-dosisverteilung-isodosen"
+  ],
+  "body": {
+    "mode": "mc",
+    "question": "Welche Aussage fasst den Planvergleich am besten zusammen?",
+    "image": {
+      "src": "./media/images/dvh-isodosen-planpaar-beta.svg",
+      "alt": "Lehrdarstellung mit einem DVH links und einem axialen Isodosenbild rechts. Die DVH-Kurven sind mit A bis H bezeichnet.",
+      "caption": "Bearbeite zuerst die vier Teilaufträge. Die fachliche Auflösung folgt erst danach.",
+      "layout": "wide-scroll"
+    },
+    "analysisPrompts": [
+      "Ordne die Kurven A–H in zwei Gruppen: eher Zielvolumen oder eher Risikoorgan. Nenne für jede Gruppe ein Kurvenmerkmal.",
+      "Vergleiche zwei Risikoorgan-Kurven deiner Wahl. Nenne genau einen Unterschied.",
+      "Nenne zwei Informationen, die du im Isodosenbild erkennst, im DVH aber nicht.",
+      "Nenne eine zusätzliche Information, die du vor einer fachlichen Planbeurteilung noch brauchst."
+    ],
+    "options": [
+      {
+        "label": "DVH und Isodosen ergänzen sich: Das DVH zeigt Dosis-Volumen-Beziehungen, das Isodosenbild die räumliche Verteilung.",
+        "correct": true,
+        "feedback": "Richtig. Erst zusammen entsteht ein belastbareres Bild. Für eine klinische Beurteilung fehlen zusätzlich Planungsziel und lokale Kriterien."
+      },
+      {
+        "label": "Das DVH reicht für die Planbeurteilung aus, weil dort alle räumlichen Informationen enthalten sind.",
+        "correct": false,
+        "feedback": "Nein. Im DVH geht die räumliche Lage der Dosis verloren."
+      },
+      {
+        "label": "Das Isodosenbild ersetzt das DVH, weil dort jede relevante Dosis als Linie eingezeichnet ist.",
+        "correct": false,
+        "feedback": "Nein. Das Isodosenbild zeigt die räumliche Verteilung, aber nicht so kompakt die Dosis-Volumen-Beziehung einzelner Strukturen."
+      }
+    ],
+    "solutionImage": {
+      "src": "./media/images/dvh-isodosen-planpaar-beta-loesung.svg",
+      "alt": "Aufgelöste Lehrdarstellung mit Hinweis auf zielvolumen-typische und OAR-typische DVH-Verläufe.",
+      "caption": "Lösungshinweis nach der eigenen Bearbeitung.",
+      "layout": "wide-scroll"
+    },
+    "reinforcement": "Keine Einzelansicht beantwortet alle Fragen. DVH, Isodosen, Planungsziel und klinischer Kontext müssen zusammen gedacht werden."
+  }
+}
