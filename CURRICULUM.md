@@ -151,6 +151,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 | 09-rektum-grundlagen | Rektum – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
 | 03-dosisverteilung-isodosen | Dosisverteilung und Isodosen verstehen | knowledge | pflicht | Beta 3LJ | 🟡 |
 | 03-technikvergleich-dosis | Technikvergleich: Was macht die Dosisverteilung? | image-analysis | pflicht | Beta 3LJ | 🟡 |
+| 06-realplan-dvh-isodosen | Planvergleich: DVH und Isodosen zusammen lesen | image-analysis | pflicht | Beta 3LJ | 🟡 |
 | 06-plancheck-dvh-isodosen | Plancheck: DVH und Isodosen plausibilisieren | case | pflicht | Beta 3LJ | 🟡 |
 | 13-qm-risikomanagement | Qualitäts- und Risikomanagement in der Strahlentherapie | knowledge | pflicht | Beta 3LJ | 🟡 |
 | 13-fehlerfall-risikomanagement | Fehlerfall: Risiko erkennen, handeln, lernen | case | pflicht | Beta 3LJ | 🟡 |
@@ -165,6 +166,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 | 2026-04-18 | Modul 01-aufbau-abteilung live (knowledge, 3 Verständnisfragen) | Erstes echtes MVP-Modul, Blaupause-Charakter für alle weiteren |
 | 2026-09-28 | V3-Ausbauprinzip eingeführt; altes Phasenmodell durch Modulstatus ersetzt; kanonische Prostata-ID migriert. | Vollausbau der fachpraktischen Ausbildung mit stabiler Architektur statt Prototyp-Phasen. |
 | 2026-10-03 | Beta-Lernpfade für Dosisverteilung sowie Qualitäts-/Risikomanagement ergänzt. | Reale Erprobung der Unterrichtsarchitektur im 3. Lehrjahr mit minimalem, reproduzierbarem Umfang. |
+| 2026-10-04 | Planvergleich DVH/Isodosen als Zwischenschritt ergänzt. | Prinzipwissen wird vor dem klinischen Handlungsfall an einer konkreten Planansicht angewendet. |
 
 ---
 
