@@ -53,34 +53,11 @@
         "feedback": "Dokumentation ist wichtig, ersetzt aber nicht die Klärung einer relevanten Abweichung."
       }
     ],
-    "reinforcement": "Plan-DVH und heutiges CBCT beantworten verschiedene Fragen: Der Plan zeigt die geplante Dosisverteilung. Das CBCT zeigt die aktuelle Anatomie.",
-    "followUpQuiz": {
-      "lead": "Drei kurze Fragen sichern den Transfer.",
-      "itemRefs": [
-        "q-dosis-10",
-        "q-dosis-11",
-        "q-dosis-12"
-      ],
-      "frames": {
-        "q-dosis-10": {
-          "vor": "Übertrage den Fall auf die tägliche Bildführung.",
-          "nach": "Ein unauffälliger Knochen-Match reicht nicht, wenn die Weichteilanatomie relevant abweicht."
-        },
-        "q-dosis-11": {
-          "vor": "Trenne Planinformation und Tagesinformation.",
-          "nach": "Das DVH bleibt eine Aussage über die geplante Geometrie."
-        },
-        "q-dosis-12": {
-          "vor": "Zum Schluss: Was ist deine Rolle als MTR?",
-          "nach": "Erkennen, prüfen, klären – nicht eigenständig umplanen."
-        }
-      },
-      "engineOptions": {
-        "mode": "self-first",
-        "leitner": true,
-        "shuffle": false
-      },
-      "passThreshold": 0.66
+    "reinforcement": "Plan-DVH und heutiges CBCT beantworten verschiedene Fragen. Der Plan zeigt die geplante Dosisverteilung, das CBCT die aktuelle Anatomie. MTR-Handlungsgrundsatz: Erkennen → prüfen → nach lokalem Protokoll klären bzw. eskalieren → nicht eigenständig umplanen.",
+    "transferPrompt": {
+      "question": "Warum reicht der unauffällige Knochen-Match hier nicht aus? Begründe in 1–2 Sätzen.",
+      "placeholder": "Meine Begründung …",
+      "note": "Deine Antwort wird nicht automatisch bewertet. Nutze sie für die gemeinsame Auswertung."
     }
   }
 }
