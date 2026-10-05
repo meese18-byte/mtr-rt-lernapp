@@ -7,31 +7,13 @@
   "reihenfolge": 1,
   "pflichtgrad": "pflicht",
   "body": {
-    "intro": "Starte ohne Nachschlagen. Nutze dein Vorwissen und die Planlogik.",
+    "intro": "Starte ohne Nachschlagen. Bearbeite zuerst die drei kurzen Aufgaben.",
     "infotext": "03-dosisverteilung-isodosen",
-    "checkQuestions": [
+    "checkQuestions": [],
+    "mode": "attempt-first",
+    "preQuestions": [
       {
-        "question": "Die Hochdosis folgt dem PTV sehr eng. Welcher Begriff passt am besten?",
-        "options": [
-          {
-            "label": "Konformität",
-            "correct": true,
-            "feedback": "Richtig. Entscheidend ist die räumliche Anpassung der Hochdosis an das Zielvolumen."
-          },
-          {
-            "label": "Homogenität",
-            "correct": false,
-            "feedback": "Homogenität beschreibt die Gleichmäßigkeit der Dosis im Zielvolumen."
-          },
-          {
-            "label": "Fraktionierung",
-            "correct": false,
-            "feedback": "Fraktionierung beschreibt die Aufteilung der Gesamtdosis auf mehrere Sitzungen."
-          }
-        ]
-      },
-      {
-        "question": "Im PTV gibt es große Dosisunterschiede. Welcher Begriff ist hier betroffen?",
+        "question": "Im PTV gibt es deutliche Dosisunterschiede. Welcher Fachbegriff passt dazu?",
         "options": [
           {
             "label": "Homogenität",
@@ -41,7 +23,7 @@
           {
             "label": "Konformität",
             "correct": false,
-            "feedback": "Konformität beschreibt vor allem die räumliche Anpassung an das Zielvolumen."
+            "feedback": "Konformität beschreibt vor allem, wie gut die Hochdosis räumlich zum Zielvolumen passt."
           },
           {
             "label": "Dosisleistung",
@@ -51,7 +33,7 @@
         ]
       },
       {
-        "question": "Was kannst du aus einem DVH allein nicht beurteilen?",
+        "question": "Welche Information zeigt dir ein DVH nicht?",
         "options": [
           {
             "label": "Wo ein hoher Dosisbereich im Körper liegt.",
@@ -71,50 +53,12 @@
         ]
       }
     ],
-    "mode": "attempt-first",
-    "preQuestions": [
-      {
-        "question": "Was prüfst du an einer Isodosenverteilung zuerst?",
-        "options": [
-          {
-            "label": "Zielabdeckung und Dosis zu Risikoorganen.",
-            "correct": true,
-            "feedback": "Gute Richtung. Genau daraus leiten wir die weitere Beurteilung ab."
-          },
-          {
-            "label": "Nur die Anzahl der Bestrahlungsfelder.",
-            "correct": false,
-            "feedback": "Die Feldzahl allein sagt noch nicht, ob die Dosisverteilung passt."
-          },
-          {
-            "label": "Nur die Behandlungsdauer.",
-            "correct": false,
-            "feedback": "Die Behandlungsdauer ist dafür nicht die zentrale Information."
-          }
-        ]
-      },
-      {
-        "question": "Ein DVH sieht unauffällig aus. Welche Frage bleibt trotzdem offen?",
-        "options": [
-          {
-            "label": "Wo die Dosis räumlich im CT liegt.",
-            "correct": true,
-            "feedback": "Richtig. Diese Information liefert das DVH allein nicht."
-          },
-          {
-            "label": "Ob überhaupt ein Plan vorhanden ist.",
-            "correct": false,
-            "feedback": "Das ist aus dem Szenario bereits klar."
-          },
-          {
-            "label": "Wie viele Mitarbeitende am Gerät stehen.",
-            "correct": false,
-            "feedback": "Das hat mit der Dosisverteilung nichts zu tun."
-          }
-        ]
-      }
-    ],
-    "questionFirst": true
+    "preRecall": {
+      "question": "Die Hochdosis liegt eng um das PTV. Wie heißt dieses Merkmal?",
+      "placeholder": "Fachbegriff eingeben …",
+      "answer": "Konformität",
+      "feedback": "Konformität beschreibt die räumliche Anpassung der Hochdosis an das Zielvolumen."
+    }
   },
   "learningGoals": [
     "Konformität, Homogenität und Dosisgradient unterscheiden.",
