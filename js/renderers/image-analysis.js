@@ -34,7 +34,7 @@ export async function render(container, module) {
   const interact = view.querySelector('.interaction-slot');
   const feedbackSlot = view.querySelector('.feedback-slot');
 
-  renderTeachingImage(imageSlot, img, mobileView, false);
+  if (mode !== 'click') renderTeachingImage(imageSlot, img, mobileView, false);
 
   const analysisPrompts = Array.isArray(body.analysisPrompts) ? body.analysisPrompts : [];
   const analysisHints = Array.isArray(body.analysisHints) ? body.analysisHints : [];
