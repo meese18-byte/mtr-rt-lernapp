@@ -41,7 +41,7 @@
     ],
     "reinforcement": "Nutze sichtbare Merkmale: Anzahl fester Winkel, Segmentierung und Rotationsbewegung. Erst danach ordnest du den Techniknamen zu.",
     "analysisPrompts": [
-      "Welche Technik siehst du bei A, B, C und D? Ordne diese vier Techniknamen zu: Vier-Felder-Box, 3D-CRT, Step-and-Shoot-IMRT, VMAT.",
+      "Welche Technik siehst du bei A, B, C und D? Ordne zu: Vier-Felder-Box, 3D-CRT, Step-and-Shoot-IMRT, VMAT.",
       "Woran erkennst du die jeweilige Technik? Nenne zu A–D jeweils ein Merkmal im Bild.",
       "Was ist bei Technik B und C unterschiedlich? Nenne zwei Unterschiede bei der Bestrahlung.",
       "Bei welcher Technik bewegt sich die Gantry während der Bestrahlung? Woran erkennst du das im Bild?"
