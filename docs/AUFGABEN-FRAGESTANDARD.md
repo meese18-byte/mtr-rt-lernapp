@@ -154,3 +154,20 @@ Eine Aufgabe wird erst freigegeben, wenn alle Fragen mit **Ja** beantwortet werd
 **So wenig Text wie moeglich – so viel Orientierung wie noetig.**
 
 Die kognitive Energie der Lernenden soll in die **fachliche Loesung**, nicht in die Interpretation des Arbeitsauftrags fliessen.
+
+
+## 9. Sprachliche Zugänglichkeit
+
+Fachliche Tiefe und sprachliche Komplexität werden getrennt betrachtet.
+
+- Fachbegriffe wie PTV, DVH, Isodose, Gantry, IMRT oder VMAT bleiben erhalten.
+- Arbeitsanweisungen werden so einfach formuliert, wie es die fachliche Aufgabe erlaubt.
+- Bevorzugt werden kurze Verben und direkte Fragen: „Was siehst du?“, „Woran erkennst du das?“, „Was ist unterschiedlich?“
+- Abstrakte Formulierungen werden vermieden, wenn eine konkrete Beobachtungsfrage denselben fachlichen Anspruch erfüllt.
+- Bei anspruchsvollen Bild- oder Vergleichsaufgaben darf ein kurzer **Tipp** die Blickrichtung lenken, ohne die Lösung zu verraten.
+- Ziel: Die Lernenden sollen ihre Denkenergie für die fachliche Antwort verwenden, nicht für die Übersetzung des Arbeitsauftrags.
+
+Beispiel:
+
+> **Was ist bei Technik B und C unterschiedlich? Nenne zwei Unterschiede bei der Bestrahlung.**  
+> Tipp: Schau auf die Einstrahlrichtungen und darauf, was sich während der Bestrahlung verändert.
