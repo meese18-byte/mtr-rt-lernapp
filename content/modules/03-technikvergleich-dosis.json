@@ -15,11 +15,11 @@
   ],
   "body": {
     "mode": "mc",
-    "question": "Welche Zuordnung ist richtig?",
+    "question": "Welche Zuordnung stimmt?",
     "image": {
       "src": "./media/images/dosis-technikvergleich-beta-student.svg",
       "alt": "Vier schematische Beckenquerschnitte mit unterschiedlichen Feld- und Rotationsmustern, beschriftet als Technik A bis D.",
-      "caption": "Vier Darstellungen, gleiche Grundanatomie. Ordne die Techniken anhand der sichtbaren Applikationsmuster zu.",
+      "caption": "Vier Darstellungen, gleiche Grundanatomie. Ordne die Techniken anhand der sichtbaren Merkmale zu.",
       "layout": "wide-scroll"
     },
     "options": [
@@ -41,10 +41,10 @@
     ],
     "reinforcement": "Nutze sichtbare Merkmale: Anzahl fester Winkel, Segmentierung und Rotationsbewegung. Erst danach ordnest du den Techniknamen zu.",
     "analysisPrompts": [
-      "Ordne A–D zu: Vier-Felder-Box, 3D-CRT mit 6 Feldern, Step-and-Shoot-IMRT, VMAT.",
-      "Nenne zu jeder Zuordnung genau ein sichtbares Merkmal.",
-      "Vergleiche Technik B und C. Nenne zwei Unterschiede in der Strahlenabgabe.",
-      "Welche Technik arbeitet ohne feste Gantrywinkel? Begründe mit einem sichtbaren Merkmal."
+      "Welche Technik siehst du bei A, B, C und D? Ordne die vier Techniknamen zu.",
+      "Woran erkennst du die jeweilige Technik? Nenne zu A–D jeweils ein Merkmal im Bild.",
+      "Was ist bei Technik B und C unterschiedlich? Nenne zwei Unterschiede bei der Bestrahlung.",
+      "Bei welcher Technik bewegt sich die Gantry während der Bestrahlung? Woran erkennst du das im Bild?"
     ],
     "solutionImage": {
       "src": "./media/images/dosis-technikvergleich-beta.svg",
@@ -52,6 +52,14 @@
       "caption": "Lösung und Merkmale der vier Techniken.",
       "layout": "wide-scroll"
     },
-    "intro": "Arbeite zuerst nur mit der Grafik. Ergebnis: 4 Zuordnungen und zu jeder Zuordnung genau 1 sichtbares Merkmal."
+    "intro": "Ergebnis: 4 Zuordnungen + je 1 sichtbares Merkmal + 2 Unterschiede + 1 begründete Entscheidung.",
+    "analysisHints": [
+      "",
+      "",
+      "Schau auf die Einstrahlrichtungen und darauf, was sich während der Bestrahlung verändert.",
+      ""
+    ],
+    "requirePromptResponses": true,
+    "mobileView": "tech-four"
   }
 }
