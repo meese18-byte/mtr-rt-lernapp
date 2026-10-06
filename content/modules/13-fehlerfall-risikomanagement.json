@@ -1,0 +1,48 @@
+{
+  "id": "13-fehlerfall-risikomanagement",
+  "learningGoals": [
+    "Die Lernenden erkennen eine sicherheitsrelevante Abweichung und priorisieren die unmittelbare Patientensicherheit.",
+    "Die Lernenden unterscheiden Sofortmaßnahme, Dokumentation und nachgelagerte Ursachenanalyse.",
+    "Die Lernenden leiten aus einem Ereignis geeignete organisatorische Lernmaßnahmen ab."
+  ],
+  "examRelevance": "3. Lehrjahr – praktischer Transfer von Qualitäts- und Risikomanagement.",
+  "relatedModules": [
+    "13-qm-risikomanagement"
+  ],
+  "relatedInfotexte": [],
+  "body": {
+    "scenario": {
+      "situation": "Bei einer vorgesehenen Qualitätsprüfung zeigt sich eine Abweichung gegenüber dem festgelegten Referenzzustand. Gleichzeitig steht der reguläre Patientenbetrieb unter Zeitdruck. Im Team entsteht die Frage, ob zunächst weitergearbeitet und die Ursache später geklärt werden kann.",
+      "question": "Welche Reihenfolge ist für ein sicheres Vorgehen sinnvoll?"
+    },
+    "options": [
+      {
+        "label": "Patientenbetrieb unverändert fortsetzen und die Abweichung am Tagesende melden.",
+        "correct": false,
+        "feedback": "Nicht geeignet. Eine relevante Abweichung muss vor weiterer Nutzung entsprechend dem festgelegten Verfahren bewertet werden."
+      },
+      {
+        "label": "Abweichung nach Vorgabe bewerten, erforderliche Verantwortliche einbeziehen, Nutzung entsprechend der Entscheidung begrenzen oder stoppen und anschließend dokumentieren sowie Ursache/Lernmaßnahmen bearbeiten.",
+        "correct": true,
+        "feedback": "Das trennt Sofortreaktion und nachgelagerte Fehleranalyse sinnvoll."
+      },
+      {
+        "label": "Messung so oft wiederholen, bis wieder ein unauffälliger Wert erscheint.",
+        "correct": false,
+        "feedback": "Nicht ausreichend. Wiederholung kann Teil der Klärung sein, ersetzt aber keine strukturierte Bewertung und Dokumentation."
+      }
+    ],
+    "reinforcement": "Beta-Fokus: Sicherheitsmanagement verbindet unmittelbares Handeln mit systematischem Lernen. CIRS/FMEA dienen nicht als Ersatz für die Sofortmaßnahme, sondern für Prävention und Organisationslernen.",
+    "followUpQuiz": {
+      "lead": "Masterfragen werden nach fachlicher Verifikation aus der zentralen Itembank ergänzt.",
+      "itemRefs": [],
+      "frames": {},
+      "engineOptions": {
+        "mode": "self-first",
+        "leitner": true,
+        "shuffle": false
+      },
+      "passThreshold": 0.66
+    }
+  }
+}

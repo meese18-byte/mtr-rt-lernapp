@@ -1,0 +1,480 @@
+{
+  "thema": "dosisverteilung",
+  "version": 1,
+  "lastUpdated": "2026-10-03",
+  "schemaNote": "Beta 3. Lehrjahr. Masterfragen zu Dosisverteilung, Isodosen, DVH, Technikbezug und MTR-Handlung. Keine universellen OAR-Grenzwerte als Auswendigwissen.",
+  "items": [
+    {
+      "id": "q-dosis-01",
+      "type": "single",
+      "stem": "Was beschreibt die Konformität eines Bestrahlungsplans?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Wie gleichmäßig die Dosis im Zielvolumen verteilt ist.",
+          "korrekt": false,
+          "rationale": "Das beschreibt die Homogenität."
+        },
+        {
+          "id": "o-b",
+          "text": "Wie gut sich die Hochdosisregion an das Zielvolumen anpasst.",
+          "korrekt": true,
+          "rationale": "Das ist der Kern der Konformität."
+        },
+        {
+          "id": "o-c",
+          "text": "Wie schnell die Dosis abgegeben wird.",
+          "korrekt": false,
+          "rationale": "Das ist die Dosisleistung."
+        }
+      ],
+      "correct": [
+        "o-b"
+      ],
+      "rationale_global": "Konformität beschreibt die räumliche Anpassung der behandelten Dosisregion an das Zielvolumen.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dosisverteilung",
+        "konformitaet",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-02",
+      "type": "single",
+      "stem": "Was beschreibt die Homogenität im Zielvolumen?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Wie gleichmäßig die Dosis im Zielvolumen verteilt ist.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-b",
+          "text": "Wie steil die Dosis außerhalb des Zielvolumens abfällt.",
+          "korrekt": false,
+          "rationale": "Das beschreibt den Dosisgradienten."
+        },
+        {
+          "id": "o-c",
+          "text": "Wie viele Felder ein Plan nutzt.",
+          "korrekt": false,
+          "rationale": "Die Feldzahl allein beschreibt keine Homogenität."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Homogenität beschreibt die Gleichmäßigkeit der Dosis im Zielvolumen.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dosisverteilung",
+        "homogenitaet",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-03",
+      "type": "single",
+      "stem": "Was ist ein steiler Dosisgradient?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Die Dosis fällt über eine kurze Strecke stark ab.",
+          "korrekt": true,
+          "rationale": "Richtig. Das kann für die Schonung benachbarter Strukturen wichtig sein."
+        },
+        {
+          "id": "o-b",
+          "text": "Die Dosis ist im gesamten Körper gleich hoch.",
+          "korrekt": false,
+          "rationale": "Das wäre kein Gradient."
+        },
+        {
+          "id": "o-c",
+          "text": "Die Dosis steigt mit jeder Fraktion schneller an.",
+          "korrekt": false,
+          "rationale": "Der Dosisgradient beschreibt eine räumliche, nicht zeitliche Änderung."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Der Dosisgradient beschreibt, wie schnell sich die Dosis räumlich verändert.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dosisverteilung",
+        "gradient",
+        "oar"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-04",
+      "type": "single",
+      "stem": "Was zeigen Isodosen?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Bereiche mit gleicher Dosis in der räumlichen Darstellung.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-b",
+          "text": "Nur die mittlere Dosis eines Organs.",
+          "korrekt": false,
+          "rationale": "Das ist eine einzelne Dosiskennzahl."
+        },
+        {
+          "id": "o-c",
+          "text": "Nur die Anzahl der Bestrahlungsfelder.",
+          "korrekt": false,
+          "rationale": "Die Feldzahl ist eine technische Planinformation."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Isodosen machen sichtbar, wo im Bild gleiche Dosisbereiche liegen.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "isodosen",
+        "dosisverteilung",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-05",
+      "type": "single",
+      "stem": "Was kann ein DVH allein nicht zeigen?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Wie viel Volumen mindestens eine bestimmte Dosis erhält.",
+          "korrekt": false,
+          "rationale": "Das ist eine typische DVH-Information."
+        },
+        {
+          "id": "o-b",
+          "text": "Wo im Körper ein hoher Dosisbereich liegt.",
+          "korrekt": true,
+          "rationale": "Richtig. Die räumliche Lage geht im DVH verloren."
+        },
+        {
+          "id": "o-c",
+          "text": "Die mittlere Dosis eines Volumens.",
+          "korrekt": false,
+          "rationale": "Dmean kann in der Planauswertung angegeben werden."
+        }
+      ],
+      "correct": [
+        "o-b"
+      ],
+      "rationale_global": "Das DVH fasst Dosis und Volumen zusammen. Die räumliche Lage der Dosis muss in den Isodosen beurteilt werden.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dvh",
+        "isodosen",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-06",
+      "type": "single",
+      "stem": "Was bedeutet Dmean?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Die mittlere Dosis im betrachteten Volumen.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-b",
+          "text": "Die höchste einzelne Dosis im gesamten Plan.",
+          "korrekt": false,
+          "rationale": "Das wäre keine Dmean-Angabe."
+        },
+        {
+          "id": "o-c",
+          "text": "Der Volumenanteil oberhalb einer bestimmten Dosis.",
+          "korrekt": false,
+          "rationale": "Das entspricht dem Prinzip von Vx."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Dmean ist die mittlere Dosis eines definierten Volumens.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dvh",
+        "dmean",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-07",
+      "type": "single",
+      "stem": "Was bedeutet ein Wert wie V20?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Der Anteil eines Volumens, der mindestens 20 Gy erhält.",
+          "korrekt": true,
+          "rationale": "Richtig, wenn V20 in Gy angegeben ist."
+        },
+        {
+          "id": "o-b",
+          "text": "Die Dosis, die 20 Prozent des Volumens erhalten.",
+          "korrekt": false,
+          "rationale": "Das wäre eine Dxx-Angabe, nicht Vx."
+        },
+        {
+          "id": "o-c",
+          "text": "Die Anzahl der Felder mit 20 Monitor Units.",
+          "korrekt": false,
+          "rationale": "V20 ist ein Dosis-Volumen-Kennwert."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Vx beschreibt den Volumenanteil, der mindestens die angegebene Dosis x erhält.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dvh",
+        "vxx",
+        "planung"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-08",
+      "type": "single",
+      "stem": "Wofür wird D98 bei einem Zielvolumen genutzt?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Als Hinweis auf den niedrigen Dosisbereich, den fast das gesamte Volumen erreicht.",
+          "korrekt": true,
+          "rationale": "Richtig. D98 ist ein near-minimum-Kennwert."
+        },
+        {
+          "id": "o-b",
+          "text": "Als Maß für die mittlere Organdosis.",
+          "korrekt": false,
+          "rationale": "Dafür wird Dmean verwendet."
+        },
+        {
+          "id": "o-c",
+          "text": "Als Angabe für die Anzahl der Bestrahlungsfelder.",
+          "korrekt": false,
+          "rationale": "D98 ist ein Dosis-Volumen-Kennwert."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "D98 beschreibt die Dosis, die 98 Prozent des betrachteten Volumens mindestens erhalten, und wird als near-minimum-Kennwert verwendet.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "advanced",
+      "tags": [
+        "dvh",
+        "d98",
+        "zielvolumen"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-09",
+      "type": "single",
+      "stem": "Warum kann eine IMRT- oder VMAT-Verteilung konformer sein als eine einfache Gegenfeldtechnik?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Weil die Intensität zusätzlich moduliert und aus mehreren Richtungen optimiert werden kann.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-b",
+          "text": "Weil dabei keine Risikoorgane berücksichtigt werden.",
+          "korrekt": false,
+          "rationale": "Risikoorgane sind gerade ein wichtiger Teil der Optimierung."
+        },
+        {
+          "id": "o-c",
+          "text": "Weil immer Elektronen verwendet werden.",
+          "korrekt": false,
+          "rationale": "IMRT und VMAT werden typischerweise mit Photonen durchgeführt."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Mehrere Einstrahlrichtungen und Intensitätsmodulation ermöglichen eine stärkere Anpassung der Hochdosisregion an komplexe Zielgeometrien.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "bestrahlungstechnik",
+        "imrt",
+        "vmat",
+        "konformitaet"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-10",
+      "type": "single",
+      "stem": "Der Knochen-Match im CBCT ist unauffällig. Die Weichteilanatomie weicht aber deutlich vom Planungs-CT ab. Was ist richtig?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Unauffälliger Knochen-Match reicht. Die Bestrahlung kann immer starten.",
+          "korrekt": false,
+          "rationale": "Ein Knochen-Match kann relevante Weichteiländerungen übersehen."
+        },
+        {
+          "id": "o-b",
+          "text": "Die Abweichung nach lokalem Protokoll prüfen und vor der Bestrahlung klären.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-c",
+          "text": "Das DVH am Behandlungstag neu berechnen.",
+          "korrekt": false,
+          "rationale": "Das ist nicht die Aufgabe der MTR am Gerät."
+        }
+      ],
+      "correct": [
+        "o-b"
+      ],
+      "rationale_global": "Planungsgeometrie und aktuelle Anatomie müssen zusammen betrachtet werden. Relevante Abweichungen werden vor der Behandlung geklärt.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "advanced",
+      "tags": [
+        "cbct",
+        "planung",
+        "mtr-handlung",
+        "plausibilitaet"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-11",
+      "type": "single",
+      "stem": "Was beschreibt das DVH eines freigegebenen Plans?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Die geplante Dosis-Volumen-Beziehung.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-b",
+          "text": "Die tagesaktuelle Organlage im heutigen CBCT.",
+          "korrekt": false,
+          "rationale": "Das zeigt die aktuelle Bildgebung, nicht das Plan-DVH."
+        },
+        {
+          "id": "o-c",
+          "text": "Die aktuelle Patientenbewegung während der Fraktion.",
+          "korrekt": false,
+          "rationale": "Das ist keine DVH-Information."
+        }
+      ],
+      "correct": [
+        "o-a"
+      ],
+      "rationale_global": "Ein Plan-DVH beschreibt die Planungssituation. Es bildet nicht automatisch die heutige Anatomie ab.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "basic",
+      "tags": [
+        "dvh",
+        "cbct",
+        "planung",
+        "tagesanatomie"
+      ],
+      "kontext_neutral": true
+    },
+    {
+      "id": "q-dosis-12",
+      "type": "single",
+      "stem": "Was ist die Aufgabe der MTR, wenn Planangaben nicht zur aktuellen Situation passen?",
+      "options": [
+        {
+          "id": "o-a",
+          "text": "Den Plan eigenständig ändern.",
+          "korrekt": false,
+          "rationale": "Die MTR optimiert oder genehmigt den Plan nicht eigenständig."
+        },
+        {
+          "id": "o-b",
+          "text": "Die Abweichung erkennen, nach Protokoll prüfen und bei Bedarf klären oder eskalieren.",
+          "korrekt": true,
+          "rationale": "Richtig."
+        },
+        {
+          "id": "o-c",
+          "text": "Die Abweichung ignorieren, wenn die Bestrahlung technisch startbereit ist.",
+          "korrekt": false,
+          "rationale": "Technische Startbereitschaft ersetzt keine Plausibilitätsprüfung."
+        }
+      ],
+      "correct": [
+        "o-b"
+      ],
+      "rationale_global": "Die MTR muss relevante Abweichungen erkennen und sicher klären. Die fachliche Planfreigabe bleibt bei den dafür verantwortlichen Berufsgruppen.",
+      "lehrjahr": [
+        3
+      ],
+      "schwierigkeit": "advanced",
+      "tags": [
+        "mtr-handlung",
+        "sicherheit",
+        "planung",
+        "eskalation"
+      ],
+      "kontext_neutral": true
+    }
+  ]
+}

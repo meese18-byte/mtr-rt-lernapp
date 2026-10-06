@@ -1,0 +1,63 @@
+{
+  "id": "06-plancheck-dvh-isodosen",
+  "title": "Plancheck: DVH, Isodosen und heutige Anatomie",
+  "type": "case",
+  "category": "Bestrahlungsplanung – Transfer",
+  "difficulty": "fortgeschritten",
+  "estimatedMinutes": 20,
+  "learningGoals": [
+    "Planungssituation und tagesaktuelle Anatomie unterscheiden.",
+    "Einen unauffälligen Knochen-Match nicht mit einer vollständig plausiblen Anatomie gleichsetzen.",
+    "Bei relevanten Abweichungen eine sichere MTR-Handlung ableiten."
+  ],
+  "tags": [
+    "plancheck",
+    "dvh",
+    "isodosen",
+    "cbct",
+    "plausibilitaet",
+    "mtr-handlung"
+  ],
+  "examRelevance": "3. Lehrjahr – Planverständnis, Bildführung und sichere Reaktion auf Abweichungen.",
+  "relatedModules": [
+    "06-realplan-dvh-isodosen",
+    "03-dosisverteilung-isodosen"
+  ],
+  "relatedInfotexte": [
+    "03-dosisverteilung-isodosen"
+  ],
+  "body": {
+    "scenario": {
+      "situation": "Ein Patient mit Prostatakarzinom kommt zur Bestrahlung. Der Plan ist freigegeben und das DVH erfüllt das lokale Protokoll. Im heutigen CBCT ist das Rektum deutlich stärker gefüllt als im Planungs-CT. Der automatische Knochen-Match zeigt kaum Verschiebung.",
+      "question": "Was tust du als MTR?"
+    },
+    "options": [
+      {
+        "label": "Bestrahlen. Der Knochen-Match ist unauffällig.",
+        "correct": false,
+        "feedback": "Nicht ausreichend. Ein guter Knochen-Match kann eine relevante Weichteilabweichung übersehen."
+      },
+      {
+        "label": "Aktuelle Anatomie und Weichteil-Match prüfen. Abweichung nach lokalem Protokoll klären, bevor bestrahlt wird.",
+        "correct": true,
+        "feedback": "Richtig. Das Plan-DVH beschreibt die Planung. Das CBCT zeigt die heutige Anatomie. Eine relevante Abweichung muss vor der Behandlung geklärt werden."
+      },
+      {
+        "label": "Das DVH am Gerät verändern, bis es zur heutigen Anatomie passt.",
+        "correct": false,
+        "feedback": "Das ist nicht die Aufgabe der MTR am Behandlungsgerät. Eine Planänderung erfolgt nicht eigenständig."
+      },
+      {
+        "label": "Nur dokumentieren und die Bestrahlung unverändert starten.",
+        "correct": false,
+        "feedback": "Dokumentation ist wichtig, ersetzt aber nicht die Klärung einer relevanten Abweichung."
+      }
+    ],
+    "reinforcement": "Plan-DVH und heutiges CBCT beantworten verschiedene Fragen. Der Plan zeigt die geplante Dosisverteilung, das CBCT die aktuelle Anatomie. MTR-Handlungsgrundsatz: Erkennen → prüfen → nach lokalem Protokoll klären bzw. eskalieren → nicht eigenständig umplanen.",
+    "transferPrompt": {
+      "question": "Warum reicht der unauffällige Knochen-Match hier nicht aus? Begründe in 1–2 Sätzen.",
+      "placeholder": "Meine Begründung …",
+      "note": "Deine Antwort wird nicht automatisch bewertet. Nutze sie für die gemeinsame Auswertung."
+    }
+  }
+}

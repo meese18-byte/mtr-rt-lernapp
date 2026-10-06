@@ -1,0 +1,65 @@
+{
+  "id": "03-technikvergleich-dosis",
+  "learningGoals": [
+    "Vier-Felder-Box, 3D-CRT, IMRT und VMAT anhand ihrer Applikationslogik unterscheiden.",
+    "Zusammenhang zwischen Einstrahltechnik und Form der Dosisverteilung erklären.",
+    "Konformität und Dosisgradient im Technikvergleich anwenden."
+  ],
+  "examRelevance": "3. Lehrjahr – Technikverständnis als Grundlage zum Lesen von Dosisverteilungen.",
+  "relatedModules": [
+    "03-dosisverteilung-isodosen",
+    "06-plancheck-dvh-isodosen"
+  ],
+  "relatedInfotexte": [
+    "03-dosisverteilung-isodosen"
+  ],
+  "body": {
+    "mode": "mc",
+    "question": "Welche Zuordnung stimmt?",
+    "image": {
+      "src": "./media/images/dosis-technikvergleich-beta-student.svg",
+      "alt": "Vier schematische Beckenquerschnitte mit unterschiedlichen Feld- und Rotationsmustern, beschriftet als Technik A bis D.",
+      "caption": "Vier Darstellungen, gleiche Grundanatomie. Ordne die Techniken anhand der sichtbaren Merkmale zu.",
+      "layout": "wide-scroll"
+    },
+    "options": [
+      {
+        "label": "A Boxtechnik · B 3D-CRT · C Step-and-Shoot-IMRT · D VMAT",
+        "correct": true,
+        "feedback": "Richtig. A zeigt vier feste Felder, B sechs feste Felder, C feste Winkel mit Segmenten und D die Rotationsabgabe."
+      },
+      {
+        "label": "A VMAT · B Boxtechnik · C 3D-CRT · D IMRT",
+        "correct": false,
+        "feedback": "Nicht richtig. A und B zeigen feste Feldanordnungen; D zeigt die Rotationsabgabe."
+      },
+      {
+        "label": "A 3D-CRT · B VMAT · C Boxtechnik · D Step-and-Shoot-IMRT",
+        "correct": false,
+        "feedback": "Nicht richtig. D ist die einzige Darstellung mit Rotationsbogen."
+      }
+    ],
+    "reinforcement": "Nutze sichtbare Merkmale: Anzahl fester Winkel, Segmentierung und Rotationsbewegung. Erst danach ordnest du den Techniknamen zu.",
+    "analysisPrompts": [
+      "Welche Technik siehst du bei A, B, C und D? Ordne zu: Vier-Felder-Box, 3D-CRT, Step-and-Shoot-IMRT, VMAT.",
+      "Woran erkennst du die jeweilige Technik? Nenne zu A–D jeweils ein Merkmal im Bild.",
+      "Was ist bei Technik B und C unterschiedlich? Nenne zwei Unterschiede bei der Bestrahlung.",
+      "Bei welcher Technik bewegt sich die Gantry während der Bestrahlung? Woran erkennst du das im Bild?"
+    ],
+    "solutionImage": {
+      "src": "./media/images/dosis-technikvergleich-beta.svg",
+      "alt": "Lösung: Vier-Felder-Box, 3D-CRT mit sechs Feldern, Step-and-Shoot-IMRT und VMAT.",
+      "caption": "Lösung und Merkmale der vier Techniken.",
+      "layout": "wide-scroll"
+    },
+    "intro": "Ergebnis: 4 Zuordnungen + je 1 sichtbares Merkmal + 2 Unterschiede + 1 begründete Entscheidung.",
+    "analysisHints": [
+      "",
+      "",
+      "Schau auf die Einstrahlrichtungen und darauf, was sich während der Bestrahlung verändert.",
+      ""
+    ],
+    "requirePromptResponses": true,
+    "mobileView": "tech-four"
+  }
+}

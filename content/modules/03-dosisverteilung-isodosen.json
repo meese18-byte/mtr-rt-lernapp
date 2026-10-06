@@ -1,0 +1,76 @@
+{
+  "id": "03-dosisverteilung-isodosen",
+  "title": "Dosisverteilung und Isodosen verstehen",
+  "type": "knowledge",
+  "category": "Grundlagen – Volumina und Dosis",
+  "kapitel": 3,
+  "reihenfolge": 1,
+  "pflichtgrad": "pflicht",
+  "body": {
+    "intro": "Starte ohne Nachschlagen. Bearbeite zuerst die drei kurzen Aufgaben.",
+    "infotext": "03-dosisverteilung-isodosen",
+    "checkQuestions": [],
+    "mode": "attempt-first",
+    "preQuestions": [
+      {
+        "question": "Im PTV gibt es deutliche Dosisunterschiede. Welcher Fachbegriff passt dazu?",
+        "options": [
+          {
+            "label": "Homogenität",
+            "correct": true,
+            "feedback": "Richtig. Große Dosisunterschiede im Zielvolumen sprechen gegen eine homogene Verteilung."
+          },
+          {
+            "label": "Konformität",
+            "correct": false,
+            "feedback": "Konformität beschreibt vor allem, wie gut die Hochdosis räumlich zum Zielvolumen passt."
+          },
+          {
+            "label": "Dosisleistung",
+            "correct": false,
+            "feedback": "Die Dosisleistung beschreibt die Dosis pro Zeit."
+          }
+        ]
+      },
+      {
+        "question": "Welche Information zeigt dir ein DVH nicht?",
+        "options": [
+          {
+            "label": "Wo ein hoher Dosisbereich im Körper liegt.",
+            "correct": true,
+            "feedback": "Richtig. Die räumliche Lage geht im DVH verloren."
+          },
+          {
+            "label": "Wie viel Volumen mindestens eine bestimmte Dosis erhält.",
+            "correct": false,
+            "feedback": "Genau diese Dosis-Volumen-Beziehung kann ein DVH zeigen."
+          },
+          {
+            "label": "Ob zwei Strukturen unterschiedliche Dosisverläufe haben.",
+            "correct": false,
+            "feedback": "Die Kurven lassen sich miteinander vergleichen."
+          }
+        ]
+      }
+    ],
+    "preRecall": {
+      "question": "Die Hochdosis liegt eng um das PTV. Wie heißt dieses Merkmal?",
+      "placeholder": "Fachbegriff eingeben …",
+      "answer": "Konformität",
+      "feedback": "Konformität beschreibt die räumliche Anpassung der Hochdosis an das Zielvolumen."
+    }
+  },
+  "learningGoals": [
+    "Konformität, Homogenität und Dosisgradient unterscheiden.",
+    "Isodosen als räumliche Dosisdarstellung lesen.",
+    "Grundmuster verschiedener Bestrahlungstechniken mit der Dosisverteilung verknüpfen.",
+    "DVH-Kennwerte grundlegend einordnen und die Grenzen eines DVH benennen."
+  ],
+  "examRelevance": "3. Lehrjahr – Planverständnis, Dosisverteilung und fachpraktische Plausibilisierung.",
+  "relatedModules": [
+    "06-plancheck-dvh-isodosen"
+  ],
+  "relatedInfotexte": [
+    "03-dosisverteilung-isodosen"
+  ]
+}
