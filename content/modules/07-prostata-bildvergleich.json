@@ -1,0 +1,69 @@
+{
+  "id": "07-prostata-bildvergleich",
+  "learningGoals": [
+    "Knöcherne Übereinstimmung von veränderter Weichteilgeometrie unterscheiden.",
+    "Zwei sichtbare Unterschiede in einem schematischen Referenzvergleich beschreiben.",
+    "Die Grenzen einer Dosis- und Freigabeaussage aus dem Bildvergleich benennen."
+  ],
+  "examRelevance": "Fachpraktische Vorbereitung: Befund beschreiben, Vorgehen begründen, Zuständigkeiten und Rückfragen klären. Keine Aussage über individuelle Prüfungssicherheit.",
+  "relatedModules": [
+    "09-prostata-grundlagen",
+    "05-enddarmvorbereitung-becken",
+    "14-plct-stoerfall-prostata",
+    "09-prostata-teamuebergabe"
+  ],
+  "relatedInfotexte": [],
+  "reviewNote": "Pilotfassung zur fachlichen und didaktischen Prüfung; keine bestätigte UKR-SOP.",
+  "sources": [
+    {
+      "title": "eviQ 3657: Definitive EBRT, Simulation und Bildverifikation",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/3657-prostate-adenocarcinoma-definitive-ebrt-prost"
+    },
+    {
+      "title": "eviQ 4160: Preparing your bladder and bowel for pelvic radiation therapy",
+      "url": "https://www.eviq.org.au/patients-and-carers/patient-information-sheets/treating-cancer-with-radiation-therapy/4160-preparing-your-bladder-and-bowel-for-pelvic-r"
+    },
+    {
+      "title": "Cancer Research UK: Planning radiotherapy for prostate cancer",
+      "url": "https://www.cancerresearchuk.org/about-cancer/prostate-cancer/treatment/radiotherapy/external-radiotherapy/planning-radiotherapy"
+    },
+    {
+      "title": "eviQ 4140: IGRT, Organfüllung und referenzbezogener Vergleich",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/4140-prostate-adenocarcinoma-definitive-ultra-hypo"
+    }
+  ],
+  "body": {
+    "mode": "mc",
+    "question": "Vergleiche A und B. Beschreibe zuerst zwei Beobachtungen in eigenen Worten und trenne sie von deiner Interpretation. Welche Schlussfolgerung ist durch das Schema am besten gestützt?",
+    "ownResponsePrompt": "Notiere zwei sichtbare Beobachtungen und eine offene Frage für die weitere Verifikation. Wähle erst danach eine Schlussfolgerung.",
+    "ownResponseMinWords": 15,
+    "image": {
+      "src": "./media/images/prostata-referenz-tagesbild-schema.svg",
+      "alt": "Zwei sagittale Beckenschemata mit denselben knöchernen Bezugspunkten und den beschrifteten Strukturen Blase, Prostata und Rektum. Im Tagesbild unterscheiden sich die Weichteilumrisse und ihre Lage von der Referenz. Vorn ist links, hinten rechts.",
+      "caption": "Eigenes didaktisches SVG ohne Patientenbezug. Keine reale Bildgebung, keine Maßangabe und keine Dosisdarstellung. Es wird Bildvergleich trainiert, keine klinische Freigabe simuliert."
+    },
+    "options": [
+      {
+        "label": "Die Knochen passen; damit sind auch Zielgebiet und Risikoorgane ausreichend überprüft.",
+        "correct": false,
+        "feedback": "Die knöchernen Bezugspunkte stimmen überein, die Weichteilgeometrie aber nicht. Ein Knochenvergleich allein beantwortet die Frage nach dem Zielgebiet und den Nachbarorganen nicht."
+      },
+      {
+        "label": "Die Rektumform und die Lage der Prostata unterscheiden sich trotz gleicher knöcherner Bezugspunkte. Weitere Bewertung nach Verifikationsprotokoll ist erforderlich.",
+        "correct": true,
+        "feedback": "Im Tagesbild ist das Rektum breiter dargestellt und die Prostata gegenüber der Referenz nach vorn versetzt. Das Schema zeigt eine mögliche Geometrieänderung; Freigabe, Toleranz und Maßnahmen benötigen den vollständigen klinischen Vergleich."
+      },
+      {
+        "label": "Das Schema beweist eine konkrete Unterdosierung der Prostata.",
+        "correct": false,
+        "feedback": "Es zeigt Geometrie, keine Dosisberechnung. Eine genaue Dosisfolge ist daraus nicht ableitbar."
+      },
+      {
+        "label": "Eine Tischverschiebung stellt automatisch dieselbe Form und Füllung aller Organe wieder her.",
+        "correct": false,
+        "feedback": "Eine starre Verschiebung verändert die relative Form und Füllung der Organe nicht. Ein Lageversatz und eine Formänderung müssen unterschieden werden."
+      }
+    ],
+    "reinforcement": "Erst beschreiben, dann interpretieren: Knochenbezug, Weichteile, mögliche Bedeutung, offene Klärung. Geometrische Auffälligkeit und nachgewiesene Dosisabweichung sind unterschiedliche Aussagen."
+  }
+}

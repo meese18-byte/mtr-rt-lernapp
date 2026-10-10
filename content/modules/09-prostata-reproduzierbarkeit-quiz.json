@@ -1,0 +1,57 @@
+{
+  "id": "09-prostata-reproduzierbarkeit-quiz",
+  "learningGoals": [
+    "Vorbereitung, äußeres Setup und Bildverifikation unterscheiden.",
+    "Geometriebefunde bewerten, ohne unbelegte Dosisfolgen zu behaupten.",
+    "Offenen Wiederholungsbedarf aus dem eigenen Wissenscheck ableiten."
+  ],
+  "examRelevance": "Fachpraktische Vorbereitung: Befund beschreiben, Vorgehen begründen, Zuständigkeiten und Rückfragen klären. Keine Aussage über individuelle Prüfungssicherheit.",
+  "relatedModules": [
+    "09-prostata-grundlagen",
+    "05-enddarmvorbereitung-becken",
+    "07-prostata-bildvergleich",
+    "14-plct-stoerfall-prostata",
+    "09-prostata-teamuebergabe"
+  ],
+  "relatedInfotexte": [],
+  "reviewNote": "Pilotfassung zur fachlichen und didaktischen Prüfung; keine bestätigte UKR-SOP.",
+  "sources": [
+    {
+      "title": "eviQ 3657: Definitive EBRT, Simulation und Bildverifikation",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/3657-prostate-adenocarcinoma-definitive-ebrt-prost"
+    },
+    {
+      "title": "eviQ 4160: Preparing your bladder and bowel for pelvic radiation therapy",
+      "url": "https://www.eviq.org.au/patients-and-carers/patient-information-sheets/treating-cancer-with-radiation-therapy/4160-preparing-your-bladder-and-bowel-for-pelvic-r"
+    },
+    {
+      "title": "Cancer Research UK: Planning radiotherapy for prostate cancer",
+      "url": "https://www.cancerresearchuk.org/about-cancer/prostate-cancer/treatment/radiotherapy/external-radiotherapy/planning-radiotherapy"
+    },
+    {
+      "title": "eviQ 4140: IGRT, Organfüllung und referenzbezogener Vergleich",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/4140-prostate-adenocarcinoma-definitive-ultra-hypo"
+    }
+  ],
+  "body": {
+    "lead": "Bearbeite acht Fragen ohne Lösungshilfe. Lies nach jeder Antwort die Begründung. Notiere zum Schluss ein Thema, das du noch einmal erklären oder praktisch üben möchtest.",
+    "itemRefs": [
+      "q-prostata-01",
+      "q-prostata-02",
+      "q-prostata-03",
+      "q-prostata-05",
+      "q-prostata-07",
+      "q-prostata-08",
+      "q-prostata-10",
+      "q-prostata-12"
+    ],
+    "engineOptions": {
+      "mode": "self-first",
+      "leitner": true,
+      "shuffle": true
+    },
+    "passThreshold": 0.75,
+    "resultLabel": "Wissenscheck",
+    "resultNote": "Das Ergebnis beschreibt diesen Wissenscheck. Es belegt weder praktische Handlungskompetenz noch Prüfungssicherheit."
+  }
+}

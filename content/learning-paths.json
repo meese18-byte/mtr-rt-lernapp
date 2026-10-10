@@ -1,6 +1,24 @@
 {
   "version": 1,
-  "lastUpdated": "2026-09-28",
-  "schemaNote": "V3: Lernpfade sind Kompositionen aus Standardmodulen und keine Modultypen. Pfade werden erst eingetragen, wenn die referenzierten Module existieren.",
-  "paths": []
+  "lastUpdated": "2026-10-10",
+  "schemaNote": "Lernpfade referenzieren Standardmodule. Fortschritt wird aus den Modulen berechnet; keine eigene Persistenz. Pilotpfade mit review-Modulen sind zur Prüfung gekennzeichnet.",
+  "paths": [
+    {
+      "id": "lp-prostata-reproduzierbarkeit",
+      "title": "Prostata: vom Planungs-CT zur täglichen Verifikation",
+      "clinicalGoal": "Vorbereitung und Bildbefund beurteilen, das Vorgehen begründen und offene Schritte sicher übergeben.",
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "moduleIds": [
+        "09-prostata-grundlagen",
+        "05-enddarmvorbereitung-becken",
+        "07-prostata-bildvergleich",
+        "14-plct-stoerfall-prostata",
+        "09-prostata-reproduzierbarkeit-quiz",
+        "09-prostata-teamuebergabe"
+      ]
+    }
+  ]
 }

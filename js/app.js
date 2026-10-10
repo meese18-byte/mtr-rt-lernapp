@@ -4,8 +4,13 @@ import { loadRegistry, loadModule } from './registry.js';
 import { loadProgress, loadSettings, saveSettings, exportProgressAsFile, importProgressFromFile, resetProgress } from './storage.js';
 import { getModuleProgress, getOverallProgress } from './progress.js';
 import { esc, chapterLabel } from './util.js';
+import { buildCard } from './module-card.js';
+import { isAvailable } from './learning-paths.js';
+import { mountPathOverview, renderPathList, renderLearningPath, renderTraining, mountModuleNavigation } from './path-ui.js';
 
 const viewEl = document.getElementById('view');
+let routeVersion = 0;
+let disposeModuleNavigation = () => {};
 
 // Renderer-Lookup für Modultypen
 const renderers = {
@@ -20,35 +25,53 @@ window.addEventListener('hashchange', route);
 window.addEventListener('DOMContentLoaded', route);
 
 async function route() {
-  const hash = location.hash.replace(/^#/, '') || '/';
+  const request = ++routeVersion;
+  disposeModuleNavigation();
+  disposeModuleNavigation = () => {};
+  const raw = location.hash.replace(/^#/, '') || '/';
+  const [hash, query = ''] = raw.split('?');
+  const params = new URLSearchParams(query);
+  const current = () => request === routeVersion;
   try {
     if (hash === '/' || hash === '') {
-      await renderDashboard();
+      await renderDashboard(false, current);
+    } else if (hash === '/themen') {
+      await renderDashboard(true, current);
+    } else if (hash === '/lernwege') {
+      await renderPathList(viewEl, current);
+    } else if (hash.startsWith('/lernweg/')) {
+      await renderLearningPath(viewEl, decodeURIComponent(hash.slice('/lernweg/'.length)), current);
+    } else if (hash === '/trainieren') {
+      await renderTraining(viewEl, current);
     } else if (hash.startsWith('/module/')) {
-      const id = hash.substring('/module/'.length);
-      await renderModule(id);
+      await renderModule(decodeURIComponent(hash.slice('/module/'.length)), params, current);
     } else if (hash.startsWith('/info/')) {
-      const id = hash.substring('/info/'.length);
-      await renderInfotextPage(id);
+      await renderInfotextPage(hash.slice('/info/'.length), current);
     } else if (hash === '/pruefung') {
-      await renderPruefung();
+      await renderPruefung(current);
     } else if (hash === '/einstellungen') {
       await renderEinstellungen();
     } else {
       viewEl.innerHTML = '<p>Seite nicht gefunden. <a href="#/">Zur Startseite</a>.</p>';
     }
+    if (current()) {
+      window.scrollTo(0, 0);
+      document.getElementById('main').focus({preventScroll:true});
+    }
   } catch (e) {
+    if (!current()) return;
     console.error(e);
-    viewEl.innerHTML = `<p>Fehler: ${esc(e.message)}</p><p><a href="#/">Zur Startseite</a></p>`;
+    viewEl.innerHTML = '<p>Fehler: ' + esc(e.message) + '</p><p><a href="#/">Zur Startseite</a></p>';
   }
 }
 
-async function renderDashboard() {
+async function renderDashboard(topicsOnly = false, current = () => true) {
   const registry = await loadRegistry();
+  if (!current()) return;
   const settings = loadSettings();
   const overall = getOverallProgress(registry);
 
-  const activeModules = (registry.modules || []).filter(m => m.status !== 'legacy' && !m.legacy);
+  const activeModules = (registry.modules || []).filter(isAvailable);
   const legacyModules = (registry.modules || []).filter(m => m.status === 'legacy' || m.legacy);
 
   const selectedYear = String(settings.lehrjahr || 'alle');
@@ -70,9 +93,10 @@ async function renderDashboard() {
   Object.values(byChapter).forEach(arr => arr.sort((a, b) => (a.reihenfolge || 0) - (b.reihenfolge || 0)));
 
   viewEl.innerHTML = `
-    <h1>Willkommen in der Lernapp Strahlentherapie</h1>
+    <h1>${topicsOnly ? "Themen" : "Lernapp Strahlentherapie"}</h1>
     <p>Fachpraktischer Unterricht, Prüfungsvorbereitung und Nachschlagewerk für MTR-Auszubildende.</p>
 
+    ${topicsOnly ? "" : '<section id="path-overview" class="module-view path-overview" aria-label="Weiterlernen"></section>'}
     <section class="progress-overview" aria-label="Dein Fortschritt">
       <strong>Fortschritt:</strong> ${overall.completed} von ${overall.total} aktiven Modulen abgeschlossen (${overall.percent}%).
       <div class="progress-bar" role="progressbar" aria-valuenow="${overall.percent}" aria-valuemin="0" aria-valuemax="100">
@@ -104,14 +128,16 @@ async function renderDashboard() {
   viewEl.querySelector('#dashboard-lehrjahr').addEventListener('change', (e) => {
     settings.lehrjahr = e.target.value;
     saveSettings(settings);
-    renderDashboard();
+    renderDashboard(topicsOnly, current);
   });
   viewEl.querySelector('#dashboard-pflichtgrad').addEventListener('change', (e) => {
     settings.pflichtgrad = e.target.value;
     saveSettings(settings);
-    renderDashboard();
+    renderDashboard(topicsOnly, current);
   });
 
+  if (!topicsOnly) await mountPathOverview(viewEl.querySelector("#path-overview"), current);
+  if (!current()) return;
   const chapterBlock = viewEl.querySelector('#chapters');
   const chapterNumbers = Object.keys(byChapter).map(Number).sort((a, b) => a - b);
 
@@ -125,7 +151,7 @@ async function renderDashboard() {
     block.innerHTML = `<h2>${String(chapter).padStart(2, '0')} · ${esc(chapterLabel(chapter))}</h2><div class="module-grid"></div>`;
     const grid = block.querySelector('.module-grid');
     byChapter[chapter].forEach(mod => {
-      grid.appendChild(buildCard(mod, getModuleProgress(mod.id)));
+      grid.appendChild(buildCard(mod, getModuleProgress(mod.id), {from:"themen", registryModules:registry.modules}));
     });
     chapterBlock.appendChild(block);
   });
@@ -138,99 +164,34 @@ async function renderDashboard() {
   }
 }
 
-function buildCard(mod, progress) {
-  const a = document.createElement('a');
-  a.className = 'module-card';
-
-  const isLegacy = mod.status === 'legacy' || mod.legacy;
-  a.href = isLegacy && mod.file ? mod.file : `#/module/${mod.id}`;
-
-  if (isLegacy && mod.file) {
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener');
-  }
-
-  a.setAttribute('aria-label', `Modul öffnen: ${mod.title}`);
-
-  const statusBadge = progress.status === 'completed'
-    ? '<span class="badge status-completed">abgeschlossen</span>'
-    : (progress.status === 'in-progress'
-      ? '<span class="badge status-in-progress">begonnen</span>'
-      : (isLegacy ? '<span class="badge badge-legacy">Legacy</span>' : ''));
-
-  const yearBadge = Array.isArray(mod.lehrjahr) && mod.lehrjahr.length
-    ? `<span class="badge">LJ ${esc(mod.lehrjahr.join('/'))}</span>`
-    : '';
-
-  const dutyBadge = mod.pflichtgrad
-    ? `<span class="badge badge-${esc(mod.pflichtgrad)}">${esc(pflichtgradLabel(mod.pflichtgrad))}</span>`
-    : '';
-
-  const timeBadge = Number.isFinite(Number(mod.estimatedMinutes))
-    ? `<span class="badge">${Number(mod.estimatedMinutes)} Min</span>`
-    : '';
-
-  const prereqHint = Array.isArray(mod.voraussetzungen) && mod.voraussetzungen.length
-    ? `<p class="module-prereq muted">Vorher sinnvoll: ${esc(mod.voraussetzungen.join(', '))}</p>`
-    : '';
-
-  a.innerHTML = `
-    <h3>${esc(mod.title)}</h3>
-    <div class="meta">
-      <span class="badge type-${esc(isLegacy ? 'legacy' : mod.type)}">${esc(isLegacy ? 'Legacy-Lernsequenz' : typeLabel(mod.type))}</span>
-      ${dutyBadge}
-      ${yearBadge}
-      ${timeBadge}
-      ${statusBadge}
-    </div>
-    ${prereqHint}
-  `;
-  return a;
-}
-
-function typeLabel(t) {
-  return {
-    'knowledge': 'Wissenskarte',
-    'case': 'Fall',
-    'image-analysis': 'Bildanalyse',
-    'quiz': 'Quiz',
-    'transfer': 'Transfer'
-  }[t] || t;
-}
-
-function pflichtgradLabel(value) {
-  return {
-    'pflicht': 'Pflicht',
-    'vertiefung': 'Vertiefung',
-    'exkurs': 'Exkurs'
-  }[value] || value;
-}
-
-async function renderModule(id) {
+async function renderModule(id, params = new URLSearchParams(), current = () => true) {
   viewEl.innerHTML = '<p class="loading">Modul wird geladen…</p>';
-
-  // Lernsequenzen: Registry-Eintrag prüfen, dann zur HTML-Seite weiterleiten
   const registry = await loadRegistry();
+  if (!current()) return;
   const meta = registry.modules.find(m => m.id === id);
   if (meta && meta.type === 'sequence' && meta.file) {
     window.location.href = meta.file;
     return;
   }
-
   const module = await loadModule(id);
-  const type = module.type;
-  if (!renderers[type]) {
-    viewEl.innerHTML = `<p>Unbekannter Modultyp: ${esc(type)}</p>`;
-    return;
-  }
-  const r = await renderers[type]();
-  await r.render(viewEl, module);
-  mountPrintTools(module);
+  if (!current()) return;
+  if (!isAvailable(module)) throw new Error('Dieses Modul ist noch nicht verfügbar.');
+  if (!renderers[module.type]) throw new Error('Unbekannter Modultyp: ' + module.type);
+  const renderer = await renderers[module.type]();
+  if (!current()) return;
+  const staged = document.createElement('div');
+  await renderer.render(staged, module);
+  if (!current()) return;
+  const dispose = await mountModuleNavigation(staged, module, params);
+  if (!current()) { dispose(); return; }
+  mountPrintTools(module, staged);
+  viewEl.replaceChildren(...staged.childNodes);
+  disposeModuleNavigation = dispose;
 }
 
-function mountPrintTools(module) {
+function mountPrintTools(module, container = viewEl) {
   if (module.printable === false || module.mode === 'praesenz_gekoppelt') return;
-  const view = viewEl.querySelector('.module-view');
+  const view = container.querySelector('.module-view');
   if (!view || view.querySelector('.print-tools')) return;
 
   const tools = document.createElement('div');
@@ -249,25 +210,28 @@ function mountPrintTools(module) {
   view.appendChild(tools);
 }
 
-async function renderInfotextPage(id) {
+async function renderInfotextPage(id, current = () => true) {
   viewEl.innerHTML = '<p class="loading">Infotext wird geladen…</p>';
   const { loadInfotext } = await import('./registry.js');
   const { renderMarkdownSimple } = await import('./util.js');
   try {
     const md = await loadInfotext(id);
+    if (!current()) return;
     viewEl.innerHTML = `<article class="module-view">
       <p class="breadcrumb"><a href="#/">Start</a></p>
       ${renderMarkdownSimple(md)}
     </article>`;
   } catch (e) {
+    if (!current()) return;
     viewEl.innerHTML = `<p>Infotext nicht gefunden.</p>`;
   }
 }
 
-async function renderPruefung() {
+async function renderPruefung(current = () => true) {
   const registry = await loadRegistry();
+  if (!current()) return;
   const modules = (registry.modules || [])
-    .filter(m => m.status !== 'legacy' && !m.legacy)
+    .filter(isAvailable)
     .filter(m => Number(m.kapitel) === 14 || (Array.isArray(m.tags) && m.tags.includes('pruefung')))
     .sort((a, b) => (a.reihenfolge || 0) - (b.reihenfolge || 0));
 
@@ -282,7 +246,7 @@ async function renderPruefung() {
     grid.innerHTML = '<p class="muted">Noch keine Module für die Prüfungsvorbereitung vorhanden.</p>';
     return;
   }
-  modules.forEach(m => grid.appendChild(buildCard(m, getModuleProgress(m.id))));
+  modules.forEach(m => grid.appendChild(buildCard(m, getModuleProgress(m.id), {from:"pruefung", registryModules:registry.modules})));
 }
 
 async function renderEinstellungen() {
@@ -364,3 +328,4 @@ async function renderEinstellungen() {
     }
   });
 }
+

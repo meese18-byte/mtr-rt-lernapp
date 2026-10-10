@@ -1,63 +1,55 @@
 {
   "id": "05-enddarmvorbereitung-becken",
-  "type": "case",
-  "title": "Planungs-CT bei Prostatakarzinom: voller Enddarm – wie weiter?",
-  "category": "Becken – Prostata",
-  "difficulty": "fortgeschritten",
-  "estimatedMinutes": 10,
   "learningGoals": [
-    "Der Lernende erkennt einen deutlich gefüllten Enddarm im Planungs-CT und benennt dessen Einfluss auf die Lage der Prostata.",
-    "Der Lernende begründet, warum die Reproduzierbarkeit der Enddarmfüllung eine Grundvoraussetzung für die Prostata-Bestrahlung ist.",
-    "Der Lernende leitet die korrekte Handlungskette zur Wiederherstellung einer reproduzierbaren Ausgangslage ab."
-  ],
-  "tags": [
-    "prostata",
-    "planungs-ct",
-    "enddarm",
-    "setup",
-    "lagerung"
+    "Eine gegenüber dem vorgesehenen Referenzzustand auffällige Rektumfüllung beschreiben.",
+    "Mögliche Geometrieänderungen von nicht belegten Dosisfolgen unterscheiden.",
+    "Vorbereitung, Rücksprache und eine gegebenenfalls erforderliche Wiederholungsaufnahme protokollgerecht begründen."
   ],
   "examRelevance": "MTAPrV praktische Prüfung – Setup-Verifikation und Lagerung bei Beckenbestrahlung",
-  "relatedModules": [],
+  "relatedModules": [
+    "09-prostata-grundlagen",
+    "07-prostata-bildvergleich",
+    "09-prostata-reproduzierbarkeit-quiz"
+  ],
   "relatedInfotexte": [
-    "enddarmvorbereitung-becken"
+    "09-prostata-grundlagen"
   ],
   "body": {
     "scenario": {
-      "situation": "Sie bereiten das Planungs-CT eines Patienten mit lokal begrenztem Prostatakarzinom vor. Die Aufnahmen sind gefahren. Beim Sichten der Schnittbilder fällt Ihnen auf, dass der Enddarm stark gefüllt ist. Der Patient gibt auf Rückfrage an, er habe das morgendliche Vorbereitungsschema nicht vollständig durchgeführt.",
+      "situation": "Beim Planungs-CT für eine definitive Prostatabestrahlung fällt ein deutlich gefülltes Rektum auf. Im vorliegenden Fall ist laut Vorbereitungsvorgabe ein möglichst wenig gefülltes Rektum vorgesehen. Der Patient berichtet, die Vorbereitung nicht vollständig umgesetzt zu haben. Eine Freigabe der Aufnahmen für die Planung liegt noch nicht vor.",
       "media": [
         {
           "type": "image",
           "src": "./media/images/platzhalter-enddarm-voll.svg",
           "alt": "Schematischer axialer CT-Schnitt auf Höhe der Prostata mit deutlich gefülltem Enddarm",
-          "caption": "Schematische Darstellung: axialer CT-Schnitt auf Höhe der Prostata. Der Enddarm ist deutlich gefüllt und verlagert die Prostata nach ventral (Platzhalter-Grafik – später durch anonymisiertes CT-Bild ersetzen)."
+          "caption": "Didaktisches Schema ohne Patientenbezug. Keine reale CT-Aufnahme; Lageänderungen sind beispielhaft und nicht maßstäblich."
         }
       ],
-      "question": "Wie entscheiden Sie sich als MTR an diesem Punkt?"
+      "question": "Formuliere zuerst Befund, mögliche Bedeutung und nächsten Schritt in eigenen Worten. Welche Entscheidung ist auf Basis der vorliegenden Angaben am besten begründet?"
     },
     "options": [
       {
-        "label": "Aufnahme akzeptieren, Bestrahlungsplanung auf dieser Basis beginnen.",
+        "label": "Die Aufnahme unverändert zur Planung weitergeben, weil spätere Bildkontrollen jede Abweichung ausgleichen.",
         "correct": false,
-        "feedback": "Nicht empfohlen. Ein voller Enddarm verlagert die Prostata nach ventral und kaudal, typisch im Bereich einiger Millimeter. Klinische Konsequenz: bei täglicher Verifikation über Wochen wird der Enddarm regelmäßig weniger gefüllt sein als am Planungs-CT, das Zielvolumen wandert nach dorsal, die dorsale CTV-Randzone wird unterdosiert und die Rektum-Vorderwand bekommt mehr Dosis als geplant. Korrekter Weg: Ausgangslage korrigieren, dann Wiederholungs-CT."
+        "feedback": "Bildverifikation ersetzt keine Prüfung der Planungsreferenz. Sie kann einen veränderten Füllungszustand nicht automatisch in den vorgesehenen Zustand überführen."
       },
       {
-        "label": "Patient zur Enddarmentleerung auffordern und ein Wiederholungs-Planungs-CT veranlassen.",
+        "label": "Befund und Vorbereitungsvorgabe abgleichen, den nächsten Schritt nach SOP beziehungsweise Rücksprache klären, Vorbereitung anpassen und bei Bedarf eine Wiederholungsaufnahme durchführen.",
         "correct": true,
-        "feedback": "Richtige Entscheidung. Nur ein Planungs-CT mit reproduzierbarem Füllungszustand des Enddarms liefert eine valide Basis für die Konturierung und für die tägliche Bildverifikation (CBCT). Der Patient wird auf die Toilette geschickt, das Vorbereitungsschema (z. B. Mikroklist oder Diätempfehlung) wird besprochen und dokumentiert, anschließend wird das CT unter denselben Lagerungsbedingungen wiederholt."
+        "feedback": "Der Befund passt im beschriebenen Fall nicht zur Vorbereitungsvorgabe. Ob und wie wiederholt wird, hängt vom Befund und der zuständigen Entscheidung ab. Maßnahmen und Ergebnis werden dokumentiert."
       },
       {
-        "label": "Nur die oberen Schnitte nachfahren, in denen der Enddarm weniger gefüllt aussieht.",
+        "label": "Nur einige Schnitte wiederholen, ohne den Organfüllungszustand erneut zu prüfen.",
         "correct": false,
-        "feedback": "Nicht ausreichend. Die veränderte Enddarmfüllung wirkt sich auf die Lage der Prostata im gesamten Zielvolumen aus, nicht nur an einzelnen Schnittpositionen. Ein partielles Nachfahren liefert keine konsistente Basis für die Planung und für die Bildverifikation."
+        "feedback": "Die unklare Ausgangsgeometrie bleibt bestehen. Eine neue Aufnahme muss fachlich begründet und konsistent sein."
       },
       {
-        "label": "Das Zielvolumen in der Konturierung einfach etwas ventral erweitern, damit es passt.",
+        "label": "Die Zielvolumina eigenständig erweitern, um die Organfüllung zu kompensieren.",
         "correct": false,
-        "feedback": "Nicht zulässig. Eine MTR kompensiert eine fehlerhafte Ausgangslage nicht durch Konturierungs-Kompromisse. Zielvolumendefinition ist ärztliche Aufgabe und setzt ein qualitativ einwandfreies Planungs-CT voraus. Der korrekte Weg bleibt: reproduzierbare Ausgangslage herstellen und Wiederholungs-CT."
+        "feedback": "Eine Änderung der Zielvolumendefinition ist keine eigenständige Korrekturmaßnahme der MTR. Auffälligkeiten werden nach SOP und Zuständigkeit geklärt."
       }
     ],
-    "reinforcement": "Reproduzierbare Enddarmfüllung ist die Grundvoraussetzung jeder Prostata-Bestrahlung. Das tägliche CBCT prüft nicht nur den Knochenstand, sondern auch Enddarm und Harnblase. Weicht der Füllungszustand deutlich vom Planungs-CT ab, muss interveniert werden – nicht einfach bestrahlt werden.",
+    "reinforcement": "Befund beschreiben, mit der Vorbereitungsvorgabe abgleichen, Vorgehen klären und Ergebnis dokumentieren. Mögliche Geometrieänderungen sind begründbar; eine konkrete Unter- oder Überdosierung ist aus dem Schema allein nicht nachweisbar.",
     "followUpQuiz": {
       "lead": "Drei Items aus der Itembank sichern den klinischen Transfer: Konsequenz → Begründung → Übertrag auf das tägliche CBCT.",
       "itemRefs": [
@@ -67,16 +59,13 @@
       ],
       "frames": {
         "q-prostata-05": {
-          "vor": "Im konkreten Fall war der Enddarm beim Planungs-CT deutlich gefüllt. Ordne die klinische Konsequenz ein, wenn auf dieser Geometrie weitergeplant würde.",
-          "nach": "Genau dieser systematische Drift ist der Grund, warum der Patient zur Entleerung geschickt und das CT wiederholt wird."
+          "vor": "Prüfe nun die Aussagekraft einer auffälligen Planungsgeometrie."
         },
         "q-prostata-03": {
-          "vor": "Warum verlangt der Standardablauf eine reproduzierbare Enddarmfüllung über die gesamte Serie?",
-          "nach": "Reproduzierbarkeit ist die Bedingung, unter der Konturierung, Plan und tägliches Setup überhaupt zusammenpassen."
+          "vor": "Begründe das Prinzip der möglichst vergleichbaren Rektumfüllung."
         },
         "q-prostata-12": {
-          "vor": "Übertrag in den Klinikalltag: Welche Befunde im täglichen CBCT rechtfertigen ein aktives Eingreifen vor der Fraktion?",
-          "nach": "Eingreifkriterien sind im Team abgesprochen und dokumentiert. Bagatell-Variationen werden nicht überreguliert."
+          "vor": "Übertrage deine Überlegung auf die Verifikation einer Tagesfraktion."
         }
       },
       "engineOptions": {
@@ -85,7 +74,27 @@
         "shuffle": false
       },
       "passThreshold": 0.66
-    }
+    },
+    "ownResponsePrompt": "Notiere deinen Befund beziehungsweise die fehlende Information und begründe den nächsten Schritt. Vergleiche deine Überlegung anschließend mit den Optionen.",
+    "ownResponseMinWords": 12
   },
-  "umbenannt_von": "prostata-planungs-ct-enddarm"
+  "umbenannt_von": "prostata-planungs-ct-enddarm",
+  "sources": [
+    {
+      "title": "eviQ 3657: Definitive EBRT, Simulation und Bildverifikation",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/3657-prostate-adenocarcinoma-definitive-ebrt-prost"
+    },
+    {
+      "title": "eviQ 4160: Preparing your bladder and bowel for pelvic radiation therapy",
+      "url": "https://www.eviq.org.au/patients-and-carers/patient-information-sheets/treating-cancer-with-radiation-therapy/4160-preparing-your-bladder-and-bowel-for-pelvic-r"
+    },
+    {
+      "title": "Cancer Research UK: Planning radiotherapy for prostate cancer",
+      "url": "https://www.cancerresearchuk.org/about-cancer/prostate-cancer/treatment/radiotherapy/external-radiotherapy/planning-radiotherapy"
+    },
+    {
+      "title": "eviQ 4140: IGRT, Organfüllung und referenzbezogener Vergleich",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/4140-prostate-adenocarcinoma-definitive-ultra-hypo"
+    }
+  ]
 }

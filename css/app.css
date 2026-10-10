@@ -636,3 +636,27 @@ h3 { font-size: 1.1rem; margin: 1.25rem 0 0.4rem; }
   padding-top: 1rem;
   border-top: 2px solid #e5e7eb;
 }
+
+
+/* Referenzpfad: vorhandene Designsprache, vertikale DOM-Navigation. */
+.main-nav { display: flex; flex-wrap: wrap; gap: .4rem .85rem; }
+.main-nav a { margin-left: 0; padding: .2rem 0; }
+.path-overview { margin: 1rem 0 1.5rem; }
+.pilot-note { color: #60440e; background: #fff4dc; border-left: 3px solid #94681b; padding: .5rem .75rem; }
+.learning-path { list-style: none; padding: 0 0 0 1rem; border-left: 3px solid #91a8bc; }
+.learning-path li { margin: 0 0 1.2rem; padding-left: .5rem; }
+.path-step { font-weight: 600; margin-bottom: .35rem; }
+.module-context { background: #f2f6fa; border-left: 3px solid #1a5aa8; padding: .6rem 1rem; margin-bottom: 1.2rem; }
+.module-context p { margin: .3rem 0; }
+.module-context summary { cursor: pointer; }
+.own-response { margin: 1.25rem 0; }
+.own-response label { display: block; margin-bottom: .4rem; }
+.own-response textarea { display: block; width: 100%; min-height: 8rem; font: inherit; padding: .6rem; border: 1px solid #8b98a8; border-radius: .35rem; }
+.own-response-error { color: #9d2222; }
+.transfer-prompt { white-space: pre-line; }
+.dashboard-filter { flex-wrap: wrap; }
+.module-grid { grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); }
+@media print {
+  .module-context, .path-overview .btn-row { display: none; }
+  .own-response { break-inside: avoid; }
+}

@@ -61,3 +61,10 @@ Vorlage:
 | Pfad | Typ | Herkunft | Rechte | Patientenbezug | Anonymisierung | Öffentliche Freigabe | Status | Notiz |
 |---|---|---|---|---|---|---|---|---|
 | `media/...` | Bild | ... | ... | nein | nicht erforderlich | ja | approved-nonclinical | ... |
+
+
+## Referenzpfad Prostata – eigenes schematisches Material (2026-10-10)
+
+| Pfad | Typ | Herkunft | Rechte | Patientenbezug | Anonymisierung | Öffentliche Freigabe | Status | Notiz |
+|---|---|---|---|---|---|---|---|---|
+| media/images/prostata-referenz-tagesbild-schema.svg | Bild/SVG | Neu erstellte, codebasierte didaktische Grafik | Eigenes Projektmaterial, keine übernommene Fremdgrafik | nein | nicht erforderlich | nicht-klinisches Projektmaterial | approved-nonclinical | Nicht maßstäblich; keine reale CT-/CBCT-Aufnahme; keine Dosis- oder Toleranzwerte |

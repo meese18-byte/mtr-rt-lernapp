@@ -1,7 +1,7 @@
 # ARCHITECTURE.md - Lernapp Strahlentherapie MTR
 
-**Version:** 3.0 (kanonische Modularchitektur + Lernpfade)
-**Letzte Änderung:** 2026-09-28
+**Version:** 3.2 (Referenzpfad-Pilot + verbindliche Lernprinzipien)
+**Letzte Änderung:** 2026-10-10
 **Autor:** Jan
 
 Dieses Dokument ist die Single Source of Truth für alle Architekturentscheidungen dieser Lernapp. Jede Änderung, die einer der hier dokumentierten Entscheidungen widerspricht, muss **hier zuerst** diskutiert und dokumentiert werden, bevor Code geschrieben wird.
@@ -170,6 +170,63 @@ Haupt-Routen:
 - `#/einstellungen` - Export/Import, Fortschritt zurücksetzen
 
 ---
+
+### 6.1 Referenzpfad-Pilot Prostata (2026-10-10)
+
+Der Pilot setzt eine additive Navigation auf die V3-Modularchitektur:
+- #/lernwege – verfügbare Lernpfade für das gewählte Lehrjahr
+- #/lernweg/:id – vertikale, frei zugängliche Modulliste mit abgeleitetem Fortschritt
+- #/themen – bestehendes Kapitel-Dashboard als Direktzugriff
+- #/trainieren – vorhandene case-/image-analysis-/quiz-Module mit Aufgabenart-Filter
+- #/module/:id?path=:pathId – Modul im Kontext eines Lernpfads
+- #/module/:id?from=themen|trainieren|pruefung – Modul mit Rückweg zum gewählten Einstieg
+
+Alle Einstiege verwenden dieselben Modul-IDs und dieselben Bearbeitungsdaten.
+Weiterlernen priorisiert begonnene Stationen im gewählten Pfad, danach die erste noch
+nicht abgeschlossene Station. Bei vollständig bearbeitetem Pfad wird Wiederholung angeboten.
+Der gewählte Pfad liegt als activeLearningPath in den vorhandenen Einstellungen;
+es gibt keinen eigenen Fortschritts-Key für Lernpfade.
+
+Status live und review sind im Pilot zugänglich; review wird als Pilotfassung markiert.
+planned/draft werden nicht als bearbeitbare Module gezählt. Voraussetzungen empfehlen
+eine Reihenfolge und sperren keine anderen Module.
+
+Optionales body.ownResponsePrompt in case und image-analysis (MC) fordert eine eigene
+Begründung an, bevor Optionen gezeigt werden. Dies ist eine Ergänzung vorhandener Typen.
+Die Eingabe wird in diesem Pilot nicht gespeichert; dieser Umstand steht an der Eingabe.
+
+Die visuelle Gestaltung nutzt die bestehende Oberfläche. Die drei Designsprachen aus
+PR #2 bleiben offen; der Pilot erklärt nicht das gesamte UX-CONCEPT-V1 zur kanonischen
+Architektur. Weitere Pfade werden erst nach Review dieses Referenzpfads produziert.
+
+
+### 6.2 Übernommene Lernprinzipien aus „Tumor Target Therapy“
+
+**Entscheidung vom 2026-10-10:** Die Referenz dient als Inspiration für Lernmechanik
+und Inhaltsorganisation. Verbindlich für neue und überarbeitete Inhalte gelten:
+
+1. **Eine Inhaltsbasis, mehrere Zugänge.** Lernwege, Themen, Training und
+   Abschlussvorbereitung referenzieren dieselben Modul-IDs und Bearbeitungsdaten.
+   Kontext und Rückweg gehören zur Navigation, nicht zu einer zweiten Inhaltskopie.
+2. **Geführt, aber frei zugänglich.** Eine empfohlene Reihenfolge verbindet Wissen,
+   klinische Entscheidung und Transfer. Fehler oder unerfüllte Voraussetzungen
+   sperren keine anderen Stationen. Nicht jedes Thema benötigt alle fünf Modultypen.
+3. **Orientierung vor Einstieg.** Lernziel, Voraussetzungen, Pflichtgrad und
+   geschätzte Bearbeitungszeit sind erkennbar. Zeitangaben sind Planungswerte,
+   keine Countdown- oder Abbruchgrenzen.
+4. **MTR-Handlung als Ziel.** Fälle verlangen Beobachtung, begründetes Vorgehen,
+   Kommunikation oder Übergabe. Ärztliche Therapieentscheidungen sind fachlicher
+   Kontext; sie werden nicht als eigenständige MTR-Zuständigkeit trainiert.
+5. **Grundlagen und Vertiefung unterscheiden.** Modulweite Tiefe nutzt
+   `pflichtgrad`; zusätzliche Bausteine nutzen `visibility`, `lehrjahr` und
+   `schwierigkeit`. Handlungsnotwendige Informationen bleiben im Kern sichtbar.
+   Textliche Kennzeichnung ergänzt die Farbe.
+
+Die Autorenregeln, Übernahmematrix und Umsetzungslücken stehen in
+[architecture/LERNPRINZIPIEN-TTT.md](architecture/LERNPRINZIPIEN-TTT.md).
+Die Entscheidung erweitert keine Modultypen, Rendererzahl oder Fortschritts-Keys.
+Der Prostata-Pilot in §6.1 bleibt die erste überprüfbare Anwendung; diese
+Architekturentscheidung nimmt dessen fachlichen Review nicht vorweg.
 
 ## 7. Fortschritt und Speicherung
 
@@ -405,6 +462,34 @@ Pflicht-Tool: `tools/redundanz-check.js` (Node, kein Build-Step). Wird manuell v
 
 ---
 
+
+### 13.5 Gestufte Unterstützung und handlungsbezogenes Feedback
+
+**Autorenstandard:** Bei anspruchsvollen Fällen, Bildanalysen und Transferaufgaben
+werden bei Bedarf zwei aufeinander aufbauende Hilfen vorbereitet:
+erst ein Denkimpuls, dann ein fachlicher Hinweis oder eine gezielte Quellenstelle.
+Hilfen erscheinen auf ausdrücklichen Abruf und nennen vor einem eigenen Versuch
+nicht die richtige Option oder die vollständige Musterantwort.
+
+Die dritte Stufe ist das bestehende Feedback nach einem eigenen Versuch:
+Es erklärt den relevanten Befund, die Bedeutung der gewählten Handlung,
+den nächsten sinnvollen Schritt und gegebenenfalls die Zuständigkeitsgrenze.
+Jede Option erhält eine eigene Begründung. Ein Fehler führt zu einer
+verständlichen Rückmeldung und einer Gelegenheit zur erneuten Bearbeitung.
+Musterantworten im Transfer sind mögliche fachlich tragfähige Formulierungen,
+kein einzig zulässiger Wortlaut.
+
+Eigene Formulierungen sind dort sinnvoll, wo Begründung die Lernkompetenz ist;
+sie werden nicht pauschal vor jede einfache Wissensfrage geschaltet.
+Mindestwortzahlen prüfen lediglich eine Eingabe, keine fachliche Qualität.
+Bearbeitungsstatus, Quizquote und Selbstbewertung sind keine Kompetenznachweise.
+
+**Umsetzungsstatus:** Eigene Kurzbegründung, Antworten vor Lösungen und freie
+Stationsnavigation bestehen im Prostata-Pilot. Die gemeinsame Oberfläche für
+abrufbare Hilfestufen ist noch zu implementieren; aktuell werden keine
+unbekannten Hilfefelder in Moduldateien geschrieben. Details und Abnahmekriterien:
+[architecture/LERNPRINZIPIEN-TTT.md](architecture/LERNPRINZIPIEN-TTT.md).
+
 ## 14. Exit-Slip und Print-View
 
 ### 14.1 Exit-Slip (Pflicht in jedem Modul)
@@ -466,9 +551,36 @@ Renderer blendet Bausteine aus, deren `lehrjahr`-Array das gewählte LJ nicht en
 
 ### 15.3 Praxis-Module ohne Dozent
 
-Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Musterlösungsvideo + alternative Aufgabe für die Online-Bearbeitung. Verhindert Sackgassen bei Praxisstationen ohne Klinik-Zugang.
+Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: alternative Aufgabe für die Online-Bearbeitung mit Text-/Bild-Erwartungshorizont oder optionalem Musterlösungsvideo. Verhindert Sackgassen bei Praxisstationen ohne Klinik-Zugang (siehe §15.4).
 
 ---
+
+
+### 15.4 Produktion kleiner, wiederverwendbarer Lerneinheiten
+
+Vor einem neuen Modul werden Registry, Infotexte und Itembank auf geeignete
+vorhandene Inhalte geprüft. Jede Lerneinheit hat höchstens drei beobachtbare
+Lernziele und einen klar begrenzten Arbeitsauftrag; die Grenzen aus §12.3 gelten.
+Lange Skripte werden fachlich zerlegt, nicht als vollständige Kapitel in eine
+Modulkarte kopiert. Lernpfade komponieren vorhandene Module.
+
+Ein Wissensmodul kann mit einer knappen Übersicht oder einem Schema beginnen.
+Text und Grafik müssen die Lernaufgabe ohne zwingendes Video verständlich machen.
+Videos sind optionale Erklärwege; sie setzen einen erkennbaren fachlichen
+Mehrwert, eine zugängliche Textalternative und die Medienprüfung aus §8 voraus.
+Ein fehlendes oder nicht geladenes externes Video blockiert keine Kernaufgabe.
+
+Für neue hybride Module bedeutet der Online-Fallback eine alternative
+bearbeitbare Aufgabe mit erreichbarem Erwartungshorizont. Ein Musterlösungsvideo
+ist möglich, aber kein Pflichtmedium; Text oder ein beschriftetes Schema reichen,
+wenn sie dieselbe Aufgabe nachvollziehbar erschließen.
+
+Vor Serienproduktion wird der Referenzpfad mit Lernenden geprüft:
+Finden sie ohne zusätzliche Erklärung den nächsten Schritt?
+Können sie einen Fehler nach Feedback begründen und ihre Antwort verbessern?
+Bleiben Pflichtkern und Vertiefung unterscheidbar?
+Der kurze Autorencheck steht in
+[architecture/LERNPRINZIPIEN-TTT.md](architecture/LERNPRINZIPIEN-TTT.md).
 
 ## 16. Offene Entscheidungen
 
@@ -485,10 +597,13 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 
 | Datum | Änderung | Grund |
 |---|---|---|
+| 2026-10-10 | v3.2: §§6.2, 13.5 und 15.4; wiederverwendbare Zugänge, freie Lernwege, Hilfestufen, Handlungsfeedback und Autorenstandard. Videozwang im hybriden Fallback aufgehoben. | Vom Nutzer autorisierte Übertragung nützlicher TTT-Prinzipien; bestehende Pilotfunktionen und noch offene UI-Umsetzung ausdrücklich unterschieden. |
 | 2026-04-18 | Initialversion mit §§ 1-10 | Projektstart |
 | 2026-04-18 | §11 Canvas-Policy ergänzt | Verbindliche DOM-vs-Canvas-Leitlinie, Prüfbogen-Pflicht, hybride Architektur |
 | 2026-04-18 | §12 Konsistenzregeln für Curriculum und Module ergänzt, CURRICULUM.md als zweite Source of Truth eingeführt | Roter Faden von Anfang bis Ende, Feature-Creep-Vermeidung, gemeinsame Felder Kapitel/Pflichtgrad/Voraussetzungen |
 | 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
 | 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `05-enddarmvorbereitung-becken` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
 | 2026-05-20 | §5.1 Push-Disziplin (Standalone ↔ Root) ergänzt: verpflichtender Pre-Push-Check auf gelöschte Root-Dateien bei Änderungen in Standalone-Ordnern. | Reaktion auf Incident 2026-05-19: Commit `e63211a` hat `index.html` im Root stillschweigend gelöscht, GitHub Pages lieferte bis zur Wiederherstellung 404. Strukturelle Schutzregel statt Einzelfall-Reparatur. |
+| 2026-10-10 | V3.1: Referenzpfad Prostata, kontextbezogene Navigation, Themen-/Trainingsansicht und optionale eigene Begründung. | Sechs Standardmodule als prüfbarer Pilot; keine neue Content-Welt oder Fortschrittspersistenz. |
 | 2026-09-28 | v3.0: `sequence` als aktiver Modultyp abgeschafft; Lernpfade als Komposition eingeführt; Registry zur kanonischen Metadatenquelle erklärt; Legacy-Migration, Medienregister und Content-Validator verbindlich ergänzt. | Vorbereitung des Vollausbaus auf die gesamte fachpraktische MTR-Ausbildung ohne Architektur-Drift. |
+

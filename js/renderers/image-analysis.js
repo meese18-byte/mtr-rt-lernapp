@@ -4,6 +4,7 @@
 import { markModuleStarted, markModuleCompleted } from '../progress.js';
 import { esc , moduleContextLabel } from '../util.js';
 import { mountExitSlip } from '../exit-slip.js';
+import { mountOwnResponse } from '../own-response.js';
 
 export async function render(container, module) {
   markModuleStarted(module.id);
@@ -34,6 +35,7 @@ export async function render(container, module) {
     renderClickMode(imageSlot, feedbackSlot, img, body, module);
   } else {
     renderMCMode(imageSlot, interact, feedbackSlot, img, body, module);
+    mountOwnResponse(view, body, interact);
   }
 
   // Exit-Slip-Footer (Baustelle E)
@@ -132,3 +134,4 @@ function renderClickMode(imageSlot, feedbackSlot, img, body, module) {
     }
   });
 }
+

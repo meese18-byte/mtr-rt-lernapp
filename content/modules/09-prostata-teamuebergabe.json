@@ -1,0 +1,54 @@
+{
+  "id": "09-prostata-teamuebergabe",
+  "learningGoals": [
+    "Eine kurze Teamübergabe aus Befund, Bedeutung, Maßnahmen und offener Entscheidung formulieren.",
+    "Eine nicht freigegebene Situation eindeutig kennzeichnen.",
+    "Eigene Aussagen mit Kriterien prüfen und fehlende Informationen benennen."
+  ],
+  "examRelevance": "Fachpraktische Vorbereitung: Befund beschreiben, Vorgehen begründen, Zuständigkeiten und Rückfragen klären. Keine Aussage über individuelle Prüfungssicherheit.",
+  "relatedModules": [
+    "05-enddarmvorbereitung-becken",
+    "07-prostata-bildvergleich",
+    "14-plct-stoerfall-prostata",
+    "09-prostata-reproduzierbarkeit-quiz"
+  ],
+  "relatedInfotexte": [],
+  "reviewNote": "Pilotfassung zur fachlichen und didaktischen Prüfung; keine bestätigte UKR-SOP.",
+  "sources": [
+    {
+      "title": "eviQ 3657: Definitive EBRT, Simulation und Bildverifikation",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/3657-prostate-adenocarcinoma-definitive-ebrt-prost"
+    },
+    {
+      "title": "eviQ 4160: Preparing your bladder and bowel for pelvic radiation therapy",
+      "url": "https://www.eviq.org.au/patients-and-carers/patient-information-sheets/treating-cancer-with-radiation-therapy/4160-preparing-your-bladder-and-bowel-for-pelvic-r"
+    },
+    {
+      "title": "Cancer Research UK: Planning radiotherapy for prostate cancer",
+      "url": "https://www.cancerresearchuk.org/about-cancer/prostate-cancer/treatment/radiotherapy/external-radiotherapy/planning-radiotherapy"
+    },
+    {
+      "title": "eviQ 4140: IGRT, Organfüllung und referenzbezogener Vergleich",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/4140-prostate-adenocarcinoma-definitive-ultra-hypo"
+    }
+  ],
+  "body": {
+    "prompt": "Du übergibst einen fiktiven Patienten während der Vorbereitung einer Prostatafraktion an eine Kollegin. Vorgegeben sind folgende Informationen: Die Identität wurde geprüft. Äußere Lagerung und Hilfsmittel entsprechen der Dokumentation. Im Kontrollbild ist das Rektum gegenüber der Planungsreferenz deutlich weiter dargestellt; die Prostata ist relativ zum knöchernen Becken versetzt. Der Befund wurde im Team angesprochen. Weitere Vorbereitung und erneute Verifikation sind nach dem gültigen Protokoll vorgesehen, aber noch nicht abgeschlossen. Eine Bestrahlungsfreigabe liegt noch nicht vor. Konkrete Dosisfolgen wurden nicht berechnet.\n\nSchreibe eine Übergabe mit 100–180 Wörtern: Trenne Beobachtung und Interpretation, benenne bereits erfolgte und noch ausstehende Schritte und formuliere eine eindeutige Rückfrage an die zuständige Person. Erfinde keine Trinkmenge, Toleranz, Freigabe oder Untersuchungsergebnisse. Formuliere abschließend einen patientengerechten Satz zur Verzögerung. Vergleiche deine Antwort erst danach mit den Leitpunkten.",
+    "minWords": 100,
+    "maxWords": 180,
+    "selfAssessment": {
+      "intro": "Prüfe deine Übergabe an diesen Leitpunkten. Mehrere Formulierungen sind fachlich möglich; die Vollständigkeit und die Trennung von Befund und Schlussfolgerung zählen.",
+      "checklist": [
+        "Identitätsprüfung sowie dokumentierte äußere Lagerung sind benannt.",
+        "Die Abweichung von der Planungsreferenz ist konkret beschrieben.",
+        "Mögliche Geometriebedeutung und nicht belegte Dosisfolgen sind getrennt.",
+        "Bereits erfolgte Teamrückmeldung und ausstehende Vorbereitung/Verifikation sind unterscheidbar.",
+        "Die fehlende Bestrahlungsfreigabe ist eindeutig genannt.",
+        "Eine konkrete Rückfrage zur zuständigen Entscheidung und zum weiteren Vorgehen ist formuliert.",
+        "Keine Trinkmenge, Toleranz oder Ergebnisse wurden erfunden.",
+        "Ein verständlicher, sachlicher Satz für den Patienten ist enthalten."
+      ]
+    },
+    "sampleAnswer": "Die Identität des Patienten ist geprüft. Äußere Lagerung und Hilfsmittel stimmen mit der Dokumentation überein. Im Kontrollbild ist das Rektum gegenüber der Planungsreferenz deutlich weiter dargestellt. Die Prostata liegt relativ zum knöchernen Becken versetzt. Das spricht für eine veränderte innere Geometrie; eine konkrete Dosisabweichung ist damit nicht nachgewiesen. Der Befund wurde im Team angesprochen. Die vorgesehenen weiteren Vorbereitungsschritte und die erneute Verifikation sind noch nicht abgeschlossen. Eine Freigabe für die Bestrahlung liegt nicht vor. Bitte klärt mit der nach unserem Protokoll zuständigen Person, welche Maßnahmen jetzt durchgeführt werden und wer den anschließenden Bildvergleich bewertet. Ich dokumentiere Befund, Rückmeldung und offene Schritte. Dem Patienten erkläre ich: „Wir prüfen Ihre Vorbereitung und die Bilder noch einmal, damit die Behandlung unter den vorgesehenen Bedingungen stattfinden kann.“"
+  }
+}

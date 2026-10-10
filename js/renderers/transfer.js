@@ -15,7 +15,7 @@ export async function render(container, module) {
     <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
     <h2>Aufgabe</h2>
-    <p>${esc(body.prompt || '')}</p>
+    <p class="transfer-prompt">${esc(body.prompt || '')}</p>
     <textarea id="answer" placeholder="Deine Antwort…" aria-label="Eigene Antwort"></textarea>
     <p class="word-count" id="wc">0 Wörter</p>
     <div class="btn-row">
@@ -86,3 +86,4 @@ export async function render(container, module) {
   // Exit-Slip-Footer (Baustelle E)
   mountExitSlip(view, module);
 }
+

@@ -1,0 +1,104 @@
+{
+  "id": "09-prostata-grundlagen",
+  "learningGoals": [
+    "Die Lagebeziehung von Prostata, Harnblase und Rektum mit der Bedeutung reproduzierbarer Vorbereitung verknüpfen.",
+    "Äußere Lagerungsreferenz und innere Organgeometrie unterscheiden.",
+    "Protokollvorgaben von allgemeingültigen Fachprinzipien unterscheiden."
+  ],
+  "examRelevance": "Fachpraktische Vorbereitung: Befund beschreiben, Vorgehen begründen, Zuständigkeiten und Rückfragen klären. Keine Aussage über individuelle Prüfungssicherheit.",
+  "relatedModules": [
+    "05-enddarmvorbereitung-becken",
+    "07-prostata-bildvergleich",
+    "14-plct-stoerfall-prostata",
+    "09-prostata-reproduzierbarkeit-quiz",
+    "09-prostata-teamuebergabe"
+  ],
+  "relatedInfotexte": [
+    "09-prostata-grundlagen"
+  ],
+  "reviewNote": "Pilotfassung zur fachlichen und didaktischen Prüfung; keine bestätigte UKR-SOP.",
+  "sources": [
+    {
+      "title": "eviQ 3657: Definitive EBRT, Simulation und Bildverifikation",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/3657-prostate-adenocarcinoma-definitive-ebrt-prost"
+    },
+    {
+      "title": "eviQ 4160: Preparing your bladder and bowel for pelvic radiation therapy",
+      "url": "https://www.eviq.org.au/patients-and-carers/patient-information-sheets/treating-cancer-with-radiation-therapy/4160-preparing-your-bladder-and-bowel-for-pelvic-r"
+    },
+    {
+      "title": "Cancer Research UK: Planning radiotherapy for prostate cancer",
+      "url": "https://www.cancerresearchuk.org/about-cancer/prostate-cancer/treatment/radiotherapy/external-radiotherapy/planning-radiotherapy"
+    },
+    {
+      "title": "eviQ 4140: IGRT, Organfüllung und referenzbezogener Vergleich",
+      "url": "https://www.eviq.org.au/radiation-oncology/urogenital/prostate/4140-prostate-adenocarcinoma-definitive-ultra-hypo"
+    }
+  ],
+  "body": {
+    "intro": "Aktiviere dein Vorwissen: Welche Veränderungen im kleinen Becken könnten trotz gleicher Lagerung auftreten? Notiere eine Vermutung. Lies anschließend die Wissenskarte und prüfe deine Vermutung.",
+    "infotext": "09-prostata-grundlagen",
+    "checkQuestions": [
+      {
+        "question": "Die Hautreferenzen passen zum Laser. Was ist damit noch nicht belegt?",
+        "options": [
+          {
+            "label": "Die innere Organgeometrie stimmt mit der Planungsreferenz überein.",
+            "correct": true,
+            "feedback": "Äußere Referenzen bilden nicht unmittelbar die aktuelle Lage und Form der inneren Organe ab. Dafür ist die protokollgerechte Bildverifikation erforderlich."
+          },
+          {
+            "label": "Die äußeren Referenzpunkte wurden verglichen.",
+            "correct": false,
+            "feedback": "Das wurde in der Frage bereits festgestellt. Offen bleibt die innere Geometrie."
+          },
+          {
+            "label": "Der Patient befindet sich im Behandlungsraum.",
+            "correct": false,
+            "feedback": "Diese Feststellung sagt nichts über den für die Bestrahlung wichtigen Bildvergleich aus."
+          }
+        ]
+      },
+      {
+        "question": "Was macht einen Vorbereitungshinweis fachlich eindeutig?",
+        "options": [
+          {
+            "label": "Er nennt dieselbe Trinkmenge für alle Patientinnen und Patienten.",
+            "correct": false,
+            "feedback": "Ein einheitlicher Zahlenwert berücksichtigt weder das geltende Protokoll noch individuelle Schwierigkeiten."
+          },
+          {
+            "label": "Er bezieht sich auf das geltende Protokoll, den angestrebten Zustand und den Umgang mit Schwierigkeiten.",
+            "correct": true,
+            "feedback": "So wird klar, was gelten soll und wann eine Rückfrage erforderlich ist."
+          },
+          {
+            "label": "Er verlangt eine möglichst starke Blasenfüllung.",
+            "correct": false,
+            "feedback": "Eine möglichst starke Füllung ist kein allgemeines Qualitätsziel. Tolerierbarkeit und Vergleichbarkeit sind entscheidend."
+          }
+        ]
+      },
+      {
+        "question": "Welche Aussage beschreibt eine Grenze der Tischkorrektur?",
+        "options": [
+          {
+            "label": "Sie kann die Patientengeometrie relativ zum Gerät verschieben, aber einen veränderten Organfüllungszustand nicht automatisch beseitigen.",
+            "correct": true,
+            "feedback": "Ein Versatz und eine Form- oder Füllungsänderung sind unterschiedliche Probleme."
+          },
+          {
+            "label": "Sie verändert gezielt das Blasenvolumen.",
+            "correct": false,
+            "feedback": "Eine Tischverschiebung verändert das Blasenvolumen nicht."
+          },
+          {
+            "label": "Sie ersetzt den Vergleich mit der Planungsreferenz.",
+            "correct": false,
+            "feedback": "Die Korrektur wird aus der Verifikation abgeleitet; sie ersetzt diese nicht."
+          }
+        ]
+      }
+    ]
+  }
+}
