@@ -71,3 +71,16 @@ Die folgenden Quellen stützen Grundprinzipien; ein lokales Protokoll wird darau
 
 Geprüft am 2026-10-10. Die Falltexte, Aufgaben und Musterübergabe sind eigenständige didaktische Entwürfe.
 
+
+## Übernommene Lernprinzipien und nächste Erweiterung
+
+Die gemeinsame Inhaltsbasis, freie Stationswahl, eigenen Kurzbegründungen und
+Antworten vor dem Erwartungshorizont sind bereits Bestandteil dieses Piloten.
+Die verbindlichen Autorenregeln stehen in
+[LERNPRINZIPIEN-TTT.md](LERNPRINZIPIEN-TTT.md) und ARCHITECTURE.md §§6.2, 13.5, 15.4.
+
+Noch nicht vorhanden ist eine gemeinsame Oberfläche für zwei abrufbare Hilfestufen.
+Sie wird zunächst an einem bestehenden Prostatafall erprobt, bevor andere Themen
+sie nutzen. Die Hilfen sollen zum Beobachten und Begründen führen, ohne die
+korrekte Option vorwegzunehmen. Der Hilfenaufruf ändert nicht den Modulfortschritt.
+Fachlicher Review und Unterrichtstest bleiben ausstehend.

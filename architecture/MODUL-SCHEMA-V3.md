@@ -1,6 +1,6 @@
 # Modul-Schema V3
 
-**Stand:** 2026-09-28  
+**Stand:** 2026-10-10  
 **Status:** verbindlich für neue und migrierte Module
 
 Dieses Dokument konkretisiert `ARCHITECTURE.md` V3. Es ersetzt V2 für neue Implementierungen. V2 bleibt nur als historische Migrationsreferenz bestehen.
@@ -231,3 +231,20 @@ quiz:
 
 Alle vorhandenen Module ohne diese Felder behalten ihren bisherigen Interaktionsablauf.
 Lernpfade können ein clinicalGoal für ihre Zielbeschreibung besitzen.
+
+## 11. Autorenregeln und Implementierungsgrenze
+
+Neue und überarbeitete Module folgen ARCHITECTURE.md §§6.2, 13.5 und 15.4
+sowie [LERNPRINZIPIEN-TTT.md](LERNPRINZIPIEN-TTT.md).
+
+- Maximal drei Lernziele; ein begrenzter Arbeitsauftrag pro Modul.
+- `learningGoals`, `examRelevance` und bestehende Verknüpfungsfelder werden verwendet.
+- Pflicht/Vertiefung bleibt in der Registry (`pflichtgrad`); Bausteintiefe nutzt §3.
+- Handlungsfeedback wird in den bestehenden Feedback-/Rationale-Feldern formuliert;
+  dafür entstehen keine parallelen Metadaten oder neuen Pflichtfelder.
+- Die technische Hilfestufen-Erweiterung ist noch nicht implementiert. Vor ihrer
+  Umsetzung werden ihr optionales Datenfeld und seine Validierung hier dokumentiert.
+  Bis dahin enthält produktives Modul-JSON keine erfundenen Hilfefelder.
+- Altmodule bleiben lesbar; Modul-IDs, Fortschrittsformat und die fünf Typen bleiben erhalten.
+
+Ein Konzeptstandard ist kein Nachweis einer bereits vorhandenen Rendererfunktion.

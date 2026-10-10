@@ -113,3 +113,14 @@ Hinweise und Erwartungshorizont: architecture/REFERENZPFAD-PROSTATA.md.
 
 Eigene Kurzbegründungen in Fällen/Bildanalyse bleiben nur in der aktuellen Ansicht erhalten.
 Der Modulfortschritt wird weiterhin gerätelokal gespeichert und kann exportiert/importiert werden.
+
+## Verbindliche Lern- und Autorenprinzipien
+
+Die aus „Tumor Target Therapy“ abgeleiteten Gestaltungsregeln sind in
+[architecture/LERNPRINZIPIEN-TTT.md](architecture/LERNPRINZIPIEN-TTT.md) dokumentiert.
+Sie konkretisieren kleine wiederverwendbare Module, frei zugängliche Lernwege,
+MTR-Handlungsfeedback, Pflichtkern/Vertiefung und optionale Medien.
+
+Gemeinsame Navigation und eigene Kurzbegründungen sind im Prostata-Pilot umgesetzt.
+Die abrufbare Hilfestufen-Oberfläche ist als nächste Erweiterung spezifiziert,
+aber noch nicht implementiert. ARCHITECTURE.md bleibt die kanonische Entscheidung.
