@@ -141,13 +141,17 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 
 | ID | Titel | Typ | Tag | Priorität | Status |
 |---|---|---|---|---|---|
-| 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | Core | ✅ |
+| 05-enddarmvorbereitung-becken | Planungs-CT Prostata – gefüllter Enddarm | case | pflicht | Core | 🟡 review |
 | 01-aufbau-abteilung | Aufbau einer Strahlentherapie-Abteilung | knowledge | pflicht | Core | ✅ |
 | 01-rollen-berufsgruppen | Berufsgruppen und ihre Rollen | knowledge | pflicht | Core | ⬜ |
 | 01-tagesablauf | Typischer Tagesablauf einer MTR | knowledge | pflicht | Core | ⬜ |
 | 05-ablauf-planungsct | Ablauf eines Planungs-CT | knowledge | pflicht | Core | ⬜ |
 | 05-lagerung-immobilisierung | Lagerung und Immobilisierung (Grundlagen) | knowledge | pflicht | Core | ⬜ |
-| 09-prostata-grundlagen | Prostata – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
+| 09-prostata-grundlagen | Prostata: Vorbereitung und reproduzierbare Geometrie | knowledge | pflicht | Core | 🟡 review |
+| 07-prostata-bildvergleich | Prostata: Referenz und Tagesbild vergleichen | image-analysis | pflicht | Core | 🟡 review |
+| 14-plct-stoerfall-prostata | Tagesbestrahlung Prostata: abweichende Blasenfüllung | case | pflicht | Core | 🟡 review |
+| 09-prostata-reproduzierbarkeit-quiz | Prostata: Wissenscheck zur Reproduzierbarkeit | quiz | pflicht | Core | 🟡 review |
+| 09-prostata-teamuebergabe | Prostata: eine klare Teamübergabe formulieren | transfer | pflicht | Core | 🟡 review |
 | 09-rektum-grundlagen | Rektum – Grundlagen der Bestrahlung | knowledge | pflicht | Core | ⬜ |
 
 ---
@@ -158,6 +162,7 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 |---|---|---|
 | 2026-04-18 | Curriculum initial angelegt, 14-Kapitel-Struktur, MVP Phase 1 mit 8 Modulen definiert | Roter Faden von Anfang an, Vermeidung Feature-Creep |
 | 2026-04-18 | Modul 01-aufbau-abteilung live (knowledge, 3 Verständnisfragen) | Erstes echtes MVP-Modul, Blaupause-Charakter für alle weiteren |
+| 2026-10-10 | Referenzpfad Prostata mit sechs Stationen für LJ 2–3 angelegt; vier Module ergänzt und zwei Fälle präzisiert. | Erster vollständiger Pilot vor Serienproduktion; Status review. |
 | 2026-09-28 | V3-Ausbauprinzip eingeführt; altes Phasenmodell durch Modulstatus ersetzt; kanonische Prostata-ID migriert. | Vollausbau der fachpraktischen Ausbildung mit stabiler Architektur statt Prototyp-Phasen. |
 
 ---
@@ -168,3 +173,24 @@ Diese Liste ist das lebende Inventar. Status wird bei jedem Push aktualisiert.
 - **Referenz-Lernpfad zuerst vollständig testen**, bevor themenweise Serienproduktion beginnt.
 - **Jede Kapitel-Änderung** wird zuerst hier im Änderungsprotokoll eingetragen, dann umgesetzt.
 - **Pflichtgrad ehrlich vergeben**: Kernmodule bleiben klar von Vertiefung und Exkurs getrennt.
+
+
+## 11. Referenzpfad Prostata – Pilot
+
+Titel: Prostata: vom Planungs-CT zur täglichen Verifikation.
+Ziel: Vorbereitung und Bildbefund beurteilen, Vorgehen begründen, offene Schritte übergeben.
+Zielgruppe: LJ 2–3. Umfang: ca. 77 Minuten einschließlich Transfer, ohne gemeinsame Auswertung.
+Es handelt sich um einen thematischen Teilpfad, nicht um die vollständige Prostata-Onkologie.
+
+Reihenfolge:
+1. 09-prostata-grundlagen
+2. 05-enddarmvorbereitung-becken
+3. 07-prostata-bildvergleich
+4. 14-plct-stoerfall-prostata
+5. 09-prostata-reproduzierbarkeit-quiz
+6. 09-prostata-teamuebergabe
+
+Alle sechs Stationen stehen zunächst auf review. Die bestehende ID des Blasenfalls
+bleibt stabil, obwohl sein Titel korrekt die Tagesbestrahlung benennt.
+Fachlicher und didaktischer Review sowie Einsatz mit Lernenden stehen aus.
+Orientierung und Erwartungshorizont: architecture/REFERENZPFAD-PROSTATA.md.

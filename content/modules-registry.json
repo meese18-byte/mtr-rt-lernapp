@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "lastUpdated": "2026-09-28",
+  "lastUpdated": "2026-10-10",
   "schemaNote": "V3 gemaess ARCHITECTURE.md v3.0 + architecture/MODUL-SCHEMA-V3.md. Registry ist kanonische Metadatenquelle. sequence ist ausschließlich als status=legacy + legacy=true waehrend der Migration zulaessig.",
   "modules": [
     {
@@ -45,10 +45,12 @@
         "becken",
         "setup"
       ],
-      "estimatedMinutes": 20,
+      "estimatedMinutes": 15,
       "printable": true,
-      "voraussetzungen": [],
-      "status": "live"
+      "voraussetzungen": [
+        "09-prostata-grundlagen"
+      ],
+      "status": "review"
     },
     {
       "id": "10-mamma-lernsequenz",
@@ -182,26 +184,30 @@
     },
     {
       "id": "14-plct-stoerfall-prostata",
-      "title": "PLCT-Simulation: Prostata-Ca, leere Blase",
+      "title": "Tagesbestrahlung Prostata: abweichende Blasenfüllung",
       "type": "case",
       "kapitel": 14,
       "reihenfolge": 4,
       "pflichtgrad": "pflicht",
-      "voraussetzungen": [],
+      "voraussetzungen": [
+        "09-prostata-grundlagen"
+      ],
       "mode": "online_solo",
       "lehrjahr": [
+        2,
         3
       ],
       "tags": [
         "prostata",
-        "plct",
-        "blase",
+        "blasenfuellung",
+        "tagesbestrahlung",
         "stoerfall",
+        "training",
         "pruefung"
       ],
-      "estimatedMinutes": 25,
+      "estimatedMinutes": 10,
       "printable": true,
-      "status": "live"
+      "status": "review"
     },
     {
       "id": "14-quiz-gesamtwissen",
@@ -224,6 +230,106 @@
       "estimatedMinutes": 30,
       "printable": true,
       "status": "live"
+    },
+    {
+      "id": "09-prostata-grundlagen",
+      "title": "Prostata: Vorbereitung und reproduzierbare Geometrie",
+      "type": "knowledge",
+      "kapitel": 9,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "status": "review",
+      "mode": "online_solo",
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "prostata",
+        "grundlagen",
+        "reproduzierbarkeit",
+        "plct"
+      ],
+      "estimatedMinutes": 10,
+      "printable": true,
+      "voraussetzungen": []
+    },
+    {
+      "id": "07-prostata-bildvergleich",
+      "title": "Prostata: Planungsreferenz und Tagesbild vergleichen",
+      "type": "image-analysis",
+      "kapitel": 7,
+      "reihenfolge": 1,
+      "pflichtgrad": "pflicht",
+      "status": "review",
+      "mode": "online_solo",
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "prostata",
+        "bildanalyse",
+        "cbct",
+        "reproduzierbarkeit",
+        "training"
+      ],
+      "estimatedMinutes": 10,
+      "printable": true,
+      "voraussetzungen": [
+        "09-prostata-grundlagen"
+      ]
+    },
+    {
+      "id": "09-prostata-reproduzierbarkeit-quiz",
+      "title": "Prostata: Wissenscheck zur Reproduzierbarkeit",
+      "type": "quiz",
+      "kapitel": 9,
+      "reihenfolge": 2,
+      "pflichtgrad": "pflicht",
+      "status": "review",
+      "mode": "online_solo",
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "prostata",
+        "quiz",
+        "reproduzierbarkeit",
+        "training",
+        "pruefung"
+      ],
+      "estimatedMinutes": 12,
+      "printable": true,
+      "voraussetzungen": [
+        "09-prostata-grundlagen"
+      ]
+    },
+    {
+      "id": "09-prostata-teamuebergabe",
+      "title": "Prostata: eine klare Teamübergabe formulieren",
+      "type": "transfer",
+      "kapitel": 9,
+      "reihenfolge": 3,
+      "pflichtgrad": "pflicht",
+      "status": "review",
+      "mode": "online_solo",
+      "lehrjahr": [
+        2,
+        3
+      ],
+      "tags": [
+        "prostata",
+        "teamuebergabe",
+        "transfer",
+        "pruefung"
+      ],
+      "estimatedMinutes": 20,
+      "printable": true,
+      "voraussetzungen": [
+        "09-prostata-grundlagen"
+      ]
     }
   ]
 }

@@ -214,3 +214,20 @@ Fehler sind u. a.:
 - Lernpfade mit fehlenden Modulreferenzen.
 
 Legacy-`sequence` wird während der Migration als Warnung behandelt.
+
+
+## 10. Optionale Felder des Referenzpfad-Piloten
+
+case und image-analysis im MC-Modus:
+- body.ownResponsePrompt: Arbeitsauftrag für eine eigene Beobachtung/Begründung
+- body.ownResponseMinWords: Mindestumfang, positiver Integer
+- Optionen erscheinen nach Festhalten der eigenen Formulierung; keine automatische Bewertung
+- Eingabe ist flüchtig und wird entsprechend gekennzeichnet
+
+quiz:
+- body.lead: Lernauftrag anstelle einer technischen Itemanzahl
+- body.resultLabel: Kennzeichnung als Wissenscheck statt Prüfungssimulation
+- body.resultNote: Grenze der Aussagekraft des Ergebnisses
+
+Alle vorhandenen Module ohne diese Felder behalten ihren bisherigen Interaktionsablauf.
+Lernpfade können ein clinicalGoal für ihre Zielbeschreibung besitzen.

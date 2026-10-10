@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 710" role="img" aria-labelledby="title desc">
+<title id="title">Planungsreferenz und Tagesbild: schematischer Vergleich des kleinen Beckens</title>
+<desc id="desc">Zwei sagittale, nicht maßstäbliche Schemata. B bezeichnet die Blase, P die Prostata und R das Rektum. Vorn liegt links, hinten rechts. Graue Formen markieren gleiche knöcherne Bezugspunkte. Im zweiten Schema sind Form und Lage der eingezeichneten Weichteile gegenüber der Referenz verändert. Es sind keine Dosisverteilung und keine Messwerte dargestellt.</desc>
+<rect width="640" height="710" rx="16" fill="#f8fafc"/>
+<g font-family="Arial, sans-serif" fill="#182b42">
+<text x="28" y="35" font-size="23" font-weight="bold">A · Planungsreferenz</text>
+<text x="28" y="65" font-size="17">Sagittales Schema · vorn links / hinten rechts</text>
+<g transform="translate(70 78)">
+<rect x="0" y="0" width="500" height="225" rx="14" fill="#fff" stroke="#c4cedb" stroke-width="2"/>
+<path d="M65 120 Q40 147 65 192 L84 177 L82 135 Z" fill="#8a96a7" stroke="#26384e" stroke-width="2"/>
+<path d="M385 22 Q407 66 395 115 L379 160 L362 158 Q375 95 367 37 Z" fill="#8a96a7" stroke="#26384e" stroke-width="2"/>
+<ellipse cx="206" cy="78" rx="70" ry="53" fill="#deebff" stroke="#25497e" stroke-width="3"/>
+<ellipse cx="221" cy="156" rx="34" ry="26" fill="#d7f3ee" stroke="#1d665c" stroke-width="3"/>
+<path d="M306 48 C326 72 324 132 318 169 L308 209 L283 209 L291 166 C297 126 284 83 293 55 Z" fill="#fce6d0" stroke="#8c481f" stroke-width="3"/>
+<text x="197" y="86" font-size="26" font-weight="bold">B</text>
+<text x="212" y="164" font-size="26" font-weight="bold">P</text>
+<text x="296" y="126" font-size="25" font-weight="bold">R</text>
+</g>
+<text x="28" y="348" font-size="23" font-weight="bold">B · Tagesbild</text>
+<text x="28" y="378" font-size="17">Gleiche knöcherne Bezugspunkte</text>
+<g transform="translate(70 391)">
+<rect x="0" y="0" width="500" height="225" rx="14" fill="#fff" stroke="#c4cedb" stroke-width="2"/>
+<path d="M65 120 Q40 147 65 192 L84 177 L82 135 Z" fill="#8a96a7" stroke="#26384e" stroke-width="2"/>
+<path d="M385 22 Q407 66 395 115 L379 160 L362 158 Q375 95 367 37 Z" fill="#8a96a7" stroke="#26384e" stroke-width="2"/>
+<ellipse cx="206" cy="78" rx="70" ry="53" fill="#deebff" stroke="#25497e" stroke-width="3"/>
+<ellipse cx="180" cy="149" rx="34" ry="26" fill="#d7f3ee" stroke="#1d665c" stroke-width="3"/>
+<path d="M310 44 C354 70 352 140 315 173 L308 209 L283 209 L281 178 C226 163 225 95 260 61 Z" fill="#fce6d0" stroke="#8c481f" stroke-width="3"/>
+<text x="197" y="86" font-size="26" font-weight="bold">B</text>
+<text x="171" y="157" font-size="26" font-weight="bold">P</text>
+<text x="284" y="126" font-size="25" font-weight="bold">R</text>
+</g>
+<text x="28" y="657" font-size="19">B = Blase · P = Prostata · R = Rektum</text>
+<text x="28" y="686" font-size="17">Didaktisches Schema · keine reale CT-/CBCT-Aufnahme</text>
+</g>
+</svg>

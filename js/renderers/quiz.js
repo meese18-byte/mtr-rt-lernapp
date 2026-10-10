@@ -42,7 +42,7 @@ export async function render(container, module) {
   view.innerHTML = `
     <p class="breadcrumb"><a href="#/">Start</a> → ${esc(moduleContextLabel(module))}</p>
     <h1>${esc(module.title)}</h1>
-    <p class="muted">${esc(resolved.lead)}</p>
+    <p class="muted">${esc(body.lead || resolved.lead)}</p>
     <div class="quiz-host" id="quiz-host"></div>
     <div class="feedback-slot"></div>
   `;
@@ -77,8 +77,9 @@ export async function render(container, module) {
       const passed = rate >= threshold;
       slot.innerHTML = `
         <div class="feedback ${passed ? 'correct' : 'incorrect'}">
-          <h3>${passed ? 'Bestanden' : 'Nicht bestanden'}</h3>
-          <p>Ergebnis: ${summary.korrekt} von ${summary.gesamt} richtig (${Math.round(rate * 100)} %). Bestehensgrenze: ${Math.round(threshold * 100)} %.</p>
+          <h3>${body.resultLabel ? esc(passed ? 'Wissenscheck ausgewertet' : 'Wiederholung empfohlen') : (passed ? 'Bestanden' : 'Nicht bestanden')}</h3>
+          <p>Ergebnis: ${summary.korrekt} von ${summary.gesamt} richtig (${Math.round(rate * 100)} %). ${body.resultLabel ? 'Orientierungswert' : 'Bestehensgrenze'}: ${Math.round(threshold * 100)} %.</p>
+          ${body.resultNote ? '<p>' + esc(body.resultNote) + '</p>' : ''}
           <p><a class="btn secondary" href="#/">Zurueck zur Uebersicht</a></p>
         </div>
       `;
@@ -170,3 +171,4 @@ function legacyQuestionToItem(q, qi) {
     kontext_neutral: false
   };
 }
+

@@ -102,3 +102,14 @@ Die App setzt keine Cookies, überträgt keine Daten an externe Server und binde
 ## Lizenz
 
 Die technische Grundstruktur ist für private Bildungsnutzung freigegeben. Inhalte (Texte, Bilder, Videos) unterliegen eigenen Urheberrechten – Rechteklärung liegt bei der Autorin/dem Autor.
+
+
+## Referenzpfad-Pilot Prostata
+
+Unter Lernwege steht ein vollständiger Teilpfad mit sechs Stationen (ca. 77 Minuten).
+Themen, Trainieren und Abschluss greifen auf dieselben Module und Bearbeitungsdaten zu.
+Die Stationen sind als Pilotfassung gekennzeichnet und benötigen fachlichen/didaktischen Review.
+Hinweise und Erwartungshorizont: architecture/REFERENZPFAD-PROSTATA.md.
+
+Eigene Kurzbegründungen in Fällen/Bildanalyse bleiben nur in der aktuellen Ansicht erhalten.
+Der Modulfortschritt wird weiterhin gerätelokal gespeichert und kann exportiert/importiert werden.

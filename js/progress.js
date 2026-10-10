@@ -25,12 +25,13 @@ export function markModuleCompleted(moduleId, correctRate = null) {
   if (correctRate !== null) m.correctRate = correctRate;
   p.modules[moduleId] = m;
   saveProgress(p);
+  window.dispatchEvent(new CustomEvent("mtr:module-completed", { detail: { moduleId } }));
 }
 
 export function getOverallProgress(registry) {
   const p = loadProgress();
   // V3: Legacy-Sequenzen sind Migrationsquellen und zählen nicht zum regulären Lernfortschritt.
-  const activeModules = (registry.modules || []).filter(m => m.status !== 'legacy' && !m.legacy);
+  const activeModules = (registry.modules || []).filter(m => !m.legacy && ['live', 'review'].includes(m.status));
   const total = activeModules.length;
   if (total === 0) return { total: 0, completed: 0, percent: 0 };
   const completed = activeModules.filter(m => {
@@ -39,3 +40,4 @@ export function getOverallProgress(registry) {
   }).length;
   return { total, completed, percent: Math.round((completed / total) * 100) };
 }
+

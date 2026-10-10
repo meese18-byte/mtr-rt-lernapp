@@ -1,7 +1,7 @@
 # ARCHITECTURE.md - Lernapp Strahlentherapie MTR
 
-**Version:** 3.0 (kanonische Modularchitektur + Lernpfade)
-**Letzte Änderung:** 2026-09-28
+**Version:** 3.1 (V3-Modularchitektur + Referenzpfad-Pilot)
+**Letzte Änderung:** 2026-10-10
 **Autor:** Jan
 
 Dieses Dokument ist die Single Source of Truth für alle Architekturentscheidungen dieser Lernapp. Jede Änderung, die einer der hier dokumentierten Entscheidungen widerspricht, muss **hier zuerst** diskutiert und dokumentiert werden, bevor Code geschrieben wird.
@@ -170,6 +170,34 @@ Haupt-Routen:
 - `#/einstellungen` - Export/Import, Fortschritt zurücksetzen
 
 ---
+
+### 6.1 Referenzpfad-Pilot Prostata (2026-10-10)
+
+Der Pilot setzt eine additive Navigation auf die V3-Modularchitektur:
+- #/lernwege – verfügbare Lernpfade für das gewählte Lehrjahr
+- #/lernweg/:id – vertikale, frei zugängliche Modulliste mit abgeleitetem Fortschritt
+- #/themen – bestehendes Kapitel-Dashboard als Direktzugriff
+- #/trainieren – vorhandene case-/image-analysis-/quiz-Module mit Aufgabenart-Filter
+- #/module/:id?path=:pathId – Modul im Kontext eines Lernpfads
+- #/module/:id?from=themen|trainieren|pruefung – Modul mit Rückweg zum gewählten Einstieg
+
+Alle Einstiege verwenden dieselben Modul-IDs und dieselben Bearbeitungsdaten.
+Weiterlernen priorisiert begonnene Stationen im gewählten Pfad, danach die erste noch
+nicht abgeschlossene Station. Bei vollständig bearbeitetem Pfad wird Wiederholung angeboten.
+Der gewählte Pfad liegt als activeLearningPath in den vorhandenen Einstellungen;
+es gibt keinen eigenen Fortschritts-Key für Lernpfade.
+
+Status live und review sind im Pilot zugänglich; review wird als Pilotfassung markiert.
+planned/draft werden nicht als bearbeitbare Module gezählt. Voraussetzungen empfehlen
+eine Reihenfolge und sperren keine anderen Module.
+
+Optionales body.ownResponsePrompt in case und image-analysis (MC) fordert eine eigene
+Begründung an, bevor Optionen gezeigt werden. Dies ist eine Ergänzung vorhandener Typen.
+Die Eingabe wird in diesem Pilot nicht gespeichert; dieser Umstand steht an der Eingabe.
+
+Die visuelle Gestaltung nutzt die bestehende Oberfläche. Die drei Designsprachen aus
+PR #2 bleiben offen; der Pilot erklärt nicht das gesamte UX-CONCEPT-V1 zur kanonischen
+Architektur. Weitere Pfade werden erst nach Review dieses Referenzpfads produziert.
 
 ## 7. Fortschritt und Speicherung
 
@@ -491,4 +519,6 @@ Bei `mode: "hybrid"` Pflichtfeld `online_fallback` (siehe §12.2). Inhalt: Muste
 | 2026-05-18 | v2.0: §4 Querschnittsfunktionen, §7.1 Key-Übersicht, §12.2 neue Pflichtfelder (`mode`, `lehrjahr`, `tags`, `estimatedMinutes`, `printable`, `online_fallback`), §§ 13-15 neu (Itembank/Quiz-Engine, Exit-Slip/Print-View, Bausteine/Lehrjahr-Filter). Alte §§ 13-14 zu §§ 16-17 verschoben. | SuS-Feedback (n≈10): self-first, Leitner-light, Wiederverwendung, Lehrjahr-Tiefe, Exit-Slip, Print-View. Detail-Specs: `architecture/MODUL-SCHEMA-V2.md`, `architecture/QUIZ-ENGINE-SPEC.md`. |
 | 2026-05-19 | Baustelle D: Quiz-Renderer auf Itembank/Engine umgestellt (`itemRefs` + Inline-Fallback im Engine-Format gemäß QUIZ-ENGINE-SPEC §6.2, Legacy-Adapter für v1-`body.questions`). Case-Schema um optionales `followUpQuiz` ergänzt (MODUL-SCHEMA-V2 §5.2): eingebetteter Quiz-Block am Ende des Fall-Flows, `completed` erst nach `onRunDone`. Anker-Modul `05-enddarmvorbereitung-becken` nutzt q-prostata-05/03/12 mit Fall-spezifischen Frames. | Erste produktive Anbindung der Itembank an einen Case-Flow. Strukturentscheidung: Inline-Block im Case-Modul, kein separates Quiz-Modul, damit Fall und Vertiefung als eine Lerneinheit zählen. |
 | 2026-05-20 | §5.1 Push-Disziplin (Standalone ↔ Root) ergänzt: verpflichtender Pre-Push-Check auf gelöschte Root-Dateien bei Änderungen in Standalone-Ordnern. | Reaktion auf Incident 2026-05-19: Commit `e63211a` hat `index.html` im Root stillschweigend gelöscht, GitHub Pages lieferte bis zur Wiederherstellung 404. Strukturelle Schutzregel statt Einzelfall-Reparatur. |
+| 2026-10-10 | V3.1: Referenzpfad Prostata, kontextbezogene Navigation, Themen-/Trainingsansicht und optionale eigene Begründung. | Sechs Standardmodule als prüfbarer Pilot; keine neue Content-Welt oder Fortschrittspersistenz. |
 | 2026-09-28 | v3.0: `sequence` als aktiver Modultyp abgeschafft; Lernpfade als Komposition eingeführt; Registry zur kanonischen Metadatenquelle erklärt; Legacy-Migration, Medienregister und Content-Validator verbindlich ergänzt. | Vorbereitung des Vollausbaus auf die gesamte fachpraktische MTR-Ausbildung ohne Architektur-Drift. |
+
