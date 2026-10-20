@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1426">
+  <meta name="description" content="Interaktive, schematische Pixelanimation zur Strahlfeldformung mit einem Multileaf-Kollimator (MLC).">
+  <title>MLC // Feldformung – MTR Lernlabor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="animation.js" defer></script>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">▦</span><span>MTR / LERNLABOR</span></div>
+    <span class="edition">PROTOTYP 01 · PIXEL SCIENCE</span>
+  </header>
+  <section class="intro" aria-labelledby="pageTitle">
+    <div><p class="eyebrow">STRAHLENTHERAPIE / TECHNIK VERSTEHEN</p>
+    <h1 id="pageTitle">WIE DER <em>MLC</em><br>DAS FELD FORMT.</h1>
+    <p class="dek">20 Lamellenpaare. Eine Feldöffnung. Beobachte, wie der Multileaf-Kollimator das Strahlenfeld seitlich begrenzt.</p></div>
+    <div class="elapsed" aria-label="Animationsdauer"><span>LOOP /</span><strong>00:28</strong><small>SEKUNDEN</small></div>
+  </section>
+  <section class="machine" aria-label="MLC-Animation">
+    <div class="machine-top"><span><span class="led" aria-hidden="true"></span> VISUALISIERUNG AKTIV</span><span id="phaseIndicator">PHASE 01 / 04</span></div>
+    <div class="visuals">
+      <section class="viewport" aria-label="MLC in Strahlaugenansicht">
+        <div class="viewport-head"><span class="index">01</span><div><h2>BEAM'S EYE VIEW</h2><p>Blick entlang der Strahlachse auf das Feld</p></div><span class="viewport-tag">PROJEKTION</span></div>
+        <div class="scene">
+        <svg id="mlcSvg" viewBox="0 0 440 360" role="img" aria-labelledby="mlcTitle mlcDesc">
+          <title id="mlcTitle">Bewegliche MLC-Lamellen formen die Feldöffnung</title>
+          <desc id="mlcDesc">Von beiden Seiten fahren Lamellenpaare ein und begrenzen die Bestrahlungsfläche rund um die rot umrandete, schematische Zielvolumenprojektion.</desc>
+          <defs>
+            <pattern id="bevGrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#253953" stroke-width="1"/></pattern>
+            <filter id="fieldGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="10"/></filter>
+            <linearGradient id="fieldGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f8b850"/><stop offset="48%" stop-color="#fff4a4"/><stop offset="100%" stop-color="#f8b850"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="436" height="356" fill="#0c1d30" rx="8"/>
+          <rect x="2" y="2" width="436" height="356" fill="url(#bevGrid)" opacity=".75"/>
+          <path d="M220 26 V332 M24 180 H416" stroke="#557087" stroke-width="1" stroke-dasharray="5 9" opacity=".7"/>
+          <rect x="14" y="43" width="412" height="273" rx="8" fill="#0e2636" stroke="#38536a" stroke-width="2"/>
+          <path id="fieldHalo" fill="#ffd963" opacity=".26" filter="url(#fieldGlow)"/>
+          <path id="fieldShape" fill="url(#fieldGradient)" opacity=".72"/>
+          <path id="targetContour" d="M220 96L241 88L255 100L269 103L275 123L287 139L277 158L287 178L277 199L266 222L243 228L230 247L210 236L191 244L180 225L158 216L158 195L147 177L155 158L153 139L170 123L182 104L203 105Z" fill="#db4d6b" fill-opacity=".25" stroke="#ff627d" stroke-width="3" stroke-dasharray="8 4"/>
+          <g id="leafGroup" aria-hidden="true"></g>
+          <g fill="none" stroke="#59e5ce" stroke-width="2" opacity=".88"><path d="M12 24H40 M12 24V40 M428 24H400 M428 24V40 M12 338H40 M12 338V322 M428 338H400 M428 338V322"/></g>
+          <text x="28" y="31" fill="#9eb6c9" font-size="10" font-family="monospace">MLC-A / LINKS</text><text x="413" y="31" text-anchor="end" fill="#9eb6c9" font-size="10" font-family="monospace">MLC-B / RECHTS</text>
+          <circle cx="220" cy="180" r="4" fill="#fff6c8"/><path d="M210 180H230M220 170V190" stroke="#fff6c8" stroke-width="1"/>
+          <text x="220" y="348" fill="#a8b7c9" font-size="12" text-anchor="middle" font-family="monospace">ROT = ZIELPROJEKTION / GOLD = OFFENE FLÄCHE</text>
+        </svg>
+        </div>
+      </section>
+      <section class="viewport" aria-label="Schematische Darstellung der Dosis im Gewebe">
+        <div class="viewport-head"><span class="index">02</span><div><h2>IM GEWEBE</h2><p>Eine Einstrahlrichtung · stark vereinfacht</p></div><span class="viewport-tag">SCHEMA</span></div>
+        <div class="scene">
+          <svg id="bodySvg" viewBox="0 0 440 360" role="img" aria-labelledby="bodyTitle bodyDesc">
+            <title id="bodyTitle">Schematische Dosiswirkung in gesundem Gewebe und Zielvolumen</title>
+            <desc id="bodyDesc">Ein Strahlenfeld trifft von oben auf einen modellierten Gewebeblock. Die Bestrahlung durchdringt Gewebe vor und hinter dem rot markierten Ziel. Der farbige Effekt stellt keine berechnete Dosisverteilung dar.</desc>
+            <defs>
+              <pattern id="bodyGrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#253953" stroke-width="1"/></pattern>
+              <linearGradient id="beamDepth" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffda60" stop-opacity=".8"/><stop offset="45%" stop-color="#ffc24f" stop-opacity=".47"/><stop offset="100%" stop-color="#edaa3b" stop-opacity=".26"/></linearGradient>
+              <radialGradient id="doseSpot"><stop offset="0%" stop-color="#fff49b" stop-opacity=".75"/><stop offset="48%" stop-color="#ff9e3e" stop-opacity=".4"/><stop offset="100%" stop-color="#fe694f" stop-opacity="0"/></radialGradient>
+              <clipPath id="bodyClip"><rect x="42" y="85" width="356" height="240" rx="45"/></clipPath>
+            </defs>
+            <rect x="2" y="2" width="436" height="356" rx="8" fill="#0c1d30"/>
+            <rect x="2" y="2" width="436" height="356" fill="url(#bodyGrid)" opacity=".75"/>
+            <rect x="168" y="20" width="104" height="36" rx="3" fill="#56667d" stroke="#91a1b8" stroke-width="2"/>
+            <text x="220" y="43" font-size="13" font-family="monospace" text-anchor="middle" fill="#e8eef6">STRAHL</text>
+            <path id="beamCone" d="" fill="#e8c85d" opacity=".24"/>
+            <rect x="42" y="85" width="356" height="240" rx="45" fill="#6a455b" stroke="#db8c93" stroke-width="4"/>
+            <g clip-path="url(#bodyClip)">
+              <path d="M42 144H398 M42 262H398" stroke="#b67b91" stroke-width="2" stroke-dasharray="6 8"/>
+              <ellipse cx="108" cy="194" rx="38" ry="63" fill="#504259" opacity=".74"/>
+              <ellipse cx="331" cy="194" rx="38" ry="63" fill="#504259" opacity=".74"/>
+              <g id="doseLayer">
+                <rect id="dosePath" x="75" y="86" width="290" height="240" fill="url(#beamDepth)" opacity=".72"/>
+                <ellipse id="doseCloud" cx="220" cy="207" rx="135" ry="92" fill="url(#doseSpot)"/>
+              </g>
+            </g>
+            <path d="M214 162L233 155L245 167L260 173L257 195L269 206L253 222L250 240L229 239L213 250L201 235L182 230L187 208L176 194L191 177L200 174Z" fill="#bd3656" stroke="#ff9f92" stroke-width="3"/>
+            <text x="220" y="210" text-anchor="middle" fill="white" font-size="13" font-weight="bold" font-family="monospace">ZIEL</text>
+            <path d="M274 203H353" stroke="#f2bd8e" stroke-width="2"/><text x="355" y="197" fill="#f2bd8e" font-size="10" font-family="monospace">TUMOR</text>
+            <path d="M27 94V322M27 94h10M27 322h10" stroke="#59e5ce" stroke-width="2" fill="none"/>
+            <text x="16" y="212" fill="#85a1bb" font-size="10" text-anchor="middle" transform="rotate(-90 16 212)" font-family="monospace">GEWEBETIEFE</text>
+            <text x="220" y="347" fill="#a8b7c9" font-size="12" text-anchor="middle" font-family="monospace">EINTRITT → ZIEL → AUSTRITT</text>
+          </svg>
+        </div>
+      </section>
+    </div>
+    <div class="readout" aria-live="polite" aria-atomic="true">
+      <div class="phase-pip" id="phaseDot">01</div><div class="phase-copy"><span id="phaseCaption" class="phase-name">FELD OFFEN</span><p id="phaseDetail">Ein breites Strahlenfeld würde auch umliegendes Gewebe erfassen.</p></div>
+      <div class="dose-status"><span class="dose-led" id="doseLed"></span><span id="beamStatus">STRAHL AUS</span></div>
+    </div>
+  </section>
+  <section class="console" aria-label="Animationssteuerung">
+    <div class="player">
+      <button type="button" id="playPause" class="button primary" aria-label="Animation abspielen"><span aria-hidden="true" id="playIcon">▶</span> <span id="playText">ABSPIELEN</span></button>
+      <button type="button" id="restart" class="button" aria-label="Animation von vorne starten">↺ NEUSTART</button>
+      <button type="button" id="step" class="button" aria-label="Nächste Phase">⇥ NÄCHSTE PHASE</button>
+      <div class="clock" id="timeDisplay" aria-live="off">00:00 / 00:28</div>
+    </div>
+    <label class="seeklabel" for="timeline">ZEITLEISTE <span>MIT SCHIEBEREGLER FREI NAVIGIERBAR</span></label>
+    <input id="timeline" type="range" min="0" max="28" step="0.05" value="0" aria-label="Position in der Animation (Sekunden)">
+    <div class="milestones" aria-hidden="true"><span>00:00 · OFFEN</span><span>00:05 · MLC BEWEGT SICH</span><span>00:14 · FORMFELD</span><span>00:19 · EINSTRAHLUNG</span></div>
+    <div class="settings">
+      <label class="toggle"><input type="checkbox" id="showDose" checked><span class="switch" aria-hidden="true"></span><span>SCHEMATISCHE DOSIS EINBLENDEN</span></label>
+      <label class="toggle"><input type="checkbox" id="showTarget" checked><span class="switch" aria-hidden="true"></span><span>ZIELKONTUR IN DER FELDSICHT</span></label>
+    </div>
+  </section>
+  <section class="learning">
+    <div><p class="eyebrow">MERKSATZ</p><p>Der <strong>MLC begrenzt das Feld aus einer Einstrahlrichtung</strong>. Eine bessere Anpassung an die Zielprojektion kann gesundes Gewebe seitlich schonen – <strong>sie verhindert aber keine Eintritts- oder Austrittsdosis.</strong></p></div>
+    <aside><strong>FACHLICHE EINORDNUNG</strong><p>Vereinfachtes Unterrichtsmodell, keine klinische Planung: Links Feldöffnung in Strahlaugenansicht, rechts nur eine qualitative Prinzipskizze. Die Farbdarstellung ist <b>keine berechnete Dosisverteilung</b>. Reale Fluenz, Streuung, Penumbra, Tiefe, Mehrfeldertechnik und VMAT sind nicht modelliert.</p></aside>
+  </section>
+  <footer class="footer"><span>PROTOTYP · NICHT FÜR KLINISCHE ENTSCHEIDUNGEN</span><span>MTR-STRAHLENTHERAPIE / LERNAPP</span></footer>
+</main>
+</body>
+</html>
