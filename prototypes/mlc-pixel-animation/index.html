@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1426">
+  <meta name="description" content="Interaktive, schematische Pixelanimation zur Strahlfeldformung mit einem Multileaf-Kollimator (MLC).">
+  <title>MLC // Feldformung – MTR Lernlabor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="animation.js" defer></script>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">▦</span><span>MTR / LERNLABOR</span></div>
+    <span class="edition">PROTOTYP 02 · PIXEL SCIENCE</span>
+  </header>
+  <section class="intro" aria-labelledby="pageTitle">
+    <div><p class="eyebrow">STRAHLENTHERAPIE / TECHNIK VERSTEHEN</p>
+    <h1 id="pageTitle">WIE DER <em>MLC</em><br>DAS FELD FORMT.</h1>
+    <p class="dek">20 Lamellenpaare. Eine Feldöffnung. Beobachte, wie der Multileaf-Kollimator das Strahlenfeld seitlich begrenzt.</p></div>
+    <div class="elapsed" aria-label="Animationsdauer"><span>LOOP /</span><strong>00:28</strong><small>SEKUNDEN</small></div>
+  </section>
+  <section class="machine" aria-label="MLC-Animation">
+    <div class="machine-top"><span><span class="led" aria-hidden="true"></span> VISUALISIERUNG AKTIV</span><span id="phaseIndicator">PHASE 01 / 04</span></div>
+    <div class="visuals">
+      <section class="viewport" aria-label="MLC in Strahlaugenansicht">
+        <div class="viewport-head"><span class="index">01</span><div><h2>BEAM'S EYE VIEW</h2><p>Blick entlang der Strahlachse auf das Feld</p></div><span class="viewport-tag">PROJEKTION</span></div>
+        <div class="scene">
+        <svg id="mlcSvg" viewBox="0 0 440 360" role="img" aria-labelledby="mlcTitle mlcDesc">
+          <title id="mlcTitle">Bewegliche MLC-Lamellen formen die Feldöffnung</title>
+          <desc id="mlcDesc">Von beiden Seiten fahren Lamellenpaare ein und begrenzen die Bestrahlungsfläche rund um die rot umrandete, schematische Zielvolumenprojektion.</desc>
+          <defs>
+            <pattern id="bevGrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#253953" stroke-width="1"/></pattern>
+            <filter id="fieldGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="10"/></filter>
+            <linearGradient id="fieldGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f8b850"/><stop offset="48%" stop-color="#fff4a4"/><stop offset="100%" stop-color="#f8b850"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="436" height="356" fill="#0c1d30" rx="8"/>
+          <rect x="2" y="2" width="436" height="356" fill="url(#bevGrid)" opacity=".75"/>
+          <path d="M220 26 V332 M24 180 H416" stroke="#557087" stroke-width="1" stroke-dasharray="5 9" opacity=".7"/>
+          <rect x="14" y="43" width="412" height="273" rx="8" fill="#0e2636" stroke="#38536a" stroke-width="2"/>
+          <path id="fieldHalo" fill="#ffd963" opacity=".26" filter="url(#fieldGlow)"/>
+          <path id="fieldShape" fill="url(#fieldGradient)" opacity=".72"/>
+          <path id="targetContour" d="M220 96L241 88L255 100L269 103L275 123L287 139L277 158L287 178L277 199L266 222L243 228L230 247L210 236L191 244L180 225L158 216L158 195L147 177L155 158L153 139L170 123L182 104L203 105Z" fill="#db4d6b" fill-opacity=".25" stroke="#ff627d" stroke-width="3" stroke-dasharray="8 4"/>
+          <g id="leafGroup" aria-hidden="true"></g>
+          <rect id="selectedStrip" x="14" y="165.4" width="412" height="13.6" fill="#59e5ce" fill-opacity=".12" stroke="#59e5ce" stroke-width="2" pointer-events="none"/>
+          <g fill="none" stroke="#59e5ce" stroke-width="2" opacity=".88"><path d="M12 24H40 M12 24V40 M428 24H400 M428 24V40 M12 338H40 M12 338V322 M428 338H400 M428 338V322"/></g>
+          <text x="28" y="31" fill="#9eb6c9" font-size="10" font-family="monospace">MLC-A / LINKS</text><text x="413" y="31" text-anchor="end" fill="#9eb6c9" font-size="10" font-family="monospace">MLC-B / RECHTS</text>
+          <circle cx="220" cy="180" r="4" fill="#fff6c8"/><path d="M210 180H230M220 170V190" stroke="#fff6c8" stroke-width="1"/>
+          <text x="220" y="339" fill="#a8b7c9" font-size="13" text-anchor="middle" font-family="monospace">ROT: ZIEL · GOLD: ÖFFNUNG</text>
+          <text x="220" y="355" fill="#59e5ce" font-size="12" text-anchor="middle" font-family="monospace">TÜRKIS: STREIFEN FÜR ANSICHT 02</text>
+        </svg>
+        </div>
+      </section>
+      <section class="viewport" aria-label="Geometrisch gekoppelter Strahlweg im Gewebe">
+        <div class="viewport-head"><span class="index">02</span><div><h2>IM GEWEBE</h2><p id="sliceSubtitle">Längsschnitt durch Streifen 10</p></div><span class="viewport-tag">GEOMETRIE</span></div>
+        <div class="scene">
+          <svg id="bodySvg" viewBox="0 0 440 360" role="img" aria-labelledby="bodyTitle bodyDesc">
+            <title id="bodyTitle">Ein MLC-Lamellenpaar begrenzt den Strahl vor dem Gewebe</title>
+            <desc id="bodyDesc">Längsschnitt durch die Mitte des türkis markierten BEV-Streifens. Quelle, Lamellenöffnung und divergierende Randstrahlen sind geometrisch gekoppelt. Ein geschlossenes Paar lässt im idealisierten Modell keinen direkten Primärstrahl durch. Die Markierung im Gewebe zeigt einen Strahlweg und keine Dosishöhe; reale Transmission und Streuung sind nicht dargestellt.</desc>
+            <defs>
+              <pattern id="bodyGrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#253953" stroke-width="1"/></pattern>
+              <pattern id="beamHatch" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M-2 2L2-2 M0 10L10 0 M8 12L12 8" stroke="#ffe39b" stroke-width="1" opacity=".4"/></pattern>
+              <clipPath id="bodyClip"><rect x="50" y="145" width="340" height="173" rx="30"/></clipPath>
+              <clipPath id="airClip"><path d="M0 0H440V145H0Z M0 318H440V360H0Z"/></clipPath>
+            </defs>
+            <rect x="2" y="2" width="436" height="356" rx="8" fill="#0c1d30"/>
+            <rect x="2" y="2" width="436" height="356" fill="url(#bodyGrid)" opacity=".75"/>
+            <rect x="50" y="145" width="340" height="173" rx="30" fill="#624959" stroke="#cc8b9b" stroke-width="3"/>
+            <path id="beamCone" d="" fill="#f6c65c" clip-path="url(#airClip)"/>
+            <g id="tissueLayer" clip-path="url(#bodyClip)">
+              <path id="tissueBeam" d="" fill="#f6c65c" opacity=".23"/>
+              <path id="tissueHatch" d="" fill="url(#beamHatch)"/>
+            </g>
+            <path id="beamOutline" d="" fill="none" stroke="#ffe39b" stroke-width="1.6"/>
+            <path id="beamRays" d="" fill="none" stroke="#ffe39b" stroke-width="1.1" stroke-dasharray="6 13"/>
+            <path id="sliceTarget" d="" fill="#d44868" fill-opacity=".75" stroke="#ff9caa" stroke-width="2.5"/>
+            <text id="sliceTargetLabel" x="220" y="238" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="monospace">ZIEL</text>
+            <path id="incidentBeam" d="" fill="#f6c65c"/>
+            <path id="mlcOpening" d="" fill="#f6c65c"/>
+            <path id="mlcLeft" d="" fill="#7f9db8" stroke="#d4e4ef" stroke-width="1.5"/>
+            <path id="mlcRight" d="" fill="#7f9db8" stroke="#d4e4ef" stroke-width="1.5"/>
+            <circle cx="220" cy="22" r="5" fill="#fff0a4" stroke="#f6c65c" stroke-width="2"/>
+            <text x="233" y="27" fill="#dbe7ed" font-size="12" font-family="monospace">PHOTONENQUELLE</text>
+            <text id="slicePairLabel" x="220" y="76" text-anchor="middle" fill="#59e5ce" font-size="13" font-family="monospace">MLC · PAAR 10</text>
+            <text id="sliceState" x="220" y="130" text-anchor="middle" fill="#f6c65c" font-size="12" font-family="monospace">FELD GEÖFFNET</text>
+            <text x="62" y="165" fill="#e7bdc9" font-size="12" font-family="monospace">EINTRITT</text>
+            <text x="62" y="306" fill="#e7bdc9" font-size="12" font-family="monospace">AUSTRITT</text>
+            <text id="sliceNote" x="220" y="351" fill="#a8b7c9" font-size="12" text-anchor="middle" font-family="monospace">Ziel im Schnitt · Gewebe davor und dahinter</text>
+          </svg>
+        </div>
+      </section>
+    </div>
+    <div class="readout" aria-live="polite" aria-atomic="true">
+      <div class="phase-pip" id="phaseDot">01</div><div class="phase-copy"><span id="phaseCaption" class="phase-name">FELD OFFEN</span><p id="phaseDetail">Ein breites Strahlenfeld würde auch umliegendes Gewebe erfassen.</p></div>
+      <div class="dose-status"><span class="dose-led" id="doseLed"></span><span id="beamStatus">STRAHL AUS</span></div>
+    </div>
+  </section>
+  <section class="console" aria-label="Animationssteuerung">
+    <div class="player">
+      <button type="button" id="playPause" class="button primary" aria-label="Animation abspielen"><span aria-hidden="true" id="playIcon">▶</span> <span id="playText">ABSPIELEN</span></button>
+      <button type="button" id="restart" class="button" aria-label="Animation von vorne starten">↺ NEUSTART</button>
+      <button type="button" id="step" class="button" aria-label="Nächste Phase">⇥ NÄCHSTE PHASE</button>
+      <div class="clock" id="timeDisplay" aria-live="off">00:00 / 00:28</div>
+    </div>
+    <label class="seeklabel" for="timeline">ZEITLEISTE <span>MIT SCHIEBEREGLER FREI NAVIGIERBAR</span></label>
+    <input id="timeline" type="range" min="0" max="28" step="0.05" value="0" aria-label="Position in der Animation (Sekunden)">
+    <div class="milestones" aria-hidden="true"><span>00:00 · OFFEN</span><span>00:05 · MLC BEWEGT SICH</span><span>00:14 · FORMFELD</span><span>00:19 · EINSTRAHLUNG</span></div>
+    <div class="settings">
+      <label class="toggle"><input type="checkbox" id="showBeamPath" checked><span class="switch" aria-hidden="true"></span><span>STRAHLWEG IM GEWEBE MARKIEREN</span></label>
+      <label class="toggle"><input type="checkbox" id="showTarget" checked><span class="switch" aria-hidden="true"></span><span>ZIELKONTUR IN DER FELDSICHT</span></label>
+    </div>
+    <div class="pair-control">
+      <label for="pairIndex">ANSICHT 02: LAMELLENPAAR <output id="pairReadout" for="pairIndex">10 / 20</output></label>
+      <input id="pairIndex" type="range" min="1" max="20" step="1" value="10" aria-label="Lamellenpaar für den Längsschnitt auswählen">
+      <p>Verschiebe den türkis markierten Streifen: Außerhalb der Zielprojektion schließen die Paare vollständig.</p>
+    </div>
+  </section>
+  <section class="learning">
+    <div><p class="eyebrow">MERKSATZ</p><p>Der <strong>MLC begrenzt das Feld aus einer Einstrahlrichtung</strong>. Eine bessere Anpassung an die Zielprojektion kann gesundes Gewebe seitlich schonen – <strong>sie verhindert aber keine Eintritts- oder Austrittsdosis.</strong></p></div>
+    <aside><strong>FACHLICHE EINORDNUNG</strong><p>Links eine synthetische Zielprojektion; rechts der geometrisch zugehörige Längsschnitt durch die Mitte des markierten Streifens. Gold markiert den <b>Strahlweg, keine Dosishöhe</b>. Geometrie und Abstände sind schematisch. Reale Transmission, Streuung und Penumbra sind nicht dargestellt: <b>geschlossen bedeutet klinisch nicht Dosis null</b>. Zusätzliche Blenden können je nach Gerät ebenfalls begrenzen. Das Modell zeigt statische Feldformung; dynamische Verfahren sind nicht enthalten.</p></aside>
+  </section>
+  <footer class="footer"><span>PROTOTYP · NICHT FÜR KLINISCHE ENTSCHEIDUNGEN</span><span>MTR-STRAHLENTHERAPIE / LERNAPP</span></footer>
+</main>
+</body>
+</html>
