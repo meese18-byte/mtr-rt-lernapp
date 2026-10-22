@@ -1,0 +1,85 @@
+# Vom LINAC zur Zellwirkung · isolierter Animationspilot
+
+Stand: 22.10.2026. Erster quellenbasierter Lehrentwurf, keine abschließende fachliche oder didaktische Freigabe.
+
+## Ziel und didaktische Entscheidung
+
+Die Energieübertragung vom technischen Gerät bis zu möglichen Zellfolgen verständlich machen. Ein 140-sekündiger stummer Gesamtablauf ist mit acht direkt anwählbaren Kapiteln verbunden. Die Filmzeit ist keine physikalische Zeitskala. Die Darstellung soll im Unterricht angehalten, erklärt und hinterfragt werden können.
+
+Zielgruppe: MTR-Ausbildung. Basistext für das 2. Lehrjahr; zuschaltbare Vertiefung für das 3. Lehrjahr. Jede Station enthält einen Merksatz, einen Hinweis gegen Fehlvorstellungen und eine Denkfrage mit aufklappbarer Erklärung. Kein neuer Modultyp und keine Fortschritts-/Prüfungslogik.
+
+Das hochgeladene Instagram-Recording `Screen_Recording_20261022_150206_Instagram.mp4` wurde als visuelle Referenz gesichtet: Geräteübersicht, Glühemission, Beschleunigung, Bremsstrahlung/charakteristische Strahlung, Gewebedurchtritt und Detektion. Übernommen wird das didaktische Prinzip des Ebenenwechsels. Bilder, Videosegmente, Texte und Audiomaterial werden nicht kopiert oder eingebettet. Alle Pilotgrafiken und Texte sind neu erstellt.
+
+Eine diagnostische Röntgenröhre ist keine Vorlage für eine unveränderte LINAC-Mechanik: Beschleunigung durch HF-Felder, Target, MV-Spektrum, Strahlmonitoring und therapeutische Wirkung brauchen eine eigene Darstellung. Bilddetektion wird durch den für diesen Lehrzweck relevanten Weg zur chemischen und biologischen Wirkung ersetzt.
+
+## Storyboard
+
+| Filmzeit | Station | Visueller Schwerpunkt | Fachlicher Prüfpunkt |
+|---|---|---|---|
+| 00:00–00:16 | Elektronenquelle | Geräteübersicht, Übergang zur geheizten Kathode, gebündelte Elektronen | Glühemission und Injektion von der späteren Photonenerzeugung unterscheiden. |
+| 00:16–00:34 | Beschleunigung | Elektronen entlang der Achse; HF-Feldsymbole und beispielhafte Umlenkung | Elektrisches Feld überträgt Energie; ideales statisches Magnetfeld lenkt ab. |
+| 00:34–00:50 | Target | Elektronenbahn im Coulombfeld und symbolisch emittiertes Photon | Bremsstrahlung, Spektrum und Energiedeposition im Target; kein 1:1-Teilchenumwandlungsmodell. |
+| 00:50–01:08 | Strahlkopf | Target, Primärkollimator, FF-Filter, Monitor, Blenden, MLC, Gewebe | Beispielkonfiguration; keine allgemeine Geräteanordnung und keine Dosisrechnung. |
+| 01:08–01:26 | Gewebe | Compton-Beispiel mit Streuphoton, Elektronenspur und lokalen Ereignissen | Sekundäre geladene Teilchen vermitteln die Energieabgabe; keine Ereignisstatistik. |
+| 01:26–01:44 | Strahlenchemie | Wassermoleküle vor/nach beispielhafter Ionisation und Protonentransfer | Ladungen, Wasserstoffzahl und Radikalpunkt; •OH und OH⁻ unterscheiden. |
+| 01:44–02:02 | DNA | Direkter und indirekter Weg, symbolische Strangschäden | Sekundäre Elektronen können direkte Wirkung vermitteln; Schaden ist nicht gleich Zelltod. |
+| 02:02–02:20 | Zellfolgen | Verzweigung in alternative Verläufe | Reparatur, Fehlreparatur, Verlust der Teilungsfähigkeit; keine Häufigkeiten oder Sofortauflösung. |
+
+## Fachliche Leitplanken
+
+- Photonenmodus eines konventionellen FF-LINACs. FFF und Elektronenmodus werden als Varianten erklärt, aber nicht vollständig animiert. Keine herstellerspezifische Geräteabbildung.
+- Geräte-, Teilchen-, Molekül- und Zellansichten haben unterschiedliche Maßstäbe. Farben, Wellenlinien, Teilchenzahlen, Abstände und Zeitraffung sind Symbole.
+- Keine gemessenen Spektren, Streuwinkel, physikalischen Flugbahnen oder Energie-/Dosis-/Überlebensberechnungen. Das Targetbild ist keine maßstäbliche Atomdarstellung.
+- Die HF-Pfeile sind ein Funktionsschema, keine zeit-/ortsaufgelöste Simulation einer konkreten stehenden oder laufenden Welle.
+- Coulombwechselwirkungen im Target, Energieabgabe im Gewebe und biologische Konsequenzen werden kausal verbunden, nicht als maßstäblicher Film eines einzelnen durchgehenden Teilchens ausgegeben.
+- Die gezeichneten Teilchen sind ausgewählte Beispiele. Nicht jede Photonwechselwirkung erzeugt einen DNA-Schaden, nicht jedes Radikal reagiert mit DNA und nicht jeder Schaden führt zum Verlust klonogener Teilungsfähigkeit.
+- Beispielzweig der Radiolyse: Energiezufuhr/Ionisation `H₂O → H₂O•⁺ + e⁻`; Protonentransfer `H₂O•⁺ + H₂O → H₃O⁺ + •OH`. Die erste Gleichung ist eine reduzierte Ionisationsdarstellung, keine vollständige Elektronenstoßbilanz. Weitere Produkte und Konkurrenzreaktionen sind in der Vertiefung benannt.
+- Bei der Visualisierung des Protonentransfers verliert das erste Wassermolekül einen Wasserstoff; das zweite erhält ihn. Es bleibt kein unverändertes H₂O-Bild stehen, während Produkte zusätzlich gezählt werden.
+- Die indirekte Wirkung wird nicht mit der gesamten Photonwirkung gleichgesetzt. Direkte Wirkung an DNA kann durch geladene Sekundärteilchen vermittelt werden.
+- DNA-Schäden können repariert werden; Doppelstrangbrüche werden nicht pauschal als irreparabel dargestellt. Zellreaktionen sind kontextabhängig und häufig verzögert.
+- Gesundes Gewebe kann betroffen sein. Keine pauschale Gegenüberstellung „Tumorzellen reparieren nie / gesunde Zellen immer“.
+- Vakuum, Kühlung, Steuerung, Sicherheitssysteme, Gantry und Tisch sind im Gesamtkontext benannt. Diese Systeme sowie Planung, IGRT, VMAT und Mehrfeldertechnik sind keine vollständigen Animationskapitel dieses ersten Piloten.
+
+## Primäre und institutionelle Fachquellen
+
+1. IAEA, *Radiation Oncology Physics: A Handbook for Teachers and Students*, 2005: Kapitel 1 (Wechselwirkungen), 5 (LINAC), 6 (Photonenstrahl), 14 (Radiobiologie). https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1196_web.pdf
+2. IAEA, *Radiation Biology: A Handbook for Teachers and Students*, 2010: Abschnitte 2.2.7, 2.3 und molekulare/zelluläre Strahlenwirkung; Sauerstoffeffekt und Reparatur. https://www-pub.iaea.org/MTCD/Publications/PDF/TCS-42_web.pdf
+3. SLAC / Argonne, Bericht zur zugrunde liegenden experimentellen Arbeit über Protonentransfer nach Wasserionisation, 09.01.2020. https://www6.slac.stanford.edu/news/2020-01-09-scientists-observe-ultrafast-birth-free-radicals-water
+4. NCI, *Radiation Therapy to Treat Cancer*: zeitverzögerte Wirkung und Normalgewebebelastung. https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy
+
+Keine Quellenbilder oder längeren Textpassagen übernommen. Texte sind didaktische Eigenformulierungen, Abbildungen eigene Schemata.
+
+## Lokal öffnen
+
+`index.html` in einem modernen Browser öffnen. Kein Build, kein Server, keine Installation. Keine Fremdbibliotheken, externen Schriften, externen Medien oder Tracking. Fachquellen werden erst beim bewussten Öffnen ihrer Links aufgerufen.
+
+Bedienung: Gesamtablauf, Pause, Vor/Zurück, Kapitelwiederholung, Zeitleiste, Tempo und Auswahl Basis/Vertiefung. Kein Autoplay und keine Endlosschleife. Bei reduzierter Bewegung bleibt der Start pausiert; Wiedergabe ist eine bewusste Nutzeraktion. Tastaturbedienung über native Buttons, Inputs und Selects. Canvas-Inhalte sind durch Bildbeschreibung und HTML-Texte ergänzt; kein vollständiger Screenreader-Ersatz einer visuellen Untersuchung.
+
+## Durchgeführte technische Prüfung
+
+Am 22.10.2026 lokal in Chromium:
+
+- JS-Syntax, keine Laufzeitfehler und keine automatischen externen Requests.
+- Acht Kapitel, korrekte Grenzen und Gesamtdauer 140 Sekunden.
+- Alle Kapitel mit mehreren Zeitpositionen auf Desktop und mobilem Viewport aufgerufen.
+- Wiedergabe, Pause, Zeitleistensprung, Kapitelwechsel, Basis/Vertiefung und Denkfragen überprüft.
+- Wiedergabe endet am Schluss; keine unbeabsichtigte Endlosschleife.
+- 320/390/760/850/1440 px ohne horizontalen Seitenüberlauf.
+- Alle acht Szenen auf Desktop und bei 390 px visuell gesichtet; Textbegrenzungen im Canvas zusätzlich geprüft.
+
+Die technische Prüfung ersetzt keine fachliche oder didaktische Freigabe. Smartphone-Viewport ist kein Test auf einem echten Smartphone.
+
+## Nächster Unterrichtstest (20 Minuten)
+
+1. 4 Min.: Gesamtablauf mit einer orientierenden Frage: „Welche Teilchen transportieren hier Energie?“
+2. 8 Min.: Partnerarbeit in vier Themenpaaren: Quelle/HF; Target/Strahlkopf; Gewebe/Radiolyse; DNA/Zellfolgen. Jeweils Ursache, beobachteter Vorgang und Folge erklären.
+3. 4 Min.: Jede Person erläutert einzeln die Kette Photon → Elektron → Ionisation/Anregung → chemische Veränderung → mögliche DNA-/Zellfolge.
+4. 4 Min.: Fehlvorstellungen sofort klären. Notieren, an welcher Szene die Erklärung ins Stocken gerät.
+
+Zentrale Prüffragen: Werden Elektronen- und Photonenerzeugung getrennt? Wird direkt/indirekt richtig eingeordnet? Wird •OH nicht als OH⁻ bezeichnet? Wird DNA-Schaden nicht mit unvermeidlichem sofortigem Zelltod gleichgesetzt? Wiederkehrende falsche Deutungen sind Überarbeitungsgründe; das ist ein Pilotkriterium, kein Wirksamkeitsnachweis.
+
+Vor regulärem Einsatz: Review durch Medizinphysik und strahlenbiologisch fachkundige Lehrkraft; Beamer-Lesbarkeit und tatsächliche mobile Bedienung prüfen. Optionaler späterer Ausbau: Sprechertext, MP4-Export, vertiefte Fraktionierung und Herstellerbezug. Diese Leistungen sind im aktuellen Pilot nicht enthalten.
+
+## Architektur
+
+Nur `prototypes/linac-cell-animation/{index.html,style.css,animation.js,README.md}`. Keine Änderung der produktiven Lernapp, der Architektur, Registry, Lernpfade oder des MLC-Piloten. Separater Draft-PR, keine Freigabe durch Merge.
