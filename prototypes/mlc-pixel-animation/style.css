@@ -33,7 +33,12 @@ h1 em{font-style:normal;color:var(--mint)}
 .viewport-tag{border:1px solid #54738d;color:#93b3c8;font-size:9px;padding:4px 6px;letter-spacing:.04em}
 .scene{padding:0}
 .scene svg{display:block;width:100%;height:auto}
-.scene svg [id^="field"],.scene svg #doseLayer{transition:opacity .2s ease}
+.scene svg [id^="field"],.scene svg #tissueLayer{transition:opacity .2s ease}
+.pair-control{margin-top:18px;border-top:1px dashed #48617b;padding-top:15px}
+.pair-control label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#d4e2ec;font-size:12px;font-weight:800}
+.pair-control output{color:var(--teal);font-size:16px;white-space:nowrap}
+.pair-control input{display:block;width:100%;min-height:30px;margin:8px 0;accent-color:var(--teal);cursor:pointer}
+.pair-control p{color:#a5bbcf;font-size:12px;margin:0}
 .readout{gap:16px;margin:0 18px 18px;padding:14px 17px;background:#172d40;border-left:5px solid var(--mint);min-height:90px}
 .phase-pip{display:grid;place-items:center;flex:0 0 54px;height:54px;color:#102335;font-size:25px;font-weight:900;background:var(--mint);box-shadow:4px 4px 0 #548b51}
 .phase-copy{flex:1}
