@@ -1,6 +1,35 @@
 # Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
-Stand: 22.10.2026. Erster quellenbasierter Lehrentwurf, keine abschließende fachliche oder didaktische Freigabe.
+Stand: 23.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
+
+
+## Visuelle Detailstudie 01 (23.10.2026)
+
+`detail.html` ist ein eigenständiger 52-Sekunden-Film innerhalb desselben Piloten. Der Gesamtablauf verlinkt ihn prominent; die Rückkehr führt über `index.html?chapter=4` direkt zur Strahlformung. Die übrigen acht Kapitel behalten ihren bisherigen illustrativen Stil. Die neue Detailtiefe ist noch nicht auf Zellbiologie oder den gesamten LINAC ausgedehnt.
+
+| Filmzeit | Visuelle Vertiefung |
+|---|---|
+| 00:00–00:10 | Perspektivischer Schnitt durch kupferfarbene Resonatorzellen, Iriden, Vakuumraum und Achse. |
+| 00:10–00:20 | Kamerafahrt mit Elektronenpaket und funktionellen Feldpfeilen. |
+| 00:20–00:29 | Schematischer Wolframkonverter, Träger, bewegte Kühlkanalmarkierungen, Elektronen- und Photonenspuren. |
+| 00:29–00:42 | Vergrößerung auf schematische Elektronenhüllen; ausgewähltes Bremsstrahlungsereignis mit bleibender Richtungsänderung der Elektronenspur und geradlinig fortlaufendem Photon. |
+| 00:42–00:52 | Ausgewählte Ensembleereignisse und ein qualitativ gezeichnetes Kontinuum. |
+
+Alle Bilder werden prozedural mit Canvas erzeugt: perspektivische Facetten, Materialschattierung, vorab berechnete Dichte-Sprites, Teilchenspuren und Überblendungen. Keine Bilder oder Filmsegmente aus Instagram werden verwendet. Es gibt keine externen Render- oder Medienabhängigkeiten.
+
+**Fachliche Grenzen der zusätzlichen Darstellung:**
+
+- Der Halb-Schnitt legt den Innenraum frei; er ist kein offener Betriebszustand. Abmessungen und Resonatorform sind generisch, keine Konstruktionszeichnung. HF-Pfeile zeigen nur die Funktion.
+- Das Target ist eine illustrative Konverter-/Träger-/Kühlkonstruktion. Seine Schichten und Kanäle sind keine realen Herstellerdaten. Kühlmarkierungen sind keine Strömungssimulation.
+- Elektronenhüllen sind schematische Dichtebilder, keine quantenmechanische Rechnung oder Sichtbarmachung einzelner Orbitale. Verhältnisse von Hülle, Kern und Atomabstand sind stark verändert.
+- Die gekrümmte Elektronenspur wurde für ein Lehrereignis gewählt; kein berechneter Stoß im Coulombpotential. Sie erhält nach der Ablenkung eine geänderte Richtung. Der gezeichnete Photonentransport läuft geradlinig. Wellenpaketsymbole sind keine maßstäbliche Wellenlänge.
+- Energiebeispiel: Elektron vorher 6 MeV, Elektron nachher 4 MeV, Photon 2 MeV; Rückstoßenergie des schweren Kerns vernachlässigt. Es wird keine kinematische Stoßrechnung oder Zuordnung zu einer konkreten LINAC-Strahlqualität behauptet.
+- Das Kontinuum ist eine qualitative didaktische Zeichnung, ohne Ordinatenskala, Messdaten oder berechnete Statistik. Sichtbare Teilchenzahlen und Emissionen sind ausgewählt. Keine Ableitung von Ausbeute, Dosis, Energiefluenz oder Strahlqualität.
+- Die visuelle Referenznähe ist ein Gestaltungsziel; die neue Version wird nicht als fertige vollständige oder die Vorlage übertreffende Animation ausgegeben.
+
+**Prüfung am 23.10.2026:** Syntax beider JS-Dateien; fünf Abschnitte und 52 Sekunden; mehrere Standbilder je Abschnitt auf Desktop und 390 px gesichtet; Wiedergabe, Pause, Zeitleiste, Abschnittswechsel, Label-/Spurenschalter und Ende ohne Loop geprüft. Keine Laufzeitfehler oder automatischen externen Requests. 320/390/700/850/1440 px ohne horizontalen Überlauf. Software-Chromium-Renderzeiten wurden zur internen Performance-Einschätzung gemessen; daraus wird keine Framerate für echte Smartphones abgeleitet. Querverweis zum Kapitel 4 des Gesamtablaufs geprüft. Medizinphysikalischer Gegencheck, Beamer-Lesbarkeit und Unterrichtstest bleiben ausstehend.
+
+Zusätzliche Dateien: `detail.html`, `detail.css`, `detail.js`. Die gesamte Änderung bleibt unter `prototypes/linac-cell-animation/`.
 
 ## Ziel und didaktische Entscheidung
 
@@ -82,4 +111,5 @@ Vor regulärem Einsatz: Review durch Medizinphysik und strahlenbiologisch fachku
 
 ## Architektur
 
-Nur `prototypes/linac-cell-animation/{index.html,style.css,animation.js,README.md}`. Keine Änderung der produktiven Lernapp, der Architektur, Registry, Lernpfade oder des MLC-Piloten. Separater Draft-PR, keine Freigabe durch Merge.
+Nur Dateien unter `prototypes/linac-cell-animation/`: Gesamtablauf, Detailstudie und README. Keine Änderung der produktiven Lernapp, der Architektur, Registry, Lernpfade oder des MLC-Piloten. Separater Draft-PR, keine Freigabe durch Merge.
+

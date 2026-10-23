@@ -139,5 +139,7 @@
  document.addEventListener("visibilitychange",()=>{if(document.hidden){wasPlaying=playing;stop();}else if(wasPlaying){wasPlaying=false;play();}});
  // Pausierter Start; auch bei reduzierter Bewegung nur bewusste Wiedergabe.
  motion.addEventListener("change",()=>{if(motion.matches)stop();});
+ const requestedChapter=Number(new URLSearchParams(location.search).get("chapter"));if(Number.isInteger(requestedChapter)&&requestedChapter>=1&&requestedChapter<=scenes.length)time=scenes[requestedChapter-1].at;
  new ResizeObserver(resize).observe(canvas);resize();stop();
 })();
+
