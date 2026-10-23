@@ -3,6 +3,29 @@
 Stand: 23.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
+## Aktueller Einstieg: Phase 01 von vier Phasen
+
+**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. Die anschließenden Phasen werden nach dem gemeinsamen Review ausgearbeitet. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
+
+| Phase | Inhalt | Status |
+|---|---|---|
+| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Erste überarbeitete Fassung; Review offen |
+| 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Detailausbau nach Review 01 |
+| 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
+| 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
+
+**Ansichten der Phase 01:** 00:00 Orientierung; 00:12 Elektronenkanone; 00:28 Wanderwelle; 00:52 Energiegewinn; Ende 01:08. Wiedergabe startet bewusst. Standardmäßig pausiert sie am nächsten Bildwechsel; die Option kann für den zusammenhängenden Film ausgeschaltet werden. Vier Ansichtstasten, Zeitleiste, Tempo und Großansicht sind direkt bedienbar. In der HF-Ansicht setzt ein zusätzlicher Knopf Feld und Pakete gemeinsam um eine Achtelperiode weiter. Beschriftung, E-Feld und Kraft sind separat ausblendbar.
+
+**Fachliche Weiterentwicklung:** Die zuvor rein funktionellen HF-Pfeile sind hier durch ein gemeinsames, idealisiertes Orts-/Zeitmodell für Feld und Pakete ersetzt. Elektrische Feldrichtung und Kraft auf das negative Elektron werden getrennt und mit korrektem Vorzeichen dargestellt. Der gezeigte HF-Ausschnitt setzt bereits gebündelte, relativistische Elektronen voraus; Buncher, Raumladung und Phasenschlupf werden nicht berechnet. Die sichtbare Periode von 8 Sekunden ist eine didaktische Zeitlupe. Das Beispiel 2 → 6 MeV beschreibt einen späteren Beschleunigungsabschnitt, nicht die Injektionsenergie. Die Geschwindigkeit wird relativistisch berechnet; geometrische Maße bleiben illustrativ.
+
+**Quellen und gemeinsames Review:** [SOURCES.md](SOURCES.md) ordnet Funktionen und Gestaltungsgrenzen den Fachquellen zu. [REVIEW.md](REVIEW.md) dokumentiert die vier Phasen, die konkreten Prüffragen, übertragbare Gestaltungsregeln und die abschließende Rückprüfung aller Phasen. Neue Hauptquelle ist Schlegel/Karger/Jäkel (2018), Kap. 20.6.3.3, ergänzt durch IAEA und Krieger. Es werden keine hochgeladenen Bücher oder Quellenbilder im Repository veröffentlicht.
+
+**Prüfung am 23.10.2026:** JS-Syntax; vier Ansichten auf Desktop und mobilem Viewport visuell geprüft; alle Wiedergabe- und Ansichtssteuerungen einschließlich Pausen am Bildwechsel und Ende geprüft. Keine Laufzeitfehler und keine automatischen externen Requests. 320/390/700/850/1120/1440 px ohne horizontalen Überlauf. Mathematische Invarianten für Ladungsvorzeichen, periodischen Feldwechsel, synchrone Pakete und relativistische Geschwindigkeit geprüft. Software-Rendering lokal geprüft; das ist keine Messung auf einem echten Smartphone. Unabhängiger medizinphysikalischer Review und Unterrichtstest bleiben offen.
+
+Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremdbibliothek für die Animation erforderlich.
+
+Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+
 ## Visuelle Detailstudie 01 (23.10.2026)
 
 `detail.html` ist ein eigenständiger 52-Sekunden-Film innerhalb desselben Piloten. Der Gesamtablauf verlinkt ihn prominent; die Rückkehr führt über `index.html?chapter=4` direkt zur Strahlformung. Die übrigen acht Kapitel behalten ihren bisherigen illustrativen Stil. Die neue Detailtiefe ist noch nicht auf Zellbiologie oder den gesamten LINAC ausgedehnt.
@@ -112,4 +135,5 @@ Vor regulärem Einsatz: Review durch Medizinphysik und strahlenbiologisch fachku
 ## Architektur
 
 Nur Dateien unter `prototypes/linac-cell-animation/`: Gesamtablauf, Detailstudie und README. Keine Änderung der produktiven Lernapp, der Architektur, Registry, Lernpfade oder des MLC-Piloten. Separater Draft-PR, keine Freigabe durch Merge.
+
 

@@ -6,3 +6,6 @@
 
 
 .detail-teaser{display:flex;gap:20px;justify-content:space-between;align-items:center;border:1px solid #95744b;background:#252d30;padding:18px 22px;margin:0 0 25px}.detail-teaser strong{color:#f1d29b;font-size:14px}.detail-teaser p{margin:4px 0 0;color:#b9c8cf;font-size:13px}.detail-teaser a{color:#f6d69d;font-size:14px;font-weight:700;white-space:nowrap}@media(max-width:700px){.detail-teaser{align-items:start;flex-direction:column;gap:12px;padding:16px}}
+
+
+.earlier-study{font-size:12px;margin:-10px 0 24px;color:#afc2ce}.earlier-study a{color:#b7cad8}

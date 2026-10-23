@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080f19">
+  <title>Phase 01 · Elektronen beschleunigen · MTR Lernlabor</title>
+  <link rel="stylesheet" href="phase1.css">
+  <script src="phase1-model.js" defer></script><script src="phase1.js" defer></script>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead"><a href="index.html" class="brand"><span aria-hidden="true">▦</span> MTR / LERNLABOR</a><span>LINAC → ZELLWIRKUNG <b>WERKSTAND 01</b></span></header>
+  <section class="intro"><div><p class="eyebrow">PHASE 01 / 04 · TECHNIK &amp; PHYSIK</p><h1>Elektronen<br><em>beschleunigen.</em></h1></div><div class="intro-copy"><p>Wo die Elektronen herkommen. Wie das elektrische Feld ihnen Energie überträgt. Und weshalb dabei der richtige Zeitpunkt zählt.</p><span class="badge">WANDERWELLENPRINZIP · GENERISCHES LEHRMODELL</span></div></section>
+  <ol class="phase-roadmap" aria-label="Die vier Phasen des Gesamtprojekts">
+    <li aria-current="step"><span>01</span><div><strong>Quelle &amp; Beschleunigung</strong><small>Diese Fassung · gemeinsam prüfen</small></div></li>
+    <li><span>02</span><div><strong>Photonen &amp; Strahlformung</strong><small>Nächste Ausbaustufe</small></div></li>
+    <li><span>03</span><div><strong>Gewebe &amp; Strahlenchemie</strong><small>Danach</small></div></li>
+    <li><span>04</span><div><strong>DNA &amp; Zellreaktion</strong><small>Danach · anschließend Gesamtreview</small></div></li>
+  </ol>
+  <section class="studio" aria-label="Interaktive erste Phase">
+    <div class="film" id="film">
+      <div class="film-meta"><span id="sceneKind">01 / ORIENTIERUNG</span><span>SCHNITTANSICHT <i aria-hidden="true"></i> STARK VERLANGSAMT</span></div>
+      <figure><canvas id="phaseCanvas" role="img" aria-label="Schematischer Schnitt einer Elektronenquelle mit angeschlossener Wanderwellenstruktur"></canvas><figcaption id="sceneCaption">Elektronen und HF-Energie gelangen auf verschiedenen Wegen in die Beschleunigungsstruktur.</figcaption></figure>
+      <div class="legend"><span><i class="electron"></i> Elektronen e⁻</span><span><i class="rf"></i> HF-Energie</span><span><i class="field"></i> E-Feld</span><span><i class="force"></i> Kraft auf e⁻</span></div>
+      <div class="player"><button type="button" id="play" class="primary">▶ Phase starten</button><button type="button" id="restart" aria-label="Phase zum Anfang zurücksetzen">↺ Anfang</button><button type="button" id="next">Nächste Ansicht →</button><label>Tempo <select id="speed"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option></select></label><button type="button" id="fullscreen" aria-label="Animation in Großansicht anzeigen">⛶ Großansicht</button></div>
+      <div class="timeline-head"><label for="timeline">FILMZEIT</label><output id="clock" for="timeline">00:00 / 01:08</output></div><input id="timeline" type="range" min="0" max="68" step="0.01" value="0" aria-label="Filmposition">
+      <nav id="views" aria-label="Vier Ansichten dieser Phase"></nav>
+      <div class="options"><label><input type="checkbox" id="labels" checked> Beschriftung</label><label><input type="checkbox" id="fields" checked> E-Feld</label><label><input type="checkbox" id="forces" checked> Kraft</label><label class="pause-option"><input type="checkbox" id="pauseBetween" checked> An Bildwechseln pausieren</label></div>
+      <div class="status-row"><p id="playerStatus" role="status">Startbereit. Jede Ansicht lässt sich einzeln betrachten.</p><button type="button" id="fieldStep" hidden>HF: +⅛ Periode</button></div>
+    </div>
+    <aside class="explanation">
+      <div class="explanation-top"><span id="viewNumber">01</span><p>BEOBACHTEN<br>&amp; VERSTEHEN</p></div>
+      <h2 id="viewTitle">Zwei Wege, ein Ziel</h2><p id="viewText"></p>
+      <div class="takeaway"><p class="eyebrow">DER ZUSAMMENHANG</p><p id="takeaway"></p></div>
+      <div id="energyReadout" hidden><p class="eyebrow">IDEALISIERTES RECHENBEISPIEL</p><div class="readout-values"><div><small>Kinetische Energie</small><strong id="kinetic">2,00 <b>MeV</b></strong></div><div><small>Geschwindigkeit</small><strong id="beta">97,91 <b>% c</b></strong></div></div><p class="readout-note">Aus der Energie berechnet. Die sichtbare Bewegung ist zeitlich gestreckt.</p></div>
+      <details id="check"><summary id="question">Woher kommt die Energie?</summary><p id="answer"></p></details>
+      <p class="source-line" id="sceneSource"></p>
+    </aside>
+  </section>
+  <section class="context-grid">
+    <details><summary>Was ist hier modelliert?</summary><div class="details-body"><p>Gezeigt wird ein generischer LINAC mit Dioden-Elektronenkanone und Wanderwellenstruktur. Der Schnitt entfernt gedanklich einen Teil der Wand; im Betrieb ist die Vakuumkammer geschlossen. Abmessungen, Oberflächenfarben und Teilchenzahlen sind didaktisch gewählt.</p><p>Im Feldmodell wandert eine idealisierte axiale HF-Komponente mit den bereits gebündelten, relativistischen Elektronen mit. Gewählt sind vier Zellen pro räumlicher Periode. Für die Bahn gilt näherungsweise v ≈ c. Die anfängliche Phasenfokussierung im Buncher und der verbleibende Phasenschlupf sind nicht berechnet.</p><p>Die Feldpfeile geben die elektrische Feldrichtung E an. Wegen der negativen Ladung gilt für das Elektron F = −eE. Die Energieanzeige zeigt ein gewähltes Beispiel von 2 bis 6 MeV im weiter stromab gelegenen Abschnitt. Sie ist keine Geräteauslegung und keine Angabe einer klinischen Photonenstrahlqualität.</p><p>Der Zusammenhang zwischen Energie und Geschwindigkeit wird relativistisch berechnet: γ = 1 + E<sub>kin</sub>/(m<sub>e</sub>c²), v/c = √(1 − 1/γ²), mit m<sub>e</sub>c² ≈ 0,511 MeV. Die Eingangsenergie aus der Kanone ist wesentlich kleiner und wird hier nicht mit 2 MeV gleichgesetzt.</p></div></details>
+    <details><summary>Quellen für diese Phase</summary><div class="details-body"><p><strong>Schlegel, Karger, Jäkel (Hrsg.), Medizinische Physik, 2018:</strong> Kap. 20.6.3.3; Buchseiten 415–420 / PDF-Seiten 438–443. Resonatorprinzip, Wanderwelle, Fokussierung, Systemkomponenten. Eigene Grafik; keine übernommenen Buchbilder.</p><p><strong><a href="https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1196_web.pdf#page=178" target="_blank" rel="noopener noreferrer">IAEA, Radiation Oncology Physics, 2005</a>:</strong> Abschnitte 5.5.5–5.5.9, Buchseiten 140–145. Elektronenkanone, HF-Erzeugung, Wellenleiter, Vakuum und Kühlung.</p><p><strong>Krieger, Grundlagen der Strahlungsphysik und des Strahlenschutzes, 3. Auflage, 2009:</strong> Kap. 1.2.1 zum relativistischen Energie-Geschwindigkeits-Zusammenhang.</p><p><a href="https://medizinphysik.wiki/teletherapie/linearbeschleuniger/" target="_blank" rel="noopener noreferrer">Medizinphysik.wiki</a> ergänzt den visuellen Bauteilabgleich. Geräteabhängige Angaben werden nicht verallgemeinert. Die Quellenzuordnung und bewusst vereinfachten Details sind im Projekt dokumentiert.</p></div></details>
+  </section>
+  <section class="review"><div><p class="eyebrow">UNSER NÄCHSTER PRÜFSCHRITT</p><h2>Erst diese Phase schärfen.</h2><p>Die Rückmeldungen zu Bauteilen, Bewegung und Verständlichkeit fließen in die nächsten drei Phasen ein. Am Ende prüfen wir den gesamten Ablauf nochmals mit denselben Kriterien.</p></div><ol><li>Ist der Unterschied zwischen Elektronenweg und HF-Zufuhr sofort erkennbar?</li><li>Erklären Feldwechsel und Teilchenbewegung das Beschleunigungsprinzip?</li><li>Welche Beschriftung oder Perspektive hilft – und welche lenkt ab?</li></ol></section>
+  <footer><span>PHASE 01 · FASSUNG 1 · 23.10.2026</span><a href="index.html">Bisherigen Gesamtablauf ansehen →</a><p>Quellenbasierter Lehrprototyp · fachlicher Gegencheck und Unterrichtstest stehen aus.</p></footer>
+</main>
+</body>
+</html>
