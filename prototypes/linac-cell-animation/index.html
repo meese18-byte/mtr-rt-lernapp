@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#091525">
+  <title>Vom LINAC zur Zellwirkung · MTR Lernlabor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="animation.js" defer></script>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead"><a class="brand" href="#start"><span aria-hidden="true">▦</span> MTR / LERNLABOR</a><span>ISOLIERTER PILOT 01</span></header>
+  <section id="start" class="intro">
+    <p class="eyebrow">TECHNIK → PHYSIK → CHEMIE → BIOLOGIE</p>
+    <h1>Vom <em>LINAC</em><br>zur Zellwirkung.</h1>
+    <p class="lead">Eine Energiegeschichte über acht Stationen: Wie aus Elektronen ein therapeutischer Photonenstrahl wird – und wie daraus Zellschäden entstehen können.</p>
+    <div class="scope"><span>PHOTONENMODUS</span><span>SCHEMATISCH · OHNE DOSISBERECHNUNG</span></div>
+  </section>
+  <aside class="detail-teaser"><div><strong>NEU · Phase 01 von 04</strong><p>Elektronenquelle und Wanderwellen-Beschleunigung · vier prüfbare Ansichten · 68 Sekunden.</p></div><a href="phase1.html">Neue Phase 01 öffnen →</a></aside><p class="earlier-study"><a href="detail.html">Frühere visuelle Studie: Target und Bremsstrahlung</a></p>
+  <section class="workspace" aria-label="Interaktive Animation">
+    <nav class="chapter-nav" aria-label="Kapitel"><div class="nav-heading">DER ABLAUF <span>08 STATIONEN</span></div><ol id="chapters"></ol></nav>
+    <div class="viewer">
+      <div class="viewer-top"><span id="domain">TECHNIK / PHYSIK</span><span id="scale">GERÄTEEBENE</span></div>
+      <div class="scene-heading" aria-live="polite" aria-atomic="true"><span id="chapterNumber">01</span><div><h2 id="sceneTitle">Elektronen bereitstellen</h2><p id="sceneSub">Eine geheizte Kathode liefert die Elektronen.</p></div></div>
+      <figure><canvas id="scene" role="img" aria-label="Animation der Elektronenquelle"></canvas><figcaption id="figureCaption">Schematische Elektronenquelle; Teilchen und Abstände sind nicht maßstäblich.</figcaption></figure>
+      <div class="legend" aria-label="Farblegende"><span><i class="electron"></i> Elektron e⁻</span><span><i class="photon"></i> Photon γ</span><span><i class="chemical"></i> Reaktive Spezies</span><span><i class="damage"></i> Schaden</span></div>
+      <div class="player">
+        <button id="play" class="primary" type="button">▶ Gesamtablauf</button>
+        <button id="back" type="button" aria-label="Vorheriges Kapitel">← Zurück</button>
+        <button id="next" type="button">Weiter →</button>
+        <button id="replay" type="button" aria-label="Aktuelles Kapitel von vorn abspielen">↺ Kapitel</button>
+        <label class="speed-label">Tempo <select id="speed"><option value="0.75">0,75×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option></select></label>
+      </div>
+      <div class="timeline-head"><label for="timeline">GESAMTABLAUF</label><output id="clock" for="timeline">00:00 / 02:20</output></div>
+      <input id="timeline" class="timeline" type="range" min="0" max="140" step="0.1" value="0" aria-label="Zeitposition im didaktischen Gesamtablauf">
+      <p class="time-note">Die Filmzeit ist didaktisch gestreckt. Geräte-, Teilchen- und Zellprozesse haben unterschiedliche Zeit- und Größenskalen.</p>
+    </div>
+  </section>
+  <section class="learning-panel">
+    <div class="learning-top"><p class="eyebrow">VERSTEHEN &amp; EINORDNEN</p><label for="level">Ansicht <select id="level"><option value="basic">Basis · 2. Lehrjahr</option><option value="advanced">Vertiefung · 3. Lehrjahr</option></select></label></div>
+    <div class="learning-grid"><div><h3>Das passiert</h3><p id="explanation"></p><div class="takeaway"><span>MERKSATZ</span><p id="takeaway"></p></div></div><div><div class="misconception"><h3>Genau hinschauen</h3><p id="caution"></p></div><details id="questionBox"><summary id="question"></summary><p id="answer"></p></details></div></div>
+    <div id="advanced" class="advanced" hidden><h3>Vertiefung</h3><p id="advancedText"></p></div>
+  </section>
+  <details class="context"><summary>Wo sich das Kapitel im gesamten LINAC einordnet</summary><div class="overview"><p><strong>Gezeigt:</strong> Elektronenquelle → HF-Beschleunigung → beispielhafte magnetische Umlenkung → Target → Strahlkontrolle und Feldformung → Gewebe → Molekül-/DNA-Schaden → mögliche Zellfolgen.</p><p><strong>Zusätzlich erforderlich:</strong> Vakuum, Kühlung, Stromversorgung und Steuerung ermöglichen den Betrieb. Monitorsysteme und Sicherheitsverriegelungen überwachen die Abgabe. Gantry, Kollimator und Patiententisch bestimmen die Einstrahlgeometrie. Diese Systeme werden hier eingeordnet, aber nicht vollständig animiert.</p><p><strong>Beispielkonfiguration:</strong> Ein konventioneller LINAC im Photonenmodus mit Ausgleichsfilter (FF). Bei FFF entfällt dieser Filter; der Elektronenmodus hat einen anderen Strahlkopfaufbau. Reihenfolge und Ausführung der Komponenten sind geräteabhängig. Die Darstellung ist kein Modell eines bestimmten Herstellers.</p></div></details>
+  <details class="context"><summary>Quellen, Modellgrenzen und nächster Unterrichtstest</summary><div class="overview"><p>Eigene Grafiken und Texte. Das hochgeladene Röntgenröhren-Recording diente als gestalterische Referenz für Ebenenwechsel und Teilchenbewegung; es wird hier nicht eingebettet.</p><ul><li><a href="https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1196_web.pdf" target="_blank" rel="noopener noreferrer">IAEA: Radiation Oncology Physics</a> – Kapitel 1, 5, 6 und 14.</li><li><a href="https://www-pub.iaea.org/MTCD/Publications/PDF/TCS-42_web.pdf" target="_blank" rel="noopener noreferrer">IAEA: Radiation Biology</a> – molekulare Schäden, Reparatur und Zellfolgen.</li><li><a href="https://www6.slac.stanford.edu/news/2020-01-09-scientists-observe-ultrafast-birth-free-radicals-water" target="_blank" rel="noopener noreferrer">SLAC / Argonne: Forschungsbericht zur Wasserradiolyse</a> – Protonentransfer und Hydroxylradikalbildung.</li><li><a href="https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy" target="_blank" rel="noopener noreferrer">NCI: Radiation Therapy to Treat Cancer</a> – zeitverzögerte Wirkung und Normalgewebe.</li></ul><p>Teilchenzahlen, Flugbahnen, Farben und Zeiten sind didaktisch gewählt; keine Monte-Carlo-Simulation, Energiedepositionsrechnung oder biologische Prognose. Wellenlinien symbolisieren Photonen; die gezeichnete Wellenlänge hat keine physikalische Bedeutung. Nicht jede Interaktion erzeugt einen DNA-Schaden; nicht jeder DNA-Schaden führt zum Verlust der Teilungsfähigkeit.</p><p><strong>Testvorschlag (20 Minuten):</strong> Vier Minuten Gesamtablauf, acht Minuten Kapitelarbeit zu Elektron/Photon und direkter/indirekter Wirkung, vier Minuten individuelle Erklärung der Energieübertragung, vier Minuten Klärung. Fachlicher Review durch Medizinphysik und Strahlenbiologie sowie Unterrichtstest stehen noch aus.</p></div></details>
+  <footer>PROTOTYP · FACHREVIEW &amp; UNTERRICHTSTEST AUSSTEHEND · KEINE KLINISCHE SIMULATION</footer>
+</main>
+</body>
+</html>
+
+
