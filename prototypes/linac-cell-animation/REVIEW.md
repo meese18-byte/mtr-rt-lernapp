@@ -6,16 +6,16 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 ## Umfang und Reihenfolge
 
-| Phase | Inhalt und Übergabe | Stand am 23.10.2026 |
+| Phase | Inhalt und Übergabe | Stand am 24.10.2026 |
 |---|---|---|
-| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Erste überarbeitete Fassung in `phase1.html`, 68 s; gemeinsames fachlich-visuelles Review offen |
+| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 2 in `phase1.html`, 68 s, mit Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Vorhandene ältere Studien als Ausgangspunkt, noch nicht im neuen Phasenstandard überarbeitet |
 | 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
 ## Phase 01 – aktueller gemeinsamer Prüfauftrag
 
-1. Übersicht: Sind der Elektronenweg und die HF-Energiezufuhr ohne zusätzliche Erklärung unterscheidbar? Sind alle sichtbaren Anschlüsse verständlich?
+1. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
 2. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
 3. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
 4. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
@@ -41,6 +41,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | 23.10.2026 | Statt einer durchgehend generischen HF-Darstellung wird eine Wanderwellenvariante mit gekoppeltem Feld-/Paketmodell verwendet. | Bauart in Phase 02 konsequent fortführen; keine unbegründete Vermischung verschiedener Herstellerkonfigurationen |
 | 23.10.2026 | Anschlüsse von Quelle, HF-Zufuhr, Kühlung und Vakuumpumpe beim eigenen Bildreview verbessert. | In allen Folgephasen die räumlichen Verbindungen vor zusätzlicher Oberflächendekoration prüfen |
 | 23.10.2026 | Energieanzeige ersetzt übertriebene optische Beschleunigung im relativistischen Abschnitt. | Auch beim Target und im Gewebe Energieübertragung getrennt von dekorativer Partikelgeschwindigkeit vermitteln |
+| 24.10.2026 | Zusätzliche Video-Transkription ausgewertet: Makropulse und getrennte Steuer-/Fokusfunktionen ergänzt; gerätespezifische Angaben nicht verallgemeinert. | Quellenkritik, Phase-02-Vorgaben und 12-Minuten-Test in `REFERENCE-VIDEO.md`; keine Sichtprüfung des ganzen Videos behaupten |
 | offen | Rückmeldung von Jan zur neuen Phase 01 | Vor Phase 02 in konkrete Regeln übersetzen |
 
 ## Abschlussprüfung des Gesamtfilms
@@ -53,3 +54,5 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 - Kurzer Unterrichtstest: zunächst pro Phase 2–3 Lernende erklären lassen, was sie sehen; am Ende 15–20 Minuten für den zusammenhängenden Ablauf mit individuellen Erklärungen. Wiederkehrende Fehlvorstellungen führen zurück in die Überarbeitung.
 
 Die Liste dokumentiert das vereinbarte Vorgehen. Sie behauptet keine bereits erfolgte fachliche oder didaktische Freigabe.
+
+Für den technischen Videoabgleich und den konkreten 12-Minuten-Unterrichtstest siehe [REFERENCE-VIDEO.md](REFERENCE-VIDEO.md).

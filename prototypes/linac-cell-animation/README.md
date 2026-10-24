@@ -1,6 +1,6 @@
 # Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
-Stand: 23.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
+Stand: 24.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
 ## Aktueller Einstieg: Phase 01 von vier Phasen
@@ -25,6 +25,14 @@ Stand: 23.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremdbibliothek für die Animation erforderlich.
 
 Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+
+## Technische Ergänzung aus der Video-Transkription (24.10.2026)
+
+Fassung 2 ergänzt ein Makropulsdiagramm für HF, Injektion und dauerhaft heiße Kathode. Sichtbare Elektronen entstehen aus vorherigen Emissionszeitpunkten. In Ansicht 01 lässt sich zwischen Versorgungswegen und einer generischen Steuer-/Fokusansicht wechseln. Resonator-/Irisfunktion, Magnetron/Klystron und Diodeninjektion sind präzisiert. Die vier Hauptansichten und 68 Sekunden bleiben erhalten. Die neuen Zeitskalen und Spulengeometrien sind ausdrücklich illustrativ.
+
+[REFERENCE-VIDEO.md](REFERENCE-VIDEO.md) dokumentiert die fachliche Bewertung der vom Nutzer gelieferten Transkription, die noch ausstehende Sichtprüfung des Films, priorisierte Vorgaben für Phase 02 und einen 12-Minuten-Unterrichtstest. Es werden keine Gerätedimensionen ungeprüft übernommen.
+
+Prüfung am 24.10.2026: Modelltests für Makropulse und zeitlich zugehörige Emission, Syntax, Bedienung und Szenenwechsel bestanden. Alle vier Szenen sowie die neue Spulenansicht auf Desktop und mobilem Viewport geprüft; 320–1440 px ohne horizontalen Überlauf. Neue UI-Integration, Großansicht und Vergleichsansichten ohne Laufzeitfehler. Keine Prüfung auf echter Smartphone-Hardware.
 
 ## Visuelle Detailstudie 01 (23.10.2026)
 
