@@ -1,6 +1,6 @@
 # Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
-Stand: 24.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
+Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
 ## Aktueller Einstieg: Phase 01 von vier Phasen
@@ -9,7 +9,7 @@ Stand: 24.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 
 | Phase | Inhalt | Status |
 |---|---|---|
-| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Erste überarbeitete Fassung; Review offen |
+| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 3 mit Gesamtgerät und Kamerafahrten; Review offen |
 | 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Detailausbau nach Review 01 |
 | 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
 | 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
@@ -24,7 +24,17 @@ Stand: 24.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 
 Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremdbibliothek für die Animation erforderlich.
 
-Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `phase1-camera.js`, `tests/phase1-camera.test.cjs`, `REFERENCE-INSTAGRAM.md`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+
+## Räumlich zusammenhängende Phase 01 (25.10.2026)
+
+Fassung 3 bettet die Bauteile in eine eigene LINAC-Gesamtgeometrie mit Stativ, Gantryarm, Strahlkopfhülle und Patientenliege ein. Die Kamera fährt vom Gerät zur Beschleunigungsstrecke, zur Elektronenkanone und weiter zur Wanderwelle. Alle Ansichten verwenden dieselben Bauteilkoordinaten; eine dauerhaft sichtbare Gerätekarte markiert den betrachteten Bereich. Die Zeitleiste reproduziert die Kameraposition deterministisch.
+
+„Geführte Kamerafahrt“, „Versorgungswege“ und „Steuern & fokussieren“ bieten verschiedene Zugänge zur Orientierung. „Gesamtgerät“ hält an und führt zurück. Der Schalter „Kamerafahrten“ ermöglicht feste Perspektiven; `prefers-reduced-motion` wird berücksichtigt. Standardmäßige Lernhalte und die 68-Sekunden-Struktur bleiben erhalten.
+
+Die neue Instagram-Referenz und die daraus abgeleiteten Regeln sind in [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md) dokumentiert, einschließlich eines 10–12-minütigen Orientierungstests. Es wurden eigene Geometrie und Beschriftung erstellt. Die neue Referenz ersetzt keine Fachquelle; Strahlkopf, Dosis und Biologie folgen in den späteren Phasen. Die gestrichelte Achse unter dem Kopf ist nur eine Orientierungshilfe.
+
+Neue Modellprüfung: `node tests/phase1-camera.test.cjs` prüft kontinuierliche Position, Zoom und Orientierung an den Übergängen sowie feste Perspektiven bei reduzierter Bewegung. Die Physiktests bleiben getrennt. Browserprüfung umfasst Kameranavigation, Rücksprung, Modusmarkierung, Bewegungsoption, bisherige Bedienung und 320–1440 px. Fachlicher Gegencheck und echter Unterrichtstest stehen weiter aus.
 
 ## Technische Ergänzung aus der Video-Transkription (24.10.2026)
 

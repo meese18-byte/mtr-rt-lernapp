@@ -2,16 +2,16 @@
 /* Own cutaway geometry. Animation time is not physical time. See SOURCES.md. */
 (() => {
   const $ = id => document.getElementById(id);
-  const canvas = $("phaseCanvas"), c = canvas.getContext("2d"), M = window.LinacPhaseModel;
+  const canvas = $("phaseCanvas"), c = canvas.getContext("2d"), M = window.LinacPhaseModel, Camera = window.LinacCamera;
   const C = {bg:"#070e17",ink:"#ecf2f4",dim:"#91a8bb",cyan:"#8be7e9",purple:"#bea3ff",field:"#f0a5d1",force:"#b8ecc3",gold:"#e4b682"};
   const scenes = [
-    {at:0,end:12,name:"Orientierung",title:"Zwei Wege, ein Ziel",kind:"ORIENTIERUNG / BAUTEILE",caption:"Elektronen und HF-Energie gelangen auf verschiedenen Wegen in die Beschleunigungsstruktur.",text:"Die Elektronenkanone liefert Teilchen; eine HF-Quelle, beispielsweise ein Magnetron, liefert Energie über einen eigenen Hohlleiter. Die Pulssteuerung stimmt die Injektion auf die HF-Leistung ab. Die Beschleunigungsstruktur bleibt evakuiert und wassergekühlt.",takeaway:"Zwei getrennte Wege – zeitlich aufeinander abgestimmt.",question:"Was gelangt durch den violetten Hohlleiter?",answer:"HF-Energie. Die für den Therapiestrahl bestimmten Elektronen kommen aus der Elektronenkanone und bewegen sich entlang der zentralen Achse. Das Vakuum ermöglicht den Transport; es erzeugt die Beschleunigungsenergie nicht. Ein Magnetron erzeugt Mikrowellen; ein Klystron verstärkt ein zugeführtes HF-Signal. Welches System eingesetzt wird, hängt von der Bauart ab.",source:"IAEA 5.5.5–5.5.9 · Schlegel et al., S. 419–420",description:"Aufgeschnittene kupferfarbene Beschleunigungsstruktur. Links mündet die Elektronenkanone in die zentrale Achse. Oberhalb führt ein violett markierter Hohlleiter von der HF-Quelle zur Struktur. Zwei blaue Leitungen stehen für die Kühlung; ein Pumpenanschluss für das Vakuum."},
+    {at:0,end:12,name:"Orientierung",title:"Vom Gerät zum Elektron",kind:"ORIENTIERUNG / BAUTEILE",caption:"Vom ganzen LINAC zur Beschleunigungsstrecke: Bauteile und Wege bleiben räumlich verbunden.",text:"Die Kamerafahrt verortet die Bauteile im LINAC. Die Elektronenkanone liefert Teilchen; eine HF-Quelle, beispielsweise ein Magnetron, liefert Energie über einen eigenen Hohlleiter. Die Pulssteuerung stimmt die Injektion auf die HF-Leistung ab. Die Beschleunigungsstruktur bleibt evakuiert und wassergekühlt.",takeaway:"Zwei getrennte Wege – zeitlich aufeinander abgestimmt.",question:"Was gelangt durch den violetten Hohlleiter?",answer:"HF-Energie. Die für den Therapiestrahl bestimmten Elektronen kommen aus der Elektronenkanone und bewegen sich entlang der zentralen Achse. Das Vakuum ermöglicht den Transport; es erzeugt die Beschleunigungsenergie nicht. Ein Magnetron erzeugt Mikrowellen; ein Klystron verstärkt ein zugeführtes HF-Signal. Welches System eingesetzt wird, hängt von der Bauart ab.",source:"IAEA 5.5.5–5.5.9 · Schlegel et al., S. 419–420",description:"Eine räumlich zusammenhängende LINAC-Schnittansicht mit Gantry, Strahlkopf und Patientenliege. Die Kamera fährt vom Gesamtgerät zur aufgeschnittenen kupferfarbenen Beschleunigungsstruktur. Links mündet die Elektronenkanone in die zentrale Achse. Oberhalb führt ein violett markierter Hohlleiter von der HF-Quelle zur Struktur. Zwei blaue Leitungen stehen für die Kühlung; ein Pumpenanschluss für das Vakuum."},
     {at:12,end:28,name:"Elektronenquelle",title:"Wärme macht Elektronen verfügbar",kind:"ELEKTRONENKANONE / DETAIL",caption:"Beispiel einer Diodenkanone: Glühemission, Fokussierung und gepulste Injektion durch die Anodenöffnung.",text:"Die Heizung erwärmt die Kathode. Elektronen können ihre Oberfläche verlassen. Die Anode liegt gegenüber der Kathode auf höherem Potential; das elektrische Feld beschleunigt die Elektronen zur Anodenöffnung. Eine geformte Elektrode bündelt den Strahl. In diesem Diodenmodell erzeugen Spannungspulse die Injektion; die Heizung bleibt an.",takeaway:"Heizung ermöglicht die Emission. Das elektrische Feld bewirkt die gerichtete Beschleunigung.",question:"Entstehen an der Kathode schon die Therapiephotonen?",answer:"Hier werden Elektronen bereitgestellt und injiziert. Die zur Behandlung genutzte Bremsstrahlung entsteht später am Target. Die Kathode bleibt auch zwischen den Injektionspulsen heiß. Der Strom hängt von der Kanonenbauart und ihren Betriebsparametern ab; die Filamenttemperatur allein beschreibt die Steuerung nicht vollständig. Injektionspulse und die viel kürzeren HF-Elektronenpakete sind verschiedene Zeitskalen.",source:"IAEA 5.5.5 · generische Diodenkanone, keine Herstellerzeichnung",description:"Im Schnitt der Elektronenkanone liegen von links nach rechts eine Heizwendel, die emittierende Kathode, eine sie umgebende Fokussierelektrode und eine Anode mit zentraler Öffnung. Elektronen fliegen von der Kathode durch diese Öffnung. E-Feld und Kraft auf das negative Elektron zeigen in entgegengesetzte Richtungen."},
     {at:28,end:52,name:"Wanderwelle",title:"Der richtige Moment zählt",kind:"WANDERWELLE / FELD & PAKET",caption:"Bereits gebündelte Elektronen: Die passende beschleunigende Feldphase wandert mit ihnen nach rechts.",text:"An einem festen Ort wechselt das E-Feld seine Richtung. Ein passend eintreffendes Elektronenpaket trifft weiter stromab erneut auf eine beschleunigende Feldphase. Für das negativ geladene Elektron zeigt die Kraft entgegengesetzt zum E-Feld.",takeaway:"E nach links → Kraft auf e⁻ nach rechts. So nimmt das Paket Energie auf.",question:"Warum sind nicht alle Feldpfeile gleichgerichtet?",answer:"Die HF-Feldphase hängt von Ort und Zeit ab. Elektronen im passenden Phasenbereich erhalten Energie; ein beliebiger Eintrittszeitpunkt garantiert das nicht. Die Zell- und Irisgeometrie bestimmt Feldverteilung und Kopplung; die Öffnungen sind keine mechanischen Linsen. Hier sehen wir den bereits gebündelten, relativistischen Abschnitt innerhalb eines HF-Pulses. Buncher und magnetische Strahloptik sind in diesem Ausschnitt nicht berechnet.",source:"Schlegel et al., S. 415–416, Abb. 20.23–20.27 · IAEA 5.5.7",description:"Neun aufgeschnittene Resonatorzellen. Rosa Pfeile zeigen die zeitlich wechselnde axiale elektrische Feldrichtung. Türkise Elektronenpakete wandern nach rechts; grüne Kraftpfeile zeigen bei diesen Paketen nach rechts. Das darunterliegende Diagramm zeigt dieselbe E-Feldphase entlang der Achse. Die Pakete liegen im negativen E-Feldbereich."},
     {at:52,end:68,name:"Energiegewinn",title:"Mehr Energie. Fast gleiche Geschwindigkeit.",kind:"RELATIVISTISCHER ABSCHNITT / ENERGIE",caption:"Gewähltes Beispiel im bereits relativistischen Abschnitt: Die kinetische Energie steigt von 2 auf 6 MeV.",text:"Elektronen sind hier bereits nahe an der Lichtgeschwindigkeit. Durch die weitere Energieaufnahme steigt ihre Geschwindigkeit nur noch wenig. Deshalb zeigt eine eigene Anzeige den Energiegewinn – die Bewegung allein wäre dafür kein guter Maßstab.",takeaway:"Beschleunigung bedeutet hier vor allem: höhere kinetische Energie und höherer Impuls.",question:"Warum wird das Elektron nicht dreimal so schnell?",answer:"Die Beziehung E = ½mv² gilt hier nicht mehr als gute Näherung. Relativistisch ergeben sich bei 2 MeV etwa 97,91 % und bei 6 MeV etwa 99,69 % der Lichtgeschwindigkeit. Die Masse in Ruhe bleibt unverändert. Die angezeigten 2 MeV sind nicht die Energie unmittelbar nach der Elektronenkanone.",source:"Krieger, Kap. 1.2.1 · Rechenbeispiel, keine Maschinenparameter",description:"Ein markiertes Elektronenpaket durchläuft den bereits relativistischen Teil der Beschleunigungsstruktur. Ein Balken und eine Zahlenanzeige zeigen den gewählten Anstieg seiner kinetischen Energie von 2 auf 6 MeV. Die daraus berechnete Geschwindigkeit wächst nur von etwa 97,91 auf 99,69 Prozent der Lichtgeschwindigkeit. Rechts führt der Elektronenweg weiter zum späteren Strahltransport und Target."}
   ];
   const TOTAL = scenes.at(-1).end, reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  let equipmentMode="supply";
+  let equipmentMode="tour", pose, project;
   let W=1280,H=690,mobile=false,dpr=1,time=0,active=-1,playing=false,raf=null,last=0,shownWidth=-1;
   const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n)),mix=(a,b,p)=>a+(b-a)*p,mod=(x,n)=>(x%n+n)%n;
   const smooth=p=>{p=clamp(p);return p*p*(3-2*p);};
@@ -44,7 +44,7 @@
   function worldLine(pts,proj,color,width=2,dash=[]){line(pts.map(proj),color,width,dash);}
   function worldArrow(a,b,proj,color,width=2.3,head=8){arrow(proj(a),proj(b),color,width,head);}
   function label(str,point,x,y,{color=C.gold,small=false}={}){
-    if(!$("labels").checked)return;const fs=mobile?(small?24:27):(small?17:20),pad=11;c.font="500 "+fs+"px ui-sans-serif,system-ui,sans-serif";const w=c.measureText(str).width+2*pad,h=fs+20;const xx=clamp(x,14,W-w-14),yy=clamp(y,14,H-h-14);
+    if(!$("labels").checked || pose.annotations===0)return;const fs=mobile?(small?24:27):(small?17:20),pad=11;c.font="500 "+fs+"px ui-sans-serif,system-ui,sans-serif";const w=c.measureText(str).width+2*pad,h=fs+20;const xx=clamp(x,14,W-w-14),yy=clamp(y,14,H-h-14);
     const tx=clamp(point[0],xx+10,xx+w-10),ty=point[1]>yy+h?yy+h:yy;line([point,[tx,ty]],"#b6c9d176",1.2,[3,5]);dot(point[0],point[1],3,color);roundRect(xx,yy,w,h,4,"#08121ded","#7d9baf38");c.fillStyle=color;c.fillRect(xx,yy+7,2,h-14);text(str,xx+pad,yy+h/2,fs,C.ink);
   }
   function tag(str,x,y,color=C.dim){text(str,x,y,mobile?21:16,color);}
@@ -82,40 +82,108 @@
     }
     text("Funktionsprinzip · keine berechneten Bahnen",W*.5,H*.98,mobile?20:16,C.dim,"center");
   }
-  function overview(t){
-    const proj=camera({scale:mobile?66:100,yaw:.19,pitch:-.47,roll:mobile?-.61:0,focus:[-.35,-.23,0],cy:H*(equipmentMode==="optics"?(mobile?.42:.43):(mobile?.48:.49))});
-    worldLine([[-2.5,.5,-.4],[-2.5,.98,-.78],[3.8,.98,-.78],[3.8,.5,-.4]],proj,"#285a77",7);worldLine([[-2.5,.5,.4],[-2.5,.98,.78],[3.8,.98,.78],[3.8,.5,.4]],proj,"#347c9a",7);
-    drawMesh([...overviewCells,...overviewGun,...overviewRF,...ring(-3.0,-2.72,.145,.21,{cut:true,material:"steel"}),...box(.25,.68,-.16,.40,1.01,.32,"dark"),...box(-.05,1.69,-.38,1,.55,.76,"dark")],proj);helix(proj,[-4.15,0,0],.52);
-    if(equipmentMode==="optics")magneticOptics(proj);
-    worldLine([[-5.8,0,0],[4.7,0,0]],proj,"#79cbdc29",1,[4,6]);
-    for(const e of M.emissionAges(t,1.65,54)){const x=-5.12+e.age/1.65*9.7;if(x<-2.75||x>-2.35)electron(proj([x,Math.sin(e.index)*.02,0]),7);}
+  function housing(points,z,depth,material="dark"){
+    const base=materials[material],colour=f=>"rgb("+base.map(v=>Math.round(v*f)).join(",")+")";
+    const front=points.map(([x,y])=>[x,y,z+depth]),back=points.map(([x,y])=>[x,y,z]);
+    const faces=[{p:back,fill:colour(.6)},{p:front,fill:colour(.9),stroke:"#aac4d329"}];
+    points.forEach((p,i)=>{const j=(i+1)%points.length;faces.push({p:[back[i],back[j],front[j],front[i]],fill:colour(points[j][0]>p[0]?1.2:.65),stroke:"#aac4d321"});});return faces;
+  }
+  const worldHardware = [
+    ...housing([[-6.5,.6],[-4.7,.6],[-4.5,1.1],[-4.5,6.7],[-6.3,6.7],[-6.5,6.4]],-.9,1.8),
+    ...box(-7.05, 6.7, -1.3, 3.1, .55, 2.6, "steel"),
+    ...box(-6.1, -.95, -.95, 10.55, 1.95, .38, "dark"),
+    ...box(-6.1, -.95, .56, 10.55, .16, .32, "steel"),
+    ...box(-6.1, .86, .56, 10.55, .16, .32, "steel"),
+    ...housing([[4.35,-1.4],[6.2,-1.4],[6.66,-1.22],[6.95,-.82],[7.1,-.3],[7.1,1.55],[6.88,1.98],[6.5,2.2],[4.68,2.2],[4.35,1.88]],-.95,1.8),
+    ...box(4.65, 2.2, -.72, 2.05, .48, 1.45, "steel"),
+    ...box(4.93, 2.68, -.6, 1.5, .42, 1.2, "dark"),
+    ...box(.65, 5.45, -.8, 9.15, .25, 1.65, "steel"),
+    ...box(.6, 5.7, -.65, 9.0, .25, 1.3, "dark"),
+    ...box(1.35, 5.95, -.5, 1.25, 1.1, 1.05, "dark"),
+    ...box(.85, 7.05, -.8, 2.3, .2, 1.7, "steel")
+  ];
+  const assemblyHardware = [...overviewCells,...overviewGun,...overviewRF,
+    ...box(-4.5,-1.64,-.21,.16,.7,.42,"steel"),...box(-3.5,-1.64,-.21,.16,.7,.42,"steel"),
+    ...ring(-3.0,-2.72,.145,.21,{cut:true,material:"steel"}),
+    ...box(.25,.68,-.16,.40,1.01,.32,"dark"),...box(-.05,1.69,-.38,1,.55,.76,"dark")];
+  const toGun = p => [p[0]*.52-4.15,p[1]*.52,p[2]*.52];
+  const toWave = p => [p[0]*.77+.66,p[1]*.77,p[2]*.77];
+  const gunProject = p => project(toGun(p)), waveProject = p => project(toWave(p));
+  function deviceContext(){
+    const ratio=pose.scale/Camera.poses(mobile).whole.scale,a=clamp((2.35-ratio)/1.35,.045,1);
+    c.save();c.globalAlpha=a;
+    worldLine([[-8,7.25,-2],[11,7.25,-2],[11,7.25,2],[-8,7.25,2],[-8,7.25,-2]],project,"#526a7b55",1);
+    drawMesh(worldHardware,project);
+    // Stylised supine patient, used for spatial orientation only.
+    const body=[[3.85,5.36,.25],[4.12,4.94,.25],[4.65,4.83,.25],[5.16,4.75,.25],[6.34,4.81,.25],[7.08,5.05,.25],[8.8,5.19,.25],[9.05,5.36,.25]];
+    polygon(body.map(project),"#627b8b","#b6cdd77a");
+    const head=project([3.52,5.03,.25]);c.beginPath();c.ellipse(head[0],head[1],pose.scale*.30,pose.scale*.28,0,0,Math.PI*2);c.fillStyle="#8299a7";c.fill();
+    worldLine([[4.35,5.02,.35],[5.2,5.27,.35],[6.52,5.3,.35]],project,"#a1b6c099",2);
+    // Dashed reference axis is not an active photon field or dose display.
+    worldLine([[5.68,3.15,0],[5.68,5.15,0]],project,"#d8b98166",1,[4,6]);
+    const iso=project([5.68,5.15,0]);line([[iso[0]-8,iso[1]],[iso[0]+8,iso[1]]],"#d8b98188");line([[iso[0],iso[1]-8],[iso[0],iso[1]+8]],"#d8b98188");
+    const h=project([5.65,.4,.95]);text("02",h[0],h[1],Math.max(14,pose.scale*.4),"#7f99ac","center",600);
+    c.restore();
+  }
+  function assembly(t){
+    const proj=project;
+    worldLine([[-2.5,.5,-.4],[-2.5,.98,-.78],[3.8,.98,-.78],[3.8,.5,-.4]],proj,"#285a77",5);
+    worldLine([[-2.5,.5,.4],[-2.5,.98,.78],[3.8,.98,.78],[3.8,.5,.4]],proj,"#347c9a",5);
+    drawMesh(assemblyHardware,proj);helix(proj,[-4.15,0,0],.52);
+    if(equipmentMode==="optics"&&active===0)magneticOptics(proj);
+    const cath=proj(toGun([-1.93,0,0])),r=clamp(pose.scale*.13,5,45);c.drawImage(warm,cath[0]-r,cath[1]-r,2*r,2*r);
+    if(active===0){
+      worldLine([[-5.8,0,0],[4.35,0,0]],proj,"#79cbdc29",1,[4,6]);
+      for(const e of M.emissionAges(t,1.65,54)){const x=-5.12+e.age/1.65*9.45;if(x<-2.75||x>-2.35)electron(proj([x,Math.sin(e.index)*.02,0]),7);}
+    }
     const hfRoute=[[-3.9,-1.96,0],[-2.53,-1.96,0],[-2.53,-.65,0]];
-    worldLine(hfRoute,proj,M.pulse(t).rf?"#cfb7ff99":"#65547b",2.5);if(M.pulse(t).rf)for(let i=0;i<5;i++){const u=mod(t*.25+i/5,1),p=u<.5?[mix(-3.9,-2.53,u*2),-1.96,0]:[-2.53,mix(-1.96,-.65,(u-.5)*2),0],q=proj(p);dot(q[0],q[1],3,C.purple);}
+    worldLine(hfRoute,proj,M.pulse(t).rf?"#cfb7ff99":"#65547b",2.5);
+    if(M.pulse(t).rf)for(let i=0;i<5;i++){
+      const u=mod(t*.25+i/5,1),p=u<.5?[mix(-3.9,-2.53,u*2),-1.96,0]:[-2.53,mix(-1.96,-.65,(u-.5)*2),0],q=proj(p);dot(q[0],q[1],3,C.purple);
+    }
+  }
+  function wholeLabels(){
+    label("Quelle & Beschleunigung",project([-.3,0,0]),W*.04,H*.07,{color:C.cyan});
+    label("Strahlkopf · Phase 02",project([5.65,1.4,0]),W*(mobile?.45:.63),H*.26,{small:true});
+    label("Stativ",project([-5.4,3.4,0]),W*.04,H*.57,{small:true});
+    label("Gantryarm",project([2,-.9,0]),W*.57,H*.07,{small:true});
+    label("Patientenliege",project([7.7,5.7,0]),W*(mobile?.52:.65),H*.78,{small:true});
+    text("Ganze Anlage → Bauteil → Funktion",W*.5,H*.92,mobile?25:22,C.ink,"center");
+    text("Geometrie schematisch · Strahlkopf folgt in Phase 02",W*.5,H*.97,mobile?18:16,C.dim,"center");
+  }
+  function overview(){
+    if(pose.transition){
+      text(pose.region==="assembly"?"IN DIE BESCHLEUNIGUNGSSTRECKE":"ZUR ELEKTRONENQUELLE",W*.5,H*.92,mobile?22:19,C.cyan,"center");return;
+    }
+    if(pose.region==="whole"){wholeLabels();return;}
+    const proj=project;
+    c.save();c.globalAlpha=pose.annotations;
     if(equipmentMode==="optics"){
       label("Fokussierspulen",proj([-1.5,.95,0]),W*.04,H*.07,{color:"#a7c6dd"});
       label("Steuerspulen",proj([2.5,-.83,0]),W*.53,H*.66,{color:"#a7c6dd"});
       label("Elektronenachse",proj([1.5,0,0]),W*.04,H*.66,{color:C.cyan});
-      opticsPrinciples();return;
+      opticsPrinciples();c.restore();return;
     }
     label("HF-Quelle",proj([-4,-2,0]),W*.05,H*.06,{color:C.purple});
     label("Elektronenkanone",proj([-5.05,0,0]),W*.025,H*(mobile?.64:.75),{color:C.cyan});
     label("Beschleunigungsstruktur",proj([1.2,.2,0]),W*(mobile?.34:.46),H*(mobile?.09:.12));
     label("Kühlung",proj([2,.98,.78]),W*.65,H*(mobile?.68:.76),{color:"#78b8db"});
     label("Vakuumpumpe",proj([.4,1.82,0]),W*.20,H*(mobile?.84:.87),{small:true});
-    tag("Elektronenweg →",W*.055,H*.95,C.cyan);
+    tag("Elektronenweg →",W*.055,H*.95,C.cyan);c.restore();
   }
   function source(t){
-    const proj=camera({scale:mobile?130:190,yaw:.24,pitch:-.5,roll:mobile?-.45:0,focus:[-.4,.05,0],cy:H*(mobile?.47:.49)});
-    drawMesh(gun,proj);helix(proj);const cath=proj([-1.93,0,0]);c.drawImage(warm,cath[0]-45,cath[1]-45,90,90);
+    const proj=gunProject;
     worldLine([[-2.98,-.08,.10],[-2.68,-.08,.10]],proj,"#b2997d",3);worldLine([[-2.98,.09,-.10],[-2.68,.09,-.10]],proj,"#b2997d",3);
     const on=M.pulse(t).injection;
     for(const {age,index:j} of M.emissionAges(t,.65,42)){const u=age/.65,x=mix(-1.91,2.2,u**1.35),radius=.23*(1-u)**2+.015;electron(proj([x,Math.sin(j*2.4)*radius,Math.cos(j*2.4)*radius]),10);}
     if(on){if($("fields").checked)worldArrow([-.45,-.32,0],[-1.2,-.32,0],proj,C.field,2.6,10);if($("forces").checked)worldArrow([-1.2,-.12,0],[-.45,-.12,0],proj,C.force,2.6,10);}
+    if(pose.transition){text("WEITER ZUM HF-FELD · NEUE ZEITSKALA",W*.5,H*.93,mobile?22:19,C.cyan,"center");return;}
+    c.save();c.globalAlpha=pose.annotations;
     label("Heizung",proj([-2.42,.08,0]),W*.04,H*.09,{color:"#f8ae72"});
     label("Kathode (−)",proj([-1.93,.15,0]),W*.04,H*(mobile?.70:.78),{color:C.cyan});
     label("Anode mit Öffnung",proj([0,.24,0]),W*.53,H*.08);
     label("Fokussierelektrode",proj([-1.75,.49,.2]),W*.39,H*(mobile?.81:.85));
-    const statusX=W*.06,statusY=H*(mobile?.91:.94);dot(statusX,statusY,5,on?C.cyan:"#47616e");tag(on?"Injektionspuls: Elektronen treten aus":"Injektion aus · Kathode bleibt heiß",statusX+17,statusY,on?C.cyan:C.dim);
+    const statusX=W*.06,statusY=H*(mobile?.91:.94);dot(statusX,statusY,5,on?C.cyan:"#47616e");tag(on?"Injektionspuls: Elektronen treten aus":"Injektion aus · Kathode bleibt heiß",statusX+17,statusY,on?C.cyan:C.dim);c.restore();
   }
   function fieldChart(t,onlyX=null){
     const x=W*(mobile?.08:.11),y=H*(mobile?.75:.75),w=W*(mobile?.84:.78),h=H*(mobile?.19:.19),base=y+h*.57,amp=h*.23;
@@ -127,8 +195,8 @@
     text("Ort →",x+w-15,y+22,mobile?20:15,C.dim,"right");
   }
   function rf(t){
-    const proj=camera({scale:mobile?70:110,yaw:.15,pitch:-.5,roll:mobile?-.57:0,focus:[0,0,0],cy:H*(mobile?.43:.42)});
-    drawMesh(cavity,proj);worldLine([[-4.6,0,0],[4.7,0,0]],proj,"#9feeee33",1,[4,5]);waveFields(proj,t);
+    const proj=waveProject;
+    worldLine([[-4.6,0,0],[4.7,0,0]],proj,"#9feeee33",1,[4,5]);waveFields(proj,t);
     const ps=M.packets(t,-4.4,4.4);for(const x of ps)packet(proj,x,{big:true,force:true});
     label("Irisöffnung",proj([.52,.14,0]),W*.07,H*.055);
     label("Resonatorzelle",proj([2.2,.62,0]),W*.56,H*(mobile?.62:.12));
@@ -136,8 +204,8 @@
     fieldChart(t);text("Bereits gebündelt · v ≈ c",W*.5,H*.98,mobile?20:16,C.dim,"center");
   }
   function energy(p){
-    const x=-4+8*p,t=x*M.period/M.wavelength,proj=camera({scale:mobile?71:111,yaw:.15,pitch:-.48,roll:mobile?-.57:0,focus:[0,0,0],cy:H*(mobile?.42:.43)});
-    drawMesh(cavity,proj);waveFields(proj,t);worldLine([[-4.5,0,0],[x,0,0]],proj,"#89e7e951",2);packet(proj,x,{big:true,force:true});
+    const x=-4+8*p,t=x*M.period/M.wavelength,proj=waveProject;
+    waveFields(proj,t);worldLine([[-4.5,0,0],[x,0,0]],proj,"#89e7e951",2);packet(proj,x,{big:true,force:true});
     label("Markiertes Elektronenpaket",proj([x,0,0]),W*.06,H*.06,{color:C.cyan});
     label("Weiter zu Phase 02 →",proj([4.6,0,0]),W*(mobile?.42:.61),H*(mobile?.62:.18),{small:true});
     const bx=W*.10,by=H*.79,bw=W*.8,bh=mobile?16:12;
@@ -155,8 +223,8 @@
   function overviewExplanation(){
     if(active!==0)return;
     const optics=equipmentMode==="optics",s=scenes[0];
-    $("supplyMode").setAttribute("aria-pressed",String(!optics));$("opticsMode").setAttribute("aria-pressed",String(optics));
-    $("viewTitle").textContent=optics?"Steuern und fokussieren":s.title;
+    $("tourMode").setAttribute("aria-pressed",String(equipmentMode==="tour"));$("supplyMode").setAttribute("aria-pressed",String(equipmentMode==="supply"));$("opticsMode").setAttribute("aria-pressed",String(optics));
+    $("viewTitle").textContent=optics?"Steuern und fokussieren":equipmentMode==="supply"?"Zwei Wege, ein Ziel":s.title;
     $("viewText").textContent=optics?"Steuerspulen korrigieren Lage und Richtung der Strahlachse. Fokussierspulen beeinflussen den Strahlquerschnitt. Beide wirken über Magnetfelder auf die Elektronenbahn; die Energie für die Beschleunigung kommt aus dem HF-Feld.":s.text;
     $("takeaway").textContent=optics?"Strahlachse und Strahlbreite sind zwei unterschiedliche Aufgaben.":s.takeaway;
     $("sceneCaption").textContent=optics?"Generische Spulenanordnung im Halbschnitt. Anzahl und Position sind beispielhaft; keine Herstellergeometrie.":s.caption;
@@ -167,7 +235,24 @@
   }
   function sceneIndex(t){return t>=TOTAL?scenes.length-1:scenes.findIndex(s=>t>=s.at&&t<s.end);}
   function updateScene(i){const s=scenes[i];$("sceneKind").textContent=String(i+1).padStart(2,"0")+" / "+s.kind;$("viewNumber").textContent=String(i+1).padStart(2,"0");$("viewTitle").textContent=s.title;$("viewText").textContent=s.text;$("sceneCaption").textContent=s.caption;$("takeaway").textContent=s.takeaway;$("question").textContent=s.question;$("answer").textContent=s.answer;$("sceneSource").textContent=s.source;$("check").open=false;$("equipmentModes").hidden=i!==0;$("pulsePanel").hidden=i>1;$("energyReadout").hidden=i!==3;$("fieldStep").hidden=i!==2;$("next").disabled=i===3;canvas.setAttribute("aria-label",s.description);[...$("views").children].forEach((b,n)=>n===i?b.setAttribute("aria-current","step"):b.removeAttribute("aria-current"));overviewExplanation();}
-  function draw(){const i=sceneIndex(time),s=scenes[i],t=time-s.at,p=clamp(t/(s.end-s.at));if(i!==active){active=i;updateScene(i);}c.setTransform(dpr,0,0,dpr,0,0);background();if(i===0)overview(t);else if(i===1)source(t);else if(i===2)rf(t);else energy(p);if(i<2)pulseDiagram(t);$("timeline").value=time;$("clock").textContent=fmt(time)+" / "+fmt(TOTAL);$("timeline").setAttribute("aria-valuetext",fmt(time)+", "+s.name);}
+  function orientation(){
+    const labels={whole:"Gesamtgerät",assembly:"Beschleunigungsstrecke",gun:"Elektronenkanone",wave:"HF-Feld · relativistischer Abschnitt"};
+    $("locationText").textContent=labels[pose.region];
+    $("cameraState").textContent=pose.transition?"Kamerafahrt":$("cameraMotion").checked?"Räumlich verbunden":"Feste Perspektive";
+    const regions={whole:[-7.3,-2.6,17.5,10.3],assembly:[-6,-2.5,10.5,4.7],gun:[-5.9,-.8,3.2,1.7],wave:[-2.9,-.8,7.2,1.8]};
+    const r=regions[pose.region];["x","y","width","height"].forEach((key,i)=>$("locatorFocus").setAttribute(key,r[i]));
+    canvas.setAttribute("aria-description","Aktueller Ort: "+labels[pose.region]+". "+(pose.transition?"Die Kamera bewegt sich zum markierten Bereich.":"Der markierte Bereich ist in der Geräteübersicht hervorgehoben."));
+  }
+  function draw(){
+    const i=sceneIndex(time),s=scenes[i],t=time-s.at,p=clamp(t/(s.end-s.at));
+    if(i!==active){active=i;updateScene(i);}
+    pose=Camera.sample(time,mobile,{mode:equipmentMode,motion:$("cameraMotion").checked});
+    project=camera({...pose,cy:H*pose.cy});
+    c.setTransform(dpr,0,0,dpr,0,0);background();deviceContext();assembly(t);
+    if(i===0)overview(t);else if(i===1)source(t);else if(i===2)rf(t);else energy(p);
+    orientation();if(i<2)pulseDiagram(t);
+    $("timeline").value=time;$("clock").textContent=fmt(time)+" / "+fmt(TOTAL);$("timeline").setAttribute("aria-valuetext",fmt(time)+", "+s.name);
+  }
   function resize(){const width=canvas.clientWidth;if(width===shownWidth)return;shownWidth=width;mobile=width<650;W=mobile?760:1280;H=mobile?850:690;dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.aspectRatio=W+" / "+H;draw();}
   function stop(message){playing=false;if(raf!==null)cancelAnimationFrame(raf);raf=null;$("play").textContent=time>=TOTAL?"▶ Noch einmal":time>0?"▶ Fortsetzen":"▶ Phase starten";$("play").setAttribute("aria-label","Animation abspielen");if(message)$("playerStatus").textContent=message;}
   function advance(dt){const before=sceneIndex(time),end=scenes[before].end,next=Math.min(TOTAL,time+dt);if($("pauseBetween").checked&&before<3&&time<end&&next>=end){time=end;draw();stop("Ansichtwechsel. Mit Fortsetzen beginnt die nächste Ansicht.");return;}time=next;draw();if(time>=TOTAL)stop("Phase 01 abgeschlossen. Jetzt können wir die Darstellung gemeinsam prüfen.");}
@@ -175,14 +260,16 @@
   function play(){if(playing){stop("Pausiert. Zeitleiste und Ansichten bleiben bedienbar.");return;}if(time>=TOTAL){time=0;draw();}playing=true;last=performance.now();$("play").textContent="Ⅱ Pause";$("play").setAttribute("aria-label","Animation pausieren");$("playerStatus").textContent=$("pauseBetween").checked?"Läuft bis zum nächsten Bildwechsel.":"Die gesamte Phase läuft.";raf=requestAnimationFrame(tick);}
   function seek(t){stop();time=clamp(Number(t)||0,0,TOTAL);draw();stop(time>=TOTAL?"Phase 01 abgeschlossen.":"Pausiert · "+scenes[active].name+". Mit Fortsetzen abspielen.");}
   scenes.forEach((s,i)=>{const b=document.createElement("button");b.type="button";b.innerHTML="<small>"+String(i+1).padStart(2,"0")+" · "+fmt(s.at)+"</small>"+s.name;b.addEventListener("click",()=>seek(s.at));$("views").append(b);});
-  for(const mode of ["supply","optics"])$(mode+"Mode").addEventListener("click",()=>{equipmentMode=mode;overviewExplanation();draw();});
+  for(const mode of ["tour","supply","optics"])$(mode+"Mode").addEventListener("click",()=>{equipmentMode=mode;if(mode==="tour"){seek(0);overviewExplanation();}else{stop("Bauteilansicht pausiert. Mit Fortsetzen abspielen.");overviewExplanation();draw();}});
   $("play").addEventListener("click",play);$("restart").addEventListener("click",()=>seek(0));$("next").addEventListener("click",()=>seek(scenes[Math.min(active+1,3)].at));$("timeline").addEventListener("input",e=>seek(e.target.value));
-  for(const id of ["labels","fields","forces"])$(id).addEventListener("change",draw);
+  $("orient").addEventListener("click",()=>{equipmentMode="tour";seek(0);overviewExplanation();});
+  for(const id of ["labels","fields","forces","cameraMotion"])$(id).addEventListener("change",draw);
   $("fieldStep").addEventListener("click",()=>{if(active!==2)return;seek(scenes[2].at+mod(time-scenes[2].at+M.period/8,scenes[2].end-scenes[2].at));$("playerStatus").textContent="Feld und Elektronenpakete gemeinsam um ⅛ HF-Periode weitergesetzt.";});
   $("fullscreen").addEventListener("click",async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if($("film").requestFullscreen)await $("film").requestFullscreen();else canvas.scrollIntoView({block:"start"});}catch{canvas.scrollIntoView({block:"start"});}});
-  document.addEventListener("visibilitychange",()=>{if(document.hidden&&playing)stop("Pausiert, weil die Ansicht verlassen wurde.");});reduced.addEventListener("change",()=>{if(reduced.matches)stop("Bewegung reduziert. Wiedergabe kann bewusst gestartet werden.");});
+  document.addEventListener("visibilitychange",()=>{if(document.hidden&&playing)stop("Pausiert, weil die Ansicht verlassen wurde.");});reduced.addEventListener("change",()=>{if(reduced.matches){$("cameraMotion").checked=false;stop("Kamerafahrten deaktiviert. Wiedergabe kann bewusst gestartet werden.");draw();}});
   // Deterministic hooks for visual QA; no student state or network activity.
-  window.linacPhase1={renderAt:seek,total:TOTAL,model:M,getState:()=>({time,active,playing,width:W,height:H}),advanceForTest:advance};
+  window.linacPhase1={renderAt:seek,total:TOTAL,model:M,getState:()=>({time,active,playing,width:W,height:H,pose,equipmentMode}),advanceForTest:advance};
+  $("cameraMotion").checked=!reduced.matches;
   const initial=Number(new URLSearchParams(location.search).get("view"));if(Number.isInteger(initial)&&initial>=1&&initial<=4)time=scenes[initial-1].at;
   new ResizeObserver(resize).observe(canvas);resize();stop("Startbereit. Jede Ansicht lässt sich einzeln betrachten.");
 })();

@@ -6,19 +6,20 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 ## Umfang und Reihenfolge
 
-| Phase | Inhalt und Übergabe | Stand am 24.10.2026 |
+| Phase | Inhalt und Übergabe | Stand am 25.10.2026 |
 |---|---|---|
-| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 2 in `phase1.html`, 68 s, mit Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
+| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 3 in `phase1.html`, 68 s, mit Gesamtgerät, kontinuierlicher Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Vorhandene ältere Studien als Ausgangspunkt, noch nicht im neuen Phasenstandard überarbeitet |
 | 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
 ## Phase 01 – aktueller gemeinsamer Prüfauftrag
 
-1. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
-2. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
-3. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
-4. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
+1. Orientierung: Bleiben Quelle und Beschleunigungsstruktur bei den Kamerafahrten im Gesamtgerät lokalisierbar? Gelingt die Rückkehr über „Gesamtgerät“? Sind zentrale Labels auf dem Beamer und auf 390 px lesbar? Kurzer Test: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
+2. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
+3. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
+4. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
+5. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
 
 Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsch oder missverständlich? Was ist visuell schwer erkennbar? Was sollte bleiben?** Vor Ausbau von Phase 02 zuerst die wiederkehrenden Probleme beheben.
 
@@ -27,6 +28,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | Regel | Konsequenz für alle Phasen |
 |---|---|
 | Jede Bauteilfunktion braucht einen sichtbaren Zusammenhang | Zufuhrwege und Anschlüsse tatsächlich verbinden; keine schwebenden Funktionsbauteile |
+| Vergrößern erhält die räumliche Zuordnung | Gemeinsame Geometrie, kontinuierliche Kamerafahrt, kleine Gerätekarte und Rücksprung; Ansicht ohne Kamerabewegung anbieten |
 | Farben haben eine feste Bedeutung | e⁻ türkis, Therapiephotonen später gold, HF-Energie violett; E-Feld rosa und Kraft grün, jeweils mit Legende |
 | Bewegungen müssen Ursache und Wirkung koppeln | Feldmoment und Teilchenposition aus derselben Zeitbasis; später Reaktionsprodukte nicht neben unveränderten Edukten duplizieren |
 | Ein Zoom erhält die Orientierung | Ansichtsebene, gezeigter Ausschnitt und Übergabe zur nächsten Phase benennen |
@@ -42,6 +44,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | 23.10.2026 | Anschlüsse von Quelle, HF-Zufuhr, Kühlung und Vakuumpumpe beim eigenen Bildreview verbessert. | In allen Folgephasen die räumlichen Verbindungen vor zusätzlicher Oberflächendekoration prüfen |
 | 23.10.2026 | Energieanzeige ersetzt übertriebene optische Beschleunigung im relativistischen Abschnitt. | Auch beim Target und im Gewebe Energieübertragung getrennt von dekorativer Partikelgeschwindigkeit vermitteln |
 | 24.10.2026 | Zusätzliche Video-Transkription ausgewertet: Makropulse und getrennte Steuer-/Fokusfunktionen ergänzt; gerätespezifische Angaben nicht verallgemeinert. | Quellenkritik, Phase-02-Vorgaben und 12-Minuten-Test in `REFERENCE-VIDEO.md`; keine Sichtprüfung des ganzen Videos behaupten |
+| 25.10.2026 | Neue Instagram-Referenz ausgewertet und Phase 01 räumlich eingebettet. Kamerafahrten enden vor den Lernhalten; die Gerätekarte bleibt verfügbar. | In Phase 02 räumlich am Strahlkopf anschließen; Umlenkbauart konsistent belegen, MLC/Blenden gemeinsam begrenzen. Dosis/Strahlenchemie/DNA gemäß `REFERENCE-INSTAGRAM.md` prüfen. |
 | offen | Rückmeldung von Jan zur neuen Phase 01 | Vor Phase 02 in konkrete Regeln übersetzen |
 
 ## Abschlussprüfung des Gesamtfilms

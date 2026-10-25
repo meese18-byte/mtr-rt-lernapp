@@ -1,6 +1,6 @@
 # Quellenzuordnung: LINAC bis Zellwirkung
 
-Stand 24.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
+Stand 25.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
 
 ## Verwendete Quellen
 
@@ -20,12 +20,15 @@ Stand 24.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokume
 
 **S8:** IAEA, *Training Course on Licensing, Review and Assessment and Inspection of Linear Accelerator Facilities – Day 1*. Insbesondere Folie 65 (Dosisprofil bei definierter Tiefe), Folien 69–72 (Interlocks/Kollisionsschutz). https://gnssn.iaea.org/main/FNRBA/Activity%20Documents%20%20Public/Regional%20Training%20Course%20on%20Authorization%20and%20Inspection%20of%20Radiotherapy%20Facilities%20with%20Linear%20Accelerators/Day%201%20Physics%20of%20Linear%20Accelerators%20Reformatted.pdf . Für spätere Phasen; keine aktuellen konkreten Gerätetoleranzen daraus übernommen.
 
+**S9:** Vom Nutzer bereitgestelltes Instagram-Recording vom 25.10.2026, sichtbarer Account „8bit_sciences“, etwa 106 s, ohne Audiospur. Zeitmarkierte Einzelbilder und engere Bildfolgen visuell geprüft; kein unabhängig verifizierter Urhebernachweis. Grundlage für räumliche Orientierung, Kamerafahrten und Betrachtungsebenen. Keine Quelle für konkrete Maschinenmaße oder ungeprüfte biologische Aussagen. Auswertung und spätere Vorgaben: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
+
 Die PDFs und Quellenbilder sind nicht Bestandteil des öffentlichen Repositorys. Alle hier enthaltenen Grafiken und Texte sind eigene Ausarbeitungen. Abbildungsnummern verweisen auf die fachliche Vorlage, nicht auf übernommene Bilddateien.
 
 ## Phase 01: Nachweis pro Ansicht
 
 | Ansicht / Element | Beleg | Umsetzung | Bewusste Vereinfachung / offene Prüfung |
 |---|---|---|---|
+| Gesamtgerät und zusammenhängende Kamerafahrten | S1 Abb. 20.35; S2 5.5.4–5.5.10; visuelle Anregung S9 | Eigene gemeinsame Geräte-/Bauteilgeometrie, durchgehende räumliche Vergrößerung, markierte Gerätekarte | Stativ, Gantryarm, Kopf und Liege schematisch, keine realen Maße; Kopf nur Hülle für Phase 02, keine Umlenkbauart vorgegeben. Referenzachse ist kein aktiver Strahl. |
 | Überblick: Elektronenkanone und HF-Zufuhr getrennt | S1 S. 419–420, Abb. 20.35 / Tab. 20.1; S2 5.5.5–5.5.8 | Elektronen auf der Achse; HF-Zufuhr separat von oben | Funktionsblock für HF-Quelle, Magnetron als mögliches Beispiel; weder Magnetron noch Klystron im Inneren konstruiert |
 | Hohlleiter und Einkopplung | S2 5.5.7–5.5.8 | Äußerer Zufuhrweg mit Einlass in die Kupferstruktur | Anschlussform, Maße und Montage illustrativ; keine Kopplungsrechnung |
 | Vakuum und Kühlung | S1 Tab. 20.1; S2 5.5.9 | Angeschlossene Pumpe und farblich getrennte Kühlanschlüsse | Funktionsanschlüsse, keine realen Pumpen-/Kanalkonstruktionen; keine Strömungsrechnung |
