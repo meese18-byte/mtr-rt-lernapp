@@ -8,18 +8,19 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 | Phase | Inhalt und Übergabe | Stand am 25.10.2026 |
 |---|---|---|
-| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 3 in `phase1.html`, 68 s, mit Gesamtgerät, kontinuierlicher Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
+| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 4 in `phase1.html`, 68 s, mit Elekta-orientierter Außenform, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Vorhandene ältere Studien als Ausgangspunkt, noch nicht im neuen Phasenstandard überarbeitet |
 | 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
 ## Phase 01 – aktueller gemeinsamer Prüfauftrag
 
-1. Orientierung: Bleiben Quelle und Beschleunigungsstruktur bei den Kamerafahrten im Gesamtgerät lokalisierbar? Gelingt die Rückkehr über „Gesamtgerät“? Sind zentrale Labels auf dem Beamer und auf 390 px lesbar? Kurzer Test: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
-2. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
-3. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
-4. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
-5. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
+1. Gerätetransfer: Auf einem offiziellen Versa-HD-Foto und in der Außenansicht Therapiekopf, Beschleunigerarm, Gantry, kV-Quelle/-Detektor, MV-Panel und Liege zuordnen lassen. Kann dieselbe Person erklären, dass der nachfolgende Innenaufbau schematisch ist?
+2. Orientierung: Bleiben Quelle und Beschleunigungsstruktur bei den Kamerafahrten im Gesamtgerät lokalisierbar? Gelingt die Rückkehr über „Gesamtgerät“? Sind zentrale Labels auf dem Beamer und auf 390 px lesbar? Kurzer Test: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
+3. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
+4. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
+5. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
+6. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
 
 Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsch oder missverständlich? Was ist visuell schwer erkennbar? Was sollte bleiben?** Vor Ausbau von Phase 02 zuerst die wiederkehrenden Probleme beheben.
 
@@ -45,6 +46,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | 23.10.2026 | Energieanzeige ersetzt übertriebene optische Beschleunigung im relativistischen Abschnitt. | Auch beim Target und im Gewebe Energieübertragung getrennt von dekorativer Partikelgeschwindigkeit vermitteln |
 | 24.10.2026 | Zusätzliche Video-Transkription ausgewertet: Makropulse und getrennte Steuer-/Fokusfunktionen ergänzt; gerätespezifische Angaben nicht verallgemeinert. | Quellenkritik, Phase-02-Vorgaben und 12-Minuten-Test in `REFERENCE-VIDEO.md`; keine Sichtprüfung des ganzen Videos behaupten |
 | 25.10.2026 | Neue Instagram-Referenz ausgewertet und Phase 01 räumlich eingebettet. Kamerafahrten enden vor den Lernhalten; die Gerätekarte bleibt verfügbar. | In Phase 02 räumlich am Strahlkopf anschließen; Umlenkbauart konsistent belegen, MLC/Blenden gemeinsam begrenzen. Dosis/Strahlenchemie/DNA gemäß `REFERENCE-INSTAGRAM.md` prüfen. |
+| 25.10.2026 | Auf Wunsch Gerätebezug zu Elekta Versa HD hergestellt: Außenform anhand Herstellerbildern; Lehrschnitt ausdrücklich von nicht belegter Hersteller-Innengeometrie getrennt. | Fotozuordnung testen. In Phase 02 Elekta-Bauart fachlich konsistent belegen; Maß- und Kollisionstreue nicht aus der Außenansicht ableiten. |
 | offen | Rückmeldung von Jan zur neuen Phase 01 | Vor Phase 02 in konkrete Regeln übersetzen |
 
 ## Abschlussprüfung des Gesamtfilms

@@ -22,12 +22,15 @@ Stand 25.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokume
 
 **S9:** Vom Nutzer bereitgestelltes Instagram-Recording vom 25.10.2026, sichtbarer Account „8bit_sciences“, etwa 106 s, ohne Audiospur. Zeitmarkierte Einzelbilder und engere Bildfolgen visuell geprüft; kein unabhängig verifizierter Urhebernachweis. Grundlage für räumliche Orientierung, Kamerafahrten und Betrachtungsebenen. Keine Quelle für konkrete Maschinenmaße oder ungeprüfte biologische Aussagen. Auswertung und spätere Vorgaben: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
 
+**S10:** Elekta, *Versa HD*, Produktbroschüre, Dokument LPCVHD190103, © 2019. https://www.elekta.com/products/radiation-therapy/versa-hd/assets/versa-hd-brochure.pdf . Offizielle Produktabbildungen auf S. 3 und 10 am 25.10.2026 visuell geprüft. Beleg für die wiedererkennbare Außenform und Grundanordnung, nicht für exakte Maße oder interne Funktionsgeometrie. Herstellerbilder werden nicht in die Animation eingebunden.
+
 Die PDFs und Quellenbilder sind nicht Bestandteil des öffentlichen Repositorys. Alle hier enthaltenen Grafiken und Texte sind eigene Ausarbeitungen. Abbildungsnummern verweisen auf die fachliche Vorlage, nicht auf übernommene Bilddateien.
 
 ## Phase 01: Nachweis pro Ansicht
 
 | Ansicht / Element | Beleg | Umsetzung | Bewusste Vereinfachung / offene Prüfung |
 |---|---|---|---|
+| Elekta-orientierte Außenform, Fassung 4 | S10, S. 3 und 10 | Runde Gantry, heller Arm, kurzer Therapiekopf, dunkle Liege, kV-Bildgebung und MV-Panel; Außenansicht und Ausblenden der Armverkleidung | Eigene schematische Proportionen und Bildgebungspositionen, keine CAD-/Kollisionsprüfung; Innengeometrie bleibt generisch. Ausblenden ist kein mechanischer Öffnungsvorgang. |
 | Gesamtgerät und zusammenhängende Kamerafahrten | S1 Abb. 20.35; S2 5.5.4–5.5.10; visuelle Anregung S9 | Eigene gemeinsame Geräte-/Bauteilgeometrie, durchgehende räumliche Vergrößerung, markierte Gerätekarte | Stativ, Gantryarm, Kopf und Liege schematisch, keine realen Maße; Kopf nur Hülle für Phase 02, keine Umlenkbauart vorgegeben. Referenzachse ist kein aktiver Strahl. |
 | Überblick: Elektronenkanone und HF-Zufuhr getrennt | S1 S. 419–420, Abb. 20.35 / Tab. 20.1; S2 5.5.5–5.5.8 | Elektronen auf der Achse; HF-Zufuhr separat von oben | Funktionsblock für HF-Quelle, Magnetron als mögliches Beispiel; weder Magnetron noch Klystron im Inneren konstruiert |
 | Hohlleiter und Einkopplung | S2 5.5.7–5.5.8 | Äußerer Zufuhrweg mit Einlass in die Kupferstruktur | Anschlussform, Maße und Montage illustrativ; keine Kopplungsrechnung |

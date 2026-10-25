@@ -9,7 +9,7 @@ Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 
 | Phase | Inhalt | Status |
 |---|---|---|
-| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 3 mit Gesamtgerät und Kamerafahrten; Review offen |
+| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 4 mit Elekta-orientierter Außenform; Review offen |
 | 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Detailausbau nach Review 01 |
 | 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
 | 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
@@ -25,6 +25,18 @@ Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremdbibliothek für die Animation erforderlich.
 
 Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `phase1-camera.js`, `tests/phase1-camera.test.cjs`, `REFERENCE-INSTAGRAM.md`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+
+## Gerätebezug: Elekta Versa HD (25.10.2026, Fassung 4)
+
+Die Außenansicht orientiert sich jetzt gezielt an **Elekta Versa HD**. Grundlage sind die offiziellen Herstellerabbildungen der Produktbroschüre von 2019, besonders S. 3 und 10. Eigene Geometrie ersetzt die bisherige allgemeine Stativ-/Balkenform: runde Gantry mit zentralem türkisfarbenem Einsatz, heller geschlossener Beschleunigerarm, kompakter Therapiekopf, freitragende dunkle Tischplatte mit Hubunterbau sowie seitliche kV-Bildgebung und gegenüberliegendes MV-Panel.
+
+„Außenansicht“ hält das geschlossene Gerät zur Zuordnung fest. Die geführte Kamerafahrt blendet die Armverkleidung aus und geht in den vorhandenen Funktionsschnitt über. Das Ausblenden ist eine didaktische Sichtbarmachung, kein realer mechanischer Öffnungsvorgang. Die Bildgebung ist schematisch ausgefahren. Der Therapiestrahl ist in dieser Phase nicht eingeschaltet; die gestrichelte Linie markiert nur die Bezugsachse.
+
+**Geltungsgrenze:** Wiedererkennbare Außenform und räumliche Grundanordnung, keine maßstäbliche Herstellerrekonstruktion. Kanone, HF-Zufuhr, Zellen und Spulen im Inneren bleiben ein vereinfachtes Lehrmodell. Die Grunddarstellung darf nicht als bestätigter Versa-HD-Serviceplan verstanden werden. Die konkrete Elekta-Strahlführung und Agility-Konstruktion werden erst in Phase 02 mit spezifischen Belegen ausgearbeitet; eine Varian-270°-Geometrie wird nicht hineingemischt.
+
+Softwareprüfung Fassung 4: Außenansicht/Kamerafahrt/Lehrschnitt, Modusmarkierung, reduzierte Bewegung, Lernhalte, durchgehende Wiedergabe, HF-Einzelschritt und Großansicht geprüft. Gerätegeometrie bleibt bei 320/390/700/850/1120/1440 px im Bild; kein horizontaler Seitenüberlauf. Keine Laufzeitfehler oder automatischen externen Requests. Vorhandene Kamera- und Physiktests bestanden. Echte Smartphone-/Beamerprüfung und fachlicher Gegencheck bleiben offen.
+
+Prüfen im Unterricht: Lassen sich Therapiekopf, seitliche kV-Bildgebung und MV-Bildempfänger auf unserer Außenansicht und einem echten Gerätefoto wiederfinden? Erkennen Lernende beim Ausblenden der Verkleidung denselben Beschleunigerarm wieder? Welche Details wirken gegenüber dem Gerät vor Ort noch unplausibel?
 
 ## Räumlich zusammenhängende Phase 01 (25.10.2026)
 

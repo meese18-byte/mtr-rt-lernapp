@@ -6,7 +6,7 @@
   const mix = (a, b, p) => a + (b - a) * p;
   function poses(mobile) {
     return {
-      whole: { scale: mobile ? 40 : 60, focus: [1.1, 2.2, 0], yaw: .13, pitch: -.28, roll: 0, cy: .46 },
+      whole: { scale: mobile ? 32 : 35, focus: [2.0, 3.4, 0], yaw: .8, pitch: -.12, roll: 0, cy: mobile ? .42 : .40 },
       assembly: { scale: mobile ? 65 : 100, focus: [-.55, -.18, 0], yaw: .19, pitch: -.47, roll: mobile ? -.54 : 0, cy: .46 },
       gun: { scale: mobile ? 250 : 365, focus: [-4.358, .026, 0], yaw: .24, pitch: -.5, roll: mobile ? -.45 : 0, cy: .46 },
       wave: { scale: mobile ? 91 : 143, focus: [.66, 0, 0], yaw: .15, pitch: -.5, roll: mobile ? -.57 : 0, cy: .42 }
@@ -22,6 +22,7 @@
   function sample(time, mobile = false, options = {}) {
     const t = Math.max(0, Math.min(68, time)), p = poses(mobile);
     const mode = options.mode || "tour", motion = options.motion !== false;
+    if (t < 12 && mode === "exterior") return { ...p.whole, region: "whole", annotations: 1, transition: false };
     if (t < 12 && mode !== "tour") return { ...p.assembly, region: "assembly", annotations: 1, transition: false };
     if (!motion) {
       const region = t < 3 ? "whole" : t < 12 ? "assembly" : t < 28 ? "gun" : "wave";
