@@ -4,6 +4,14 @@ Stand: 24.10.2026. Referenz: https://www.youtube.com/watch?v=jSgnWfbEx1A . Vom N
 
 Der darin beschriebene Elekta-Aufbau ist ein Beispiel einer Bauart. Das Lehrmodell bleibt generisch, bis für einen gezielten Gerätenachbau Modell, Baujahr und technische Unterlagen eindeutig feststehen. Keine Videobilder oder Originalsprechertexte wurden übernommen.
 
+## Ergänzung vom 25.10.2026: Modellwahl und Sichtungsgrenze
+
+Die Seite des offiziellen Elekta-Kanals wurde geöffnet. Titel: *How a Linear Accelerator works – Elekta*; die Videobeschreibung nennt **Elekta Synergy**. Die bisherige Auswahl Versa HD passte daher nicht präzise zur vom Nutzer geforderten Referenz. Fassung 5 verwendet Synergy als äußere Gestaltungsreferenz.
+
+Der Player blieb ohne auswertbare Videobilder; auch Medienabruf und Storyboard-Abruf ergaben keine nutzbare Bilddatei. Es wurde **kein zeitmarkiertes Videobild** dieser YouTube-Referenz gesichtet. Die technische Transkription ist weiterhin verfügbar. Für die tatsächlich umgesetzten äußeren Details wurde deshalb die Herstellerbroschüre S11, S. 1 und 3, im Browser visuell geprüft. Der fehlende direkte Bildvergleich wird auch in der Animation genannt.
+
+Nächster gezielter Abgleich: eine Gesamt-/Schrägansicht, ein Übergang mit ausgeblendeter Verkleidung und der Beschleuniger-/Kopfanschluss aus genau diesem Film. Abweichungen der Geometrie zuerst korrigieren, bevor weitere Kleinteile ergänzt werden. Die neue Oberflächenqualität darf nicht mit belegter Konstruktionstreue verwechselt werden.
+
 ## Fachlicher Abgleich und Konsequenzen
 
 | Bereich / Zeitmarke | Einordnung | Konsequenz für die Animation / Nachweis |

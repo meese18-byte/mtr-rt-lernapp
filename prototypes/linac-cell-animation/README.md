@@ -1,6 +1,6 @@
 # Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
-Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
+Stand: 26.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
 ## Aktueller Einstieg: Phase 01 von vier Phasen
@@ -9,7 +9,7 @@ Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 
 | Phase | Inhalt | Status |
 |---|---|---|
-| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 4 mit Elekta-orientierter Außenform; Review offen |
+| 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 5 mit Synergy-Geräteform und drei Perspektiven; Review offen |
 | 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Detailausbau nach Review 01 |
 | 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
 | 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
@@ -24,19 +24,21 @@ Stand: 25.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Deta
 
 Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremdbibliothek für die Animation erforderlich.
 
-Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `phase1-camera.js`, `tests/phase1-camera.test.cjs`, `REFERENCE-INSTAGRAM.md`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
+Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `phase1-camera.js`, `phase1-surface.js`, `tests/phase1-camera.test.cjs`, `REFERENCE-INSTAGRAM.md`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
 
-## Gerätebezug: Elekta Versa HD (25.10.2026, Fassung 4)
+## Gerätebezug: Elekta Synergy (26.10.2026, Fassung 5)
 
-Die Außenansicht orientiert sich jetzt gezielt an **Elekta Versa HD**. Grundlage sind die offiziellen Herstellerabbildungen der Produktbroschüre von 2019, besonders S. 3 und 10. Eigene Geometrie ersetzt die bisherige allgemeine Stativ-/Balkenform: runde Gantry mit zentralem türkisfarbenem Einsatz, heller geschlossener Beschleunigerarm, kompakter Therapiekopf, freitragende dunkle Tischplatte mit Hubunterbau sowie seitliche kV-Bildgebung und gegenüberliegendes MV-Panel.
+Der vom Nutzer verlinkte Film nennt in seiner Elekta-Videobeschreibung ausdrücklich **Elekta Synergy**. Die frühere Orientierung am Versa HD wird daher ersetzt. Visuell geprüft wurden S. 1 und 3 der Elekta-Synergy-Broschüre (2017, LPCSYN170901), geöffnet im MedicalExpo-Katalog. Der YouTube-Player und der direkte Medienabruf lieferten in dieser Sitzung kein auswertbares Videobild. **Ein genauer Einzelbildabgleich mit dem Referenzfilm steht noch aus.** Es wird weder eine abgeschlossene Sichtung noch Gleichwertigkeit mit dessen Darstellungsqualität behauptet.
 
-„Außenansicht“ hält das geschlossene Gerät zur Zuordnung fest. Die geführte Kamerafahrt blendet die Armverkleidung aus und geht in den vorhandenen Funktionsschnitt über. Das Ausblenden ist eine didaktische Sichtbarmachung, kein realer mechanischer Öffnungsvorgang. Die Bildgebung ist schematisch ausgefahren. Der Therapiestrahl ist in dieser Phase nicht eingeschaltet; die gestrichelte Linie markiert nur die Bezugsachse.
+Neu aufgebaut: breitere Gantry mit hellblauer Front und Skalenring, kantig gerundete Armverkleidung, abgesetzter metallfarbener Kollimatorkopf mit Skala und Schutzbügel, kräftigere Bildgebungsarme mit Anschlüssen/Gelenken, seitliche Displays sowie Tischunterbau mit Faltenbälgen und Indexmarkierungen. Die Schräg-, Front- und Seitenansicht zeigen dieselbe Geometrie. In der Frontansicht ist das MV-Panel durch den Tisch verdeckt; ein Hinweis verweist auf die Schrägansicht.
 
-**Geltungsgrenze:** Wiedererkennbare Außenform und räumliche Grundanordnung, keine maßstäbliche Herstellerrekonstruktion. Kanone, HF-Zufuhr, Zellen und Spulen im Inneren bleiben ein vereinfachtes Lehrmodell. Die Grunddarstellung darf nicht als bestätigter Versa-HD-Serviceplan verstanden werden. Die konkrete Elekta-Strahlführung und Agility-Konstruktion werden erst in Phase 02 mit spezifischen Belegen ausgearbeitet; eine Varian-270°-Geometrie wird nicht hineingemischt.
+Die Außenflächen werden mit einem kleinen lokalen WebGL-Renderer glatt schattiert und mit Tiefenprüfung gezeichnet. Ohne WebGL oder nach Kontextverlust übernimmt die bisherige Canvas-Zeichnung. Kein Build, keine externe Renderbibliothek, kein Mediennachladen. Der didaktische Innenaufbau verwendet weiterhin Canvas. „Phase starten“ beginnt die bestehende Kamerafahrt mit Ausblenden der Verkleidung; der Effekt ist kein realer Öffnungsvorgang.
 
-Softwareprüfung Fassung 4: Außenansicht/Kamerafahrt/Lehrschnitt, Modusmarkierung, reduzierte Bewegung, Lernhalte, durchgehende Wiedergabe, HF-Einzelschritt und Großansicht geprüft. Gerätegeometrie bleibt bei 320/390/700/850/1120/1440 px im Bild; kein horizontaler Seitenüberlauf. Keine Laufzeitfehler oder automatischen externen Requests. Vorhandene Kamera- und Physiktests bestanden. Echte Smartphone-/Beamerprüfung und fachlicher Gegencheck bleiben offen.
+**Geltungsgrenze:** Angenäherte Proportionen und illustrative Details, keine maßstäbliche Herstellerrekonstruktion oder Kollisionsprüfung. Kanone, HF-Zufuhr, Zellen und Spulen bleiben ein generisches Lehrmodell. Weder die gewählte Kopfkonfiguration noch eine konkrete MLC-Generation sind durch die Außenform nachgewiesen. Für Phase 02 müssen Synergy-Gerätestand, Kopf und Elekta-Strahlführung spezifisch abgeglichen werden; Agility wird nicht allein aus der früheren Versa-HD-Auswahl vorausgesetzt.
 
-Prüfen im Unterricht: Lassen sich Therapiekopf, seitliche kV-Bildgebung und MV-Bildempfänger auf unserer Außenansicht und einem echten Gerätefoto wiederfinden? Erkennen Lernende beim Ausblenden der Verkleidung denselben Beschleunigerarm wieder? Welche Details wirken gegenüber dem Gerät vor Ort noch unplausibel?
+Die Beschleunigungsphysik, die vier Lernansichten und die 68 Sekunden bleiben erhalten. Technische Prüfung: Kamera-/Physiktests sowie Browserprüfung mit und ohne WebGL, Geräteperspektiven, Rücksprung, Lernhalten, Großansicht, reduzierter Bewegung und 320–1440 px. Medizinphysikalischer Gegencheck, echte Smartphone-/Beamerprüfung und Unterrichtstest bleiben offen.
+
+Prüfen im Unterricht: Drei Lernende ordnen zunächst in der Schrägansicht Therapiekopf, kV-Quelle/-Detektor und MV-Panel zu, anschließend auf einem Synergy-Foto (3 Minuten). Eine Person erklärt die Frontansicht und die dort verdeckten Bauteile (2 Minuten). Gemeinsam die Kamerafahrt bis zur Quelle ansehen und den Ort im Gesamtgerät zeigen lassen (3 Minuten). Zum Abschluss: „Welche Elemente sind wirklich belegt, welche nur modelliert?“ (2 Minuten). Wiederkehrende Zuordnungsfehler vor Phase 02 korrigieren.
 
 ## Räumlich zusammenhängende Phase 01 (25.10.2026)
 

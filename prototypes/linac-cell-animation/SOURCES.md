@@ -1,6 +1,6 @@
 # Quellenzuordnung: LINAC bis Zellwirkung
 
-Stand 25.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
+Stand 26.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
 
 ## Verwendete Quellen
 
@@ -16,13 +16,15 @@ Stand 25.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokume
 
 **S6:** IAEA: *Radiation Biology: A Handbook for Teachers and Students*. Training Course Series 42, 2010, besonders 2.2.7 und 2.3. https://www-pub.iaea.org/MTCD/Publications/PDF/TCS-42_web.pdf . Bestehende Grundlage für die spätere Strahlenchemie und Zellwirkung.
 
-**S7:** Vom Nutzer verlinktes Elekta-Video: https://www.youtube.com/watch?v=jSgnWfbEx1A . Am 24.10.2026 wurde die bereitgestellte deutschsprachige Transkription ausgewertet. Vollständige visuelle Sichtprüfung des Films nicht erfolgt. Damit technische Anregung und Gegenstand des Abgleichs, kein unabhängiger Nachweis von CAD-Geometrie, Maßeinheiten oder konkretem Gerätestand. Einzelbewertung: [REFERENCE-VIDEO.md](REFERENCE-VIDEO.md).
+**S7:** Vom Nutzer verlinktes Elekta-Video: https://www.youtube.com/watch?v=jSgnWfbEx1A . Am 24.10.2026 wurde die bereitgestellte deutschsprachige Transkription ausgewertet. Die Beschreibung auf dem offiziellen Elekta-Kanal wurde am 25.10.2026 geprüft: Das gezeigte Modell heißt Synergy. Player und direkter Medienabruf lieferten kein auswertbares Videobild. Die visuelle Sichtprüfung des Films bleibt offen. Damit technische Anregung und Gegenstand des Abgleichs, kein unabhängiger Nachweis von CAD-Geometrie, Maßeinheiten oder konkretem Gerätestand. Einzelbewertung: [REFERENCE-VIDEO.md](REFERENCE-VIDEO.md).
 
 **S8:** IAEA, *Training Course on Licensing, Review and Assessment and Inspection of Linear Accelerator Facilities – Day 1*. Insbesondere Folie 65 (Dosisprofil bei definierter Tiefe), Folien 69–72 (Interlocks/Kollisionsschutz). https://gnssn.iaea.org/main/FNRBA/Activity%20Documents%20%20Public/Regional%20Training%20Course%20on%20Authorization%20and%20Inspection%20of%20Radiotherapy%20Facilities%20with%20Linear%20Accelerators/Day%201%20Physics%20of%20Linear%20Accelerators%20Reformatted.pdf . Für spätere Phasen; keine aktuellen konkreten Gerätetoleranzen daraus übernommen.
 
 **S9:** Vom Nutzer bereitgestelltes Instagram-Recording vom 25.10.2026, sichtbarer Account „8bit_sciences“, etwa 106 s, ohne Audiospur. Zeitmarkierte Einzelbilder und engere Bildfolgen visuell geprüft; kein unabhängig verifizierter Urhebernachweis. Grundlage für räumliche Orientierung, Kamerafahrten und Betrachtungsebenen. Keine Quelle für konkrete Maschinenmaße oder ungeprüfte biologische Aussagen. Auswertung und spätere Vorgaben: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
 
-**S10:** Elekta, *Versa HD*, Produktbroschüre, Dokument LPCVHD190103, © 2019. https://www.elekta.com/products/radiation-therapy/versa-hd/assets/versa-hd-brochure.pdf . Offizielle Produktabbildungen auf S. 3 und 10 am 25.10.2026 visuell geprüft. Beleg für die wiedererkennbare Außenform und Grundanordnung, nicht für exakte Maße oder interne Funktionsgeometrie. Herstellerbilder werden nicht in die Animation eingebunden.
+**S10 (frühere Fassung 4):** Elekta, *Versa HD*, Produktbroschüre, Dokument LPCVHD190103, © 2019. https://www.elekta.com/products/radiation-therapy/versa-hd/assets/versa-hd-brochure.pdf . Offizielle Produktabbildungen auf S. 3 und 10 am 25.10.2026 visuell geprüft. Beleg für die wiedererkennbare Außenform und Grundanordnung, nicht für exakte Maße oder interne Funktionsgeometrie. Herstellerbilder werden nicht in die Animation eingebunden.
+
+**S11:** Elekta, *Elekta Synergy – Digital accelerator for advanced IGRT*, Herstellerbroschüre, LPCSYN170901 v1.0, © 2017. https://pdf.medicalexpo.com/pdf/elekta/elekta-synergy/70692-219065.html . S. 1 (Kopf, Skalenring, Bügel, kV-Gehäuse) und S. 3 (Gantry-Front, Bildgebung, Liege) am 25.10.2026 im Browser visuell geprüft. Primärmaterial des Herstellers, gehostet bei MedicalExpo. Basis der Außenansicht in Fassung 5; keine Vermessung und kein Nachweis eines bestimmten Innenaufbaus.
 
 Die PDFs und Quellenbilder sind nicht Bestandteil des öffentlichen Repositorys. Alle hier enthaltenen Grafiken und Texte sind eigene Ausarbeitungen. Abbildungsnummern verweisen auf die fachliche Vorlage, nicht auf übernommene Bilddateien.
 
@@ -30,7 +32,7 @@ Die PDFs und Quellenbilder sind nicht Bestandteil des öffentlichen Repositorys.
 
 | Ansicht / Element | Beleg | Umsetzung | Bewusste Vereinfachung / offene Prüfung |
 |---|---|---|---|
-| Elekta-orientierte Außenform, Fassung 4 | S10, S. 3 und 10 | Runde Gantry, heller Arm, kurzer Therapiekopf, dunkle Liege, kV-Bildgebung und MV-Panel; Außenansicht und Ausblenden der Armverkleidung | Eigene schematische Proportionen und Bildgebungspositionen, keine CAD-/Kollisionsprüfung; Innengeometrie bleibt generisch. Ausblenden ist kein mechanischer Öffnungsvorgang. |
+| Synergy-orientierte Außenform, Fassung 5 | S11, S. 1 und 3; Modellzuordnung S7 | Gantry-Front und Skalenring, gerundetes Armgehäuse, abgesetzter Kollimatorkopf, kV-/MV-Bildgebung, Tisch; drei feste Perspektiven und glatte Materialschattierung | Eigene schematische Proportionen und Bildgebungspositionen, keine CAD-/Kollisionsprüfung; Innengeometrie bleibt generisch. Ausblenden ist kein mechanischer Öffnungsvorgang. |
 | Gesamtgerät und zusammenhängende Kamerafahrten | S1 Abb. 20.35; S2 5.5.4–5.5.10; visuelle Anregung S9 | Eigene gemeinsame Geräte-/Bauteilgeometrie, durchgehende räumliche Vergrößerung, markierte Gerätekarte | Stativ, Gantryarm, Kopf und Liege schematisch, keine realen Maße; Kopf nur Hülle für Phase 02, keine Umlenkbauart vorgegeben. Referenzachse ist kein aktiver Strahl. |
 | Überblick: Elektronenkanone und HF-Zufuhr getrennt | S1 S. 419–420, Abb. 20.35 / Tab. 20.1; S2 5.5.5–5.5.8 | Elektronen auf der Achse; HF-Zufuhr separat von oben | Funktionsblock für HF-Quelle, Magnetron als mögliches Beispiel; weder Magnetron noch Klystron im Inneren konstruiert |
 | Hohlleiter und Einkopplung | S2 5.5.7–5.5.8 | Äußerer Zufuhrweg mit Einlass in die Kupferstruktur | Anschlussform, Maße und Montage illustrativ; keine Kopplungsrechnung |

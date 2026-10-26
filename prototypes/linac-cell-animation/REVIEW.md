@@ -8,14 +8,14 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 | Phase | Inhalt und Übergabe | Stand am 25.10.2026 |
 |---|---|---|
-| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 4 in `phase1.html`, 68 s, mit Elekta-orientierter Außenform, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
+| 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 5 in `phase1.html`, 68 s, mit Synergy-orientierter Außenform und drei Geräteperspektiven, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Vorhandene ältere Studien als Ausgangspunkt, noch nicht im neuen Phasenstandard überarbeitet |
 | 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
 ## Phase 01 – aktueller gemeinsamer Prüfauftrag
 
-1. Gerätetransfer: Auf einem offiziellen Versa-HD-Foto und in der Außenansicht Therapiekopf, Beschleunigerarm, Gantry, kV-Quelle/-Detektor, MV-Panel und Liege zuordnen lassen. Kann dieselbe Person erklären, dass der nachfolgende Innenaufbau schematisch ist?
+1. Gerätetransfer: Auf einem offiziellen Synergy-Foto und in der Außenansicht Therapiekopf, Beschleunigerarm, Gantry, kV-Quelle/-Detektor, MV-Panel und Liege zuordnen lassen. Kann dieselbe Person erklären, dass der nachfolgende Innenaufbau schematisch ist?
 2. Orientierung: Bleiben Quelle und Beschleunigungsstruktur bei den Kamerafahrten im Gesamtgerät lokalisierbar? Gelingt die Rückkehr über „Gesamtgerät“? Sind zentrale Labels auf dem Beamer und auf 390 px lesbar? Kurzer Test: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
 3. Übersicht: Sind Elektronenweg, HF-Energie und zeitliche Synchronisation unterscheidbar? Versteht die lernende Person, dass die Kathode zwischen Pulsen heiß bleibt? In der zusätzlichen Spulenansicht: Strahlachse und Strahlbreite getrennt erklären lassen.
 4. Quelle: Lassen sich Heizung, Kathode, Fokussierelektrode und Anodenöffnung räumlich zuordnen? Wird Emission von Beschleunigung unterschieden?
@@ -47,6 +47,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | 24.10.2026 | Zusätzliche Video-Transkription ausgewertet: Makropulse und getrennte Steuer-/Fokusfunktionen ergänzt; gerätespezifische Angaben nicht verallgemeinert. | Quellenkritik, Phase-02-Vorgaben und 12-Minuten-Test in `REFERENCE-VIDEO.md`; keine Sichtprüfung des ganzen Videos behaupten |
 | 25.10.2026 | Neue Instagram-Referenz ausgewertet und Phase 01 räumlich eingebettet. Kamerafahrten enden vor den Lernhalten; die Gerätekarte bleibt verfügbar. | In Phase 02 räumlich am Strahlkopf anschließen; Umlenkbauart konsistent belegen, MLC/Blenden gemeinsam begrenzen. Dosis/Strahlenchemie/DNA gemäß `REFERENCE-INSTAGRAM.md` prüfen. |
 | 25.10.2026 | Auf Wunsch Gerätebezug zu Elekta Versa HD hergestellt: Außenform anhand Herstellerbildern; Lehrschnitt ausdrücklich von nicht belegter Hersteller-Innengeometrie getrennt. | Fotozuordnung testen. In Phase 02 Elekta-Bauart fachlich konsistent belegen; Maß- und Kollisionstreue nicht aus der Außenansicht ableiten. |
+| 25.10.2026 | Rückmeldung: Außenform zu grob, näher am YouTube-Video arbeiten. Videobeschreibung nennt Synergy. Außenform nach tatsächlich gesichteter Synergy-Broschüre neu aufgebaut; Materialschattierung und drei Perspektiven ergänzt. | Exakter Einzelbildabgleich mit dem Film bleibt mangels auswertbarem Videoabruf offen. Silhouette und Proportionen vor Phase 02 prüfen; realistischere Schattierung ist kein Nachweis technischer Genauigkeit. |
 | offen | Rückmeldung von Jan zur neuen Phase 01 | Vor Phase 02 in konkrete Regeln übersetzen |
 
 ## Abschlussprüfung des Gesamtfilms
