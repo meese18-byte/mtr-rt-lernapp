@@ -62,3 +62,22 @@ Die PDFs und Quellenbilder sind nicht Bestandteil des öffentlichen Repositorys.
 Im Wiki-Artikel „Biologische Strahlenwirkung“ wurden am 23.10.2026 OH⁻, H₂O₂ und H₂ in einer Aufzählung freier Radikale gefunden. Diese Zuordnung wird nicht übernommen. Hydroxylradikal •OH und Hydroxidion OH⁻ sind getrennt zu behandeln; S6 2.2.7 liefert den fachlichen Gegencheck. Auch ältere Lehrbücher werden nicht als Nachweis aktueller Geräteausführungen oder aktueller Strahlenschutzvorgaben verwendet.
 
 Weitere Quellen der bestehenden Gesamtübersicht stehen im README. Der SLAC/Argonne-Text ist ein institutioneller Forschungsbericht; die vollständige zugehörige Originalstudie wurde für den bisherigen Pilot nicht ausgewertet.
+
+
+## Phase 02: konkrete Quellen und Modellentscheidungen (26.10.2026)
+
+**S12:** AAPM Report 72 / Task Group 50, *Basic Applications of Multileaf Collimators* (2001), https://aapm.org/pubs/reports/RPT_72.pdf . Abschnitt I.B.a und Abb. 3 (Buchseite 5 / PDF-Seite 10), ergänzend I.G. Historischer Nachweis einer Elekta/Philips-Konfiguration mit MLC als oberem Kollimator, darunter Backup-Blende und quer beweglichen unteren Blenden. Keine Aussage über den Gerätestand des Nutzerfilms.
+
+| Element | Beleg | Umsetzung und Grenze |
+|---|---|---|
+| Slalom-Strahltransport | S1 Buchseiten 419–420 / PDF-Seiten 442–443, Abb. 20.36b; S2 5.5.10 | Lehrbuchseite 443 erneut visuell geprüft. Drei geometrische Bogenbereiche mit 45°, −45° und 112,5°; gedrehte Ausgangslage zum vertikalen Target. Kein Lorentzkraftintegrator und keine berechnete Achromasie. |
+| Target / Bremsstrahlung | S1 S. 420–421; S3 Kap. 7; S2 5.5.11–12 | Eigenes Wechselwirkungsbild, getrennte e⁻-/γ-Symbole, Wärmeabfuhr. Bahn und Teilchenzahlen illustrativ; kein Spektrum berechnet. |
+| Primärkollimator | S2 5.5.11–13 | Begrenzung ausgewählter geometrischer Strahlen, keine vollständige Abschirmungs- oder Streurechnung. |
+| FF / FFF | S1 S. 420 | Getrennt wählbare Betriebsarten; qualitative Dosisquerprofile bei derselben gedachten Referenztiefe, jeweils auf Zentralachse normiert. Keine absoluten Dosisraten. |
+| Monitorkammer / Abschaltung | S1 S. 421; S2 5.5.15 | Dimensionsloser Demo-Fortschritt und Abschaltung. Kein MU-cGy-Umrechnungsmodell; unabhängige Kanäle im Text, genaue Kammergeometrie offen. |
+| MLC / Backup / Querblenden | S12; S1 S. 421 | Eine explizit benannte historische Bauart, kein Agility-Modell. 20 modellierte Paare, freie Kontur. Gemeinsame Öffnung für BEV und ausgewählten Strahlschnitt. |
+| Übergabe an Phase 03 | S2 Kap. 6 | Geometrische Bezugsebene statt Gewebedosisbild. Folgende Gewebewechselwirkungen noch nicht Bestandteil dieser Phase. |
+
+**Quellenkritik:** Die Herstellerseite „How the linear accelerator works“ (https://www.elekta.com/company/newsroom/videos/how-the-linear-accelerator-works-ff4ecjuoqeat1mh6ievmrg/ , gelesen 26.10.2026) wurde zusätzlich als Ablaufbeleg konsultiert. Die dort verkürzten Aussagen, ein Vakuum fokussiere den Strahl und eine gemeinsame Steuerung eliminiere dosimetrische Fehler, werden nicht übernommen. Die Slalom-Bahn wird anhand S1 ausgearbeitet. Der genaue Kopf des YouTube-Films bleibt ohne Einzelbildvergleich unbestätigt.
+
+**Geometrieprüfung:** Für alle Leafpaare stimmen BEV-Durchlass und Erreichen der Bezugsebene im Strahlschnitt überein. Unbenutzte Paare sind auch während der Einrichtbewegung geschlossen; bei vollständig geschlossener Bank existiert im Modell kein direkter geometrischer Durchlass. Die Modellannahme idealer Abschattung ist keine Behauptung realer Nulldosis.

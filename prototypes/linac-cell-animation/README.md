@@ -3,14 +3,14 @@
 Stand: 26.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
-## Aktueller Einstieg: Phase 01 von vier Phasen
+## Aktueller Einstieg: Phase 01 und Phase 02 von vier Phasen
 
-**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. Die anschließenden Phasen werden nach dem gemeinsamen Review ausgearbeitet. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
+**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. **`phase2.html`** schließt mit 90 Sekunden Strahltransport, Target, Filter/Monitoring und Feldformung an. Jan hat am 26.10.2026 die Weiterarbeit nach Phase 01 beauftragt; dies ersetzt keinen unabhängigen Fachreview. Phasen 03 und 04 folgen nach Review von Phase 02. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
 
 | Phase | Inhalt | Status |
 |---|---|---|
 | 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 5 mit Synergy-Geräteform und drei Perspektiven; Review offen |
-| 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Detailausbau nach Review 01 |
+| 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Fassung 1 in `phase2.html`, vier Ansichten, 90 s; Review offen |
 | 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
 | 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
 
@@ -26,6 +26,32 @@ Modelltest lokal: `node tests/phase1-model.test.cjs`. Kein Build und keine Fremd
 
 Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js`, `tests/phase1-model.test.cjs`, `phase1-camera.js`, `phase1-surface.js`, `tests/phase1-camera.test.cjs`, `REFERENCE-INSTAGRAM.md`, `SOURCES.md` und `REVIEW.md`. Änderungen bleiben innerhalb dieses Prototypverzeichnisses.
 
+## Phase 02: Vom Elektron zum Photonenfeld (26.10.2026)
+
+Direkter Einstieg: [phase2.html](phase2.html). Phase 01 besitzt einen sichtbaren Anschluss und einen Link in der Phasenübersicht. Die frühere Gesamtübersicht verlinkt beide aktuellen Phasen. Der Übergang ist zunächst ein bewusster Seitenwechsel; noch kein durchgehender Kameraflug zwischen den Phasen.
+
+| Filmzeit | Ansicht | Sichtbare Verbindung |
+|---|---|---|
+| 00:00–00:18 | Slalom-Umlenkung | Drei Magnetbereiche und verbundenes Vakuumrohr; Elektronen kommen aus der Beschleunigungsstrecke und enden am Target. |
+| 00:18–00:36 | Target und Bremsstrahlung | Vergrößertes Wechselwirkungsprinzip, Photonensymbol, Wärmeabfuhr; Primärkollimator begrenzt den Nutzstrahl. |
+| 00:36–00:58 | Filter und Monitor | FF/FFF-Vergleich mit ausdrücklich qualitativen, separat normierten Dosisquerprofilen; dimensionsloses Monitorsignal erreicht bei 00:53 den Abschaltwert. |
+| 00:58–01:30 | MLC und Feldprojektion | Einrichtbewegung bis 01:07 ohne Strahl; danach Feldvorschau. BEV, wählbares Leafpaar und Schnitt verwenden dieselbe Öffnungsgeometrie. |
+
+**Bedienung:** Start/Pause, Lernhalte, Zeitleiste, vier Ansichten, Tempo, Großansicht und Beschriftung. Im Filtervergleich wird pausiert. In der MLC-Ansicht sind Zielprojektion, Rechteck und geschlossenes Feld wählbar. Der Schieber oder ein Klick auf eine BEV-Zeile wählt ein Leafpaar; Randpaare bleiben stets geschlossen. Kein Autostart und keine externen Laufzeitabhängigkeiten. Die Darstellung besteht aus eigenen SVG-Grafiken.
+
+**Fachlicher Status:** Die Slalom-Geometrie wurde gegen Schlegel et al., Abb. 20.36b, geprüft. Für den MLC ist ausdrücklich eine ältere Elekta/Philips-Anordnung mit Backup-Blenden nach AAPM TG-50 gewählt. Die exakte Kopf-/MLC-Ausführung im YouTube-Referenzfilm bleibt ungeklärt. Deshalb wird kein exaktes Synergy-Innenmodell behauptet. Die 20 Leafpaare, Flächen, Abstände und Zeitskalen sind didaktisch gewählt. Halbschatten, Transmission, Streuung, Dosis, IMRT und achromatische Strahloptik werden nicht berechnet. Monitoring ist von Patientendosis getrennt.
+
+**Technische Prüfung:** `node tests/phase2-model.test.cjs` prüft Öffnungsprojektion, geschlossene Paare, Konturabdeckung und Monitorgrenzen. Zusätzlich Browserprüfung der vier Szenen, Zeitsteuerung, manuellen Vergleiche, Bildschirmbreiten 320–1440 px, Vollbild und reduzierter Bewegung. Kein Ersatz für einen Test auf echter Smartphone-Hardware.
+
+**Unterrichtstest, 12 Minuten, 9–12 Lernende:**
+
+1. 0–2 min, einzeln: „Wo entstehen die Photonen? Was misst die Monitorkammer?“ Antworten vor der Animation notieren.
+2. 2–6 min, drei Gruppen: jeweils eine Ansicht (Target, Filter/Monitor, MLC) ansehen und den Zusammenhang in eigenen Worten erklären. Beim MLC zusätzlich Paar 11 und Paar 1 vergleichen.
+3. 6–9 min: je 60 Sekunden Teach-back mit dem Bild. Lehrkraft protokolliert Verwechslungen von Elektron/Photon, Output/Dosis und Öffnung/Dosisverteilung.
+4. 9–12 min, individuelles Exit-Ticket: dieselben zwei Startfragen plus „Warum kann auch außerhalb der geometrischen Feldöffnung Dosis entstehen?“ Erwartet: Transmission und/oder Streuung, die das Modell nicht berechnet.
+
+Überarbeiten, wenn zwei oder mehr Lernende dieselbe Fehlvorstellung zeigen oder die Bedienung den Zusammenhang verdeckt. Antworten und Beobachtungen zählen mehr als ein Gefallensurteil. Ergebnis, medizinphysikalischer Gegencheck und Beamerprüfung stehen aus.
+
 ## Gerätebezug: Elekta Synergy (26.10.2026, Fassung 5)
 
 Der vom Nutzer verlinkte Film nennt in seiner Elekta-Videobeschreibung ausdrücklich **Elekta Synergy**. Die frühere Orientierung am Versa HD wird daher ersetzt. Visuell geprüft wurden S. 1 und 3 der Elekta-Synergy-Broschüre (2017, LPCSYN170901), geöffnet im MedicalExpo-Katalog. Der YouTube-Player und der direkte Medienabruf lieferten in dieser Sitzung kein auswertbares Videobild. **Ein genauer Einzelbildabgleich mit dem Referenzfilm steht noch aus.** Es wird weder eine abgeschlossene Sichtung noch Gleichwertigkeit mit dessen Darstellungsqualität behauptet.
@@ -34,7 +60,7 @@ Neu aufgebaut: breitere Gantry mit hellblauer Front und Skalenring, kantig gerun
 
 Die Außenflächen werden mit einem kleinen lokalen WebGL-Renderer glatt schattiert und mit Tiefenprüfung gezeichnet. Ohne WebGL oder nach Kontextverlust übernimmt die bisherige Canvas-Zeichnung. Kein Build, keine externe Renderbibliothek, kein Mediennachladen. Der didaktische Innenaufbau verwendet weiterhin Canvas. „Phase starten“ beginnt die bestehende Kamerafahrt mit Ausblenden der Verkleidung; der Effekt ist kein realer Öffnungsvorgang.
 
-**Geltungsgrenze:** Angenäherte Proportionen und illustrative Details, keine maßstäbliche Herstellerrekonstruktion oder Kollisionsprüfung. Kanone, HF-Zufuhr, Zellen und Spulen bleiben ein generisches Lehrmodell. Weder die gewählte Kopfkonfiguration noch eine konkrete MLC-Generation sind durch die Außenform nachgewiesen. Für Phase 02 müssen Synergy-Gerätestand, Kopf und Elekta-Strahlführung spezifisch abgeglichen werden; Agility wird nicht allein aus der früheren Versa-HD-Auswahl vorausgesetzt.
+**Geltungsgrenze:** Angenäherte Proportionen und illustrative Details, keine maßstäbliche Herstellerrekonstruktion oder Kollisionsprüfung. Kanone, HF-Zufuhr, Zellen und Spulen bleiben ein generisches Lehrmodell. Weder die gewählte Kopfkonfiguration noch eine konkrete MLC-Generation sind durch die Außenform nachgewiesen. Phase 02 benennt die vorläufig gewählte ältere Kollimatorbauart separat; der Abgleich mit dem exakten Synergy-Gerätestand des Films bleibt offen. Agility wird nicht aus der Außenform abgeleitet.
 
 Die Beschleunigungsphysik, die vier Lernansichten und die 68 Sekunden bleiben erhalten. Technische Prüfung: Kamera-/Physiktests sowie Browserprüfung mit und ohne WebGL, Geräteperspektiven, Rücksprung, Lernhalten, Großansicht, reduzierter Bewegung und 320–1440 px. Medizinphysikalischer Gegencheck, echte Smartphone-/Beamerprüfung und Unterrichtstest bleiben offen.
 

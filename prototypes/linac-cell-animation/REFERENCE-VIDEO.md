@@ -46,3 +46,10 @@ Mit 9–12 Lernenden in drei Kleingruppen; je ein Browsergerät. Noch keine bewe
 Beobachtet werden Erklärung, sichere Zuordnung und wiederkehrende Fehlvorstellungen; Gefallen allein ist kein Erfolgskriterium. Wenn zwei oder mehr Lernende dieselbe falsche Ursache nennen, zuerst Bild/Erklärung überarbeiten. Lesbarkeit am Beamer und auf einem echten Smartphone separat prüfen. Ergebnis noch offen.
 
 Quellenschlüssel S1–S8: siehe [SOURCES.md](SOURCES.md).
+
+
+## Umsetzung Phase 02 (26.10.2026)
+
+Auf Jans Auftrag nach Review der Außenansicht wurde der nächste Abschnitt in `phase2.html` erstellt. Slalom-Schema gegen Schlegel et al., Abb. 20.36b, geprüft; für die Kollimation eine ausdrücklich benannte ältere Elekta/Philips-Konfiguration nach AAPM TG-50 gewählt. Die genaue MLC-Generation im Referenzfilm bleibt offen. Keine neue Sichtung des YouTube-Films behauptet.
+
+Umgesetzt: vier Ansichten, Elektron/Photon-Trennung am Target, Wärmeabfuhr, FF/FFF-Prinzipvergleich, Output-Überwachung mit Demo-Abschaltung und MLC mit identischer Öffnungsgeometrie in BEV und Strahlschnitt. Einrichtbewegung ohne Strahl, Randpaare geschlossen. Unterrichtstest und Prüfkriterien in README und REVIEW.

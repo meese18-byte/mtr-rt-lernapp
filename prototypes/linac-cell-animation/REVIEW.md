@@ -6,14 +6,14 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 ## Umfang und Reihenfolge
 
-| Phase | Inhalt und Übergabe | Stand am 25.10.2026 |
+| Phase | Inhalt und Übergabe | Stand am 26.10.2026 |
 |---|---|---|
 | 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 5 in `phase1.html`, 68 s, mit Synergy-orientierter Außenform und drei Geräteperspektiven, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
-| 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Vorhandene ältere Studien als Ausgangspunkt, noch nicht im neuen Phasenstandard überarbeitet |
+| 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Fassung 1 in `phase2.html`, 90 s: Slalom, Target, FF/FFF und Monitor, gekoppelte BEV-/Leafpaarprojektion; Fachreview offen |
 | 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
-## Phase 01 – aktueller gemeinsamer Prüfauftrag
+## Phase 01 – weiter gültige Prüfkriterien
 
 1. Gerätetransfer: Auf einem offiziellen Synergy-Foto und in der Außenansicht Therapiekopf, Beschleunigerarm, Gantry, kV-Quelle/-Detektor, MV-Panel und Liege zuordnen lassen. Kann dieselbe Person erklären, dass der nachfolgende Innenaufbau schematisch ist?
 2. Orientierung: Bleiben Quelle und Beschleunigungsstruktur bei den Kamerafahrten im Gesamtgerät lokalisierbar? Gelingt die Rückkehr über „Gesamtgerät“? Sind zentrale Labels auf dem Beamer und auf 390 px lesbar? Kurzer Test: [REFERENCE-INSTAGRAM.md](REFERENCE-INSTAGRAM.md).
@@ -22,7 +22,18 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 5. Wanderwelle: Einmal anhalten und um eine Achtelperiode weiterschalten. Kann die lernende Person erklären, warum das Feld an einem festen Ort wechselt und ein passend eintreffendes Paket trotzdem Energie gewinnt?
 6. Energie: Wird klar, weshalb 6 MeV keine Verdreifachung der Geschwindigkeit gegenüber 2 MeV bedeuten? Bleibt die Kanonen-Injektionsenergie davon getrennt?
 
-Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsch oder missverständlich? Was ist visuell schwer erkennbar? Was sollte bleiben?** Vor Ausbau von Phase 02 zuerst die wiederkehrenden Probleme beheben.
+Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsch oder missverständlich? Was ist visuell schwer erkennbar? Was sollte bleiben?** Die Erkenntnisse beim abschließenden Gesamtfilm-Review erneut berücksichtigen.
+
+## Phase 02 – aktueller gemeinsamer Prüfauftrag
+
+- **Orientierung:** Wird klar, dass der Funktionsschnitt im Strahlkopf an Phase 01 anschließt? Der Seitenwechsel ist zunächst explizit; die Zusammenführung zum Gesamtfilm folgt später.
+- **Teilchen:** Beginnen die gezeigten Photonen am Target? Werden Elektronen nicht als Photonen umetikettiert? Ist Wärmeabfuhr erkennbar?
+- **Monitoring:** Kann die lernende Person den Abschaltwert erklären, ohne ihn als Tumordosis zu deuten?
+- **Filter:** Werden FF und FFF als Betriebsarten verstanden? Keine Schlussfolgerung „flaches Profil = überall gleiche Dosis“.
+- **Feldform:** Paar 11, ein Randpaar und geschlossenes Feld vergleichen. BEV und Strahlschnitt müssen zum selben Ergebnis führen. Leerzeilen dürfen keinen direkten Nutzstrahl zeigen.
+- **Modellstatus:** Kann die Person die ältere Beispielbauart von einem nachgewiesenen Synergy-Innenaufbau unterscheiden? Transmission, Streuung und Halbschatten bleiben explizit offen.
+
+Der 12-Minuten-Unterrichtstest steht im README. Ergebnisse noch nicht erhoben. Vor Phase 03 zuerst wiederkehrende Verständnisprobleme beheben.
 
 ## Übertragbare Regeln – Startfassung
 
@@ -48,7 +59,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 | 25.10.2026 | Neue Instagram-Referenz ausgewertet und Phase 01 räumlich eingebettet. Kamerafahrten enden vor den Lernhalten; die Gerätekarte bleibt verfügbar. | In Phase 02 räumlich am Strahlkopf anschließen; Umlenkbauart konsistent belegen, MLC/Blenden gemeinsam begrenzen. Dosis/Strahlenchemie/DNA gemäß `REFERENCE-INSTAGRAM.md` prüfen. |
 | 25.10.2026 | Auf Wunsch Gerätebezug zu Elekta Versa HD hergestellt: Außenform anhand Herstellerbildern; Lehrschnitt ausdrücklich von nicht belegter Hersteller-Innengeometrie getrennt. | Fotozuordnung testen. In Phase 02 Elekta-Bauart fachlich konsistent belegen; Maß- und Kollisionstreue nicht aus der Außenansicht ableiten. |
 | 25.10.2026 | Rückmeldung: Außenform zu grob, näher am YouTube-Video arbeiten. Videobeschreibung nennt Synergy. Außenform nach tatsächlich gesichteter Synergy-Broschüre neu aufgebaut; Materialschattierung und drei Perspektiven ergänzt. | Exakter Einzelbildabgleich mit dem Film bleibt mangels auswertbarem Videoabruf offen. Silhouette und Proportionen vor Phase 02 prüfen; realistischere Schattierung ist kein Nachweis technischer Genauigkeit. |
-| offen | Rückmeldung von Jan zur neuen Phase 01 | Vor Phase 02 in konkrete Regeln übersetzen |
+| 26.10.2026 | Jan bewertet Phase 01 als passabel und beauftragt den nächsten Abschnitt. Phase 02 mit vier Ansichten, expliziter Kopf-Bauart und gemeinsamer MLC-Projektionsgeometrie erstellt. | Kein Abschluss des unabhängigen Fachreviews. Aktueller Prüfauftrag: Phase 02; später Übergänge und Stil gemeinsam nachziehen. |
 
 ## Abschlussprüfung des Gesamtfilms
 
