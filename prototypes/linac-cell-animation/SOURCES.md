@@ -1,6 +1,6 @@
 # Quellenzuordnung: LINAC bis Zellwirkung
 
-Stand 26.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
+Stand 27.10.2026. Dieser Nachweis gehört zum isolierten Lehrprototyp. Er dokumentiert Funktionsbelege und Gestaltungsgrenzen; er ist keine technische Freigabe eines Gerätemodells.
 
 ## Verwendete Quellen
 
@@ -98,4 +98,23 @@ Weitere Quellen der bestehenden Gesamtübersicht stehen im README. Der SLAC/Argo
 
 Quellenkritische Entscheidung: Die Fußnote auf Krieger S. 384 definiert freie Radikale eingeschränkt als elektrisch neutral. Diese Einschränkung wird nicht übernommen; Radikalionen sind möglich (S13). Auch die Sammelbezeichnung „Wasserradikale“ über eine Liste einschließlich H₂ und H₂O₂ auf S. 385 wird nicht als chemische Klassifikation übernommen. Keine G-Werte, festen Lebensdauern, Diffusionslängen oder pauschalen direkten/indirekten Prozentanteile aus diesen Darstellungen abgeleitet.
 
-Filmzeit (104 s), Ausschnittgrößen, Weglängen und Molekülbewegungen sind eigene didaktische Entscheidungen. Die vier Ansichten wechseln bewusst den Raum- und Zeitmaßstab. Ionisation/Anregung, Radikalbildung und biologische Zellfolge werden nicht gleichgesetzt. DNA-Schäden, Sauerstoffeffekt im biologischen Zusammenhang, Reparatur und Zellschicksal bleiben Phase 04 vorbehalten.
+Filmzeit (104 s), Ausschnittgrößen, Weglängen und Molekülbewegungen sind eigene didaktische Entscheidungen. Die vier Ansichten wechseln bewusst den Raum- und Zeitmaßstab. Ionisation/Anregung, Radikalbildung und biologische Zellfolge werden nicht gleichgesetzt. DNA-Schäden, Reparatur und mögliche Zellfolgen werden in Phase 04 aufgegriffen. Sauerstoffeffekt und Fraktionierung bleiben spätere Vertiefungen.
+
+## Phase 04: DNA und Zellreaktion (27.10.2026)
+
+**S14:** National Cancer Institute, *Radiation Therapy to Treat Cancer*. https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy . Gelesen 27.10.2026. Zeitlich verzögerte Zellwirkung; keine feste Zeitprognose für eine einzelne dargestellte Zelle.
+
+**S15:** National Cancer Institute, *Dictionary of Cancer Terms: Senescence*. https://www.cancer.gov/publications/dictionaries/cancer-terms/def/senescence . Gelesen 27.10.2026. Gegenprüfung der Abgrenzung lebender, nicht proliferierender Zellen vom Zelltod.
+
+**S16:** NIEHS, Structure Function Group, *DNA Repair Enzymes*. https://www.niehs.nih.gov/research/atniehs/labs/gisbl/sf/studies/dnarepair . Gelesen 27.10.2026; verweist auf die eigenen Strukturarbeiten zu Pol μ und Ligase IV von 2020/2018. Beleg für unterschiedliche Endkonfigurationen und Bearbeitung/Verknüpfung bei NHEJ; keine Übernahme von Proteinstrukturen.
+
+| Ansicht | Beleg | Umsetzung und Grenze |
+|---|---|---|
+| Direkter/indirekter Weg | S3 Kap. 11.2; S1 Kap. 22.1; S6 2.2.7 | Elektronenionisation an DNA bzw. ausgewählte H-Abstraktion durch •OH. Das zusätzliche H wird symbolisch von DNA auf Wasser übertragen. Keine Atomtrajektorie oder Trefferquote berechnet. |
+| Basen- und Strangschäden | S3 Kap. 11.3, S. 387–389 / PDF 386–388, Abb. 11.10 visuell geprüft; S6 2.3.1 | Eigene achtbasige Leiter mit antiparallelen Rückgraten. Strangbrüche an den Rückgraten, nicht an den Wasserstoffbrücken. Versetzte DSB-Enden, keine Darstellung vollständiger Clusterschäden. |
+| Erkennung und Reparatur | S1 Kap. 22.1, S. 452–453 / PDF 475–476; S3 S. 389–390 / PDF 388–389; S6 2.3.2–3; S16 | Erkennung, Endbearbeitung und Endverknüpfung als stark gekürztes Schema. Drei auswählbare Ergebnisse, darunter eine Deletion von genau einem Basenpaar als frei gewähltes Beispiel. Keine Erfolgsquoten oder vollständige NHEJ-/HR-Kaskade. |
+| Zellfolgen und Endpunkt | S1 Kap. 22.1–22.2, S. 452–453 / PDF 475–476; S6 2.3.5; S14–15 | Überleben, stabile Veränderung, Seneszenz und Apoptose als getrennte Beispiele. Eine einzelne animierte Teilung gilt nicht als Nachweis klonogenen Überlebens. Verzögerte Inaktivierung wird erklärt, keine Mitosekaskade berechnet. |
+
+**Quellenkritik:** S3 ist ein älteres Grundlagenwerk. Seine Reparaturdarstellung wird nur für Grundprinzipien verwendet; Photoreaktivierung, „SOS“-Reparatur oder bakterielle Methylierungserkennung werden nicht als menschliche Reparaturwege übertragen. S1 nennt Seneszenz im Kontext zellulärer Selbstauflösung. Die Animation folgt hier ausdrücklich der Abgrenzung in S15: Seneszente Zellen können lebend und stoffwechselaktiv bleiben. Ebenso werden weder „DSB bedeutet sicherer Zelltod“ noch „Tumorzellen sind grundsätzlich empfindlicher als alle Normalzellen“ übernommen.
+
+**Gestaltung:** Sequenz, Farben, Marker, Zellformen, 118 Sekunden Filmzeit und Zwischenpositionen sind eigene didaktische Entscheidungen. Das Leiterbild beschreibt keine tatsächliche Entwindung der DNA. Der Mutationsmarker ist ein Symbol; die vergrößerte seneszente Zelle ist kein diagnostisches Merkmal. Apoptose ist ein Beispiel und wird nicht als universeller Hauptmechanismus der Strahlentherapie behauptet. Sauerstoffeffekt, Fraktionierung und vollständige Reparaturwege bleiben Vertiefungsthemen. Buchabbildungen und PDFs werden nicht mit dem Prototyp veröffentlicht.

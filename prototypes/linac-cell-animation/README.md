@@ -1,18 +1,18 @@
 # Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
-Stand: 26.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
+Stand: 27.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
-## Aktueller Einstieg: drei von vier Phasen
+## Aktueller Einstieg: alle vier Phasen einzeln verfügbar
 
-**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. **`phase2.html`** schließt mit 90 Sekunden Strahltransport, Target, Filter/Monitoring und Feldformung an. Jan hat am 26.10.2026 die Weiterarbeit nach Phase 01 beauftragt; dies ersetzt keinen unabhängigen Fachreview. Jan hat danach Phase 02 als gelungen bewertet und Phase 03 beauftragt. **`phase3.html`** ergänzt jetzt 104 Sekunden Gewebewechselwirkungen und Strahlenchemie. Phase 04 folgt nach dem gemeinsamen Review von Phase 03. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
+**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. **`phase2.html`** schließt mit 90 Sekunden Strahltransport, Target, Filter/Monitoring und Feldformung an. Jan hat am 26.10.2026 die Weiterarbeit nach Phase 01 beauftragt; dies ersetzt keinen unabhängigen Fachreview. Jan hat danach Phase 02 als gelungen bewertet und Phase 03 beauftragt. **`phase3.html`** ergänzt jetzt 104 Sekunden Gewebewechselwirkungen und Strahlenchemie. Jan hat Phase 03 anschließend als passabel bewertet und Phase 04 beauftragt. **`phase4.html`** ergänzt 118 Sekunden zu DNA-Schäden, Reparatur und möglichen Zellfolgen. Der gemeinsame Gesamtzusammenhang ist jetzt der nächste Prüfschritt. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
 
 | Phase | Inhalt | Status |
 |---|---|---|
 | 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 5 mit Synergy-Geräteform und drei Perspektiven; Review offen |
 | 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Fassung 1 in `phase2.html`, vier Ansichten, 90 s; Review offen |
 | 03 | Gewebewechselwirkungen und Strahlenchemie | Fassung 1 in `phase3.html`, vier Ansichten, 104 s; Review offen |
-| 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
+| 04 | DNA-Schäden und Zellreaktion | Fassung 1 in `phase4.html`, vier Ansichten, 118 s; Fachreview und Unterrichtstest offen |
 
 **Ansichten der Phase 01:** 00:00 Orientierung; 00:12 Elektronenkanone; 00:28 Wanderwelle; 00:52 Energiegewinn; Ende 01:08. Wiedergabe startet bewusst. Standardmäßig pausiert sie am nächsten Bildwechsel; die Option kann für den zusammenhängenden Film ausgeschaltet werden. Vier Ansichtstasten, Zeitleiste, Tempo und Großansicht sind direkt bedienbar. In der HF-Ansicht setzt ein zusätzlicher Knopf Feld und Pakete gemeinsam um eine Achtelperiode weiter. Beschriftung, E-Feld und Kraft sind separat ausblendbar.
 
@@ -221,3 +221,34 @@ Mit 6–12 Lernenden in Zweiergruppen an vorhandenen Geräten, zusätzlich ein B
 4. **1 min:** Jede Person notiert die unklarste Stelle. Lehrkraft markiert je Lernziel „erklärt“, „mit Hinweis“, „Fehlvorstellung“.
 
 Vorläufiges Überarbeitungskriterium: Jede wiederkehrende Fehlvorstellung in mindestens zwei Gruppen führt zu einer konkreten Bild-/Textänderung. Sichtbarkeit wird am tatsächlichen Beamer und auf mindestens einem echten Smartphone geprüft. Dieser Test ist vorbereitet, noch nicht durchgeführt. Die unabhängige Prüfung durch Medizinphysik und eine strahlenbiologisch fachkundige Lehrkraft bleibt offen.
+
+## Phase 04: DNA und Zellreaktion (27.10.2026)
+
+Direkt: [phase4.html](phase4.html). Der sichtbare Anschluss aus Phase 03 und die Navigation aus Phase 01/02 führen zu dieser Fassung. Alle vier Phasen sind einzeln verfügbar; ein nahtloser Gesamtfilm ist noch nicht umgesetzt.
+
+| Filmzeit | Ansicht | Vergleich und Lernziel |
+|---|---|---|
+| 00:00–00:24 | Weg zur DNA | Direkte Ionisation durch ein Elektron und ausgewählte indirekte H-Abstraktion vergleichen. „Direkt“ beschreibt den Angriffspunkt, nicht „primäres Photon“. |
+| 00:24–00:50 | DNA-Schäden | Basenschaden, Einzel- und Doppelstrangbruch am selben Leiterbild vergleichen; unbeschädigte Referenz zuschalten. Die Bilder sind Alternativen, keine Schadensprogression. |
+| 00:50–01:22 | Reparatur | Endverknüpfung mit erhaltener Sequenz, Verlust eines Basenpaars oder persistierendem Bruch. Geschlossene Struktur und erhaltene Information getrennt prüfen. |
+| 01:22–01:58 | Zellverläufe | Weiterteilen, Überleben mit Veränderung, Seneszenz und Apoptose als anwählbare Beispiele. Kein vom vorigen Schaden berechnetes Schicksal. |
+
+Auswahlknöpfe zeigen ein Vergleichsergebnis und pausieren. „Beispiel/Verlauf abspielen“ startet dessen Ablauf erneut. Ansichtstasten, Zeitleiste, Tempo, Lernhalte, Bildbeschriftung und Großansicht entsprechen Phase 03. Kein Autostart; Hintergrundwechsel pausiert. `?view=0` bis `?view=3` öffnen die vier Ansichten direkt.
+
+### Prüfung dieser Fassung
+
+- Alle fünf vorhandenen/neuen Modelltest-Dateien mit Node ausgeführt; 11 Testeinträge bestanden. Phase 04 prüft DNA-Topologie, komplementäre Basenfolge, Sequenzverlust gegenüber bloßem Strangschluss, getrennte Zellzustände und Lernhalte an exakten sowie überschrittenen Zeitgrenzen.
+- Chromium: 66 Kombinationen aus Zeitposition und 320/390/700/850/1120/1440 px ohne horizontalen Seitenüberlauf. Alle Wirkungs-, Schadens-, Reparatur- und Zellfolgenwahlen sowie Referenzschalter, Wiederholknöpfe, Lernhalte, durchlaufende Wiedergabe, Ende/Neustart, Tempo, Beschriftung, Vollbild und reduzierte Bewegung geprüft.
+- Die Szenen wurden auf Desktop und in mobiler Ansicht visuell gesichtet. Keine JavaScript-Laufzeitfehler und keine automatisch geladenen externen Medien. Ein noch fehlender Navigationslink aus Phase 01 wurde ergänzt.
+- Grenzen: Browser-Viewport ersetzt keinen Test am echten Smartphone oder Beamer. Modelltests prüfen die programmierten didaktischen Beispiele, keine biologische Vorhersage. Fachreview und Unterrichtstest sind vorbereitet, nicht durchgeführt.
+
+### Unterrichtstest Phase 04: 12 Minuten
+
+Für 9–12 Lernende im 2./3. Lehrjahr, Zweiergruppen; bei ungerader Zahl eine Dreiergruppe mit Beobachterrolle. Je Gruppe ein Browsergerät, ein Beamer für den Einstieg, ein Blatt mit den vier Leitfragen. Keine Anmeldung und keine Planungssoftware nötig.
+
+1. **2 min – Anschluss:** Ende Phase 03 und Anfang Phase 04. Jede Person benennt den Unterschied zwischen Elektronen-Energieübertragung und nachfolgender chemischer Reaktion.
+2. **6 min – Vergleichen:** Pro Schadensbild die beschädigte Struktur zeigen. Vor dem Wechsel zur reparierten Deletion vermuten, ob ein geschlossenes Rückgrat die Originalsequenz garantiert. Danach Seneszenz und Apoptose vergleichen.
+3. **3 min – Erklären:** Bei ausgeschalteter Bildbeschriftung erklärt Person A den Unterschied SSB/DSB, Person B Strukturreparatur versus Informationsverlust. Beide begründen, warum eine geschädigte Zelle nicht sofort sterben muss. Die dritte Person prüft gegebenenfalls mit den aufklappbaren Antworten; Rollen wechseln.
+4. **1 min – Rückmeldung:** Jede Person nennt eine unklare Bildstelle. Die Lehrkraft markiert pro Gruppe „selbstständig erklärt“, „mit Hinweis“ oder „Fehlvorstellung“.
+
+Erwartung: direkte Wirkung auch durch Sekundärelektronen; Strangbruch am kovalenten Rückgrat; geschlossene DNA kann Sequenzverlust enthalten; Seneszenz bedeutet lebend, aber anhaltend nicht proliferierend. Eine wiederkehrende Fehlvorstellung in mindestens zwei Gruppen führt zur Überarbeitung dieser Bild-/Textstelle. Erst danach folgt der gemeinsame Durchgang aller vier Phasen mit Prüfung von Übergängen, Maßstäben, Begriffen und Lernhalten.

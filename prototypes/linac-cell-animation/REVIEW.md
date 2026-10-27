@@ -6,12 +6,12 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 ## Umfang und Reihenfolge
 
-| Phase | Inhalt und Übergabe | Stand am 26.10.2026 |
+| Phase | Inhalt und Übergabe | Stand am 27.10.2026 |
 |---|---|---|
 | 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 5 in `phase1.html`, 68 s, mit Synergy-orientierter Außenform und drei Geräteperspektiven, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Fassung 1 in `phase2.html`, 90 s: Slalom, Target, FF/FFF und Monitor, gekoppelte BEV-/Leafpaarprojektion; Fachreview offen |
-| 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Fassung 1 in `phase3.html`, 104 s: Feld/Gewebe, Compton und Elektronenspur, Wasserradiolyse, Reaktionsvergleich; gemeinsamer Review offen |
-| 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
+| 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Fassung 1 in `phase3.html`, 104 s: Feld/Gewebe, Compton und Elektronenspur, Wasserradiolyse, Reaktionsvergleich; Jan beauftragte danach Phase 04, unabhängiger Fachreview offen |
+| 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Fassung 1 in `phase4.html`, 118 s: Wirkungsweg, DNA-Schadensbilder, Reparaturergebnisse und alternative Zellverläufe; unabhängiger Fachreview und Unterrichtstest offen |
 
 ## Phase 01 – weiter gültige Prüfkriterien
 
@@ -85,3 +85,21 @@ Jan hat Phase 02 als gelungen bewertet und den nächsten Abschnitt beauftragt. P
 - **Folgen:** Keine automatisch sterbende Zelle in dieser Phase. Mögliche Zielschäden und Reparatur bilden die Übergabe an Phase 04.
 
 Neue übertragbare Regel: Quantitative Einzelereignisse müssen ihre Annahmen neben der Bedienung nennen. Beispielrechnung, illustrative Teilchenspur und chemisches Reaktionsschema bleiben klar unterscheidbar. Für den Gesamtfilm später nochmals die Lernhalte und die Orientierung an jedem Maßstabswechsel prüfen.
+
+## Phase 04 – neuer Prüfstand (27.10.2026)
+
+Jan hat Phase 03 als passabel bewertet und die Umsetzung von Phase 04 beauftragt. Das ist die Grundlage für diesen nächsten Entwicklungsschritt, keine unabhängige fachliche Freigabe.
+
+- **Anschluss:** Wird verständlich, wie die reaktiven Spezies aus Phase 03 zur DNA-Veränderung beitragen können? Direkte Wirkung durch ein Sekundärelektron muss benennbar bleiben.
+- **Schadensbild:** Bei SSB/DSB auf die unterbrochenen Rückgrate zeigen lassen. Basenschaden, gelöste Wasserstoffbrücke und Strangbruch nicht verwechseln.
+- **Reparatur:** Zwei geschlossene Ergebnisse vergleichen lassen. Die verlorene Base muss im Sequenzvergleich erkennbar sein; „geschlossen = vollständig wiederhergestellt“ wäre eine Überarbeitungsstelle.
+- **Zellfolge:** Seneszenz, vorübergehende Checkpoint-Pause und Zelltod auseinanderhalten. Die Beispielwahl darf nicht als berechnete Folge des vorherigen Schadens oder als gleich wahrscheinliche Verteilung verstanden werden.
+- **Zeiten und Maßstäbe:** DNA-Ausschnitt, Zellansicht und Filmzeit sind verschiedene Darstellungsebenen. Aus einer sichtbaren Teilung keinen klonogenen Überlebensnachweis ableiten.
+
+Übertragbare Regel: Eine biologische Veränderung bekommt keinen zwangsläufigen Endzustand. Struktur, Information und Zellfunktion werden zuerst getrennt verglichen und dann in Beziehung gesetzt.
+
+Technische Prüfung und durchführbarer 12-Minuten-Test mit Leitfragen und Erwartungshorizont stehen im [README](README.md#phase-04-dna-und-zellreaktion-27102026). Unterrichtstest und unabhängiger Fachreview sind weiterhin offen.
+
+### Danach: Gesamtzusammenhang aller vier Phasen
+
+Die vier Einzelphasen sind verfügbar. Nach Jans Rückmeldung zu Phase 04 gemeinsam prüfen: durchgängige Teilchenfarben und Begriffe; Orientierung bei jedem Maßstabswechsel; erkennbare Übergaben; sinnvolle Lernhalte; frühere Szenen anhand der inzwischen gewonnenen Gestaltungsregeln nacharbeiten. Erst auf dieser Grundlage eine nahtlose Gesamtsequenz ausarbeiten. Die aktuell verlinkten Seiten sind noch kein durchgehender Film.
