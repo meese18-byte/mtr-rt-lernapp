@@ -81,3 +81,21 @@ Weitere Quellen der bestehenden Gesamtübersicht stehen im README. Der SLAC/Argo
 **Quellenkritik:** Die Herstellerseite „How the linear accelerator works“ (https://www.elekta.com/company/newsroom/videos/how-the-linear-accelerator-works-ff4ecjuoqeat1mh6ievmrg/ , gelesen 26.10.2026) wurde zusätzlich als Ablaufbeleg konsultiert. Die dort verkürzten Aussagen, ein Vakuum fokussiere den Strahl und eine gemeinsame Steuerung eliminiere dosimetrische Fehler, werden nicht übernommen. Die Slalom-Bahn wird anhand S1 ausgearbeitet. Der genaue Kopf des YouTube-Films bleibt ohne Einzelbildvergleich unbestätigt.
 
 **Geometrieprüfung:** Für alle Leafpaare stimmen BEV-Durchlass und Erreichen der Bezugsebene im Strahlschnitt überein. Unbenutzte Paare sind auch während der Einrichtbewegung geschlossen; bei vollständig geschlossener Bank existiert im Modell kein direkter geometrischer Durchlass. Die Modellannahme idealer Abschattung ist keine Behauptung realer Nulldosis.
+
+## Phase 03: Gewebe und Strahlenchemie (26.10.2026)
+
+**S13:** IUPAC, *Glossary of Terms Used in Physical Organic Chemistry*, Recommendations 1994, Einträge „radical“ und „radical ion“. https://iupac.qmul.ac.uk/gtpoc/R.html . Volltext am 26.10.2026 geprüft. Die zusätzlich gesuchten direkten Gold-Book-Seiten waren nicht abrufbar; der verlinkte IUPAC-Glossartext trägt den Begriffsabgleich.
+
+| Ansicht | Beleg | Umsetzung und Grenze |
+|---|---|---|
+| Photonenfeld im Gewebe | S1 Kap. 1.3.2.4; S3 Kap. 11.2 | Drei ausgewählte Photonenwege, darunter ein Compton-Ereignis. Kein Tumor als selektiver Absorber. Teilchenzahl und Häufigkeit frei gewählt; keine Schwächungsrechnung. MLC-Öffnung begrenzt die direkten Wege; Streuphoton darf die Kontur verlassen. |
+| Compton-Einzelereignis | S1 S. 14–15 / PDF 37–38, besonders Abb. 1.7 und Kap. 1.3.2.4 | E′ aus E und θ, T = E−E′; Elektronenrichtung aus der Impulserhaltung. Freies ruhendes Elektron, Bindungsenergie ignoriert. Keine Klein-Nishina-Stichprobe. 0,5 / 1 / 2 MeV sind Einzelphotonen, keine MV-Geräteenergien. |
+| Elektronenspur | S1 Kap. 1.3.1; S3 S. 381–382 / PDF 380–381 | Anregung und Ionisation getrennt markiert. Die gezeichnete Auswahl von Ereignissen berechnet weder Reichweite noch lokales Energieverlustprofil. |
+| Wasserionisation und Protontransfer | S3 Kap. 11.2, S. 384–385 / PDF 383–384, Abb. 11.9 visuell geprüft; S6 2.2.7.2, S. 24–25 / PDF 34–35 | Elektronenstoß setzt ein zusätzliches Elektron frei. H₂O⁺• + H₂O → H₃O⁺ + •OH zeigt das Nachbarwasser explizit. Stoff- und Ladungsbilanz getestet. Keine Übernahme der Buchgrafik. |
+| Hydratisiertes Elektron | S3 S. 385; S6 2.2.7.2 | Erst nach Energieverlusten. Fünf gezeichnete Wassersymbole veranschaulichen Orientierung im Lösungsmittel, keine feste Koordinationszahl oder berechnete Quantenzustandsdichte. |
+| Konkurrierende Reaktionen | S3 S. 385; S6 2.2.7.2–3 | •OH + RH → H₂O + R• und 2 •OH → H₂O₂ als alternative Beispiele. Edukte werden in Produkte überführt; kein weiterhin vorhandenes doppeltes H-Atom. Keine relativen Häufigkeiten oder Reaktionsraten. R ist ein organischer Rest, nicht speziell DNA. |
+| Radikal, Ion und Molekül | S13; S6 2.2.7.2 | Punkt und Ladung getrennt erläutert. •OH ≠ OH⁻; H₂O₂ ist kein Radikal. H₂O⁺• ist ein Radikalion. |
+
+Quellenkritische Entscheidung: Die Fußnote auf Krieger S. 384 definiert freie Radikale eingeschränkt als elektrisch neutral. Diese Einschränkung wird nicht übernommen; Radikalionen sind möglich (S13). Auch die Sammelbezeichnung „Wasserradikale“ über eine Liste einschließlich H₂ und H₂O₂ auf S. 385 wird nicht als chemische Klassifikation übernommen. Keine G-Werte, festen Lebensdauern, Diffusionslängen oder pauschalen direkten/indirekten Prozentanteile aus diesen Darstellungen abgeleitet.
+
+Filmzeit (104 s), Ausschnittgrößen, Weglängen und Molekülbewegungen sind eigene didaktische Entscheidungen. Die vier Ansichten wechseln bewusst den Raum- und Zeitmaßstab. Ionisation/Anregung, Radikalbildung und biologische Zellfolge werden nicht gleichgesetzt. DNA-Schäden, Sauerstoffeffekt im biologischen Zusammenhang, Reparatur und Zellschicksal bleiben Phase 04 vorbehalten.

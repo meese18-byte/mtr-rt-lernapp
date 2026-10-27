@@ -3,15 +3,15 @@
 Stand: 26.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
 
-## Aktueller Einstieg: Phase 01 und Phase 02 von vier Phasen
+## Aktueller Einstieg: drei von vier Phasen
 
-**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. **`phase2.html`** schließt mit 90 Sekunden Strahltransport, Target, Filter/Monitoring und Feldformung an. Jan hat am 26.10.2026 die Weiterarbeit nach Phase 01 beauftragt; dies ersetzt keinen unabhängigen Fachreview. Phasen 03 und 04 folgen nach Review von Phase 02. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
+**`phase1.html`** ist die neue, quellenbezogen überarbeitete erste Phase: Elektronenquelle und Wanderwellen-Beschleunigung. Vier Ansichten bilden einen 68-sekündigen Abschnitt. **`phase2.html`** schließt mit 90 Sekunden Strahltransport, Target, Filter/Monitoring und Feldformung an. Jan hat am 26.10.2026 die Weiterarbeit nach Phase 01 beauftragt; dies ersetzt keinen unabhängigen Fachreview. Jan hat danach Phase 02 als gelungen bewertet und Phase 03 beauftragt. **`phase3.html`** ergänzt jetzt 104 Sekunden Gewebewechselwirkungen und Strahlenchemie. Phase 04 folgt nach dem gemeinsamen Review von Phase 03. Der bisherige Gesamtablauf und die ältere Detailstudie bleiben als Vergleich verfügbar.
 
 | Phase | Inhalt | Status |
 |---|---|---|
 | 01 | Elektronenquelle, Injektion, HF-Zufuhr, Wanderwelle, Energiegewinn | Fassung 5 mit Synergy-Geräteform und drei Perspektiven; Review offen |
 | 02 | Photonenerzeugung, Strahlführung, Monitoring, Feldformung | Fassung 1 in `phase2.html`, vier Ansichten, 90 s; Review offen |
-| 03 | Gewebewechselwirkungen und Strahlenchemie | Danach |
+| 03 | Gewebewechselwirkungen und Strahlenchemie | Fassung 1 in `phase3.html`, vier Ansichten, 104 s; Review offen |
 | 04 | DNA-Schäden und Zellreaktion | Danach; anschließend gemeinsamer Gesamtfilm-Review |
 
 **Ansichten der Phase 01:** 00:00 Orientierung; 00:12 Elektronenkanone; 00:28 Wanderwelle; 00:52 Energiegewinn; Ende 01:08. Wiedergabe startet bewusst. Standardmäßig pausiert sie am nächsten Bildwechsel; die Option kann für den zusammenhängenden Film ausgeschaltet werden. Vier Ansichtstasten, Zeitleiste, Tempo und Großansicht sind direkt bedienbar. In der HF-Ansicht setzt ein zusätzlicher Knopf Feld und Pakete gemeinsam um eine Achtelperiode weiter. Beschriftung, E-Feld und Kraft sind separat ausblendbar.
@@ -28,7 +28,7 @@ Zusätzliche Dateien: `phase1.html`, `phase1.css`, `phase1.js`, `phase1-model.js
 
 ## Phase 02: Vom Elektron zum Photonenfeld (26.10.2026)
 
-Direkter Einstieg: [phase2.html](phase2.html). Phase 01 besitzt einen sichtbaren Anschluss und einen Link in der Phasenübersicht. Die frühere Gesamtübersicht verlinkt beide aktuellen Phasen. Der Übergang ist zunächst ein bewusster Seitenwechsel; noch kein durchgehender Kameraflug zwischen den Phasen.
+Direkter Einstieg: [phase2.html](phase2.html). Phase 01 besitzt einen sichtbaren Anschluss und einen Link in der Phasenübersicht. Die frühere Gesamtübersicht verlinkt die drei aktuellen Phasen. Der Übergang ist zunächst ein bewusster Seitenwechsel; noch kein durchgehender Kameraflug zwischen den Phasen.
 
 | Filmzeit | Ansicht | Sichtbare Verbindung |
 |---|---|---|
@@ -195,3 +195,29 @@ Vor regulärem Einsatz: Review durch Medizinphysik und strahlenbiologisch fachku
 Nur Dateien unter `prototypes/linac-cell-animation/`: Gesamtablauf, Detailstudie und README. Keine Änderung der produktiven Lernapp, der Architektur, Registry, Lernpfade oder des MLC-Piloten. Separater Draft-PR, keine Freigabe durch Merge.
 
 
+
+## Phase 03: Im Gewebe (26.10.2026)
+
+Direkt: [phase3.html](phase3.html). Phase 02 besitzt jetzt einen sichtbaren Anschluss. Die vier Phasen bleiben einzeln prüfbar; eine durchgehende Kamerasequenz zwischen den Seiten ist noch nicht umgesetzt.
+
+| Filmzeit | Ansicht | Interaktion und Lernziel |
+|---|---|---|
+| 00:00–00:20 | Photonenfeld im Gewebe | Transmission und ausgewähltes Compton-Ereignis auseinanderhalten; keine Dosisgrenze aus der Feldkontur ableiten. |
+| 00:20–00:45 | Compton und Elektronenspur | 0,5 / 1 / 2 MeV und 15–150° wählen; gekoppelte Energie- und Winkelbeziehung. Ionisation gegenüber Anregung unterscheiden. |
+| 00:45–01:16 | Wasserradiolyse | Einzeln anwählbar: Ionisation (00:45), Protontransfer (00:55), Hydratation (01:06). Atom-, Ladungs- und Radikalsymbole bleiben unterscheidbar. |
+| 01:16–01:44 | Konkurrierende Reaktionen | H-Abstraktion am Biomolekül und Rekombination zu H₂O₂ vergleichen und erneut abspielen. Kein vorbestimmtes Zellschicksal. |
+
+Bedienung wie in Phase 02: Start/Pause, Lernhalte, Zeitleiste, Tempo, Bildbeschriftung und Großansicht. Kein Autostart; Hintergrundwechsel pausiert. Einstellungen des Compton-Beispiels halten an und zeigen das Ereignis fertig. Die Chemie-Tasten springen zum Beginn des jeweiligen Teilschritts; Fortsetzen startet ihn. Die Reaktionswahl zeigt zunächst das Ergebnis, der beschriftete Wiederholknopf den Ablauf. Direkte Ansicht mit `?view=0` bis `?view=3`.
+
+Prüfungen: Syntax und Modelltests; Energie- und zweidimensionale Impulserhaltung über 0,05–20 MeV und 0–180°; monotone Winkelabhängigkeit; Atom-, Restgruppen- und Ladungsbilanz aller vier Reaktionsschemata. Browserprüfung in 320/390/700/850/1120/1440 px: keine horizontalen Überläufe, vier Ansichten plus Chemie-Teilschritte, Energie-/Winkelwahl, alternative Reaktionen, Lernhalte, Zeitende, Wiederholung, Vollbild, Beschriftung und reduzierte Bewegung. Keine Laufzeitfehler oder automatisch geladenen externen Medien. Ein Rundungsfehler an einem Lernhalt wurde in Phase 03 beseitigt. Die Tests belegen die gewählten Modellbeziehungen, keine klinische oder strahlenchemische Simulation.
+
+### Realistischer Unterrichtstest für Phase 03 (12 Minuten)
+
+Mit 6–12 Lernenden in Zweiergruppen an vorhandenen Geräten, zusätzlich ein Beamer. Eine Lehrkraft sammelt pro Gruppe nur die Antworten auf vier Leitfragen und eine unklare Bildstelle; keine Leistungsbewertung.
+
+1. **2 min:** Ende von Phase 02 und erste Ansicht von Phase 03. Frage: Was tritt aus dem Kopf aus, und muss jedes Photon im gezeigten Ausschnitt Energie abgeben?
+2. **6 min:** Ansichten 02–04 und ihre drei Vergleichsfunktionen bedienen. Vor dem Verändern des Streuwinkels die erwartete Energierichtung vorhersagen; bei der Chemie bewegtes H und Ladungszeichen mitverfolgen.
+3. **3 min:** Eine Person erklärt bei ausgeblendeter Bildbeschriftung, die andere prüft: (a) Photon bleibt Photon, (b) Ionisation ≠ Anregung, (c) Radikalpunkt ≠ Ladung, (d) chemische Reaktion ≠ sicherer Zelltod. Anschließend Rollen wechseln.
+4. **1 min:** Jede Person notiert die unklarste Stelle. Lehrkraft markiert je Lernziel „erklärt“, „mit Hinweis“, „Fehlvorstellung“.
+
+Vorläufiges Überarbeitungskriterium: Jede wiederkehrende Fehlvorstellung in mindestens zwei Gruppen führt zu einer konkreten Bild-/Textänderung. Sichtbarkeit wird am tatsächlichen Beamer und auf mindestens einem echten Smartphone geprüft. Dieser Test ist vorbereitet, noch nicht durchgeführt. Die unabhängige Prüfung durch Medizinphysik und eine strahlenbiologisch fachkundige Lehrkraft bleibt offen.

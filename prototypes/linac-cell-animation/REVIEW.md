@@ -10,7 +10,7 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 |---|---|---|
 | 01 Quelle und Beschleunigung | Elektronenquelle, Injektion, HF-Zufuhr, gewählte Wanderwellenstruktur, Energiegewinn; Übergabe: energiereicher Elektronenstrahl | Fassung 5 in `phase1.html`, 68 s, mit Synergy-orientierter Außenform und drei Geräteperspektiven, sichtbarer Trennung von Therapiekopf/kV/MV, Lehrschnitt, Kamera, Gerätekarte, Makropulsen und Steuer-/Fokusansicht; gemeinsames fachlich-visuelles Review offen |
 | 02 Photonenerzeugung und Strahlformung | Passende Strahlführung, Target, Bremsstrahlung, Spektrum, FF/FFF-Einordnung, Monitoring, Blenden/MLC; Übergabe: geformter Photonenstrahl | Fassung 1 in `phase2.html`, 90 s: Slalom, Target, FF/FFF und Monitor, gekoppelte BEV-/Leafpaarprojektion; Fachreview offen |
-| 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 02 |
+| 03 Wechselwirkung im Gewebe und Strahlenchemie | Photonwechselwirkung, sekundäre Elektronen, lokale Ionisation/Anregung, Wasserradiolyse und konkurrierende Reaktionen | Fassung 1 in `phase3.html`, 104 s: Feld/Gewebe, Compton und Elektronenspur, Wasserradiolyse, Reaktionsvergleich; gemeinsamer Review offen |
 | 04 DNA-Schäden und Zellreaktion | Direkte/indirekte Wirkung, Schadensarten, Reparatur/Fehlreparatur, verzögerte Zellfolgen und Normalgewebe | Bisherige Gesamtübersicht vorhanden, Detailausbau nach Review 03 |
 
 ## Phase 01 – weiter gültige Prüfkriterien
@@ -24,7 +24,7 @@ Pro Phase entsteht eine zusammenhängende, direkt prüfbare Animation. Wenige an
 
 Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsch oder missverständlich? Was ist visuell schwer erkennbar? Was sollte bleiben?** Die Erkenntnisse beim abschließenden Gesamtfilm-Review erneut berücksichtigen.
 
-## Phase 02 – aktueller gemeinsamer Prüfauftrag
+## Phase 02 – beibehaltene Prüfkriterien
 
 - **Orientierung:** Wird klar, dass der Funktionsschnitt im Strahlkopf an Phase 01 anschließt? Der Seitenwechsel ist zunächst explizit; die Zusammenführung zum Gesamtfilm folgt später.
 - **Teilchen:** Beginnen die gezeigten Photonen am Target? Werden Elektronen nicht als Photonen umetikettiert? Ist Wärmeabfuhr erkennbar?
@@ -33,7 +33,7 @@ Für die Rückmeldung reichen pro Ansicht drei Angaben: **Was ist fachlich falsc
 - **Feldform:** Paar 11, ein Randpaar und geschlossenes Feld vergleichen. BEV und Strahlschnitt müssen zum selben Ergebnis führen. Leerzeilen dürfen keinen direkten Nutzstrahl zeigen.
 - **Modellstatus:** Kann die Person die ältere Beispielbauart von einem nachgewiesenen Synergy-Innenaufbau unterscheiden? Transmission, Streuung und Halbschatten bleiben explizit offen.
 
-Der 12-Minuten-Unterrichtstest steht im README. Ergebnisse noch nicht erhoben. Vor Phase 03 zuerst wiederkehrende Verständnisprobleme beheben.
+Der 12-Minuten-Unterrichtstest steht im README. Ergebnisse noch nicht erhoben. Jan hat die Ansicht als gelungen bewertet und den Übergang zu Phase 03 beauftragt; das ersetzt keinen unabhängigen Fachreview oder Unterrichtstest.
 
 ## Übertragbare Regeln – Startfassung
 
@@ -73,3 +73,15 @@ Der 12-Minuten-Unterrichtstest steht im README. Ergebnisse noch nicht erhoben. V
 Die Liste dokumentiert das vereinbarte Vorgehen. Sie behauptet keine bereits erfolgte fachliche oder didaktische Freigabe.
 
 Für den technischen Videoabgleich und den konkreten 12-Minuten-Unterrichtstest siehe [REFERENCE-VIDEO.md](REFERENCE-VIDEO.md).
+
+## Phase 03 – aktueller gemeinsamer Prüfauftrag
+
+Jan hat Phase 02 als gelungen bewertet und den nächsten Abschnitt beauftragt. Phase 03 knüpft mit einer expliziten Übergabe an das geformte Feld an. Abnahme der Gesamtsequenz, unabhängiger Fachreview und Unterrichtstest werden damit nicht vorweggenommen.
+
+- **Orientierung:** Ist der Sprung von Gewebe über Einzelereignis zu molekularer Nachbarschaft erkennbar? Niemand soll die Molekülwege als zellgroße Diffusionsbahnen deuten.
+- **Energie:** Verändern Streuwinkel und Elektronenrichtung sich gemeinsam? Kann eine Person erklären, warum ein freigesetztes Elektron kein umgewandeltes Photon ist?
+- **Chemie:** Wird ein H-Atom bei der Abstraktion tatsächlich vom Reaktionspartner auf das Wasser übertragen? Wird der Protontransfer im Wasser von dieser H-Atom-Übertragung unterschieden?
+- **Begriffe:** •OH, OH⁻, H₂O⁺• und H₂O₂ ohne Gleichsetzung von Ladung und Radikal erklären lassen. Der Radikalpunkt ist kein zusätzliches Teilchen außerhalb des Moleküls.
+- **Folgen:** Keine automatisch sterbende Zelle in dieser Phase. Mögliche Zielschäden und Reparatur bilden die Übergabe an Phase 04.
+
+Neue übertragbare Regel: Quantitative Einzelereignisse müssen ihre Annahmen neben der Bedienung nennen. Beispielrechnung, illustrative Teilchenspur und chemisches Reaktionsschema bleiben klar unterscheidbar. Für den Gesamtfilm später nochmals die Lernhalte und die Orientierung an jedem Maßstabswechsel prüfen.
