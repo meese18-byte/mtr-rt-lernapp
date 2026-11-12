@@ -21,6 +21,7 @@ check('B2 Phase 02: photon traces follow uniform distance per time',()=>{assert.
 check('B4 Phase 02: target electron slower after energy loss',()=>{assert.match(src2,/speedBefore=120,speedAfter=76/);});
 check('Phase 02: MU1 MU2 and isocenter labels',()=>{assert.match(read('phase2.html'),/monitorValue2/);assert.match(src2,/ISOZENTRUMSEBENE/);});
 check('B3 Phase 03: scattered photon speed unchanged; electron speed beta(E)',()=>{const v=p3.compton(1,60);assert.ok(Math.abs(v.photon-.505)<.002);assert.ok(Math.abs(v.electron-.495)<.002);assert.ok(p3.electronBeta(v.electron)>0&&p3.electronBeta(v.electron)<1);assert.match(read('phase3.js'),/photonDistance=elapsed\*photonSpeed/);});
+check('B3 Phase 03: scattered photon visibly loses energy, not speed',()=>{assert.match(read('phase3.js'),/v\.photon\/v\.energy/);assert.match(read('phase3.js'),/Wavelength is only a qualitative energy cue/);});
 check('B7 Phase 03: arclength interpolation independent of control points',()=>{const p=p3.pointOnTrack([[0,0],[100,0],[101,0]],.5);assert.ok(Math.abs(p[0]-50.5)<1e-8);assert.equal(p[1],0);});
 check('B6 Phase 03/04: directional radical tracking removed',()=>{assert.match(read('phase3.js'),/Math\.sin\(q\*31\)/);assert.match(read('phase4.js'),/Weiteres •OH: kein Kontakt/);});
 check('B5 Phase 04: direct electron slows after DNA energy transfer',()=>{assert.match(read('phase4.js'),/speedOut=speedIn\*\.7/);});
