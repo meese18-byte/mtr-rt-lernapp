@@ -106,9 +106,9 @@ function filterDetail(){const ff=filter==='ff';let h=txt(24,27,ff?'FF · MIT AUS
  h+=txt(27,237,'1','#94aabc',12)+txt(240,349,'Feldposition','#94aabc',12,'text-anchor="middle"');
  const pts=[];for(let i=0;i<=120;i++){const x=-1.25+i*2.5/120,edge=1/(1+Math.exp((Math.abs(x)-1)*30)),f=ff?1-.035*x*x:Math.exp(-1.15*x*x);pts.push([240+x*145,322-82*f*edge]);}
  h+=`<path d="${path(pts)}" stroke="#f4cf83" fill="none" stroke-width="3"/>`;
- h+=line(240,224,240,322,'#4f6a80',1,'stroke-dasharray="3 5"')+txt(240,373,'Prinzipskizze · keine Messdaten','#8ca6b9',12,'text-anchor="middle"');return h;
+ h+=line(240,224,240,322,'#4f6a80',1,'stroke-dasharray="3 5"')+txt(240,373,ff?'FF · flacheres Profil':'FFF · höhere Dosisleistung möglich','#8ca6b9',12,'text-anchor="middle"');return h;
 }
-function fieldDetail(){let h=txt(24,28,'BEV · GEOMETRISCHE PROJEKTION','#8be7e9',14);
+function fieldDetail(){let h=txt(24,28,'BEV · ISOZENTRUMSEBENE · 100 cm AB FOKUS','#8be7e9',14);
  const x0=60,y0=64,w=360,hh=270,form=currentForm(),closed=shape==='closed';
  const px=x=>x0+(x+1)*w/2,py=y=>y0+(y+1)*hh/2;
  h+=`<rect x="${x0}" y="${y0}" width="${w}" height="${hh}" fill="#111f2c" stroke="#5c7485"/>`;
@@ -126,7 +126,7 @@ function fieldDetail(){let h=txt(24,28,'BEV · GEOMETRISCHE PROJEKTION','#8be7e9
 function setScene(s){current=s;const c=scenes[s];$('sceneKind').textContent=String(s+1).padStart(2,'0')+' / '+c.kind;$('viewNumber').textContent=String(s+1).padStart(2,'0');for(const [id,key]of [['viewTitle','title'],['viewText','text'],['takeaway','take'],['question','question'],['answer','answer'],['detailTitle','detail'],['detailNote','note'],['headCaption','caption'],['sceneSource','source']])$(id).textContent=c[key];$('detailKicker').textContent=String(s+1).padStart(2,'0')+' / GENAU HINSEHEN';$('detail').setAttribute('aria-label',c.detail+'. '+c.note);$('check').open=false;$('filterControls').hidden=s!==2;$('monitorReadout').hidden=s!==2;$('leafControls').hidden=s!==3;$('next').disabled=false;$('next').textContent=(s)===3?'Weiter zu Phase 03 →':'Nächste Ansicht →';
  [...$('views').children].forEach((b,i)=>{if(i===s)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});}
 function render(){const s=M.scene(time);if(s!==current)setScene(s);renderHead();$('detail').innerHTML=[transportDetail,targetDetail,filterDetail,fieldDetail][s]();
- if(s===2){const v=Math.round(M.monitor(time)*100);$('monitorValue').textContent=v+' %';$('monitorFill').style.width=v+'%';$('monitorState').textContent=v>=100?'Abschaltwert erreicht · Strahl beendet':'Geräteoutput wird erfasst · Strahl aktiv';}
+ if(s===2){const v=Math.round(M.monitor(time)*100);$('monitorValue').textContent='MU1: '+(v*2)+' / 200 MU';$('monitorValue2').textContent='MU2: '+(v*2)+' / 200 MU';$('monitorFill').style.width=v+'%';$('monitorState').textContent=v>=100?'Beide MU-Kanäle: Sollwert erreicht · Strahl aus':'MU-Output und Strahlprofil werden überwacht';}
  if(s===3){const [l,r]=M.leaf(row,currentForm(),shape==='closed');$('rowValue').textContent=row+1;$('leafStatus').textContent=r-l<1e-6?'Paar geschlossen → kein direkter Nutzstrahl':forming()?'Lamellen positionieren · Strahl aus':'Paar offen → begrenzter direkter Nutzstrahl';}
  $('timeline').value=time;$('clock').textContent=clock(time)+' / 01:30';$('head').querySelectorAll('.annotation').forEach(e=>e.classList.toggle('label-off',!$('labels').checked));
 }
