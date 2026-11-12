@@ -1,55 +1,22 @@
-<!doctype html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#091525">
-  <title>Vom LINAC zur Zellwirkung · MTR Lernlabor</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="animation.js" defer></script>
-</head>
-<body>
-<main class="shell">
-  <header class="masthead"><a class="brand" href="#start"><span aria-hidden="true">▦</span> MTR / LERNLABOR</a><span>ISOLIERTER PILOT 01</span></header>
-  <section id="start" class="intro">
-    <p class="eyebrow">TECHNIK → PHYSIK → CHEMIE → BIOLOGIE</p>
-    <h1>Vom <em>LINAC</em><br>zur Zellwirkung.</h1>
-    <p class="lead">Eine Energiegeschichte über acht Stationen: Wie aus Elektronen ein therapeutischer Photonenstrahl wird – und wie daraus Zellschäden entstehen können.</p>
-    <div class="scope"><span>PHOTONENMODUS</span><span>SCHEMATISCH · OHNE DOSISBERECHNUNG</span></div>
-  </section>
-  <aside class="detail-teaser"><div><strong>NEU · Phase 04 von 04</strong><p>DNA-Schäden, Reparatur und mögliche Zellfolgen · vier vergleichbare Ansichten, 118 Sekunden.</p></div><a href="phase4.html">Phase 04 öffnen →</a></aside>
-  <aside class="detail-teaser"><div><strong>Phase 03 von 04</strong><p>Photonen im Gewebe, Compton-Energievergleich, Wasserradiolyse und konkurrierende Reaktionen · 104 Sekunden.</p></div><a href="phase3.html">Phase 03 öffnen →</a></aside>
-  <aside class="detail-teaser"><div><strong>Phase 02 von 04</strong><p>Umlenkung, Target, Filter und Monitorkammern bis zur gekoppelten MLC-Feldprojektion · 90 Sekunden.</p></div><a href="phase2.html">Phase 02 öffnen →</a></aside>
-  <aside class="detail-teaser"><div><strong>Phase 01 von 04</strong><p>Elektronenquelle und Wanderwellen-Beschleunigung · vier prüfbare Ansichten · 68 Sekunden.</p></div><a href="phase1.html">Neue Phase 01 öffnen →</a></aside><p class="earlier-study"><a href="detail.html">Frühere visuelle Studie: Target und Bremsstrahlung</a></p>
-  <section class="workspace" aria-label="Interaktive Animation">
-    <nav class="chapter-nav" aria-label="Kapitel"><div class="nav-heading">DER ABLAUF <span>08 STATIONEN</span></div><ol id="chapters"></ol></nav>
-    <div class="viewer">
-      <div class="viewer-top"><span id="domain">TECHNIK / PHYSIK</span><span id="scale">GERÄTEEBENE</span></div>
-      <div class="scene-heading" aria-live="polite" aria-atomic="true"><span id="chapterNumber">01</span><div><h2 id="sceneTitle">Elektronen bereitstellen</h2><p id="sceneSub">Eine geheizte Kathode liefert die Elektronen.</p></div></div>
-      <figure><canvas id="scene" role="img" aria-label="Animation der Elektronenquelle"></canvas><figcaption id="figureCaption">Schematische Elektronenquelle; Teilchen und Abstände sind nicht maßstäblich.</figcaption></figure>
-      <div class="legend" aria-label="Farblegende"><span><i class="electron"></i> Elektron e⁻</span><span><i class="photon"></i> Photon γ</span><span><i class="chemical"></i> Reaktive Spezies</span><span><i class="damage"></i> Schaden</span></div>
-      <div class="player">
-        <button id="play" class="primary" type="button">▶ Gesamtablauf</button>
-        <button id="back" type="button" aria-label="Vorheriges Kapitel">← Zurück</button>
-        <button id="next" type="button">Weiter →</button>
-        <button id="replay" type="button" aria-label="Aktuelles Kapitel von vorn abspielen">↺ Kapitel</button>
-        <label class="speed-label">Tempo <select id="speed"><option value="0.75">0,75×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option></select></label>
-      </div>
-      <div class="timeline-head"><label for="timeline">GESAMTABLAUF</label><output id="clock" for="timeline">00:00 / 02:20</output></div>
-      <input id="timeline" class="timeline" type="range" min="0" max="140" step="0.1" value="0" aria-label="Zeitposition im didaktischen Gesamtablauf">
-      <p class="time-note">Die Filmzeit ist didaktisch gestreckt. Geräte-, Teilchen- und Zellprozesse haben unterschiedliche Zeit- und Größenskalen.</p>
-    </div>
-  </section>
-  <section class="learning-panel">
-    <div class="learning-top"><p class="eyebrow">VERSTEHEN &amp; EINORDNEN</p><label for="level">Ansicht <select id="level"><option value="basic">Basis · 2. Lehrjahr</option><option value="advanced">Vertiefung · 3. Lehrjahr</option></select></label></div>
-    <div class="learning-grid"><div><h3>Das passiert</h3><p id="explanation"></p><div class="takeaway"><span>MERKSATZ</span><p id="takeaway"></p></div></div><div><div class="misconception"><h3>Genau hinschauen</h3><p id="caution"></p></div><details id="questionBox"><summary id="question"></summary><p id="answer"></p></details></div></div>
-    <div id="advanced" class="advanced" hidden><h3>Vertiefung</h3><p id="advancedText"></p></div>
-  </section>
-  <details class="context"><summary>Wo sich das Kapitel im gesamten LINAC einordnet</summary><div class="overview"><p><strong>Gezeigt:</strong> Elektronenquelle → HF-Beschleunigung → beispielhafte magnetische Umlenkung → Target → Strahlkontrolle und Feldformung → Gewebe → Molekül-/DNA-Schaden → mögliche Zellfolgen.</p><p><strong>Zusätzlich erforderlich:</strong> Vakuum, Kühlung, Stromversorgung und Steuerung ermöglichen den Betrieb. Monitorsysteme und Sicherheitsverriegelungen überwachen die Abgabe. Gantry, Kollimator und Patiententisch bestimmen die Einstrahlgeometrie. Diese Systeme werden hier eingeordnet, aber nicht vollständig animiert.</p><p><strong>Beispielkonfiguration:</strong> Ein konventioneller LINAC im Photonenmodus mit Ausgleichsfilter (FF). Bei FFF entfällt dieser Filter; der Elektronenmodus hat einen anderen Strahlkopfaufbau. Reihenfolge und Ausführung der Komponenten sind geräteabhängig. Die Darstellung ist kein Modell eines bestimmten Herstellers.</p></div></details>
-  <details class="context"><summary>Quellen, Modellgrenzen und nächster Unterrichtstest</summary><div class="overview"><p>Eigene Grafiken und Texte. Das hochgeladene Röntgenröhren-Recording diente als gestalterische Referenz für Ebenenwechsel und Teilchenbewegung; es wird hier nicht eingebettet.</p><ul><li><a href="https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1196_web.pdf" target="_blank" rel="noopener noreferrer">IAEA: Radiation Oncology Physics</a> – Kapitel 1, 5, 6 und 14.</li><li><a href="https://www-pub.iaea.org/MTCD/Publications/PDF/TCS-42_web.pdf" target="_blank" rel="noopener noreferrer">IAEA: Radiation Biology</a> – molekulare Schäden, Reparatur und Zellfolgen.</li><li><a href="https://www6.slac.stanford.edu/news/2020-01-09-scientists-observe-ultrafast-birth-free-radicals-water" target="_blank" rel="noopener noreferrer">SLAC / Argonne: Forschungsbericht zur Wasserradiolyse</a> – Protonentransfer und Hydroxylradikalbildung.</li><li><a href="https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy" target="_blank" rel="noopener noreferrer">NCI: Radiation Therapy to Treat Cancer</a> – zeitverzögerte Wirkung und Normalgewebe.</li></ul><p>Teilchenzahlen, Flugbahnen, Farben und Zeiten sind didaktisch gewählt; keine Monte-Carlo-Simulation, Energiedepositionsrechnung oder biologische Prognose. Wellenlinien symbolisieren Photonen; die gezeichnete Wellenlänge hat keine physikalische Bedeutung. Nicht jede Interaktion erzeugt einen DNA-Schaden; nicht jeder DNA-Schaden führt zum Verlust der Teilungsfähigkeit.</p><p><strong>Testvorschlag (20 Minuten):</strong> Vier Minuten Gesamtablauf, acht Minuten Kapitelarbeit zu Elektron/Photon und direkter/indirekter Wirkung, vier Minuten individuelle Erklärung der Energieübertragung, vier Minuten Klärung. Fachlicher Review durch Medizinphysik und Strahlenbiologie sowie Unterrichtstest stehen noch aus.</p></div></details>
-  <footer>PROTOTYP · FACHREVIEW &amp; UNTERRICHTSTEST AUSSTEHEND · KEINE KLINISCHE SIMULATION</footer>
-</main>
-</body>
-</html>
-
-
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vom LINAC zur Zellwirkung · MTR-Lernlabor</title>
+<style>:root{font-family:system-ui,sans-serif;color:#173947;background:#f4f9fb}*{box-sizing:border-box}body{margin:0}main{max-width:1340px;padding:28px;margin:auto}
+header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#226f8b;font-size:15px;border-bottom:1px solid #c2d6df;padding-bottom:14px}
+h1{font-size:clamp(40px,5vw,66px);line-height:1.08;letter-spacing:-.06em;margin:34px 0 8px}h1 em{font-style:normal;color:#0a87aa}
+.lead{font-size:20px;color:#4a6c7d;line-height:1.6;max-width:67ch}
+a{color:#0a87aa} .hero{display:grid;grid-template-columns:1.4fr .6fr;gap:30px;align-items:end;padding:15px 0 25px}
+.callout{background:#e2f2f7;border-left:5px solid #0a87aa;padding:22px;border-radius:7px;font-size:18px;line-height:1.5}
+.film-button{display:inline-block;background:#0a87aa;color:#fff;padding:15px 22px;border-radius:8px;font-weight:700;text-decoration:none;font-size:18px;margin-top:15px}
+h2{font-size:30px;margin:25px 0 15px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{border:1px solid #c4d8e3;border-radius:11px;background:#fff;padding:25px;display:flex;flex-direction:column}
+.card .num{font-size:15px;color:#226f8b;font-weight:800}.card h3{font-size:26px;margin:11px 0}.card p{font-size:17px;color:#496a7a;line-height:1.6;flex:1}
+.card .links{display:flex;gap:14px;flex-wrap:wrap}.card a{font-size:17px;font-weight:700}
+footer{margin-top:28px;padding:20px 0;border-top:1px solid #c2d6df;font-size:15px}
+@media(max-width:750px){main{padding:15px}.hero,.cards{grid-template-columns:1fr}}
+</style></head><body><main><header><strong>MTR · LERNLABOR</strong><span>Technik → Physik → Chemie → Biologie</span></header>
+<div class="hero"><div><h1>Vom <em>LINAC</em><br>zur Zellwirkung</h1><p class="lead">Wie entsteht therapeutische Photonenstrahlung? Wie überträgt sie Energie auf Gewebe? Und warum sind präzise Lagerung, Dosis und Fraktionierung wichtig?</p><a class="film-button" href="gesamtfilm.html">▶ Durchgehenden Basis-Film ansehen</a></div><div class="callout"><strong>Dein Lernweg</strong><p>Starte mit dem Film. Wähle anschließend eine der vier interaktiven Phasen. Die Vertiefung lässt sich jeweils zuschalten.</p></div></div>
+<h2>Vier interaktive Phasen</h2><div class="cards">
+<article class="card"><span class="num">01 · TECHNIK</span><h3>Elektronen beschleunigen</h3><p>Elektronenkanone, HF-Energie, Vakuum und Wanderwellenprinzip im LINAC.</p><div class="links"><a href="phase1.html">Basis öffnen</a><a href="phase1.html?level=vertiefung">Vertiefung</a></div></article>
+<article class="card"><span class="num">02 · STRAHLKOPF</span><h3>Photonenfeld formen</h3><p>Magnetische Umlenkung, Target, Ausgleichsfilter, MU-Überwachung und MLC am Isozentrum.</p><div class="links"><a href="phase2.html">Basis öffnen</a><a href="phase2.html?level=vertiefung">Vertiefung</a></div></article>
+<article class="card"><span class="num">03 · GEWEBE</span><h3>Energie deponieren</h3><p>Compton-Streuung, Sekundärelektronen, Wasserradiolyse und Dosis in Gray.</p><div class="links"><a href="phase3.html">Basis öffnen</a><a href="phase3.html?level=vertiefung">Vertiefung</a></div></article>
+<article class="card"><span class="num">04 · BIOLOGIE</span><h3>Zellwirkung verstehen</h3><p>Direkte und indirekte Wirkung, DNA-Reparatur, mitotischer Zelltod und Fraktionierung.</p><div class="links"><a href="phase4.html">Basis öffnen</a><a href="phase4.html?level=vertiefung">Vertiefung</a></div></article></div>
+<footer><a href="lehrkraft.html">Fachquellen, Modellgrenzen und Unterrichtshinweise für Lehrkräfte</a></footer></main></body></html>
