@@ -25,7 +25,11 @@ const reactions=Object.freeze({
 });
 function inventory(side){return Object.entries(side).reduce((sum,[id,n])=>{if(!species[id]||!Number.isInteger(n)||n<0)throw new RangeError('Unknown species or invalid count');for(const k of Object.keys(sum))sum[k]+=species[id][k]*n;return sum;},{H:0,O:0,R:0,charge:0});}
 function chemistry(t){const step=t<55?0:t<66?1:2;return{step,progress:clamp((t-[46,56,67][step])/[7,8,6][step])};}
-function pointOnTrack(points,p){const u=clamp(p)*(points.length-1),i=Math.min(points.length-2,Math.floor(u)),f=u-i;return points[i].map((v,k)=>v+(points[i+1][k]-v)*f);}
-const api={clamp,starts,duration,scene,compton,species,reactions,inventory,chemistry,pointOnTrack};
+function pathMetrics(points){const cumulative=[0];for(let i=1;i<points.length;i++)cumulative.push(cumulative[i-1]+Math.hypot(points[i][0]-points[i-1][0],points[i][1]-points[i-1][1]));return{cumulative,length:cumulative.at(-1)};}
+function pointAtDistance(points,d){const m=pathMetrics(points),u=Math.max(0,Math.min(m.length,d));let i=1;while(i<m.cumulative.length-1&&m.cumulative[i]<u)i++;const start=i-1,step=m.cumulative[i]-m.cumulative[start]||1,f=(u-m.cumulative[start])/step;return points[start].map((v,k)=>v+(points[i][k]-v)*f);}
+function pointOnTrack(points,p){return pointAtDistance(points,clamp(p)*pathMetrics(points).length);}
+function pathLength(points){return pathMetrics(points).length;}
+function electronBeta(kineticMeV){const gamma=1+Math.max(0,kineticMeV)/.51099895;return Math.sqrt(1-1/(gamma*gamma));}
+const api={clamp,starts,duration,scene,compton,species,reactions,inventory,chemistry,pointOnTrack,pointAtDistance,pathLength,electronBeta};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.LinacTissue=api;
 })(typeof window!=='undefined'?window:globalThis);
