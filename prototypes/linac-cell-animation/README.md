@@ -1,4 +1,4 @@
-# Vom LINAC zur Zellwirkung · isolierter Animationspilot
+> **Review-Überarbeitung vom 12.11.2026:** Der neue Einstieg ist `index.html` mit vier Phasen und dem durchgehenden `gesamtfilm.html`. Basis- und Vertiefungsspur, P0-Bewegungskorrekturen, Dosis- und Fraktionierungsbrücken sowie der Stand der Tests sind in [REVIEW_IMPLEMENTATION.md](REVIEW_IMPLEMENTATION.md) dokumentiert. Der frühere 8-Stationen-Film ist nicht mehr der Startpunkt. **Medizinphysik-/Unterrichtsfreigabe steht weiterhin aus.**\n\n# Vom LINAC zur Zellwirkung · isolierter Animationspilot
 
 Stand: 27.10.2026. Quellenbasierter Lehrentwurf mit zusätzlicher visueller Detailstudie; keine abschließende fachliche oder didaktische Freigabe.
 
