@@ -17,7 +17,11 @@ const defs=`<defs><linearGradient id="steel" x1="0" x2="1"><stop stop-color="#24
 // Three circular bending regions (+45°, -45°, +112.5°), rotated into a vertical exit.
 function transport(){let x=0,y=0,a=-Math.PI/8;const pts=[[x,y]],bends=[];const straight=n=>{for(let i=0;i<20;i++){x+=n/20*Math.cos(a);y+=n/20*Math.sin(a);pts.push([x,y]);}};const bend=(r,turn)=>{const seg=[[x,y]],da=turn/35;for(let i=0;i<35;i++){x+=Math.abs(r*da)*Math.cos(a+da/2);y+=Math.abs(r*da)*Math.sin(a+da/2);a+=da;pts.push([x,y]);seg.push([x,y]);}bends.push(seg);};straight(105);bend(52,Math.PI/4);straight(45);bend(48,-Math.PI/4);straight(38);bend(65,Math.PI*5/8);straight(64);const tr=p=>[390+(p[0]-x)*.8,235+(p[1]-y)*.8];return{pts:pts.map(tr),bends:bends.map(b=>b.map(tr))};}
 const track=transport();
-function onTrack(p){const z=cl(p)*(track.pts.length-1),i=Math.min(track.pts.length-2,Math.floor(z)),q=z-i;return track.pts[i].map((a,j)=>a+(track.pts[i+1][j]-a)*q);}
+// Arc-length interpolation avoids artificial stopping in bending magnets.
+function trackMetrics(points){const cumulative=[0];for(let i=1;i<points.length;i++)cumulative.push(cumulative[i-1]+Math.hypot(points[i][0]-points[i-1][0],points[i][1]-points[i-1][1]));return{cumulative,length:cumulative.at(-1)};}
+function trackAtDistance(points,m,d){const z=cl(d,0,m.length);let lo=0,hi=m.cumulative.length-1;while(lo+1<hi){const mid=(lo+hi)>>1;if(m.cumulative[mid]<z)lo=mid;else hi=mid;}const seg=m.cumulative[hi]-m.cumulative[lo]||1,q=(z-m.cumulative[lo])/seg;return points[lo].map((v,j)=>v+(points[hi][j]-v)*q);}
+const trackMetric=trackMetrics(track.pts);
+function onTrack(p){return trackAtDistance(track.pts,trackMetric,cl(p)*trackMetric.length);}
 function bolt(x,y){return `<circle cx="${x}" cy="${y}" r="4" fill="#213744" stroke="#94a6ab"/>`+line(x-2,y,x+2,y,'#b9c2c2');}
 const label=(name,y,x=280)=>`<g class="annotation">${txt(22,y-5,name,'#b7cad7',15,'class="label"')}${line(22,y+4,198,y+4,'#49667c')}${line(198,y+4,x,y,'#49667c') }<circle cx="${x}" cy="${y}" r="2" fill="#8be7e9"/></g>`;
 function setupHead(){
@@ -55,8 +59,12 @@ function renderHead(){const scene=M.scene(time),on=beamOn(),form=scene===3?curre
  const eAllowed=scene===0||on;let electrons='';if(eAllowed)for(let n=0;n<10;n++){const q=((time/6+n/10)%1+1)%1,[x,y]=onTrack(q);electrons+=`<circle cx="${x}" cy="${y}" r="${n%3===0?3.5:2.5}" fill="#8be7e9"/>`;}$('electrons').innerHTML=electrons;
  $('targetHeat').innerHTML=on?`<circle cx="390" cy="237" r="${22+5*Math.sin(time*3)}" fill="url(#warm)"/>`:'';
  let rays='';if(on){for(let i=0;i<43;i++){const x=(i-21)/18;const end=M.stop(x,row,form,closed);const upper=.8-.32*Math.abs(x),lower=filter==='ff'?.28:upper;const re=M.project(x,end),split=Math.min(end,M.planes.filter);rays+=line(M.project(x,251),251,M.project(x,split),split,'#f4cf83',i%3===0?1.6:1,`opacity="${upper}"`);if(end>split)rays+=line(M.project(x,split),split,re,end,'#f4cf83',i%3===0?1.6:1,`opacity="${lower}"`);
- const f=((time*.55+i*.173)%1);const y=251+(end-251)*f;
- rays+=`<circle cx="${M.project(x,y)}" cy="${y}" r="1.8" fill="#ffe3a5" opacity="${y<M.planes.filter?upper:lower}"/>`;
+ // Uniform photon path speed; disappear at collimator/MLC instead of slowing down.
+ const sx=M.project(x,251),ex=M.project(x,end),distance=Math.hypot(ex-sx,end-251);
+ const photonSpeed=240,period=2.65,travel=((time+i*.173)%period)*photonSpeed;
+ if(travel<distance){const f=travel/distance,y=251+(end-251)*f,xx=sx+(ex-sx)*f;
+ rays+=`<circle cx="${xx}" cy="${y}" r="1.8" fill="#ffe3a5" opacity="${y<M.planes.filter?upper:lower}"/>`;}
+
  if(end<730)rays+=`<circle cx="${re}" cy="${end}" r="2.3" fill="#d6b783" opacity=".5"/>`;
  }}$('headPhotons').innerHTML=rays;
  const [l,r]=M.leaf(row,form,closed),lx=M.project(l,485),rx=M.project(r,485);
@@ -78,7 +86,12 @@ function targetDetail(){const p=((time-18)/4.2%1+1)%1;let h=`<rect x="150" y="56
  h+=txt(166,41,'Wolfram · stark vergrößert','#c8b38c',14);
  const ep=[[28,150],[90,150],[145,150],[185,152],[212,159],[235,178],[260,211],[287,242]];
  h+=`<path d="${path(ep)}" fill="none" stroke="#8be7e9" stroke-width="2" stroke-opacity=".4"/><circle cx="218" cy="187" r="9" fill="#debc7e"/>`+txt(163,217,'Atomkern','#d8be91',14);
- if(p<.7){const k=p/.7*(ep.length-1),i=Math.min(ep.length-2,Math.floor(k)),f=k-i,x=ep[i][0]+(ep[i+1][0]-ep[i][0])*f,y=ep[i][1]+(ep[i+1][1]-ep[i][1])*f;h+=`<circle cx="${x}" cy="${y}" r="5" fill="#8be7e9"/>`;}
+ // A transfer at the target decreases electron energy and therefore speed.
+ const collisionIndex=4,pre=ep.slice(0,collisionIndex+1),post=ep.slice(collisionIndex);
+ const preM=trackMetrics(pre),postM=trackMetrics(post),elapsed=p*4.2;
+ const speedBefore=120,speedAfter=76,collisionTime=preM.length/speedBefore;
+ const electronPosition=elapsed<collisionTime?trackAtDistance(pre,preM,elapsed*speedBefore):trackAtDistance(post,postM,(elapsed-collisionTime)*speedAfter);
+ if(elapsed<collisionTime+postM.length/speedAfter)h+=`<circle cx="${electronPosition[0]}" cy="${electronPosition[1]}" r="5" fill="#8be7e9"/>`;
  if(p>.4){const q=cl((p-.4)/.5),pts=[];for(let i=0;i<35;i++){const a=i/34*q;pts.push([212+226*a,159+112*a+6*Math.sin(a*48)]);}h+=`<path d="${path(pts)}" fill="none" stroke="#f4cf83" stroke-width="2.5"/>`;}
  h+=txt(24,128,'e⁻','#8be7e9',22)+txt(403,302,'γ','#f4cf83',24);
  h+=line(252,289,252,333,'#f29c78',2)+`<path d="M245 323L252 335L259 323" fill="none" stroke="#f29c78" stroke-width="2"/>`+txt(133,364,'Energiedeposition → Wärme','#f29c78',17);
