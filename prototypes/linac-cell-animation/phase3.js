@@ -62,7 +62,23 @@ function compton(){const v=M.compton(energy,angle),q=cl((time-23)/9),cx=290,cy=2
  d+=electron(...ep)+ann(txt(15,29,'Ionisation',C.rad,18)+txt(191,68,'Anregung',C.ph,18)+line(203,76,201,110,C.ph,1)+txt(15,264,'Nur ausgewählte Ereignisse einer Spur',C.muted,16));$('detail').innerHTML=d;
  ['incomingEnergy','outgoingEnergy','electronEnergy'].forEach((id,i)=>$(id).textContent=[v.energy,v.photon,v.electron][i].toFixed(3).replace('.',','));$('angleValue').textContent=angle+'°';
 }
-function chemistry(){const {step,progress:q}=M.chemistry(time);let h=defs+backdrop(),d='';
+function chemistry(){
+ // Basis: keep one visible causal chain. The full three-step radiolysis model
+ // remains available through the Vertiefung toggle.
+ if(document.body.dataset.level==='basis'){
+   const q=cl((time-45)/31);
+   let h=defs+backdrop()+water(212,225,0,1.6);
+   h+=line(280,225,397,225,C.el,3,'stroke-dasharray="6 8"');
+   h+=txt(290,192,'Energieübertrag',C.el,18);
+   if(q>.12)h+=hydroxyl(433+6*Math.sin(q*23),223+6*Math.cos(q*31),1,true);
+   h+=ann(txt(148,333,'Wasser H₂O',C.muted,22)+txt(398,333,'Hydroxylradikal •OH',C.rad,19));
+   $('tissue').innerHTML=h;
+   $('detail').innerHTML=txt(20,68,'Ionisation von Wasser kann',C.muted,21)+txt(20,110,'reaktive Spezies erzeugen.',C.muted,21)+hydroxyl(255,180,1,true)+txt(30,270,'•OH kann Biomoleküle verändern.',C.rad,19);
+   $('visualTitle').textContent='Aus Wasser entstehen reaktive Teilchen.';
+   equation('SCHEMATISCHE WIRKUNGSKETTE','Wasser → reaktive Zwischenprodukte → •OH','Mehrere elementare chemische Schritte sind in der Basisansicht zusammengefasst.');
+   return;
+ }
+ const {step,progress:q}=M.chemistry(time);let h=defs+backdrop(),d='';
  document.querySelectorAll('[data-chem]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.chem)===step)));
  if(step===0){const hit=q>.51;h+=water(310,242,0,1.4,hit?'+•':'');h+=line(55,235,551,264,C.el,1.5,'stroke-dasharray="4 7" opacity=".5"');h+=electron(lerp(60,550,q),lerp(235,264,q));if(hit){h+=line(310,242,420,119,C.el,1.5,'opacity=".6"')+electron(lerp(310,420,cl((q-.51)/.49)),lerp(242,119,cl((q-.51)/.49)));}h+=ann(txt(45,176,'Energieübertrag durch e⁻',C.el,19)+txt(335,70,'Freigesetztes e⁻',C.el,19)+txt(208,356,hit?'Wasser-Radikalkation':'Wassermolekül',C.muted,20));
   equation('IONISATION DURCH EIN ELEKTRON','H₂O + e⁻<sub>ein</sub> → H₂O⁺• + e⁻<sub>aus</sub> + e⁻<sub>sek</sub>','Das einfallende Elektron gibt Energie ab und bleibt erhalten. Ein weiteres Elektron wird aus dem Wassermolekül freigesetzt.');
