@@ -18,7 +18,12 @@ const path=ps=>'M'+ps.map(p=>p.map(num).join(',')).join('L');
 const ann=s=>`<g class="annotation">${s}</g>`;
 const defs=`<defs><radialGradient id="oxygen" cx=".32" cy=".25" r=".8"><stop stop-color="#f4c9c8"/><stop offset=".3" stop-color="#dc8a9b"/><stop offset="1" stop-color="#693b59"/></radialGradient><radialGradient id="hydrogen" cx=".3" cy=".25"><stop stop-color="#fff"/><stop offset=".55" stop-color="#bdcdd5"/><stop offset="1" stop-color="#57758c"/></radialGradient><radialGradient id="cell"><stop stop-color="#344c60" stop-opacity=".42"/><stop offset=".8" stop-color="#304b60" stop-opacity=".28"/><stop offset="1" stop-color="#65849c" stop-opacity=".5"/></radialGradient><radialGradient id="nucleus"><stop stop-color="#827ca0"/><stop offset=".7" stop-color="#45546f"/><stop offset="1" stop-color="#283b50"/></radialGradient><linearGradient id="steel"><stop stop-color="#2f4859"/><stop offset=".4" stop-color="#b2c4c9"/><stop offset=".6" stop-color="#78909e"/><stop offset="1" stop-color="#293e50"/></linearGradient><radialGradient id="electronGlow"><stop stop-color="#8be7e9" stop-opacity=".3"/><stop offset="1" stop-color="#8be7e9" stop-opacity="0"/></radialGradient></defs>`;
 function electron(x,y,label=true){return circle(x,y,15,'url(#electronGlow)')+circle(x,y,5,C.el,'data-electron="free"')+ (label?txt(x+12,y-11,'e⁻',C.el,18):'');}
-function photon(x,y,rotation=0){return `<g class="photon-symbol" transform="translate(${num(x)} ${num(y)}) rotate(${num(rotation)})"><path d="M-17 0Q-12-10-7 0T3 0T13 0" fill="none" stroke="${C.ph}" stroke-width="3"/>${circle(17,0,3,C.ph)}</g>`;}
+function photon(x,y,rotation=0,energyRatio=1){
+ const lower=energyRatio<.7,color=lower?'#f6ad7e':C.ph;
+ // Wavelength is only a qualitative energy cue. Photon propagation speed is unchanged.
+ const wave=lower?'M-20 0Q-8-9 4 0T28 0':'M-20 0Q-14-9-8 0T4 0T16 0T28 0';
+ return `<g class="photon-symbol" transform="translate(${num(x)} ${num(y)}) rotate(${num(rotation)})"><path d="${wave}" fill="none" stroke="${color}" stroke-width="3"/>${circle(28,0,3,color)}</g>`;
+}
 function atom(x,y,k,scale=1){const r=(k==='O'?23:14)*scale;return circle(x+2,y+4,r,'#030b12','opacity=".3"')+circle(x,y,r,`url(#${k==='O'?'oxygen':'hydrogen'})`,`stroke="#d7dce5" stroke-opacity=".25" data-atom="${k}"`)+txt(x,y+5*scale,k,k==='O'?'#321b34':'#183343',15*scale,'text-anchor="middle" font-weight="650"');}
 function bond(x,y,a,b){return line(x,y,a,b,'#40556b',9,'stroke-linecap="round"')+line(x,y,a,b,'#a2b5c3',4,'stroke-linecap="round"');}
 function water(x,y,rot=0,s=1,mark=''){let h=bond(0,0,-39,30)+bond(0,0,39,30)+atom(0,0,'O')+atom(-39,30,'H')+atom(39,30,'H');if(mark)h+=txt(24,-28,mark,C.rad,26);return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})">${h}</g>`;}
@@ -50,12 +55,12 @@ function compton(){const v=M.compton(energy,angle),q=cl((time-23)/9),cx=290,cy=2
   // Rückstoßelektron bewegt sich entsprechend seiner kinetischen Energie langsamer.
   const elapsed=Math.max(0,time-23),photonSpeed=(cx-55)/3,photonDistance=elapsed*photonSpeed;
   const electronDistance=photonDistance*M.electronBeta(v.electron);
-  if(photonDistance<=L)h+=photon(cx+Math.cos(v.theta)*photonDistance,cy-Math.sin(v.theta)*photonDistance,-angle);
+  if(photonDistance<=L)h+=photon(cx+Math.cos(v.theta)*photonDistance,cy-Math.sin(v.theta)*photonDistance,-angle,v.photon/v.energy);
   if(electronDistance<=190)h+=electron(cx+Math.cos(v.phi)*electronDistance,cy+Math.sin(v.phi)*electronDistance);
   h+=circle(cx,cy,10,'none',`stroke="#d4e4ea"`);
  }
  const ax=cx+62*Math.cos(v.theta),ay=cy-62*Math.sin(v.theta);h+=`<path d="M${cx+62} ${cy}A62 62 0 0 0 ${ax} ${ay}" fill="none" stroke="${C.ph}" stroke-width="2"/>`;
- h+=ann(txt(cx+72,cy-14,`θ = ${angle}°`,C.ph,18)+txt(25,55,'Gestreutes Photon γ′',C.ph,18)+txt(330,443,'Rückstoßelektron e⁻',C.el,18)+txt(30,465,'Winkel gekoppelt · Weglängen symbolisch',C.muted,16));
+ h+=ann(txt(cx+72,cy-14,`θ = ${angle}°`,C.ph,18)+txt(25,55,'γ′: weniger Energie · gleiches Tempo',C.ph,17)+txt(330,443,'Rückstoßelektron e⁻',C.el,18)+txt(30,465,'Winkel gekoppelt · Weglängen symbolisch',C.muted,16));
  $('tissue').innerHTML=h;
  const pts=[[24,82],[92,103],[157,85],[200,137],[255,128],[291,178],[338,198],[350,237]],p=cl((time-29)/14),ep=M.pointOnTrack(pts,p);let d=`<path d="${path(pts)}" fill="none" stroke="${C.el}" stroke-width="2.3" opacity=".55"/>`;
  [[92,103],[200,137],[291,178]].forEach(([x,y],i)=>{const active=p>[.14,.43,.71][i];d+=circle(x,y,18,'#244356',`stroke="${active?(i===1?C.ph:C.rad):'#527084'}"`);if(active&&i!==1){d+=line(x,y,x+27,y-42,C.el,1.5)+electron(x+27,y-42);d+=txt(x-18,y+5,'+',C.rad,17);}if(active&&i===1)d+=circle(x,y,24,'none',`stroke="${C.ph}"`);});
