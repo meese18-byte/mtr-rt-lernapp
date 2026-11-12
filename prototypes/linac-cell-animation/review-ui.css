@@ -54,3 +54,5 @@ svg text[font-size="7"],svg text[font-size="8"],svg text[font-size="9"],svg text
 .practice-review strong{display:block;margin-bottom:6px}
 footer{font-size:15px}
 @media(max-width:800px){.shell{padding:12px 14px}.review-toolbar{padding:13px}.review-toolbar .goal{font-size:16px}body[data-level="basis"] .explanation{display:block}.phase-roadmap strong{font-size:14px}.phase-roadmap small{font-size:13px}.film button,.film select{font-size:14px}}
+
+body[data-level="basis"] .deep-only{display:none!important}
