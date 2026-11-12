@@ -56,3 +56,15 @@ footer{font-size:15px}
 @media(max-width:800px){.shell{padding:12px 14px}.review-toolbar{padding:13px}.review-toolbar .goal{font-size:16px}body[data-level="basis"] .explanation{display:block}.phase-roadmap strong{font-size:14px}.phase-roadmap small{font-size:13px}.film button,.film select{font-size:14px}}
 
 body[data-level="basis"] .deep-only{display:none!important}
+
+/* Full-film iframe: single drawing area, no student control clutter. */
+body.film-only{background:#091825!important;color:#e7f2f7}
+body.film-only .shell{margin:0;max-width:none;padding:0}
+body.film-only .shell> :not(.studio){display:none!important}
+body.film-only .studio{display:block!important;border:0;border-radius:0;background:#091825!important}
+body.film-only .studio .explanation,body.film-only .film-meta,body.film-only .orientation-rail,body.film-only .player,body.film-only .timeline-head,body.film-only #timeline,body.film-only #views,body.film-only .options,body.film-only .status-row,body.film-only .legend,body.film-only .equipment-modes,body.film-only .meaning-panel,body.film-only .detail-note,body.film-only .scale-rail,body.film-only .detail-heading,body.film-only .compare-controls,body.film-only .experiment,body.film-only .phase-next{display:none!important}
+body.film-only .head-stage,body.film-only .tissue-stage,body.film-only .cell-stage{background:#091825}
+body.film-only canvas,body.film-only svg{max-width:100%;height:auto}
+body.film-only .film{padding:0}
+body.film-only .head-stage{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+body.film-only #monitorReadout{padding:6px;font-size:15px}
