@@ -32,7 +32,9 @@ function field(){let h=defs+backdrop();
  h+=`<path d="M205 26H415L400 60H220Z" fill="url(#steel)" stroke="#8fa6b5"/>`+line(203,77,270,77,'#a7b9c1',11)+line(350,77,417,77,'#a7b9c1',11);
  h+=ann(txt(27,52,'MLC-Ausgang',C.muted,18)+line(175,48,211,48)+txt(25,118,'Geformtes Feld',C.ph,18)+line(178,113,250,113));
  const q=cl(time/16),paths=[[[280,88],[236,452]],[[310,88],[310,250],[530,400]],[[338,88],[379,452]]];
- paths.forEach((ps,i)=>{h+=`<path d="${path(ps)}" fill="none" stroke="${C.ph}" stroke-width="1.8" opacity="${q>.1?.45:.16}"/>`;const p=M.pointOnTrack(ps,cl((q-i*.13)*1.25));let a=i===1&&q>.53?34:90;h+=photon(p[0],p[1],a);});
+ paths.forEach((ps,i)=>{h+=`<path d="${path(ps)}" fill="none" stroke="${C.ph}" stroke-width="1.8" opacity="${q>.1?.45:.16}"/>`;// All photon tracers advance at the same distance per second, regardless of path length.
+ const speed=40,travel=(time-i*.85)*speed;
+ if(travel>=0&&travel<M.pathLength(ps)){const p=M.pointAtDistance(ps,travel),a=i===1&&travel>M.pathLength(ps.slice(0,2))?34:90;h+=photon(p[0],p[1],a);}});
  if(q>.49){const epts=[[310,250],[314,277],[337,285],[345,315],[368,326],[360,347]];h+=`<path d="${path(epts)}" fill="none" stroke="${C.el}" stroke-width="2"/>`;const ep=M.pointOnTrack(epts,cl((q-.49)*2.2));h+=electron(...ep)+circle(310,250,27,'none',`stroke="${C.el}" stroke-dasharray="4 5"`);}
  h+=ann(txt(420,112,'Kein Dosisbild',C.muted,16));
  $('tissue').innerHTML=h;
@@ -42,7 +44,16 @@ function compton(){const v=M.compton(energy,angle),q=cl((time-23)/9),cx=290,cy=2
  h+=circle(cx,cy,175,'#1a3042','opacity=".4"')+circle(cx,cy,175,'none','stroke="#49677c" stroke-dasharray="3 9" opacity=".4"');
  h+=line(35,cy,545,cy,'#537085',1,'stroke-dasharray="4 6"')+ann(txt(28,200,'Einfallendes Photon γ',C.ph,18));
  h+=line(45,cy,cx,cy,C.ph,2);if(q===0)h+=electron(cx,cy);if(q===0)h+=photon(lerp(55,cx,cl((time-20)/3)),cy);
- if(q>0){h+=line(cx,cy,px,py,C.ph,2.5)+line(cx,cy,ex,ey,C.el,2.5)+photon(lerp(cx,px,q),lerp(cy,py,q),-angle)+electron(lerp(cx,ex,q),lerp(cy,ey,q));h+=circle(cx,cy,10,'none',`stroke="#d4e4ea"`);}
+ if(q>0){
+  h+=line(cx,cy,px,py,C.ph,2.5)+line(cx,cy,ex,ey,C.el,2.5);
+  // Symbolische Bildskalierung: Photon vor/nach Stoß mit identischem Tempo.
+  // Rückstoßelektron bewegt sich entsprechend seiner kinetischen Energie langsamer.
+  const elapsed=Math.max(0,time-23),photonSpeed=(cx-55)/3,photonDistance=elapsed*photonSpeed;
+  const electronDistance=photonDistance*M.electronBeta(v.electron);
+  if(photonDistance<=L)h+=photon(cx+Math.cos(v.theta)*photonDistance,cy-Math.sin(v.theta)*photonDistance,-angle);
+  if(electronDistance<=190)h+=electron(cx+Math.cos(v.phi)*electronDistance,cy+Math.sin(v.phi)*electronDistance);
+  h+=circle(cx,cy,10,'none',`stroke="#d4e4ea"`);
+ }
  const ax=cx+62*Math.cos(v.theta),ay=cy-62*Math.sin(v.theta);h+=`<path d="M${cx+62} ${cy}A62 62 0 0 0 ${ax} ${ay}" fill="none" stroke="${C.ph}" stroke-width="2"/>`;
  h+=ann(txt(cx+72,cy-14,`θ = ${angle}°`,C.ph,18)+txt(25,55,'Gestreutes Photon γ′',C.ph,18)+txt(330,443,'Rückstoßelektron e⁻',C.el,18)+txt(30,465,'Winkel gekoppelt · Weglängen symbolisch',C.muted,16));
  $('tissue').innerHTML=h;
@@ -68,8 +79,9 @@ function chemistry(){const {step,progress:q}=M.chemistry(time);let h=defs+backdr
 function organic(x,y,radical){let h='';for(let i=0;i<4;i++){h+=line(x+i*28,y+(i%2)*20,x+(i+1)*28,y+((i+1)%2)*20,'#a4bad0',7);h+=circle(x+i*28,y+(i%2)*20,17,'#4b657d','stroke="#91a6bb"');}h+=circle(x+112,y,17,'#4b657d','stroke="#91a6bb"')+txt(x+53,y+70,'R',C.muted,28);if(radical)h+=circle(x-17,y-18,5,C.rad);return h;}
 function reactions(){const q=cl((time-78)/15);let h=defs+backdrop();if(reaction==='abstraction'){const hx=lerp(374,224,q),hy=lerp(220,250,q);h+=hydroxyl(185,220,1,q<.96)+organic(420,220,q>.96);if(q<.3)h+=bond(420,220,hx,hy);if(q>.7)h+=bond(185,220,hx,hy);h+=atom(hx,hy,'H')+ann(txt(115,342,q>.96?'Wasser H₂O':'Hydroxylradikal •OH',C.muted,20)+txt(366,342,q>.96?'Organischer Rest R•':'Biomolekül RH',C.muted,19)+txt(123,91,'Ein Wasserstoffatom wird entzogen.',C.muted,21));
  equation('MÖGLICHKEIT A · WASSERSTOFFABSTRAKTION','•OH + RH → H₂O + R•','Ein H-Atom wird übertragen. Der Radikalort wandert auf den organischen Rest. R bezeichnet hier einen Teil eines Biomoleküls.');
- }else{const ax=lerp(175,285,q),bx=lerp(465,345,q);if(q>.85)h+=bond(ax,220,bx,220);h+=hydroxyl(ax,220,1,q<.96)+hydroxyl(bx,220,-1,q<.96)+ann(txt(134,89,'Zwei Radikale können rekombinieren.',C.muted,21)+txt(320,346,q>.96?'Wasserstoffperoxid H₂O₂':'Zwei Hydroxylradikale',C.muted,22,'text-anchor="middle"'));equation('MÖGLICHKEIT B · REKOMBINATION','•OH + •OH → H₂O₂','Zwei Hydroxylradikale bilden Wasserstoffperoxid. Es besitzt kein ungepaartes Elektron, ist aber weiterhin chemisch wirksam.');}
- h+=ann(txt(320,434,'Keine Häufigkeits- oder Reaktionsratenberechnung',C.muted,17,'text-anchor="middle"'));$('tissue').innerHTML=h;
+ }else{// Short-range wandering instead of two radicals homing on each other.
+ const ax=301+8*Math.sin(q*31)+5*Math.sin(q*53),bx=339+8*Math.sin(q*37+1)+4*Math.cos(q*61);if(q>.85)h+=bond(ax,220,bx,220);h+=hydroxyl(ax,220,1,q<.96)+hydroxyl(bx,220,-1,q<.96)+ann(txt(134,89,'Zwei Radikale können rekombinieren.',C.muted,21)+txt(320,346,q>.96?'Wasserstoffperoxid H₂O₂':'Zwei Hydroxylradikale',C.muted,22,'text-anchor="middle"'));equation('MÖGLICHKEIT B · REKOMBINATION','•OH + •OH → H₂O₂','Zwei Hydroxylradikale bilden Wasserstoffperoxid. Es besitzt kein ungepaartes Elektron, ist aber weiterhin chemisch wirksam.');}
+ h+=ann(txt(320,434,'Zufälliger Kontakt · vereinfachte Diffusion',C.muted,17,'text-anchor="middle"'));$('tissue').innerHTML=h;
  let d='';[['•OH','Radikal · neutral',C.rad],['OH⁻','Ion · kein Radikal',C.el],['H₂O₂','Molekül · kein Radikal',C.muted]].forEach(([sym,s,col],i)=>{const y=40+i*88;d+=`<rect x="10" y="${y-29}" width="380" height="72" rx="7" fill="#152a3c" stroke="#354f65"/>`+txt(28,y+13,sym,col,28)+txt(140,y+9,s,C.muted,17);});$('detail').innerHTML=d;
 }
 function equation(label,eq,note){$('equationLabel').textContent=label;$('equation').innerHTML=eq;$('equationNote').textContent=note;}
