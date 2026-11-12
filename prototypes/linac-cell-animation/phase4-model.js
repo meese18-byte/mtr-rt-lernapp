@@ -21,7 +21,8 @@ const fates=Object.freeze({
  survival:{label:'Weiterteilen',alive:true,dividing:true,altered:false},
  mutation:{label:'Veränderung bleibt',alive:true,dividing:true,altered:true},
  arrest:{label:'Teilungsstopp',alive:true,dividing:false,altered:false},
- death:{label:'Zelltod',alive:false,dividing:false,altered:false}
+ death:{label:'Mitotischer Zelltod',alive:false,dividing:false,altered:false},
+ apoptosis:{label:'Apoptose',alive:false,dividing:false,altered:false}
 });
 function fate(key){if(!fates[key])throw new RangeError('Unknown cell example');return{...fates[key]};}
 function repairStage(t){return t<60?0:t<72?1:2;}
