@@ -15,7 +15,7 @@ Basis: Review für Commit `b524ea0` (vier Phasen). Umsetzung auf dem bestehenden
 
 `node motion-review.test.cjs` enthält reproduzierbare Prüfungen für alle vier Phasen, inklusive arclength-Test der Umlenkbahn, Compton-Werten, Elektronentempo, Lernernavigation und Existenz der neuen Transferansichten.
 
-Beim Code-Review am 12.11.2026 bestanden **22 automatisierte Assertions** sowie die Parse-Prüfung aller zehn relevanten JavaScript-Dateien. Die Umlenkbahnsimulation ergab eine maximale relative Geschwindigkeitsabweichung von **0,04 %** bei 1000 gleich großen Zeitschritten (Grenze laut Review 5 %). Ein statischer Abgleich aller `getElementById`-Bezüge zeigte keine fehlenden Elemente außer den absichtlich dynamisch erzeugten Elementen des Strahlkopfes.
+Beim Code-Review am 12.11.2026 bestanden **23 automatisierte Assertions** sowie die Parse-Prüfung aller zehn relevanten JavaScript-Dateien. Die Umlenkbahnsimulation ergab eine maximale relative Geschwindigkeitsabweichung von **0,04 %** bei 1000 gleich großen Zeitschritten (Grenze laut Review 5 %). Ein statischer Abgleich aller `getElementById`-Bezüge zeigte keine fehlenden Elemente außer den absichtlich dynamisch erzeugten Elementen des Strahlkopfes.
 
 ## Offen / vor Unterrichtsfreigabe
 
