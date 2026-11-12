@@ -1,6 +1,7 @@
 /* Course-facing mode: basis / vertiefung, no remote tracking. */
 (()=>{'use strict';
 const match=location.pathname.match(/phase([1-4])\.html$/);if(!match)return;
+if(new URLSearchParams(location.search).get('film')==='1')document.body.classList.add('film-only');
 const phase=Number(match[1]),goal={
 1:'Du kannst erklären, wo Elektronen entstehen und wie sie im LINAC Energie aufnehmen.',
 2:'Du kannst den Weg von Elektronen zum Photonenfeld und die Feldüberwachung beschreiben.',
