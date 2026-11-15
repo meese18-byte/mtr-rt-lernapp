@@ -1,0 +1,42 @@
+{
+  "phase1.js": {
+    "sha256": "ed8d46782ed1f992a3db917c95b5c19d184c1ca5e957a8c69e1d98faa4b8ea5a",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "phase1-surface.js": {
+    "sha256": "6ed3b521c2a763ddaeb8c13d340ca074fb350ebb1eb3d268bf9aa31c6b7ae389",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "phase2.html": {
+    "sha256": "78710d3efb38e73b4a83699c754d4a476ac10265650c307dc0c978f8d10aca19",
+    "reference": "8eea95ca5f1aa476efc73e8bb9f21b70288beb99"
+  },
+  "phase1.html": {
+    "sha256": "b19ef16ec053550668cfca855c7797e1fe2da8f0e97cd2d449667cc4eb1e1ce1",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "phase2.css": {
+    "sha256": "69f2212b380182a43522410c2b90da0c7a250894f7c56c8bcc62f1e10ab6d1ca",
+    "reference": "8eea95ca5f1aa476efc73e8bb9f21b70288beb99"
+  },
+  "phase2.js": {
+    "sha256": "401d3e5152654f93680ff64d759a914bbc720f12efa67650988db30fd2dd7074",
+    "reference": "8eea95ca5f1aa476efc73e8bb9f21b70288beb99"
+  },
+  "phase2-model.js": {
+    "sha256": "21bce91adb23725cb3cd0710d10654907a1fe256555ec2018430e3c992006c03",
+    "reference": "8eea95ca5f1aa476efc73e8bb9f21b70288beb99"
+  },
+  "phase1.css": {
+    "sha256": "10874380a69a4251d30ea16229ca884aa181f740d5b3c3359603269dc1a45f9a",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "phase1-model.js": {
+    "sha256": "983df0de2184de719bc67744bec600b2871039e2b0b22eef4955cb8975a45c63",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "phase1-camera.js": {
+    "sha256": "2dbd613432ca3e9babea936787610636cbee99aae74bb53247ecb76356180ef0",
+    "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  }
+}
