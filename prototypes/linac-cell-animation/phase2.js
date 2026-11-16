@@ -22,6 +22,22 @@ function trackMetrics(points){const cumulative=[0];for(let i=1;i<points.length;i
 function trackAtDistance(points,m,d){const z=cl(d,0,m.length);let lo=0,hi=m.cumulative.length-1;while(lo+1<hi){const mid=(lo+hi)>>1;if(m.cumulative[mid]<z)lo=mid;else hi=mid;}const seg=m.cumulative[hi]-m.cumulative[lo]||1,q=(z-m.cumulative[lo])/seg;return points[lo].map((v,j)=>v+(points[hi][j]-v)*q);}
 const trackMetric=trackMetrics(track.pts);
 function onTrack(p){return trackAtDistance(track.pts,trackMetric,cl(p)*trackMetric.length);}
+// Jeder neue Lichtimpuls entsteht am Target, bewegt sich nur distal und verschwindet
+// beim ersten geometrischen Hindernis. Kein Modulo-Ruecksprung einer sichtbaren Spur.
+function photonMarkers(time,sx,sy,ex,ey,start,offset=0,speed=240,interval=1.7){
+ const length=Math.hypot(ex-sx,ey-sy);
+ if(length<=0)return [];
+ const ux=(ex-sx)/length,uy=(ey-sy)/length,elapsed=time-start-offset;
+ if(elapsed<0)return [];
+ const newest=Math.floor(elapsed/interval),out=[];
+ for(let k=newest;k>=Math.max(0,newest-2);k--){
+  const age=elapsed-k*interval,travel=age*speed;
+  if(travel<0||travel>=length)continue;
+  const trail=Math.max(0,travel-16);
+  out.push({x:sx+ux*travel,y:sy+uy*travel,tailX:sx+ux*trail,tailY:sy+uy*trail,ux,uy});
+ }
+ return out;
+}
 function bolt(x,y){return `<circle cx="${x}" cy="${y}" r="4" fill="#213744" stroke="#94a6ab"/>`+line(x-2,y,x+2,y,'#b9c2c2');}
 const label=(name,y,x=280)=>`<g class="annotation">${txt(22,y-5,name,'#b7cad7',15,'class="label"')}${line(22,y+4,198,y+4,'#49667c')}${line(198,y+4,x,y,'#49667c') }<circle cx="${x}" cy="${y}" r="2" fill="#8be7e9"/></g>`;
 function setupHead(){
@@ -59,11 +75,18 @@ function renderHead(){const scene=M.scene(time),on=beamOn(),form=scene===3?curre
  const eAllowed=scene===0||on;let electrons='';if(eAllowed)for(let n=0;n<10;n++){const q=((time/6+n/10)%1+1)%1,[x,y]=onTrack(q);electrons+=`<circle cx="${x}" cy="${y}" r="${n%3===0?3.5:2.5}" fill="#8be7e9"/>`;}$('electrons').innerHTML=electrons;
  $('targetHeat').innerHTML=on?`<circle cx="390" cy="237" r="${22+5*Math.sin(time*3)}" fill="url(#warm)"/>`:'';
  let rays='';if(on){for(let i=0;i<43;i++){const x=(i-21)/18;const end=M.stop(x,row,form,closed);const upper=.8-.32*Math.abs(x),lower=filter==='ff'?.28:upper;const re=M.project(x,end),split=Math.min(end,M.planes.filter);rays+=line(M.project(x,251),251,M.project(x,split),split,'#f4cf83',i%3===0?1.6:1,`opacity="${upper}"`);if(end>split)rays+=line(M.project(x,split),split,re,end,'#f4cf83',i%3===0?1.6:1,`opacity="${lower}"`);
- // Uniform photon path speed; disappear at collimator/MLC instead of slowing down.
- const sx=M.project(x,251),ex=M.project(x,end),distance=Math.hypot(ex-sx,end-251);
- const photonSpeed=240,period=2.65,travel=((time+i*.173)%period)*photonSpeed;
- if(travel<distance){const f=travel/distance,y=251+(end-251)*f,xx=sx+(ex-sx)*f;
- rays+=`<circle cx="${xx}" cy="${y}" r="1.8" fill="#ffe3a5" opacity="${y<M.planes.filter?upper:lower}"/>`;}
+ // Flugspuren werden ausschliesslich AM TARGET emittiert und laufen vom
+ // Target durch den Strahlkopf. Der sichtbare helle Kopf zeigt nach distal;
+ // die kurze Lichtspur liegt immer hinter ihm (Richtung Target).
+ const sx=M.project(x,251),ex=M.project(x,end);
+ const start=scene===3?67:scene===2?36:18;
+ for(const p of photonMarkers(time,sx,251,ex,end,start,(i%7)*.09)){
+  const opacity=p.y<M.planes.filter?upper:lower;
+  const bx=p.x-p.ux*7,by=p.y-p.uy*7;
+  const wx=p.uy*3.6,wy=-p.ux*3.6;
+  rays+=line(p.tailX,p.tailY,p.x,p.y,'#ffdc92',2.2,`opacity="${opacity}" stroke-linecap="round"`);
+  rays+=`<path d="M${bx+wx} ${by+wy}L${p.x} ${p.y}L${bx-wx} ${by-wy}" fill="none" stroke="#fff3c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}"/>`;
+ }
 
  if(end<730)rays+=`<circle cx="${re}" cy="${end}" r="2.3" fill="#d6b783" opacity=".5"/>`;
  }}$('headPhotons').innerHTML=rays;
@@ -71,7 +94,7 @@ function renderHead(){const scene=M.scene(time),on=beamOn(),form=scene===3?curre
  $('headLeaves').innerHTML=`<path d="M259 476H${lx}V510H259Z M${rx} 476H521V510H${rx}Z" fill="url(#steel)" stroke="#9ab0bb"/>`+line(lx,477,lx,509,'#d4e0df',2)+line(rx,477,rx,509,'#d4e0df',2)+bolt(274,490)+bolt(506,490);
  $('projectedSlice').innerHTML=on&&r-l>1e-5?`<path d="M${M.project(l,730)} 729H${M.project(r,730)}L${M.project(r,730)+9} 741H${M.project(l,730)-9}Z" fill="#f4cf83" fill-opacity=".65"/>`:'';
  $('sliceInfo').textContent=scene===3?`Schnitt durch Leafpaar ${row+1}`:'Strahlachse und Bauteilfolge';
- $('beamInfo').textContent=scene===0?'Elektronen im Strahlführungsrohr':forming()?'Einrichtbewegung · Strahl aus':scene===2&&!on?'Abschaltwert erreicht · Strahl aus':closed?'Feld geschlossen · kein direkter Nutzstrahl':scene===3?'Feldvorschau · keine Gewebedosis':'Photonen ab dem Target';
+ $('beamInfo').textContent=scene===0?'Elektronen im Strahlführungsrohr':forming()?'Einrichtbewegung · Strahl aus':scene===2&&!on?'Abschaltwert erreicht · Strahl aus':closed?'Feld geschlossen · kein direkter Nutzstrahl':scene===3?'Feldvorschau · keine Gewebedosis':'Photonen: Target ↓ → Kollimation → Feldöffnung';
 }
 function transportDetail(){let h=txt(28,32,'AUS DER BESCHLEUNIGUNGSSTRUKTUR','#8be7e9',12);
  h+=`<g transform="translate(-28 55) scale(1.12)"><path d="${path(track.pts)}" fill="none" stroke="#567185" stroke-width="21"/><path d="${path(track.pts)}" fill="none" stroke="#0a1b2a" stroke-width="13"/>`;
@@ -92,7 +115,11 @@ function targetDetail(){const p=((time-18)/4.2%1+1)%1;let h=`<rect x="150" y="56
  const speedBefore=120,speedAfter=76,collisionTime=preM.length/speedBefore;
  const electronPosition=elapsed<collisionTime?trackAtDistance(pre,preM,elapsed*speedBefore):trackAtDistance(post,postM,(elapsed-collisionTime)*speedAfter);
  if(elapsed<collisionTime+postM.length/speedAfter)h+=`<circle cx="${electronPosition[0]}" cy="${electronPosition[1]}" r="5" fill="#8be7e9"/>`;
- if(p>.4){const q=cl((p-.4)/.5),pts=[];for(let i=0;i<35;i++){const a=i/34*q;pts.push([212+226*a,159+112*a+6*Math.sin(a*48)]);}h+=`<path d="${path(pts)}" fill="none" stroke="#f4cf83" stroke-width="2.5"/>`;}
+ // Vom Wechselwirkungsort aus nach rechts-unten: ein kurzer Wellenzug mit
+ // vorn liegender Pfeilspitze, keine zum Target gerichtete Welle.
+ if(p>.4){const q=cl((p-.4)/.54),x=212+226*q,y=159+112*q,angle=Math.atan2(112,226)*180/Math.PI;
+  h+=`<g transform="translate(${x} ${y}) rotate(${angle})"><path d="M-32 0Q-27-8-22 0T-12 0T-2 0" fill="none" stroke="#f4cf83" stroke-width="2.5"/><path d="M-9 -6L0 0L-9 6" fill="none" stroke="#fff3c2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+ }
  h+=txt(24,128,'e⁻','#8be7e9',22)+txt(403,302,'γ','#f4cf83',24);
  h+=line(252,289,252,333,'#f29c78',2)+`<path d="M245 323L252 335L259 323" fill="none" stroke="#f29c78" stroke-width="2"/>`+txt(133,364,'Energiedeposition → Wärme','#f29c78',17);
  return h;
