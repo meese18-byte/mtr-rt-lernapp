@@ -12,12 +12,20 @@ const p1=load('phase1-model.js'),p2=load('phase2-model.js'),p3=load('phase3-mode
 check('P0 Phase 01: 2-MeV beta near 0.9791 and correct force direction',()=>{assert.ok(Math.abs(p1.beta(2)-.9791)<.0002);assert.equal(p1.field(0,0),-p1.force(0,0));});
 const src2=read('phase2.js'),start=src2.indexOf('function transport(){'),end=src2.indexOf('function bolt(',start);
 assert.ok(start>0&&end>start,'transport code available');
-const geometry=new Function('cl',src2.slice(start,end)+';return {onTrack,trackMetric};')((x,a=0,b=1)=>Math.max(a,Math.min(b,x)));
+const geometry=new Function('cl',src2.slice(start,end)+';return {onTrack,trackMetric,photonMarkers};')((x,a=0,b=1)=>Math.max(a,Math.min(b,x)));
 check('B1 Phase 02: magnet paths have <=5% visual speed drift',()=>{
  const steps=1000,arr=[];for(let i=0;i<steps;i++){const p=geometry.onTrack(i/steps),q=geometry.onTrack((i+1)/steps);arr.push(Math.hypot(p[0]-q[0],p[1]-q[1]));}
  const mean=arr.reduce((a,b)=>a+b,0)/steps;assert.ok(arr.every(n=>Math.abs(n/mean-1)<=.05),'path interpolation must be arclength-based');
 });
-check('B2 Phase 02: photon traces follow uniform distance per time',()=>{assert.match(src2,/photonSpeed=240,period=/);assert.match(src2,/travel\/distance/);assert.doesNotMatch(src2,/time\*\.55\+i\*\.173/);});
+check('B2 Phase 02: emitted photons move only away from target',()=>{
+ const p=geometry.photonMarkers(20,390,251,390,730,18,0),q=geometry.photonMarkers(20.2,390,251,390,730,18,0);
+ assert.ok(p.length>0&&q.length>0,'visible photons expected');
+ assert.ok(q[0].y>p[0].y,'photon must move downstream with time');
+ assert.ok(q[0].tailY<=q[0].y,'trail must remain upstream of photon head');
+ assert.ok(geometry.photonMarkers(19.55,390,251,390,360,18,0).length===0,'absorbed photon must disappear rather than return upstream');
+ assert.match(src2,/for\(const p of photonMarkers/);assert.match(src2,/M\$\{bx\+wx\}/);
+ assert.doesNotMatch(src2,/travel=\(\(time\+i\*\.173\)%period\)/);
+});
 check('B4 Phase 02: target electron slower after energy loss',()=>{assert.match(src2,/speedBefore=120,speedAfter=76/);});
 check('Phase 02: MU1 MU2 and isocenter labels',()=>{assert.match(read('phase2.html'),/monitorValue2/);assert.match(src2,/ISOZENTRUMSEBENE/);});
 check('B3 Phase 03: scattered photon speed unchanged; electron speed beta(E)',()=>{const v=p3.compton(1,60);assert.ok(Math.abs(v.photon-.505)<.002);assert.ok(Math.abs(v.electron-.495)<.002);assert.ok(p3.electronBeta(v.electron)>0&&p3.electronBeta(v.electron)<1);assert.match(read('phase3.js'),/photonDistance=elapsed\*photonSpeed/);});
