@@ -1,0 +1,51 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gesamtfilm · Vom LINAC zur Zellwirkung</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#183949;background:#f3f8fa}
+*{box-sizing:border-box}body{margin:0}.container{max-width:1380px;margin:auto;padding:20px}
+nav{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}a{color:#0a87aa}
+h1{font-size:clamp(30px,4.5vw,58px);letter-spacing:-.04em;margin:16px 0 5px}
+.lead{font-size:18px;line-height:1.55;max-width:80ch;color:#496878;margin:0 0 15px}
+.frame{position:relative;background:#091825;border-radius:12px;overflow:hidden;height:clamp(410px,58vw,800px);box-shadow:0 12px 42px #0b243828}
+iframe{width:100%;height:100%;border:0;display:block;overflow:hidden;background:#091825}
+.overlay{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;gap:12px;pointer-events:none}
+.overlay span{background:#0c243aee;border:1px solid #406179;padding:8px 12px;color:#fff;font-weight:700;border-radius:7px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0}
+button{cursor:pointer;border:1px solid #b7d1dd;border-radius:7px;padding:12px 16px;background:#fff;font:600 16px system-ui;color:#22556d;min-height:46px}
+button.primary{background:#0a87aa;color:#fff;border-color:#0a87aa}
+input[type=range]{width:100%;accent-color:#0a87aa;height:26px}
+.chapters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.chapters button{text-align:left;line-height:1.35}.chapters strong{display:block}
+.chapters button[aria-current="step"]{background:#e6f3f7;border-color:#0a87aa}
+.info{color:#4b6978;font-size:15px;margin-top:16px}
+@media(max-width:700px){.container{padding:10px}.frame{height:470px}.chapters{grid-template-columns:repeat(2,1fr)}.controls button{flex:1 1 auto}}
+</style></head><body><main class="container"><nav><a href="index.html">← Zur Übersicht</a><a href="lehrkraft.html">Informationen für Lehrkräfte</a></nav>
+<h1>Vom LINAC zur Zellwirkung</h1><p class="lead">Durchgehende Basis-Spur in etwa fünf Minuten: Elektronen bereitstellen, Photonenfeld erzeugen, Energie im Gewebe übertragen und mögliche Zellfolgen verstehen. Die einzelnen Phasen bieten zusätzlich Aufgaben und Vertiefungen.</p>
+<div class="frame"><iframe id="scene" title="Fortlaufende Animation der vier Phasen" src="phase1.html?film=1&amp;level=basis" loading="eager" tabindex="-1"></iframe><div class="overlay"><span id="chapter">01 · Elektronen beschleunigen</span><span id="time">00:00 / 04:45</span></div></div>
+<div class="controls"><button class="primary" id="play">▶ Gesamtfilm starten</button><button id="restart">↺ Anfang</button><button id="skip">Nächste Phase →</button><label for="progress">Filmposition</label></div>
+<input id="progress" type="range" min="0" max="285" step=".2" value="0" aria-label="Gesamtfilmposition"><div class="chapters" id="chapters"></div>
+<p id="status" class="info" role="status">Startbereit · Die Bildgeschwindigkeit ist zum Lernen stark verlangsamt. Ein Maßstabswechsel erfolgt sichtbar beim Übergang zur nächsten Phase.</p>
+</main><script>
+(()=>{'use strict';
+const segments=[{name:'Elektronen beschleunigen',src:'phase1.html',duration:68,api:'linacPhase1'},{name:'Photonenfeld formen',src:'phase2.html',duration:90,api:'linacPhase2'},{name:'Energie im Gewebe',src:'phase3.html',duration:104,api:'linacPhase3'},{name:'DNA und Zellwirkung',src:'phase4.html',duration:118,api:'linacPhase4'}];
+const modelSeconds=segments.reduce((s,p)=>s+p.duration,0),filmSeconds=285,mult=modelSeconds/filmSeconds;
+const $=id=>document.getElementById(id),clock=t=>String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0');
+let position=0,playing=false,last=null,raf=0,visible=-1,loaded=false,pending=0,lastDraw=0;
+function locate(p){let t=Math.min(modelSeconds,Math.max(0,p*mult));for(let i=0;i<segments.length;i++){if(t<segments[i].duration||i===segments.length-1)return{index:i,local:Math.min(segments[i].duration,t)};t-=segments[i].duration;}}
+function state(){const {index,local}=locate(position),segment=segments[index];if(index!==visible){visible=index;loaded=false;pending=local;$('scene').src=segment.src+'?film=1&level=basis';}
+ else if(loaded){const child=$('scene').contentWindow,api=child&&child[segment.api];if(api?.renderAt)api.renderAt(local);}
+ $('chapter').textContent=String(index+1).padStart(2,'0')+' · '+segment.name;$('time').textContent=clock(position)+' / '+clock(filmSeconds);
+ $('progress').value=position;$('chapters').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===index?'step':'false'));
+}
+$('scene').onload=()=>{loaded=true;const seg=segments[visible]||segments[0];const child=$('scene').contentWindow;if(child?.[seg.api]?.renderAt)child[seg.api].renderAt(locate(position).local);};
+function setPlaying(v){playing=v;last=null;$('play').textContent=v?'Ⅱ Pausieren':'▶ '+(position>=filmSeconds?'Erneut starten':'Fortsetzen');if(v)raf=requestAnimationFrame(tick);else cancelAnimationFrame(raf);}
+function tick(ts){if(!playing)return;if(last===null)last=ts;const dt=Math.min((ts-last)/1000,.12);last=ts;position=Math.min(filmSeconds,position+dt);
+if(ts-lastDraw>110||position>=filmSeconds){state();lastDraw=ts;}
+if(position>=filmSeconds){setPlaying(false);$('status').textContent='Gesamtfilm abgeschlossen. Die vier Phasen können separat wiederholt und vertieft werden.';return;}raf=requestAnimationFrame(tick);}
+$('play').onclick=()=>{if(playing){setPlaying(false);return;}if(position>=filmSeconds)position=0;setPlaying(true);state();$('status').textContent='Gesamtfilm läuft · beim Phasenwechsel wird der neue Maßstab angezeigt.';};
+$('restart').onclick=()=>{setPlaying(false);position=0;state();};$('skip').onclick=()=>{setPlaying(false);const j=locate(position).index;position=segments.slice(0,Math.min(4,j+1)).reduce((sum,x)=>sum+x.duration,0)/mult;state();};
+$('progress').oninput=e=>{setPlaying(false);position=+e.target.value;state();};
+$('chapters').innerHTML=segments.map((s,i)=>'<button type="button" data-phase="'+i+'"><strong>0'+(i+1)+' · '+s.name+'</strong>Phase öffnen</button>').join('');
+$('chapters').onclick=e=>{const b=e.target.closest('[data-phase]');if(!b)return;setPlaying(false);const i=+b.dataset.phase;position=segments.slice(0,i).reduce((sum,x)=>sum+x.duration,0)/mult;state();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)setPlaying(false);});state();
+})();
+</script></body></html>
