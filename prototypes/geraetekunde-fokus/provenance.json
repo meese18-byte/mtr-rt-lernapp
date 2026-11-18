@@ -38,5 +38,24 @@
   "phase1-camera.js": {
     "sha256": "2dbd613432ca3e9babea936787610636cbee99aae74bb53247ecb76356180ef0",
     "reference": "a7f30ef00899cd721e890a279b8289bf0c0a22f4"
+  },
+  "revision": {
+    "date": "2026-11-18",
+    "source_commit": "703d0e5a94857f4579086b5ff464e6b8f73b3115",
+    "transferred": [
+      "arc-length transport",
+      "downstream photon tracers",
+      "target energy-transfer motion"
+    ],
+    "retained": [
+      "focused A1–A3 navigation",
+      "limited clips",
+      "dimensionless monitor display"
+    ],
+    "excluded": [
+      "full-film navigation",
+      "MU example",
+      "phase 3 and 4"
+    ]
   }
 }
